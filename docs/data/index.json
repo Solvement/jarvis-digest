@@ -1,0 +1,15 @@
+{
+ "site": {
+  "title": "Jarvis · AI 每日情报",
+  "subtitle": "项目 + 论文 · 每天中午 12:00 更新",
+  "repo": "https://github.com/Solvement/jarvis-digest"
+ },
+ "days": [
+  {
+   "date": "2026-09-02",
+   "papers": 8,
+   "projects": 10,
+   "top": "EmbodiedSkills: A Unified Framework for Orchestrating, Training, and Deploying VLA Agents"
+  }
+ ]
+}
