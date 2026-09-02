@@ -1,0 +1,61 @@
+# Jarvis 配置 —— 改这里，不用改代码
+timezone: America/New_York
+
+sources:
+  github_trending:
+    enabled: true
+    # 日榜 / 周榜 / 月榜全抓（Kevin 规则：项目必须是 trending 上的，不允许 noise）
+    boards: [daily, weekly, monthly]
+    # 每个 language 抓一页；"" 表示所有语言
+    languages: ["", "python", "jupyter-notebook", "typescript", "rust"]
+  github_search:
+    enabled: true
+    # GitHub API 搜索：最近 N 天创建、按 star 排序的 AI 主题仓库（补充 trending 漏掉的新项目）
+    days: 14
+    per_query: 15
+    # 注意：GitHub Search API 不支持 topic 之间用 OR，一行一个
+    queries:
+      - "topic:llm"
+      - "topic:ai-agents"
+      - "topic:agentic-ai"
+      - "topic:rag"
+      - "topic:multimodal"
+      - "topic:vision-language-model"
+      - "topic:diffusion-models"
+      - "topic:video-generation"
+      - "topic:llm-inference"
+      - "topic:rlhf"
+  hf_papers:
+    enabled: true
+    days: 2            # 抓最近 2 天的 HF Daily Papers（含周末补漏）
+  arxiv:
+    enabled: true
+    categories: [cs.AI, cs.CL, cs.LG, cs.CV, cs.MA]
+    max_results: 200
+    window_hours: 48
+
+filters:
+  # 硬过滤（不用 LLM）
+  repo_min_total_stars: 200      # 项目最少总 star（trending 或搜索）
+  repo_min_today_stars: 30       # 日榜当日新增 star 下限
+  repo_min_week_stars: 300       # 周榜本周新增 star 下限
+  repo_min_month_stars: 1000     # 月榜本月新增 star 下限
+  seen_days: 14                  # 14 天内出现过的条目不再重复推
+
+ranking:
+  papers_core: 8       # 核心方向论文条数
+  projects_core: 6     # 核心方向项目条数
+  wide: 4              # 全领域热点条数（论文+项目混合）
+  core_min_score: 6    # 核心分低于此不进核心档
+
+llm:
+  provider: openai
+  score_model: gpt-5.4-nano     # 打分：便宜、快
+  digest_model: gpt-5.4-mini    # 速览生成：质量与成本平衡
+  score_batch_size: 20
+  max_arxiv_to_score: 150       # arXiv 候选太多时只给 LLM 打前 N 条（按标题关键词粗排后）
+
+site:
+  title: "Jarvis · AI 每日情报"
+  subtitle: "项目 + 论文 · 每天中午 12:00 更新"
+  repo: "https://github.com/Solvement/jarvis-digest"

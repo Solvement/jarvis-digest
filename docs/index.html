@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis 情报台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --paper:#F7F9FC; --sheet:#FFFFFF; --ink:#141B2A; --ink-2:#4A5568; --ink-3:#8A94A6;
+    --line:#E3E8F0; --line-2:#CBD3DF;
+    --core:#2749D6; --core-soft:#E8EDFF; --core-ink:#1B36A8;
+    --wide:#C46A00; --wide-soft:#FFF1DE; --wide-ink:#8A4B00;
+    --paper-kind:#0F766E; --paper-kind-soft:#DDF5F1;
+    --proj-kind:#6D28D9; --proj-kind-soft:#EEE7FD;
+    --ok:#15803D; --ok-soft:#DCFCE7; --todo:#B45309; --todo-soft:#FEF3C7;
+    --star:#E0A100;
+    --radius:10px; --shadow:0 1px 2px rgba(20,27,42,.04), 0 8px 24px -12px rgba(20,27,42,.12);
+    --display:"Sora","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --body:"IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--core);outline-offset:2px;border-radius:6px}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* ---------- top bar ---------- */
+  .top{position:sticky;top:0;z-index:20;background:rgba(247,249,252,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1560px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:18px}
+  .brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--core);box-shadow:0 0 0 4px var(--core-soft)}
+  .brand small{font-family:var(--body);font-weight:500;color:var(--ink-3);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .search{flex:1;max-width:460px;position:relative}
+  .search input{width:100%;padding:8px 12px 8px 36px;border:1px solid var(--line-2);border-radius:8px;background:var(--sheet);font:inherit;font-size:14px;color:var(--ink)}
+  .search svg{position:absolute;left:11px;top:9px;width:16px;height:16px;color:var(--ink-3)}
+  .streak{margin-left:auto;display:flex;gap:18px;font-size:13px;color:var(--ink-2)}
+  .streak b{font-family:var(--display);font-size:16px;color:var(--ink)}
+  .streak span{display:flex;flex-direction:column;line-height:1.2}
+  .streak i{font-style:normal;font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase}
+
+  /* ---------- layout ---------- */
+  .wrap{max-width:1560px;margin:0 auto;padding:24px 28px;display:grid;grid-template-columns:150px minmax(0,1fr) 250px;gap:26px;align-items:start}
+  @media (max-width:1100px){.wrap{grid-template-columns:150px minmax(0,1fr)} .queue{grid-column:1/-1;position:static}}
+  @media (max-width:760px){.wrap{grid-template-columns:1fr} .rail{position:static}.streak{display:none}}
+  .rail{position:sticky;top:76px}
+  .rail h4,.queue h4{font-family:var(--body);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px;font-weight:600}
+  .days{display:flex;flex-direction:column;gap:2px;max-height:60vh;overflow:auto;padding-right:4px}
+  .day{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;text-align:left;width:100%}
+  .day:hover{background:var(--sheet)}
+  .day.active{background:var(--sheet);box-shadow:var(--shadow)}
+  .day .d{font-family:var(--display);font-weight:600;font-size:15px;line-height:1}
+  .day .d small{display:block;font-family:var(--body);font-weight:500;font-size:10px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
+  .day .c{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:right}
+  .day.unread .d::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--core);margin-left:6px;vertical-align:middle}
+
+  /* ---------- header of the day ---------- */
+  .dayhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+  .dayhead h1{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.15;text-wrap:balance}
+  .dayhead h1 small{display:block;font-family:var(--body);font-weight:500;font-size:13px;color:var(--ink-3);letter-spacing:.02em;margin-bottom:4px}
+  .funnel{display:flex;gap:6px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .funnel b{color:var(--ink);font-weight:500}
+  .funnel .arrow{color:var(--line-2)}
+
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px}
+  .chip{padding:5px 11px;border-radius:999px;border:1px solid var(--line-2);background:var(--sheet);font-size:12.5px;color:var(--ink-2);font-weight:500}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip .n{font-family:var(--mono);opacity:.7;margin-left:4px;font-size:11px}
+
+  /* ---------- must-read hero ---------- */
+  .lead{background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--core);border-radius:var(--radius);padding:18px 20px;margin-bottom:22px;box-shadow:var(--shadow)}
+  .lead .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--core-ink);font-weight:600;margin-bottom:6px}
+  .lead h2{font-family:var(--display);font-size:20px;margin:0 0 6px;letter-spacing:-.01em;line-height:1.3;text-wrap:balance}
+  .lead p{margin:0;color:var(--ink-2)}
+
+  /* ---------- sections & items ---------- */
+  .sec{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px}
+  .sec h3{font-family:var(--display);font-size:15px;font-weight:600;margin:0;letter-spacing:-.005em}
+  .sec .n{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .sec .ln{flex:1;height:1px;background:var(--line)}
+  .list{display:flex;flex-direction:column;gap:10px}
+  .item{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 12px;display:grid;grid-template-columns:34px minmax(0,1fr) minmax(280px,34%);gap:12px 18px;transition:border-color .15s}
+  @media (max-width:1000px){.item{grid-template-columns:34px minmax(0,1fr)} .side{grid-column:2}}
+  .side{display:flex;flex-direction:column;gap:10px;border-left:1px solid var(--line);padding-left:16px;min-width:0}
+  .side-l{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .side .mermaid{margin:0;padding:8px}
+  .side .mermaid svg{max-width:100%;height:auto}
+  .side .prelist{display:flex;flex-wrap:wrap;gap:5px}
+  .side .kv{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+  .side .kv b{color:var(--ink);font-weight:600}
+  .whynow{font-size:13.5px;color:var(--ink-2);margin:0 0 8px;max-width:72ch}
+  .whynow::before{content:"为什么现在上榜 · ";color:var(--ink-3);font-size:11px;letter-spacing:.06em}
+  .item:hover{border-color:var(--line-2)}
+  .item.read{opacity:.55}
+  .item.hidden{display:none}
+  .idx{font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink-3);padding-top:3px;text-align:right}
+  .item.core .idx{color:var(--core)}
+  .item.wide .idx{color:var(--wide)}
+  .kind{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:.04em;padding:2px 8px;border-radius:5px}
+  .kind.paper{background:var(--paper-kind-soft);color:var(--paper-kind)}
+  .kind.project{background:var(--proj-kind-soft);color:var(--proj-kind)}
+  .tier{font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px}
+  .tier.core{background:var(--core-soft);color:var(--core-ink)}
+  .tier.wide{background:var(--wide-soft);color:var(--wide-ink)}
+  .head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .head .heat{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-2);display:flex;gap:10px}
+  .title{font-family:var(--display);font-weight:600;font-size:16.5px;line-height:1.35;letter-spacing:-.01em;margin:0 0 4px;text-wrap:balance}
+  .title a:hover{color:var(--core)}
+  .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap}
+  .meta a{color:var(--ink-2);border-bottom:1px dotted var(--line-2)}
+  .one{font-size:15.5px;margin:0 0 6px;color:var(--ink);max-width:68ch}
+  .why{margin:0 0 8px;font-size:14px;color:var(--core-ink);background:var(--core-soft);display:inline-block;padding:3px 10px;border-radius:6px;max-width:68ch}
+  .item.wide .why{color:var(--wide-ink);background:var(--wide-soft)}
+  .arch{margin:6px 0 10px;padding:10px 14px;border-left:2px solid var(--line-2);background:var(--paper);border-radius:0 8px 8px 0;max-width:72ch}
+  .arch-l{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:3px}
+  .arch p{margin:0;font-size:14px;color:var(--ink);line-height:1.65}
+  .verdict{font-size:13px;color:var(--ink-2);margin-top:4px}
+  .verdict::before{content:"精读价值 · ";color:var(--ink-3);font-size:11px;letter-spacing:.06em}
+  .pts{margin:0 0 8px;padding-left:18px;color:var(--ink-2);font-size:14px;max-width:68ch}
+  .pts li{margin:2px 0}
+  .foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-top:6px}
+  .tag{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--paper);padding:1px 7px;border-radius:4px;border:1px solid var(--line)}
+  .pre{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--line)}
+  .pre.known{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+  .pre.unknown{background:var(--todo-soft);color:var(--todo);border-color:transparent}
+  .diff{display:inline-flex;gap:2px;align-items:center}
+  .diff i{width:6px;height:6px;border-radius:2px;background:var(--line-2)}
+  .diff i.on{background:var(--ink-2)}
+  .lvl{font-weight:600;color:var(--ink-2)}
+  .lvl.L3{color:var(--core-ink)}
+  .acts{margin-left:auto;display:flex;gap:4px}
+  .act{padding:4px 9px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink-2);border:1px solid transparent}
+  .act:hover{background:var(--paper);border-color:var(--line)}
+  .act.on{color:var(--star);font-weight:600}
+  .act.done{color:var(--ok)}
+  .mermaid{background:var(--paper);border-radius:8px;padding:10px;margin-top:8px;overflow-x:auto;font-size:13px}
+  .reason{font-size:11.5px;color:var(--ink-3);margin-top:4px}
+
+  /* ---------- reading queue ---------- */
+  .queue{position:sticky;top:76px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+  .queue .empty{font-size:13px;color:var(--ink-3);line-height:1.5}
+  .qlist{display:flex;flex-direction:column;gap:8px;max-height:46vh;overflow:auto;margin:0;padding:0;list-style:none}
+  .qlist li{font-size:13px;line-height:1.4;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:start}
+  .qlist li .t{font-weight:500}
+  .qlist li .s{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .qlist li button{color:var(--ink-3);font-size:14px;line-height:1}
+  .qlist li button:hover{color:var(--ink)}
+  .qbtn{margin-top:12px;width:100%;padding:9px 12px;border-radius:8px;background:var(--core);color:#fff;font-weight:600;font-size:13px;text-align:center}
+  .qbtn:hover{background:var(--core-ink)}
+  .qhint{font-size:11.5px;color:var(--ink-3);margin-top:8px;line-height:1.5}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:.2s;pointer-events:none;z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .loading{color:var(--ink-3);padding:40px 0;text-align:center;font-size:14px}
+  footer{max-width:1560px;margin:30px auto 40px;padding:0 24px;font-size:12px;color:var(--ink-3);display:flex;gap:16px;flex-wrap:wrap}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="./"><span class="dot"></span>Jarvis <small>情报台</small></a>
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="搜今天的标题、标签、摘要…" autocomplete="off">
+    </label>
+    <div class="streak">
+      <span><b id="st-days">0</b><i>连续天数</i></span>
+      <span><b id="st-read">0</b><i>已读条目</i></span>
+      <span><b id="st-queue">0</b><i>精读队列</i></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <aside class="rail">
+    <h4>日期</h4>
+    <div class="days" id="days"></div>
+  </aside>
+
+  <section id="main">
+    <div class="loading">加载中…</div>
+  </section>
+
+  <aside class="queue" id="queue">
+    <h4>精读队列 <span class="mono" id="qn"></span></h4>
+    <div id="qbody"><p class="empty">在条目上点「想读」，这里会攒起来。攒够了就复制给 Claude，让它按你的 known.md 只讲你不会的部分。</p></div>
+    <button class="qbtn" id="qcopy">复制精读指令给 Claude</button>
+    <p class="qhint">粘贴到 Claude Code / Cowork 里即可开始对话式精读；读完后笔记会自动进 notes/。</p>
+  </aside>
+</main>
+
+<footer>
+  <span id="site-sub"></span>
+  <span id="llm-usage"></span>
+  <a href="https://github.com" id="repo-link" style="margin-left:auto">仓库</a>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.1/mermaid.min.js"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+  // ---------- local state (per-browser) ----------
+  const store = {
+    get(k, d){ try { return JSON.parse(localStorage.getItem('jarvis:'+k)) ?? d; } catch { return d; } },
+    set(k, v){ try { localStorage.setItem('jarvis:'+k, JSON.stringify(v)); } catch {} }
+  };
+  let queue = store.get('queue', []);      // [{id,title,date,kind,url}]
+  let read = store.get('read', {});        // {id: date}
+  let visits = store.get('visits', []);    // ['2026-09-02', ...]
+  let seenDays = store.get('seenDays', {});
+  let current = null, index = null, filter = 'all';
+
+  // streak
+  (function markVisit(){
+    const today = new Date().toISOString().slice(0,10);
+    if (!visits.includes(today)) { visits.push(today); visits = visits.slice(-400); store.set('visits', visits); }
+    let n = 0, d = new Date(today);
+    while (visits.includes(d.toISOString().slice(0,10))) { n++; d.setDate(d.getDate()-1); }
+    $('#st-days').textContent = n;
+  })();
+  const refreshStats = () => {
+    $('#st-read').textContent = Object.keys(read).length;
+    $('#st-queue').textContent = queue.length;
+    $('#qn').textContent = queue.length ? '· ' + queue.length : '';
+  };
+
+  const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); };
+
+  // ---------- mermaid ----------
+  if (window.mermaid) mermaid.initialize({ startOnLoad:false, theme:'neutral', fontFamily:'IBM Plex Sans, Noto Sans SC, sans-serif', flowchart:{ curve:'basis', htmlLabels:true } });
+  async function renderDiagram(container, code, id){
+    if (!code) return;
+    if (!window.mermaid) { container.innerHTML = '<pre style="margin:0;white-space:pre-wrap;font-size:12px;color:var(--ink-3)">'+esc(code)+'</pre>'; return; }
+    try { const { svg } = await mermaid.render('m'+id.replace(/[^a-z0-9]/gi,''), code); container.innerHTML = svg; }
+    catch { container.innerHTML = '<pre style="margin:0;white-space:pre-wrap;font-size:12px;color:var(--ink-3)">'+esc(code)+'</pre>'; }
+  }
+
+  // ---------- render one day ----------
+  const kindName = { paper:'论文', project:'项目' };
+  const lvlName = { L1:'看速览即可', L2:'值得通读 · 20 min', L3:'建议精读' };
+  function itemNode(it, n){
+    const d = it.digest || {};
+    const node = el('article', 'item ' + it.tier + (read[it.id] ? ' read' : ''));
+    node.dataset.id = it.id; node.dataset.kind = it.kind; node.dataset.tier = it.tier;
+    node.dataset.text = (it.title + ' ' + (it.keywords||[]).join(' ') + ' ' + (d.one_liner||'') + ' ' + (it.summary||'')).toLowerCase();
+    const pid = it.id.split(':')[1];
+    let meta = [];
+    if (it.kind === 'paper') {
+      meta.push(`<a href="${esc(it.url)}" target="_blank" rel="noopener">arXiv ${esc(pid)}</a>`);
+      meta.push(`<a href="${esc(it.pdf_url)}" target="_blank" rel="noopener">PDF</a>`);
+      if (it.code_url) meta.push(`<a href="${esc(it.code_url)}" target="_blank" rel="noopener">代码${it.stars?' ★'+it.stars.toLocaleString():''}</a>`);
+    } else {
+      meta.push(`<a href="${esc(it.url)}" target="_blank" rel="noopener">GitHub</a>`);
+      if (it.language) meta.push(esc(it.language));
+      if (it.org) meta.push(esc(it.org));
+    }
+    const heat = it.kind === 'paper'
+      ? (it.hf_upvotes ? `<span title="Hugging Face upvotes">🔥 ${it.hf_upvotes}</span>` : '')
+      : `<span title="总 star">★ ${it.stars.toLocaleString()}</span>${it.stars_today?`<span title="今日新增">+${it.stars_today}</span>`:''}`;
+    const diff = [1,2,3].map(i => `<i class="${i <= (d.difficulty||2) ? 'on':''}"></i>`).join('');
+    const pre = (d.prereqs||[]).map(p => `<span class="pre ${p.status}">${p.status==='known'?'✓':p.status==='unknown'?'◻':'·'} ${esc(p.name)}</span>`).join('');
+    const tags = (it.keywords||[]).slice(0,4).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+    const inQ = queue.some(q => q.id === it.id);
+    const boardName = { daily:'日榜', weekly:'周榜', monthly:'月榜' };
+    const period = { daily:'今日', weekly:'本周', monthly:'本月' }[it.board] || '近期';
+    const heat2 = it.kind === 'paper' ? heat
+      : `<span title="总 star">★ ${it.stars.toLocaleString()}</span>${it.stars_today?`<span title="${period}新增">+${it.stars_today} ${period}</span>`:''}${it.board?`<span title="GitHub Trending">${boardName[it.board]}</span>`:''}`;
+    node.innerHTML = `
+      <div class="idx">${n}</div>
+      <div class="main">
+        <div class="head">
+          <span class="kind ${it.kind}">${kindName[it.kind]||it.kind}</span>
+          <span class="tier ${it.tier}">${it.tier==='core'?'核心方向':'全领域热点'}</span>
+          ${it.ptype && it.ptype!=='paper' ? `<span class="tag">${esc(it.ptype)}</span>` : ''}
+          <span class="heat">${heat2}</span>
+        </div>
+        <h3 class="title"><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a></h3>
+        <div class="meta">${meta.join('<span>·</span>')}</div>
+        ${d.one_liner ? `<p class="one">${esc(d.one_liner)}</p>` : ''}
+        ${d.why ? `<p class="why">${esc(d.why)}</p>` : ''}
+        ${d.architecture ? `<div class="arch"><span class="arch-l">核心架构</span><p>${esc(d.architecture)}</p></div>` : ''}
+        ${d.why_now ? `<p class="whynow">${esc(d.why_now)}</p>` : ''}
+        ${(d.key_points||[]).length ? `<ul class="pts">${d.key_points.map(k=>`<li>${esc(k)}</li>`).join('')}</ul>` : ''}
+        ${d.verdict ? `<div class="verdict">${esc(d.verdict)}</div>` : ''}
+        <div class="foot">
+          ${tags}
+          <span class="diff" title="难度">${diff}</span>
+          <span class="lvl ${d.read_level||'L1'}">${lvlName[d.read_level]||lvlName.L1}</span>
+          <span class="acts">
+            <button class="act star ${inQ?'on':''}" data-act="star">${inQ?'★ 已加入':'☆ 想读'}</button>
+            <button class="act ${read[it.id]?'done':''}" data-act="read">${read[it.id]?'✓ 已读':'标为已读'}</button>
+          </span>
+        </div>
+        ${it.score_reason ? `<div class="reason">打分理由：${esc(it.score_reason)} · core ${Math.round(it.core_score)} / wide ${Math.round(it.wide_score)}</div>` : ''}
+      </div>
+      <aside class="side">
+        ${d.mermaid ? `<div><span class="side-l">机制示意</span><div class="mermaid" data-code="${esc(d.mermaid)}"></div></div>` : ''}
+        ${pre ? `<div><span class="side-l">前置概念</span><div class="prelist">${pre}</div></div>` : ''}
+        ${d.related && d.related.length ? `<div class="kv"><b>延续 / 对比</b><br>${d.related.map(esc).join('、')}</div>` : ''}
+        ${it.kind==='paper' && it.authors && it.authors.length ? `<div class="kv"><b>作者</b><br>${esc(it.authors.slice(0,4).join(', '))}${it.authors.length>4?' 等':''}</div>` : ''}
+        ${it.kind==='project' ? `<div class="kv"><b>信号</b><br>★ ${it.stars.toLocaleString()}${it.forks?` · fork ${it.forks.toLocaleString()}`:''}${it.language?` · ${esc(it.language)}`:''}</div>` : ''}
+      </aside>`;
+    node.querySelector('[data-act="star"]').addEventListener('click', e => toggleQueue(it, e.currentTarget));
+    node.querySelector('[data-act="read"]').addEventListener('click', e => toggleRead(it, node, e.currentTarget));
+    const box = node.querySelector('.side .mermaid');
+    if (box) queueMicrotask(() => renderDiagram(box, box.dataset.code, it.id + n));
+    return node;
+  }
+
+  function toggleQueue(it, btn){
+    const i = queue.findIndex(q => q.id === it.id);
+    if (i >= 0) { queue.splice(i,1); btn.classList.remove('on'); btn.textContent = '☆ 想读'; toast('已移出精读队列'); }
+    else { queue.push({ id: it.id, title: it.title, date: current.date, kind: it.kind, url: it.url, n: it._n }); btn.classList.add('on'); btn.textContent = '★ 已加入'; toast('已加入精读队列'); }
+    store.set('queue', queue); renderQueue(); refreshStats();
+  }
+  function toggleRead(it, node, btn){
+    if (read[it.id]) { delete read[it.id]; node.classList.remove('read'); btn.classList.remove('done'); btn.textContent = '标为已读'; }
+    else { read[it.id] = current.date; node.classList.add('read'); btn.classList.add('done'); btn.textContent = '✓ 已读'; }
+    store.set('read', read); refreshStats();
+  }
+
+  function renderQueue(){
+    const body = $('#qbody');
+    if (!queue.length) { body.innerHTML = '<p class="empty">在条目上点「想读」，这里会攒起来。攒够了就复制给 Claude，让它按你的 known.md 只讲你不会的部分。</p>'; return; }
+    const ul = el('ul', 'qlist');
+    queue.slice().reverse().forEach(q => {
+      const li = el('li');
+      li.innerHTML = `<span><span class="t">${esc(q.title)}</span><br><span class="s">${q.date} · 第 ${q.n||'?'} 条 · ${kindName[q.kind]||q.kind}</span></span><button title="移出">×</button>`;
+      li.querySelector('button').addEventListener('click', () => { queue = queue.filter(x => x.id !== q.id); store.set('queue', queue); renderQueue(); refreshStats(); document.querySelectorAll(`.item[data-id="${CSS.escape(q.id)}"] .star`).forEach(b => { b.classList.remove('on'); b.textContent='☆ 想读'; }); });
+      ul.appendChild(li);
+    });
+    body.innerHTML = ''; body.appendChild(ul);
+  }
+  $('#qcopy').addEventListener('click', async () => {
+    if (!queue.length) return toast('队列是空的');
+    const lines = queue.map(q => `- ${q.date} 第 ${q.n||'?'} 条 · ${q.title} (${q.url})`);
+    const text = `请用 deep-read skill 带我精读下面这些（按 profile/known.md 跳过我已掌握的概念，先做前置概念探测）：\n${lines.join('\n')}`;
+    try { await navigator.clipboard.writeText(text); toast('已复制，去 Claude 里粘贴吧'); } catch { prompt('复制下面的文字：', text); }
+  });
+
+  // ---------- filters / search ----------
+  function applyFilter(){
+    const q = $('#q').value.trim().toLowerCase();
+    let shown = 0;
+    document.querySelectorAll('.item').forEach(n => {
+      let ok = true;
+      if (filter === 'paper' || filter === 'project') ok = n.dataset.kind === filter;
+      else if (filter === 'core' || filter === 'wide') ok = n.dataset.tier === filter;
+      else if (filter === 'unread') ok = !n.classList.contains('read');
+      if (ok && q) ok = n.dataset.text.includes(q);
+      n.classList.toggle('hidden', !ok); if (ok) shown++;
+    });
+    document.querySelectorAll('.sec').forEach(s => { const list = s.nextElementSibling; s.style.display = list && list.querySelector('.item:not(.hidden)') ? '' : 'none'; });
+  }
+  $('#q').addEventListener('input', applyFilter);
+
+  function renderDay(data){
+    current = data;
+    const items = data.items || [];
+    items.forEach((it, i) => it._n = i + 1);
+    const main = $('#main'); main.innerHTML = '';
+    const d = new Date(data.date + 'T12:00:00');
+    const wd = ['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
+    const head = el('div', 'dayhead');
+    const st = data.stats || {};
+    head.innerHTML = `<h1><small>${data.date} · ${wd}</small>今日情报 · ${items.filter(i=>i.kind==='paper').length} 篇论文 · ${items.filter(i=>i.kind==='project').length} 个项目</h1>
+      <div class="funnel"><span>候选 <b>${st.collected??'–'}</b></span><span class="arrow">→</span><span>过滤后 <b>${st.filtered??'–'}</b></span><span class="arrow">→</span><span>入选 <b>${items.length}</b></span></div>`;
+    main.appendChild(head);
+
+    const counts = { all: items.length, paper: items.filter(i=>i.kind==='paper').length, project: items.filter(i=>i.kind==='project').length, core: items.filter(i=>i.tier==='core').length, wide: items.filter(i=>i.tier==='wide').length, unread: items.filter(i=>!read[i.id]).length };
+    const fl = el('div', 'filters');
+    [['all','全部'],['unread','未读'],['paper','论文'],['project','项目'],['core','核心方向'],['wide','全领域热点']].forEach(([k,l]) => {
+      const b = el('button', 'chip', `${l}<span class="n">${counts[k]}</span>`); b.setAttribute('aria-pressed', filter===k);
+      b.addEventListener('click', () => { filter = k; fl.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c===b)); applyFilter(); });
+      fl.appendChild(b);
+    });
+    main.appendChild(fl);
+
+    // must-read lead: highest core score with a why
+    const lead = items.filter(i => i.tier === 'core').sort((a,b) => b.core_score - a.core_score || (b.hf_upvotes+b.stars_today) - (a.hf_upvotes+a.stars_today))[0];
+    if (lead && lead.digest && lead.digest.one_liner) {
+      const L = el('div', 'lead');
+      L.innerHTML = `<div class="eyebrow">今日必读 · ${kindName[lead.kind]} · 第 ${lead._n} 条</div><h2><a href="#" data-jump="${esc(lead.id)}">${esc(lead.title)}</a></h2><p>${esc(lead.digest.one_liner)}${lead.digest.why ? ' <span style="color:var(--core-ink)">— ' + esc(lead.digest.why) + '</span>' : ''}</p>`;
+      L.querySelector('a').addEventListener('click', e => { e.preventDefault(); const t = document.querySelector(`.item[data-id="${CSS.escape(lead.id)}"]`); if (t) { t.scrollIntoView({ behavior:'smooth', block:'center' }); t.style.borderColor = 'var(--core)'; setTimeout(()=>t.style.borderColor='',1500); } });
+      main.appendChild(L);
+    }
+
+    const groups = [
+      ['📄 论文 · 核心方向', items.filter(i => i.tier==='core' && i.kind==='paper')],
+      ['🧰 项目 · 核心方向', items.filter(i => i.tier==='core' && i.kind==='project')],
+      ['🌐 全领域热点', items.filter(i => i.tier==='wide')],
+    ];
+    groups.forEach(([name, arr]) => {
+      if (!arr.length) return;
+      const s = el('div', 'sec', `<h3>${name}</h3><span class="n">${arr.length}</span><span class="ln"></span>`);
+      const list = el('div', 'list');
+      arr.forEach(it => list.appendChild(itemNode(it, it._n)));
+      main.appendChild(s); main.appendChild(list);
+    });
+    if (!items.length) main.appendChild(el('div', 'loading', '这一天没有入选条目。'));
+    seenDays[data.date] = 1; store.set('seenDays', seenDays);
+    document.querySelectorAll('.day').forEach(b => { b.classList.toggle('active', b.dataset.date === data.date); if (b.dataset.date === data.date) b.classList.remove('unread'); });
+    applyFilter();
+    if (st.llm) $('#llm-usage').textContent = st.llm;
+    history.replaceState(null, '', '#' + data.date);
+  }
+
+  async function loadDay(date){
+    $('#main').innerHTML = '<div class="loading">加载 ' + date + '…</div>';
+    try { const r = await fetch(`data/${date}.json`, { cache:'no-cache' }); renderDay(await r.json()); }
+    catch { $('#main').innerHTML = '<div class="loading">读取 ' + date + ' 失败。</div>'; }
+  }
+
+  async function init(){
+    refreshStats(); renderQueue();
+    try {
+      index = await (await fetch('data/index.json', { cache:'no-cache' })).json();
+    } catch { $('#main').innerHTML = '<div class="loading">还没有数据。先跑一次 <code>python -m jarvis run</code>。</div>'; return; }
+    const site = index.site || {};
+    if (site.subtitle) $('#site-sub').textContent = site.subtitle;
+    if (site.repo) $('#repo-link').href = site.repo;
+    const days = index.days || [];
+    const rail = $('#days');
+    days.forEach(dd => {
+      const d = new Date(dd.date + 'T12:00:00');
+      const b = el('button', 'day' + (seenDays[dd.date] ? '' : ' unread'));
+      b.dataset.date = dd.date;
+      b.innerHTML = `<span class="d">${d.getMonth()+1}/${d.getDate()}<small>${['周日','周一','周二','周三','周四','周五','周六'][d.getDay()]}</small></span><span class="c">${dd.papers}p · ${dd.projects}r</span>`;
+      b.addEventListener('click', () => loadDay(dd.date));
+      rail.appendChild(b);
+    });
+    const want = location.hash.slice(1);
+    const first = days.find(x => x.date === want) || days[0];
+    if (first) loadDay(first.date); else $('#main').innerHTML = '<div class="loading">还没有任何日报。</div>';
+  }
+  init();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <title>ArXiv Query</title>
+  <entry>
+    <id>http://arxiv.org/abs/2609.00123v1</id>
+    <updated>2026-09-01T17:59:12Z</updated>
+    <published>2026-09-01T17:59:12Z</published>
+    <title>Tool-Augmented Memory for Long-Horizon Agents: A Retrieval-Write Policy Learned with GRPO</title>
+    <summary>We propose a learned read/write policy over an external memory for tool-using agents. Trained with GRPO on synthetic long-horizon tasks, the policy raises success rate from 31% to 68% on 200k-step tasks while cutting context tokens by 5x. Code: https://github.com/example/tamem</summary>
+    <author><name>Jane Doe</name></author><author><name>Wei Zhang</name></author>
+    <arxiv:comment>Code at https://github.com/example/tamem</arxiv:comment>
+    <category term="cs.AI"/><category term="cs.CL"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.00456v1</id>
+    <updated>2026-09-01T12:00:00Z</updated>
+    <published>2026-09-01T12:00:00Z</published>
+    <title>A Note on the Convergence of Stochastic Gradient Descent for Shallow Networks</title>
+    <summary>We give a refined convergence rate for SGD on two-layer networks under a mild separability assumption, improving the constant in prior bounds.</summary>
+    <author><name>John Smith</name></author>
+    <category term="cs.LG"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.00789v1</id>
+    <updated>2026-09-01T09:00:00Z</updated>
+    <published>2026-09-01T09:00:00Z</published>
+    <title>FlashKV: Compressing KV Cache with Learned Low-Rank Projections for 4x Longer Contexts</title>
+    <summary>FlashKV learns per-layer low-rank projections of keys and values, reducing KV cache memory by 4x with under 0.3 point perplexity degradation on long-context benchmarks, and integrates with vLLM paged attention.</summary>
+    <author><name>Li Wei</name></author><author><name>Ana Costa</name></author>
+    <category term="cs.LG"/><category term="cs.CL"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.99999v2</id>
+    <updated>2026-09-01T08:00:00Z</updated>
+    <published>2026-08-20T08:00:00Z</published>
+    <title>Old Paper That Should Be Filtered By Date Window</title>
+    <summary>This paper was published outside the 48h window and only updated recently.</summary>
+    <author><name>Nobody</name></author>
+    <category term="cs.CV"/>
+  </entry>
+</feed>

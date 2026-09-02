@@ -1,0 +1,63 @@
+name: daily-digest
+
+on:
+  schedule:
+    # 12:00 America/New_York：夏令时 = 16:00 UTC，冬令时 = 17:00 UTC。两条都跑，代码里按当天日期去重（同一天第二次运行会覆盖同名文件，结果一致）。
+    - cron: "0 16 * * *"
+    - cron: "0 17 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "YYYY-MM-DD（留空 = 今天）"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Skip if today already generated (second cron of the day)
+        id: guard
+        run: |
+          TODAY=$(TZ=America/New_York date +%F)
+          if [ -z "${{ github.event.inputs.date }}" ] && [ -f "digests/$TODAY.md" ] && [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"; echo "digests/$TODAY.md exists, skipping"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run Jarvis
+        if: steps.guard.outputs.skip == 'false'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python -m jarvis run --date "${{ github.event.inputs.date }}"
+          else
+            python -m jarvis run
+          fi
+
+      - name: Commit results
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          git config user.name "jarvis-bot"
+          git config user.email "jarvis-bot@users.noreply.github.com"
+          git add digests data docs/data state
+          git diff --cached --quiet && echo "nothing to commit" || git commit -m "digest: $(TZ=America/New_York date +%F)"
+          git push
