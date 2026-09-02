@@ -59,7 +59,7 @@ def load_seen(state_dir: Path, keep_days: int, today: date) -> dict[str, str]:
         return {}
     seen = json.loads(p.read_text(encoding="utf-8"))
     cutoff = (today - timedelta(days=keep_days)).isoformat()
-    return {k: v for k, v in seen.items() if v >= cutoff}
+    return {k: v for k, v in seen.items() if cutoff <= v < today.isoformat()}
 
 
 def save_seen(state_dir: Path, seen: dict[str, str]) -> None:
@@ -114,8 +114,9 @@ SCORE_SYSTEM = """你是一位资深 AI 研究员，替一名研二学生筛选�
 - reason：不超过 30 字的中文理由。
 原则：热度（star / upvote）只是注意力信号，不是质量信号；分数看的是对读者有没有用。
 严格判断"减分项"：与 AI 无关的项目、awesome 列表、教程合集、套壳客户端、纯 UI 模板 core 和 wide 都给 ≤2。
+每条给 is_ai（true/false）：是否属于 AI / ML / LLM / agent / 数据与模型基础设施范畴。不是的一律 false（例如通用 API 列表、浏览器、桌面工具、游戏）。
 项目额外给 ptype：skill（给 agent 用的 skill/prompt 包）/ tutorial（教学）/ tool（工具/应用）/ infra（框架/运行时/训练推理基础设施）/ model（模型或权重发布）。论文填 "paper"。
-只输出 JSON：{"scores": [{"id": "...", "core_score": n, "wide_score": n, "ptype": "...", "tags": [...], "reason": "..."}]}"""
+只输出 JSON：{"scores": [{"id": "...", "is_ai": true, "core_score": n, "wide_score": n, "ptype": "...", "tags": [...], "reason": "..."}]}"""
 
 
 def _fmt_candidate(it: Item) -> str:
@@ -134,28 +135,57 @@ def _fmt_candidate(it: Item) -> str:
     return f"[{it.id}] ({it.kind}) {it.title}\n  {'; '.join(meta)}\n  {it.summary[:700]}"
 
 
+def _apply_scores(batch: list[Item], data: dict) -> list[Item]:
+    """把 LLM 返回写回条目，返回没匹配上的条目。"""
+    by_id: dict[str, dict] = {}
+    for sc in data.get("scores", []):
+        if isinstance(sc, dict) and sc.get("id"):
+            by_id[str(sc["id"]).strip().lower()] = sc
+    missing: list[Item] = []
+    for it in batch:
+        sc = by_id.get(it.id.lower()) or by_id.get(it.id.split(":", 1)[1].lower())
+        if not sc:
+            missing.append(it)
+            continue
+        it.core_score = float(sc.get("core_score", 0) or 0)
+        it.wide_score = float(sc.get("wide_score", 0) or 0)
+        if sc.get("is_ai") is False:
+            it.core_score = min(it.core_score, 2.0)
+            it.wide_score = min(it.wide_score, 2.0)
+        it.keywords = [str(t) for t in (sc.get("tags") or [])][:4] or it.keywords
+        it.score_reason = str(sc.get("reason", ""))[:60]
+        if it.kind == "project":
+            it.ptype = str(sc.get("ptype", "") or "")
+    return missing
+
+
 def llm_score(items: list[Item], llm: LLM, interests: str, batch_size: int) -> None:
-    for i in range(0, len(items), batch_size):
-        batch = items[i : i + batch_size]
+    def run(batch: list[Item]) -> list[Item]:
         user = "## 兴趣画像\n" + interests + "\n\n## 候选\n" + "\n\n".join(_fmt_candidate(it) for it in batch)
         try:
-            data = llm.json(llm.score_model, SCORE_SYSTEM, user)
+            return _apply_scores(batch, llm.json(llm.score_model, SCORE_SYSTEM, user))
         except Exception as e:  # noqa: BLE001
-            print(f"  [score] batch {i // batch_size} failed, fallback heuristic: {e}")
-            heuristic_score(batch)
-            continue
-        by_id = {s.get("id"): s for s in data.get("scores", []) if isinstance(s, dict)}
-        for it in batch:
-            s = by_id.get(it.id)
-            if not s:
-                heuristic_score([it])
-                continue
-            it.core_score = float(s.get("core_score", 0) or 0)
-            it.wide_score = float(s.get("wide_score", 0) or 0)
-            it.keywords = [str(t) for t in (s.get("tags") or [])][:4] or it.keywords
-            it.score_reason = str(s.get("reason", ""))[:60]
-            it.ptype = str(s.get("ptype", "") or "")
-        print(f"  [score] batch {i // batch_size + 1}: {len(batch)} scored")
+            print(f"  [score] batch of {len(batch)} failed: {e}")
+            return list(batch)
+
+    leftover: list[Item] = []
+    for i in range(0, len(items), batch_size):
+        batch = items[i : i + batch_size]
+        leftover += run(batch)
+        print(f"  [score] batch {i // batch_size + 1}: {len(batch) - len(leftover)} scored so far")
+    # 没匹配/失败的条目：小批重试一次；仍失败则启发式打分并封顶，保证不会因为没经过 LLM 判断而混进日报
+    if leftover:
+        print(f"  [score] retrying {len(leftover)} unscored in small batches")
+        still: list[Item] = []
+        for i in range(0, len(leftover), 5):
+            still += run(leftover[i : i + 5])
+        if still:
+            heuristic_score(still)
+            for it in still:
+                it.core_score = min(it.core_score, 4.0)
+                it.wide_score = min(it.wide_score, 4.0)
+                it.score_reason = "LLM 未打分（已封顶，不入选）"
+            print(f"  [score] {len(still)} items capped after fallback")
 
 
 def heuristic_score(items: list[Item]) -> None:
