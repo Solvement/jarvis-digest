@@ -4,63 +4,60 @@
   "collected": 699,
   "filtered": 349,
   "selected": 18,
-  "llm": "LLM usage — gpt-5.4-nano: 18 calls, 61035 in / 17899 out; gpt-5.4-mini: 6 calls, 45853 in / 8673 out"
+  "llm": "LLM usage — gpt-5.4-nano: 20 calls, 64931 in / 20696 out; gpt-5.4-mini: 6 calls, 45488 in / 8645 out"
  },
  "items": [
   {
-   "id": "paper:2609.01281",
+   "id": "paper:2608.30147",
    "kind": "paper",
-   "title": "EmbodiedSkills: A Unified Framework for Orchestrating, Training, and Deploying VLA Agents",
-   "url": "https://arxiv.org/abs/2609.01281",
-   "summary": "Vision-language-action (VLA) models map visual observations and language instructions directly to robot actions, but long-horizon tasks require more than action prediction. An agent must coordinate perception, planning, execution, progress verification, and recovery as the physical state evolves. An action prediction or a model-generated skill decision does not, by itself, guarantee that the proposed operation is valid in the current state or that its outcome will be verified. We propose EmbodiedSkills, a unified framework that treats each skill decision as an execution proposal: the runtime checks its prerequisites before execution and verifies the outcome afterward. A shared executable-skill interface connects high-level skill selection, bounded low-level VLA execution, and post-action verification within a single agent loop. Because this interface remains fixed, low-level VLA policies can be replaced or adapted without changing the agent loop. The interface also records planning, execution, verification, and recovery events as structured trajectories, which provide supervision for individual components and can support optional online adaptation when interactive feedback is available. We instantiate EmbodiedSkills with Qwen3-VL and OpenPI/pi0.5 on RoboTwin 2.0 and LIBERO. Task-adapted low-level VLA policies achieve an average success rate of 86.20% across 50 RoboTwin 2.0 tasks and 97.40% across the four LIBERO suites. These results establish the execution performance of the task-adapted low-level VLA policies used in EmbodiedSkills. On four memory-dependent RMBench tasks, the same task-adapted execution approach achieves 12.5% average success. The framework provides a trainable and inspectable agent layer for turning these policies into closed-loop embodied systems.",
-   "source": "arxiv",
-   "published": "2026-09-01",
+   "title": "CAST: Critique-Aware Supervision for Training Reliable Long-Horizon Tool-Calling Agents",
+   "url": "https://arxiv.org/abs/2608.30147",
+   "summary": "Large language model (LLM) agents are increasingly deployed in long-horizon, interactive, and stateful environments. In these settings, a single wrong action, such as refunding the wrong purchase, can cause irreversible task failure and must be intercepted before execution. Such failures may not appear in every single run, but can emerge across repeated trials, making reliability across steps and trials critical. However, ensuring agentic reliability is challenging: even frontier LLMs struggle to explain why an action may be wrong, especially in long, intertwined trajectories governed by domain-specific policies. Much recent work relies on prompt-based critique agents, while optimization-based methods lack a systematic way to produce rich verification rationales for training. We address this gap with CAST, a critique-aware training framework that converts sparse task outcomes into action-level supervision for critique learning and policy optimization. CAST analyzes agent trajectories to synthesize structured rationales explaining action validity under partial observability. The resulting critique model is used to construct critique-aware training data for optimizing the policy model. Fine-tuning Qwen3-family models on dynamic tool-calling benchmarks, CAST improves reliability across domains, outperforming GPT-OSS-120B by over 10% pass^4 on Retail tasks and yielding an additional 9% improvement on Telehealth in an out-of-domain setting. These results demonstrate that critique-aware training improves the robustness of LLM agents in realistic dynamic environments.",
+   "source": "hf_papers",
+   "published": "2026-08-31",
    "authors": [
-    "Wei Wang",
-    "Wenqiao Zhang",
-    "Yutong Lin",
-    "Yuqian Yuan",
-    "Tianwei Lin",
-    "Jinhao Mao"
+    "Amir Saeidi",
+    "Zehua Zhang",
+    "Rishitosh Singh",
+    "Naman Ahuja",
+    "Vivek Gupta",
+    "Ali Payani"
    ],
    "org": "",
-   "hf_upvotes": 0,
+   "hf_upvotes": 6,
    "stars": 0,
    "stars_today": 0,
    "forks": 0,
    "language": "",
    "code_url": "",
-   "pdf_url": "https://arxiv.org/pdf/2609.01281",
-   "categories": [
-    "cs.RO",
-    "cs.AI"
-   ],
+   "pdf_url": "https://arxiv.org/pdf/2608.30147",
+   "categories": [],
    "keywords": [
-    "vla",
     "agent",
-    "planning",
-    "infrastructure"
+    "tool-calling",
+    "reliability",
+    "rlhf"
    ],
    "core_score": 10.0,
-   "wide_score": 7.0,
-   "score_reason": "VLA长程框架：前提检查/结果验证，强可落地",
+   "wide_score": 5.0,
+   "score_reason": "面向长程工具调用可靠性的监督/训练，直击痛点",
    "tier": "core",
-   "ptype": "paper",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "用 executable skill 约束 VLA agent，RoboTwin 2.0 平均 86.20%",
-    "why": "适合看“机器人 agent 不是只会出动作”",
-    "architecture": "反直觉点在于：长程操作失败时，问题常不在 action prediction 本身，而在“这一步现在能不能做、做完有没有真的成功”。现有 end-to-end VLA 把中间决策吞进黑箱，LLM 式机器人 agent 又会提出看似合理但对当前物理状态不合法的技能。EmbodiedSkills 的关键改动是把每个 skill decision 当成 execution proposal：skill 有 typed I/O 和 prerequisites，runtime 先做 preflight check 再执行，之后用 verifier 写回结果；这样阻断的是“过期观测、缺参数、阶段不匹配、非法状态迁移”直接变成物理动作。最直接的证据是它在 AgentLoop 里把 planning、verification、recovery 都记录成 structured trajectories，低层 policy 可替换但 loop 不变；作者报告 task-adapted low-level VLA 在 RoboTwin 2.0 50 个任务上 86.20%，LIBERO 四套 97.40%，而 RMBench 记忆依赖任务只有 12.5%，说明这个框架对可执行技能有效，但对需要长时记忆/更强状态推理的任务还不够。新意主要在系统组织层，不是新视觉策略。",
-    "verdict": "值得精读，重点看它怎么把技能接口变成闭环约束",
+    "one_liner": "CAST 用 critique supervision 训工具代理，Retail pass^4 提升超 10%",
+    "why": "适合看 agent 可靠性和后训练怎么做",
+    "architecture": "反直觉点在于：长链工具调用里，任务最终成功不等于每一步都可靠，单次跑通的模型也会在重复试验里翻车；而现有 prompt-based critique 只能“事后点评”，训练时又拿不到可学习的逐步验证理由。CAST 的关键变化是把稀疏轨迹结果转成 action-level critique supervision：先用同一任务多次 rollout 收集轨迹，再由 agentic verification 生成“当前动作在当下信息下是否有效”的结构化理据，训练出 CAST-Critic；再让这个 critic 回头给新轨迹打细粒度验证标签，构造 critique-enriched 数据去优化 policy。最直接的证据是动态 tool-calling 基准上，Qwen3 细调后在 Retail 的 pass^4 比 GPT-OSS-120B 高出 10%+，并且 Telehealth 还有额外 9% 的 OOD 提升，说明改的是跨步一致性而不只是单次命中率。新意主要在组件层和系统组织层：把“批注模型”变成可训练、可复用的数据生成中间件。",
+    "verdict": "值得精读，核心是把稀疏结果变成逐步监督",
     "why_now": "",
     "key_points": [
-     "最强证据是预检+后验验证的闭环，不是单次动作精度",
-     "RMBench 12.5% 说明记忆依赖场景仍脆弱",
-     "复现难点在真实机器人闭环与 verifier 设计"
+     "最强证据是 pass^4 跨域提升，不只是单次 pass^1",
+     "没证明通用到所有 agent 形态；依赖动态工具环境",
+     "复现门槛在于要有多轮 rollout 和高质量 critique 生成"
     ],
     "prereqs": [
      {
-      "name": "vision-language-action",
+      "name": "ReAct",
       "status": "unknown"
      },
      {
@@ -72,17 +69,17 @@
       "status": "unknown"
      },
      {
-      "name": "ReAct",
-      "status": "unknown"
+      "name": "tool-calling",
+      "status": "unlisted"
      }
     ],
     "difficulty": 2,
     "related": [
-     "ReAct",
-     "Sutton et al. 1999"
+     "Reflexion",
+     "Self-Refine"
     ],
-    "mermaid": "graph LR\nA[task state] --> B[skill proposal]\nB --> C[preflight check]\nC -->|valid| D[bounded VLA execution]\nC -->|invalid| E[replan recovery]\nD --> F[post verify]\nF -->|fail| E\nF -->|pass| G[update trajectory]",
-    "read_level": "L3"
+    "mermaid": "graph LR\nA[Repeated rollouts] --> B[Action verification]\nB --> C[Critique labels]\nC --> D[Critic model]\nD --> E[Critique enriched data]\nE --> F[Policy fine tuning]\nF --> G[More reliable tool use]",
+    "read_level": "L2"
    }
   },
   {
@@ -114,27 +111,26 @@
     "cs.LG"
    ],
    "keywords": [
-    "vla",
     "robotics",
-    "foundation-model",
-    "rl"
+    "vla",
+    "foundation-model"
    ],
    "core_score": 10.0,
-   "wide_score": 8.0,
-   "score_reason": "接触丰富操作的机器人基础模型，重磅方向",
+   "wide_score": 7.0,
+   "score_reason": "机器人接触型基础模型，系统性强",
    "tier": "core",
-   "ptype": "paper",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "用 action-wrench 联合建模做精密装配，5 任务 82%",
-    "why": "适合看机器人后训练和接触建模怎么接上",
-    "architecture": "反直觉点在于，精密装配里两个看起来几乎一样的运动，可能一个顺利插入、一个直接卡死；只看视觉或末端位姿不够。Facet-0 把“接触后果”变成 policy 要预测和评价的对象：先把 causal wrench history 和视觉-语言、kinematic state 对齐，再用 flow matching 一次生成 action chunk 和它将引起的 future wrist-wrench profile；这阻断的是“几何上对齐但物理上会 jam”的错误。部署时又用 distributional Action-Wrench Critic 评估 proposed action + anticipated wrench，把相似进度但不同接触结果分开；phase-aware reward 和 contact-selective credit 只把更新压到决定性接触上。最直接支撑的是消融：semantic-contact alignment 仅 16%，value-guided refinement 到 38%，再加 bounded local adaptation 到 82%，说明提升主要来自把 contact consequence 纳入表示与价值学习，而不只是更大数据。新意在组件层加了 wrench 预测头和接触 critic，也在实证层给了 1000 小时 force-synchronized corpus。",
-    "verdict": "值得精读，核心是把接触当成可预测的后果而不是观测",
+    "one_liner": "Facet-0 用动作加 wrench 预测做精密装配，82% 成功率",
+    "why": "对 VLA、robot RL 和具身面试都很对口",
+    "architecture": "这里的悖论是：两个动作在视觉上看起来几乎一样，落到装配末端却可能一个顺利插入、一个直接卡死；只学 motion 会把“看起来对”误当成“物理上对”。Facet-0 的关键改法是把 contact 当成动作的未来后果来建模：先把 causal wrench history、视觉语言语义和 kinematic state 融合成 semantic-contact representation，再用 flow matching 同时生成 action chunk 和它预期引发的 future wrist wrench；部署 rollout 里再训练 distributional Action-Wrench Critic，专门区分“几何进度相近但接触结果不同”的动作，并用 phase-aware reward 把 credit 只压到关键接触步骤。最直接的证据是消融：只做 semantic-contact alignment 仅 16%，加 value-guided refinement 到 38%，再加 bounded local adaptation 才到 82%，说明性能主要来自把 contact 变成可预测、可估值、可在本体上局部适配的对象。新意主要在组件层和系统层组织：不是单纯换 action head，而是把 wrench 引进表示、生成、价值三处闭环。",
+    "verdict": "值得精读，接触建模和 RL 组织方式都很有信息量",
     "why_now": "",
     "key_points": [
-     "82% vs 最强基线 15%，且给出 0.5 mm 和 50 ms",
-     "16%→38%→82% 的消融最能说明关键机制",
-     "复现门槛高：真实制造数据和力同步采集"
+     "最强证据是 16%→38%→82% 的分段消融",
+     "没证明离开装配类接触任务还能同样收益",
+     "复现难点在 force-synchronized 数据和真实机器人 rollout"
     ],
     "prereqs": [
      {
@@ -146,20 +142,20 @@
       "status": "unknown"
      },
      {
-      "name": "reinforcement learning",
-      "status": "unlisted"
-     },
-     {
       "name": "diffusion model",
       "status": "unknown"
+     },
+     {
+      "name": "reinforcement learning",
+      "status": "unlisted"
      }
     ],
     "difficulty": 3,
     "related": [
      "RT-1",
-     "Act3D"
+     "Diffusion Policy"
     ],
-    "mermaid": "graph LR\nA[images and text] --> B[semantic contact state]\nC[wrench history] --> B\nB --> D[action chunk]\nB --> E[future wrench]\nD --> F[execute]\nF --> G[critic values contact]\nG --> H[policy update]",
+    "mermaid": "graph LR\nA[Vision language state] --> B[Semantic contact rep]\nC[Wrench history] --> B\nB --> D[Action chunk]\nB --> E[Future wrench]\nD --> F[Execute]\nF --> G[Rollout value]\nG --> H[Critic and adaptation]",
     "read_level": "L3"
    }
   },
@@ -192,25 +188,25 @@
    ],
    "keywords": [
     "agent",
-    "security",
-    "rlhf"
+    "safety",
+    "guardrails"
    ],
    "core_score": 10.0,
-   "wide_score": 8.0,
-   "score_reason": "防御-as-skill保护技能体，强贴合agent安全",
+   "wide_score": 7.0,
+   "score_reason": "agent运行时防护新范式，贴合防越权。",
    "tier": "core",
-   "ptype": "paper",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "把 runtime guard 做成 skill，SCOPE-R 上 ID ASR 降到 0.104",
-    "why": "适合看 agent 安全和 skill 系统的 runtime 防护",
-    "architecture": "反直觉点在于，技能越可复用，越可能把恶意指令变成长期驻留的 steering channel；而且真正危险的动作常在“任务和 workspace 状态刚好合适”时才出现，预装扫描抓不住。Defense-as-Skill 的关键改变是把 guard 本身做成一个 installable skill：SkillSonar 和普通任务技能并行运行，但每个敏感 action 都先按用户 task boundary 过一遍 allow / replan / confirmation。它阻断的是“动作在语义上看似合理、在安全上却越界”的 runtime 失败，而不是安装时的静态文件问题。最直接证据是 SCOPE-R：206 个 attack-confirmed malicious instances、43 个 benign tasks；在 repeated GLM-5 runs 上，SkillSonar 把 ID ASR 从 0.482 降到 0.104、OOD ASR 从 0.606 降到 0.115，同时还测了对 held-out risk families 和 adaptive attackers 的迁移。新意主要在系统组织层和实证层：把安全责任做成 skill-native artifact，并用 MCTS 在 rollout 上进化它。",
-    "verdict": "值得精读，尤其适合做 agent 安全方向面试谈资",
+    "one_liner": "Defense-as-Skill 把运行时防护做成 skill，GLM-5 ASR 降到 0.104",
+    "why": "适合看 agent safety 和 skill 系统边界",
+    "architecture": "反直觉点在于：危险不一定发生在技能安装时，而是等用户任务和工作区状态“凑齐”后才出现，所以静态审计和预安装筛查都抓不到。它的关键变化是把防守本身做成一个可安装、可编辑、可检查的 skill：SkillSonar 不改 agent runtime，只在执行时盯住敏感动作，把每个 tool call、文件操作、shell 命令映射成 allow、replan 或 confirmation。再往前一步，作者把 guard 的优化也做成 skill-native 的 MCTS 演化：在真实 rollouts 上按 attack success、task utility、confirmation burden 和 token cost 迭代 guard 文件，而不是只训一个外部 classifier。最直接的证据是 repeated GLM-5 runs 上 ID ASR 从 0.482 降到 0.104、OOD ASR 从 0.606 降到 0.115，同时还报告能保持 benign utility，说明它挡的是运行时、任务条件下的攻击而不是泛化成“全拒绝”。新意主要在系统组织层：把安全中间件纳入 skill 分发与演化范式。",
+    "verdict": "值得精读，安全中间件做成 skill 这个切法很新",
     "why_now": "",
     "key_points": [
-     "SCOPE-R 只保留 attack-success-confirmed 样本，证据更硬",
-     "ID/OOD ASR 都明显下降，但依赖显式调用护栏技能",
-     "复现难点在 agent harness 和对抗式 rollout 生成"
+     "最强证据是 ID/OOD ASR 都显著下降",
+     "没证明在所有 agent runtime 都同样好接入",
+     "复现难点在于要有带攻击确认的 task-conditioned 数据"
     ],
     "prereqs": [
      {
@@ -226,16 +222,90 @@
       "status": "unknown"
      },
      {
-      "name": "multi-agent",
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Reflexion",
+     "SWE-bench"
+    ],
+    "mermaid": "graph LR\nA[Task skill] --> B[Runtime guard skill]\nB --> C{Sensitive action}\nC -->|allow| D[Execute]\nC -->|replan| E[Revise]\nC -->|confirm| F[Ask user]\nB --> G[MCTS evolution]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.00028",
+   "kind": "paper",
+   "title": "UI-Venus-2 Technical Report",
+   "url": "https://arxiv.org/abs/2609.00028",
+   "summary": "Multimodal GUI agents have emerged as a promising paradigm for digital task automation, yet transitioning from benchmark-oriented models to dependable real-world applications remains challenging due to limited environment coverage, brittle task construction, and unreliable reward verification. In this work, we present UI-Venus-2, a general-purpose foundation GUI agent designed to operate across mobile, web, and desktop environments through a unified closed-loop reasoning-action framework. To bridge the gap toward practical deployment, we jointly scale three critical dimensions: (1) Environments, expanding coverage to more than 170 multilingual mobile apps and native desktop operating systems; (2) Tasks, employing a deep-research pipeline for function-grounded instruction generation; and (3) Verification, adopting trace-level and sample-level evaluators with visual keypoints and multi-model voting to ensure reliable RL signals for training. Furthermore, we integrate safety-aware mechanisms to ensure controlled execution of consequential actions. By offering a capable, efficient, and open-source foundation, UI-Venus-2 advances the field toward more generalizable, verifiable, and self-reflective agents for real-world applications.",
+   "source": "hf_papers",
+   "published": "2026-08-27",
+   "authors": [
+    "Venus Team",
+    "Zhuohan Cai",
+    "Haoxing Chen",
+    "Jiaxuan Chen",
+    "Weizhi Chen",
+    "Changlong Gao"
+   ],
+   "org": "",
+   "hf_upvotes": 52,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.00028",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multimodal",
+    "gui"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "通用GUI智能体闭环框架，贴合工程与评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "UI-Venus-2 用统一闭环 GUI agent 覆盖 170+ 应用，靠验证器稳住 RL 信号",
+    "why": "做 Agent / GUI 自动化的人，最该看它怎么把训练信号做实",
+    "architecture": "反直觉点在于：GUI agent 真正卡住的往往不是“下一步点哪”，而是环境覆盖太窄、任务生成不实、reward 验证不可信，结果一旦进真实 app 就会在未见状态、半完成态和奖励漏洞里崩掉。UI-Venus-2 的关键变化不是再堆一个 action head，而是把 agent 组织成统一的 closed-loop reasoning-action：组件上，环境扩到 170+ multilingual mobile apps 和 desktop OS，任务生成用 deep-research 做 function-grounded instruction，验证器同时看 trace-level 和 sample-level，并用 visual keypoints + multi-model voting 阻断“表面进展被当成完成”和单一 judge 偏置。最直接的支撑是作者报告：加入大规模 video-like 轨迹不相关，这里 RL 信号变稳后，GUI bench 上 9B/27B 都能对强基线给出更可靠的端到端表现；正文里最像关键证据的是对 verification 的消融与 CAPTCHA/真实环境任务。新意主要在系统组织层，而不是单个模型结构。",
+    "verdict": "值得精读，核心价值在可训练、可验证的 GUI agent 组织方式",
+    "why_now": "",
+    "key_points": [
+     "最强证据在 verification 设计，直接防 reward hacking",
+     "没证明跨平台泛化的上限，原文未明确真实大规模部署",
+     "复现难点在环境、任务、judge 三套基础设施"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
       "status": "unknown"
      }
     ],
     "difficulty": 2,
     "related": [
-     "Prompt Injection",
-     "ReAct"
+     "UI-Venus",
+     "UI-Venus-1.5"
     ],
-    "mermaid": "graph LR\nA[user task] --> B[task skill]\nB --> C[guard skill]\nC --> D{allow replan confirm}\nD -->|allow| E[action]\nD -->|replan| B\nD -->|confirm| F[user approval]",
+    "mermaid": "graph TD\nA[自然语言任务] --> B[闭环观察]\nB --> C[函数约束生成任务]\nB --> D[轨迹与样本验证]\nD --> E[多模型投票]\nE --> F[RL 信号]\nF --> G[下一步动作]\nG --> B",
     "read_level": "L3"
    }
   },
@@ -265,26 +335,26 @@
    "pdf_url": "https://arxiv.org/pdf/2609.00188",
    "categories": [],
    "keywords": [
-    "world-model",
     "video",
-    "embodiment"
+    "embodied",
+    "world-model"
    ],
    "core_score": 9.0,
-   "wide_score": 6.0,
-   "score_reason": "视频驱动世界/动作模型，具身泛化强相关",
+   "wide_score": 7.0,
+   "score_reason": "视频预训练学习World Action Models，具身迁移强",
    "tier": "core",
-   "ptype": "paper",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "用 120k 小时视频预训练 WAM，零样本成功率 36.1%→77.8%",
-    "why": "做具身/RL 方向面试很有谈资",
-    "architecture": "反直觉点在于：机器人最缺的是动作标注，但最容易扩大的却是第一人称视频；直接拿视频生成器接控制又会卡在“看起来对、动作不对”。ZimaBlue 的关键改变是把学习拆成三段：先用 causal embodied video pre-training 学“会发生什么”的时空/物理先验，再用 unified action representation 把多种机器人轨迹对齐到同一动作语义，最后针对目标机器人做 post-training，阻断“只记住单一机体动作格式”的失败。真正支撑这个设计的证据不是视频预测，而是 zero-shot manipulation：从仅目标机器人数据到加入 120,000 小时视频，成功率按作者报告从 36.1% 升到 77.8%；再配合 Slow-Fast dual-system，把高容量 world model 和轻量 fast branch 解耦，闭环延迟降到 33 ms、能在 RTX 4090 上 30 Hz 出动作。新意主要在系统组织层：不是单个更强 policy，而是数据来源分工 + 异步控制架构。",
-    "verdict": "值得精读，核心是视频如何变成可控世界模型",
+    "one_liner": "ZimaBlue 用 12 万小时视频预训练 WAM，零样本成功率从 36.1% 到 77.8%",
+    "why": "做具身 / VLA 的人，能直接看懂它怎么补“物理经验”",
+    "architecture": "反直觉点在于：机器人泛化差，瓶颈不只是 policy 不够大，而是动作标注轨迹太贵，导致模型学不到足够广的物理和接触先验。ZimaBlue 的关键改法是把学习拆成三段：先用 large-scale egocentric video 做 causal embodied video pre-training，让模型先从无动作标注视频里学未来视觉变化与因果动态；再用 heterogeneous robot trajectories 做 video-action mid-training，并用 unified action representation 把不同 embodiment 的状态/动作对齐，阻断“只会某台机器人”；最后对目标机器人 post-training，校准到具体动作空间。最直接的证据是数据规模曲线：从 300 小时目标机器人数据到 6,000 小时多 embodiment 数据，再加到 60,000/120,000 小时视频，零样本成功率单调升到作者报告的 77.8%。新意在训练范式层和运行时系统层并进，后者是 Slow-Fast 双系统把闭环延迟压到 33 ms。",
+    "verdict": "值得精读，核心是把视频变成可控机器人先验",
     "why_now": "",
     "key_points": [
-     "最强证据是零样本任务成功率随视频规模单调上升",
-     "没证明通用到所有机器人；强依赖统一动作表示",
-     "复现难在大规模视频与多 embodiment 数据管线"
+     "最强证据是数据规模单调提升到 77.8%",
+     "没证明所有任务都受益，原文未明确脆弱边界",
+     "复现难在 12 万小时视频与统一动作表示"
     ],
     "prereqs": [
      {
@@ -292,16 +362,16 @@
       "status": "unknown"
      },
      {
-      "name": "world model",
-      "status": "unlisted"
-     },
-     {
       "name": "diffusion model",
       "status": "unknown"
      },
      {
-      "name": "KV cache",
-      "status": "unknown"
+      "name": "world-model",
+      "status": "unlisted"
+     },
+     {
+      "name": "behavior cloning",
+      "status": "unlisted"
      }
     ],
     "difficulty": 3,
@@ -309,7 +379,7 @@
      "DreamZero",
      "LingBot-VA"
     ],
-    "mermaid": "graph LR\nA[egocentric video] --> B[causal pretraining]\nC[robot trajectories] --> D[unified actions]\nB --> E[world dynamics]\nD --> F[action grounding]\nE --> G[slow fast control]\nF --> G\nG --> H[30 Hz policy]",
+    "mermaid": "graph TD\nA[egocentric video] --> B[causal pretrain]\nB --> C[video action midtrain]\nC --> D[target robot posttrain]\nD --> E[zero shot control]\nB --> F[Slow world model]\nF --> G[Fast action branch]\nG --> E",
     "read_level": "L3"
    }
   },
@@ -340,25 +410,25 @@
    "categories": [],
    "keywords": [
     "vlm",
-    "navigation",
-    "embodied"
+    "embodied-navigation",
+    "agent"
    ],
    "core_score": 9.0,
    "wide_score": 8.0,
-   "score_reason": "VLM空间智能到导航，开源且高相关",
+   "score_reason": "VLM空间智能到导航控制，且开源",
    "tier": "core",
-   "ptype": "paper",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "用 Qwen3-VL 做统一导航骨干，10 个公开设置拿到 SOTA",
-    "why": "适合看 VLM 如何落到 embodied navigation",
-    "architecture": "问题不是“导航模型不够大”，而是现有系统把感知、推理、动作拆成任务头和专用模块，换场景或换机器人就断。LightNav-0 的关键改法是让 pretrained VLM 直接承担空间推理，再用 dual-channel pointing 先产出“空间意图”：affordance point 负责可走方向或中继点，object point 负责目标定位，随后再由 residual VQ action tokenizer 把这个意图压成具体轨迹，阻断“任务间动作接口不兼容”的失败；temporal history compression 则阻断“长历史塞爆上下文”。最直接的证据是 LightNav-ER 先在 8 个 embodied-reasoning benchmark 上拿到最高 complete-set average，再初始化 LightNav-0 后，在 10 个公开导航模拟环境上做到 SOTA，且真实机器人上能跨 embodiment、静态/动态目标零样本泛化。新在系统组织层：把导航统一成 token 接口，而不是再堆一个 waypoint head。",
-    "verdict": "值得通读，能看清 VLM 导航接口怎么统一",
+    "one_liner": "LightNav-0 用 VLM 空间智能做通用导航，10 个设置都拿到 SOTA",
+    "why": "做 VLM/具身导航的人，能直接看懂“统一接口”怎么落地",
+    "architecture": "反直觉点在于：导航并不一定要为每个任务单独做 waypoint、map 或 action head；这些额外结构虽然好调参，却把跨任务和跨 embodiment 的能力切碎了。LightNav-0 的关键改变是把 pretrained VLM 直接当共享 reasoning backbone，再用一个统一 token interface 承接导航：dual-channel pointing 先把“目标在哪”和“可走哪”拆成通用空间意图，residual vector-quantized action tokenizer 再把这个意图解码成具体平台轨迹，从而阻断“语义懂了但动作落不下去”。最直接的证据是作者报告：LightNav-ER 初始化在 8 个 embodied-reasoning benchmark 上拿到最高 complete-set average，LightNav-0 在 10 个公开模拟设置上拿到 monocular SOTA，且真机零样本跨 embodiment 也能泛化。新意主要在系统组织层：不是换更大 backbone，而是用 token 化接口把空间推理与控制接回同一个模型。",
+    "verdict": "值得精读，适合看 VLM 如何被真正“拉去做导航”",
     "why_now": "",
     "key_points": [
-     "最强证据是 10 个公开导航设置的统一提升",
-     "没证明离开 monocular RGB 后仍稳定",
-     "RVQ + action decoder 让精度和 token 效率做了取舍"
+     "最强证据是 10 个模拟设置的统一 SOTA",
+     "没证明重度遮挡或长时地图场景必然稳",
+     "复现依赖双通道标注和 RVQ 解码细节"
     ],
     "prereqs": [
      {
@@ -366,16 +436,16 @@
       "status": "unknown"
      },
      {
-      "name": "visual grounding",
-      "status": "unlisted"
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "self-attention",
+      "status": "unknown"
      },
      {
       "name": "planning",
       "status": "unknown"
-     },
-     {
-      "name": "tokenization",
-      "status": "unlisted"
      }
     ],
     "difficulty": 2,
@@ -383,82 +453,7 @@
      "NaVid",
      "NavFoM"
     ],
-    "mermaid": "graph LR\nA[VLM backbone] --> B[spatial intent]\nB --> C[affordance point]\nB --> D[object point]\nC --> E[RVQ action tokenizer]\nD --> E\nE --> F[embodiment actions]\nG[visual history] --> H[compression]\nH --> A",
-    "read_level": "L2"
-   }
-  },
-  {
-   "id": "paper:2608.30147",
-   "kind": "paper",
-   "title": "CAST: Critique-Aware Supervision for Training Reliable Long-Horizon Tool-Calling Agents",
-   "url": "https://arxiv.org/abs/2608.30147",
-   "summary": "Large language model (LLM) agents are increasingly deployed in long-horizon, interactive, and stateful environments. In these settings, a single wrong action, such as refunding the wrong purchase, can cause irreversible task failure and must be intercepted before execution. Such failures may not appear in every single run, but can emerge across repeated trials, making reliability across steps and trials critical. However, ensuring agentic reliability is challenging: even frontier LLMs struggle to explain why an action may be wrong, especially in long, intertwined trajectories governed by domain-specific policies. Much recent work relies on prompt-based critique agents, while optimization-based methods lack a systematic way to produce rich verification rationales for training. We address this gap with CAST, a critique-aware training framework that converts sparse task outcomes into action-level supervision for critique learning and policy optimization. CAST analyzes agent trajectories to synthesize structured rationales explaining action validity under partial observability. The resulting critique model is used to construct critique-aware training data for optimizing the policy model. Fine-tuning Qwen3-family models on dynamic tool-calling benchmarks, CAST improves reliability across domains, outperforming GPT-OSS-120B by over 10% pass^4 on Retail tasks and yielding an additional 9% improvement on Telehealth in an out-of-domain setting. These results demonstrate that critique-aware training improves the robustness of LLM agents in realistic dynamic environments.",
-   "source": "hf_papers",
-   "published": "2026-08-31",
-   "authors": [
-    "Amir Saeidi",
-    "Zehua Zhang",
-    "Rishitosh Singh",
-    "Naman Ahuja",
-    "Vivek Gupta",
-    "Ali Payani"
-   ],
-   "org": "",
-   "hf_upvotes": 6,
-   "stars": 0,
-   "stars_today": 0,
-   "forks": 0,
-   "language": "",
-   "code_url": "",
-   "pdf_url": "https://arxiv.org/pdf/2608.30147",
-   "categories": [],
-   "keywords": [
-    "agent",
-    "tool-use",
-    "rlhf",
-    "safety"
-   ],
-   "core_score": 9.0,
-   "wide_score": 6.0,
-   "score_reason": "面向长程工具调用可靠性，研究与可面试化强",
-   "tier": "core",
-   "ptype": "paper",
-   "board": "",
-   "digest": {
-    "one_liner": "用 critique supervision 训练工具调用代理，Retail pass^4 提升 10%+",
-    "why": "很适合面试讲 agent reliability 和 RLHF 式训练",
-    "architecture": "悖论是：长链路 agent 最致命的错往往不是最终答案，而是中间一步看似合理的工具调用；但多数训练只看终局 reward，critic 也常在事后才看得到更多信息。CAST 的关键改变是把稀疏轨迹结果转成 action-level verification rationales：先跑 teacher 收集多次轨迹，再让 agentic verification 生成“这一步在当时是否有效”的结构化 critique，训练出 CAST-Critic；再用这个 critic 去给新交互打标，构造 critique-enriched 数据训练 CAST-Policy，阻断“中间动作缺乏可验证监督”的失败。最直接的证据是四个动态工具调用域里，Qwen3 微调后在 in-domain Retail 上相对 base 提升 22.6% pass^1、12.94% pass^4，out-of-domain 平均也有 3.7%/5.1% 提升，而且比重型 agentic 框架更省 token 和延迟。新意在实证层 + 训练层：把可靠性定义成跨 trial 一致性，并把 critique 变成可训练信号。",
-    "verdict": "值得精读，核心是把可靠性做成可监督对象",
-    "why_now": "",
-    "key_points": [
-     "最强证据是 pass^4 提升，说明重复试验一致性变好",
-     "没解决超长链路下的事实外泄，critic 仍依赖生成质量",
-     "复现难在多轮轨迹标注和 critique 生成管线"
-    ],
-    "prereqs": [
-     {
-      "name": "tool use",
-      "status": "unknown"
-     },
-     {
-      "name": "critique",
-      "status": "unlisted"
-     },
-     {
-      "name": "reward model",
-      "status": "unknown"
-     },
-     {
-      "name": "GRPO",
-      "status": "unknown"
-     }
-    ],
-    "difficulty": 3,
-    "related": [
-     "Reflexion",
-     "Self-Refine"
-    ],
-    "mermaid": "graph TD\nA[teacher trajectories] --> B[verify actions]\nB --> C[critique rationales]\nC --> D[critic model]\nD --> E[critique enriched data]\nE --> F[policy model]\nF --> G[reliable tool calls]",
+    "mermaid": "graph TD\nA[图像与指令] --> B[VLM backbone]\nB --> C[dual channel pointing]\nC --> D[RVQ action tokenizer]\nD --> E[具体轨迹]\nB --> F[历史压缩]\nF --> C",
     "read_level": "L3"
    }
   },
@@ -488,27 +483,27 @@
    "pdf_url": "https://arxiv.org/pdf/2608.30530",
    "categories": [],
    "keywords": [
+    "vlm",
     "agent",
-    "world-model",
-    "browser",
-    "self-improve"
+    "web",
+    "world-model"
    ],
    "core_score": 9.0,
    "wide_score": 7.0,
-   "score_reason": "浏览器作为world model监督，VLM自进化闭环",
+   "score_reason": "浏览器作为世界模型，自改善web代码闭环很对口",
    "tier": "core",
-   "ptype": "paper",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "WebWorld 用浏览器当 world model，让自改 Web code 的 VLM 只学被证实的修复；HTMLBench-400 +5.3、MiniAppBench-Val +14.9。",
-    "why": "适合看 agent / web code 的闭环训练怎么避免自骗。",
-    "architecture": "反直觉点在于：页面截图看起来更好，不代表按钮真的能点、旧功能没被改坏。传统 critique-and-rewrite 让同一个 VLM 同时当 proposer 和 judge，判断还停留在 screenshot space，所以“看起来对”很容易把坏修复选进去。WebWorld 把关键改动换成浏览器可验证的 interaction contract：VLM 先提 critique，planner 把它编成带 target predicate、preserve set、evidence path 的 typed contract；browser 重新执行候选，只在目标进展成立且所有已验证能力都保住时发 acceptance certificate；只有 certified transitions 进入 quality ratchet 和 SFT export。最直接的证据是 9B ablation：拿掉 certificate 后，增益几乎消失，说明提升主要来自 browser-backed admission，不是更会写 prompt。新意在系统组织层：把“生成-筛选”改成“假设-证明”分离。",
-    "verdict": "值得精读，核心是把自改 agent 的监督改成可证据化。",
+    "one_liner": "WebWorld 用浏览器当 world model，自证式筛选修复，27B 在 HTMLBench-400 提升 5.3 分",
+    "why": "适合看 agent 自我改进和 web 交互评测",
+    "architecture": "反直觉点在于：网页“看起来对”不代表“真能用”，尤其是按钮失灵、交互回归这种故障，VLM 自己看截图很容易把伪进步当进步。传统 critique-and-rewrite 还是同一个模型在提议和裁决，判断空间也停留在视觉表象，闭环就会把坏修复送进训练集。WebWorld 的关键改动是把“判断权”交给浏览器：VLM 只负责提 critique，planner 把它编成 typed interaction contract，browser 重新执行后只在“目标推进 + 已验证能力都保住”时发 acceptance certificate，certified transition 才能进入 SFT。最直接的证据是 9B 消融：去掉 certificate 后增益几乎消失，说明涨点主要来自浏览器背书而不是更会说的 critique。新意在系统组织层：把监督样本改成可证明的 state transition。",
+    "verdict": "适合精读，核心是“浏览器当裁判”的训练闭环",
     "why_now": "",
     "key_points": [
-     "最强证据是 9B 去证书后几乎无增益",
-     "没证什么：只对 HTML/交互式页面有效",
-     "复现难点在浏览器证据与契约编译"
+     "9B 消融显示无证书时增益几乎没了",
+     "只证明交互正确，不保证生成更优雅",
+     "复现要有可执行浏览器与证书门控"
     ],
     "prereqs": [
      {
@@ -524,16 +519,16 @@
       "status": "unknown"
      },
      {
-      "name": "memory",
+      "name": "self-attention",
       "status": "unknown"
      }
     ],
-    "difficulty": 3,
+    "difficulty": 2,
     "related": [
      "ReAct",
-     "SWE-bench"
+     "self-instruct"
     ],
-    "mermaid": "graph LR\nA[VLM critique] --> B[typed contract]\nB --> C[browser re execute]\nC --> D[accept certificate]\nD --> E[quality ratchet]\nE --> F[SFT export]\nC --> G[reject unsafe edit]",
+    "mermaid": "graph TD\nA[VLM critique] --> B[typed contract]\nB --> C[browser replay]\nC --> D{progress and preserve}\nD -->|yes| E[certificate]\nD -->|no| F[reject]\nE --> G[SFT export]\nG --> H[next round]",
     "read_level": "L3"
    }
   },
@@ -567,25 +562,25 @@
    "keywords": [
     "inference",
     "kv-cache",
-    "systems",
-    "on-device"
+    "on-device",
+    "memory"
    ],
    "core_score": 9.0,
-   "wide_score": 8.0,
-   "score_reason": "移动端并发的KV/内存管理，系统工程强相关",
+   "wide_score": 6.0,
+   "score_reason": "端侧多任务KV/内存管理，系统工程价值高",
    "tier": "core",
-   "ptype": "infra",
+   "ptype": "",
    "board": "",
    "digest": {
-    "one_liner": "mzCache 让手机端 LLM 在多任务抢内存时还能零等待恢复；相比 storage-backed partial offload，TTFT 降 2.1–5.5×。",
-    "why": "适合补训练/推理系统里 KV cache 和移动端内存管理。",
-    "architecture": "痛点不是单次推理慢，而是手机一切换 app，OS 会把模型权重和 KV cache 挤出内存；等用户回来时，要么慢读存储，要么重算整段 cache，TTFT 从 0.8 秒拖到 16 秒。mzCache 的关键改法是 restoration-oriented memory management：把 weights/KV cache 切成细粒度 shared buffers，利用 mobile SoC unified memory 让 GPU 可先跑、CPU 并行恢复；再用 hybrid swap 和 backward-out eviction，把可恢复路径和淘汰顺序设计成“无论从哪种部分驱逐状态回来，都能尽快恢复”。最直接的证据是作者在真实手机上测到：相对 storage-backed partial offload，TTFT 提升 2.1–5.5×；而且正文明确说通用压缩的 zRAM 基本压不动 KV cache，所以系统不是靠更强压缩，而是靠恢复路径和驱逐策略。新意在系统组织层和运行时机制层。",
-    "verdict": "值得通读，能补上 on-device LLM 的系统短板。",
-    "why_now": "",
+    "one_liner": "mzCache 用可恢复式内存管理，把手机 LLM 冷启动 TTFT 降了 2.1–5.5 倍",
+    "why": "对 on-device LLM 和 KV cache 这块很对口",
+    "architecture": "问题不是单次推理慢，而是手机多任务切换时，LLM 的 weights 和 KV cache 会被系统挤掉；等用户回来，要么读慢存储、要么整段重算 KV cache，TTFT 直接爆掉。mzCache 的关键改变是把目标从“尽量少占内存”改成“任何被驱逐状态都能快速恢复”：它把 LLM memory 切成细粒度 shared buffers，让 CPU 可并行恢复、GPU 先开算；再用 hybrid swap 和 backward-out eviction，把可恢复路径设计成对任意 eviction state 都低延迟。最直接的证据是它在 Android 上落地后，对比 storage-backed partial offload，TTFT 降 2.1–5.5 倍，说明收益来自恢复路径而不是单纯压缩。新意在系统层，不是新模型。",
+    "verdict": "值得看，适合做 mobile inference / KV cache 系统面试题",
+    "why_now": "原文未明确",
     "key_points": [
-     "最强证据是商业手机上的 TTFT 测试",
-     "没证明通用桌面/服务器场景收益",
-     "依赖 unified memory 与具体 SoC 结构"
+     "解决的是多任务下的恢复，而非纯 offload",
+     "KV cache 压缩只能做第二恢复通道",
+     "依赖 mobile SoC unified memory 条件"
     ],
     "prereqs": [
      {
@@ -601,150 +596,16 @@
       "status": "unknown"
      },
      {
-      "name": "KV cache",
+      "name": "gradient checkpointing",
       "status": "unknown"
      }
     ],
-    "difficulty": 2,
+    "difficulty": 3,
     "related": [
-     "KV cache",
-     "Speculative decoding"
+     "FlashAttention",
+     "speculative decoding"
     ],
-    "mermaid": "graph TD\nA[app switch] --> B[OOM pressure]\nB --> C[partial eviction]\nC --> D[CPU restore]\nC --> E[GPU infer]\nD --> F[zero wait TTFT]\nE --> F",
-    "read_level": "L2"
-   }
-  },
-  {
-   "id": "repo:calesthio/openmontage",
-   "kind": "project",
-   "title": "calesthio/OpenMontage",
-   "url": "https://github.com/calesthio/OpenMontage",
-   "summary": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.",
-   "source": "github_trending",
-   "published": "",
-   "authors": [],
-   "org": "calesthio",
-   "hf_upvotes": 0,
-   "stars": 55576,
-   "stars_today": 5232,
-   "forks": 6943,
-   "language": "Python",
-   "code_url": "https://github.com/calesthio/OpenMontage",
-   "pdf_url": "",
-   "categories": [],
-   "keywords": [
-    "agent",
-    "agentic",
-    "video"
-   ],
-   "core_score": 9.4,
-   "wide_score": 9.4,
-   "score_reason": "启发式打分（无 API key）",
-   "tier": "core",
-   "ptype": "",
-   "board": "weekly",
-   "digest": {
-    "one_liner": "OpenMontage 把“做视频”拆成 agentic pipeline，靠 12 条生产流水线和 100+ tools 自动脚本、找素材、剪辑、渲染；星标 55,576。",
-    "why": "适合看 agent 工程化：多工具编排、内容生产闭环。",
-    "architecture": "它解决的是“想做一条完整视频，但脚本、素材、配音、剪辑、合成都要人手搓”的痛点。核心搭法不是单一聊天框，而是生产系统：用户给一句话或参考视频，agent 先分析 transcript、pacing、scene、keyframes，再产出分化概念、tool path、cost estimate；中间的 Backlot 作为可见运行时，把脚本、scene card、asset generation、provider decision 和花费逐步写出来，必要时还把资产生成暂停成 approval gate，等你逐镜头确认后再 render。成熟度信号比较强：README 明确给了 Quick Start、pipelines、Agent Guide、Replay Run，还展示了多条可复现作品和成本；但原文未明确 release 版本和测试覆盖，更多是“能跑、能展示、能回放”的产品态。和同类比，它差在不是简单的视频 prompt 工具，而是把生成、审阅、回放做成一套 agentic production system。",
-    "verdict": "看项目速览就够，价值主要在 agent 生产管线设计。",
-    "why_now": "作者报告 stars +5232 today；原文未明确正式 release。",
-    "key_points": [
-     "最强证据是有 Backlot、Replay Run、approval gate",
-     "没证明：成本和质量在所有题材都稳定",
-     "复现门槛取决于外部模型与素材供应"
-    ],
-    "prereqs": [
-     {
-      "name": "agent",
-      "status": "unlisted"
-     },
-     {
-      "name": "planning",
-      "status": "unknown"
-     },
-     {
-      "name": "memory",
-      "status": "unknown"
-     },
-     {
-      "name": "multi-agent",
-      "status": "unknown"
-     }
-    ],
-    "difficulty": 2,
-    "related": [
-     "ReAct",
-     "model context protocol"
-    ],
-    "mermaid": "graph TD\nA[prompt or reference] --> B[analyze scenes]\nB --> C[plan pipeline]\nC --> D[fetch or generate assets]\nD --> E[Backlot review]\nE --> F[render video]\nE --> G[halt for approval]",
-    "read_level": "L1"
-   }
-  },
-  {
-   "id": "repo:osmantic/ods",
-   "kind": "project",
-   "title": "Osmantic/ODS",
-   "url": "https://github.com/Osmantic/ODS",
-   "summary": "Turn your PC, Mac, or Linux box into an AI server. LLM inference, chat UI, voice, agents, workflows, RAG, and image generation.",
-   "source": "github_trending",
-   "published": "",
-   "authors": [],
-   "org": "Osmantic",
-   "hf_upvotes": 0,
-   "stars": 5869,
-   "stars_today": 1144,
-   "forks": 822,
-   "language": "Python",
-   "code_url": "https://github.com/Osmantic/ODS",
-   "pdf_url": "",
-   "categories": [],
-   "keywords": [
-    "llm",
-    "agent",
-    "rag"
-   ],
-   "core_score": 9.4,
-   "wide_score": 8.0,
-   "score_reason": "启发式打分（无 API key）",
-   "tier": "core",
-   "ptype": "",
-   "board": "weekly",
-   "digest": {
-    "one_liner": "一键把本机变成 AI server，装好本地推理/UI/Agent/RAG；v2.6.0 加远程 provider 和 Model Switchboard。",
-    "why": "看本地 AI 栈怎么做成可装、可回滚的系统",
-    "architecture": "它解决的不是“能不能跑模型”，而是“本地 AI 环境每次都要手搓一串服务”的悖论：模型、UI、RAG、语音、自动化各自能装，但一旦混到桌面/服务器/不同 GPU 平台，安装、端口、权限、回滚就变成主要失败点。ODS 的关键改变是把它做成一个部署系统：安装器负责选模型、拉起服务、写入配置，dashboard 负责统一管理，Model Switchboard 负责在不同 LLM 应用间稳定路由并把 context 传过去，GPU reassignment rollback 负责把硬件切换失败恢复掉。最直接的证据是 2.6.0 的 release 验证说明：remote provider、Windows/macOS 原生运行时、Linux rootless 修复、GPU 重分配回滚都被纳入稳定线，说明它关注的是“可恢复地上线”。新意主要在系统组织层，不是新模型。",
-    "verdict": "适合想看本地 AI 栈工程化的人精读。",
-    "why_now": "v2.6.0 已是 stable release。",
-    "key_points": [
-     "2.6.0 把远程 provider 和路由稳定化",
-     "release 强调验证和回滚，不只是功能",
-     "本质是 local AI deployment system，不是单点工具"
-    ],
-    "prereqs": [
-     {
-      "name": "LLM inference",
-      "status": "unlisted"
-     },
-     {
-      "name": "RAG",
-      "status": "unlisted"
-     },
-     {
-      "name": "KV cache",
-      "status": "unknown"
-     },
-     {
-      "name": "Docker",
-      "status": "unlisted"
-     }
-    ],
-    "difficulty": 2,
-    "related": [
-     "Ollama",
-     "Open WebUI"
-    ],
-    "mermaid": "graph LR\nA[Install] --> B[Pick model]\nB --> C[Start services]\nC --> D[UI and tools]\nD --> E[Switchboard routes]\nE --> F[Context passes]\nE --> G[Rollback on failure]",
+    "mermaid": "graph TD\nA[LLM memory] --> B[shared buffers]\nB --> C[partial eviction]\nC --> D[cpu restore]\nC --> E[gpu inference]\nD --> F[fast TTFT]\nE --> F\nA --> G[hybrid swap]\nG --> D",
     "read_level": "L2"
    }
   },
@@ -759,7 +620,7 @@
    "authors": [],
    "org": "TencentCloud",
    "hf_upvotes": 0,
-   "stars": 25679,
+   "stars": 25680,
    "stars_today": 15686,
    "forks": 2402,
    "language": "TypeScript",
@@ -767,93 +628,26 @@
    "pdf_url": "",
    "categories": [],
    "keywords": [
-    "llm",
     "agent",
-    "memory"
+    "memory",
+    "rag"
    ],
-   "core_score": 9.3,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "企业级 agent memory 多资产治理与复用",
    "tier": "core",
-   "ptype": "",
+   "ptype": "infra",
    "board": "monthly",
    "digest": {
-    "one_liner": "把 Agent 经验拆成四类可复用资产，2.0.1 新增多客户端接入和会话内操作。",
-    "why": "面试 Agent memory 和团队协作设计时很能讲",
-    "architecture": "它直击的痛点是：Agent 做过的事、读过的文档、踩过的坑，下一次还要重新讲一遍。现有做法常把 memory 当成聊天摘要或向量库，结果是“能检索但不能复用、能记但不能治理”。这里的关键概念改变是把经验拆成四种资产：Chat Memory 记偏好和决策，Skill 记可执行流程，LLM-Wiki 记文档知识，Code-Graph 记代码关系；再通过 Memory Hub 统一治理，通过 Proxy 让不同 framework 只改 base URL 就能接入，阻断“框架锁死导致记忆割裂”。最直接的支撑是 2.0.1 的 release：新增 OpenCode、dsh、Codex CLI、WorkBuddy 接入，并把会话重置、任务创建、绑定持久化、技能检索盲区修掉，说明它在真实多客户端场景里已经在跑。新意在系统组织层和产品化成熟度。",
-    "verdict": "值得看，尤其适合 Agent memory 方向面试。",
-    "why_now": "作者报告 2.0.1 于 2026-08-25 发布。",
+    "one_liner": "TencentDB Agent Memory 把会话、文档和代码沉淀成四类团队记忆，2.0.1 新增多客户端接入",
+    "why": "适合看 Agent 记忆层怎么做成可共享基础设施",
+    "architecture": "它解决的不是“给 Agent 加一个聊天记录”，而是团队里重复解释上下文、重复读文档、重复摸代码这些耗时回路。这个项目的承重组件是一个共享 memory server：把 Chat Memory、Skill、LLM-Wiki、Code-Graph 变成可治理、可共享、可装配的资产，客户端只要把 base URL 指过去就能接入，不需要 hook 或 MCP。核心机制是“抽取—治理—注入”闭环：对话和任务先被抽成记忆/技能，文档和代码被结构化成 Wiki 和 CodeGraph，再按团队与 Agent 绑定回灌到后续会话。成熟度信号比较强：有明确 2.0.1 release，支持 OpenCode、DeepSeek Harness、Codex CLI、WorkBuddy，多客户端接入和会话内指令说明它已从概念走到可用产品。相比普通 RAG，它差在把经验做成可复用资产，而不只是检索片段。",
+    "verdict": "适合速览；像产品基础设施，重点看架构和接入形态",
+    "why_now": "最近 release：v2.0.1（2026-08-25）",
     "key_points": [
-     "四类资产不是简单摘要，强调可治理和可共享",
-     "Proxy 只改 base URL，主打零代码接入",
-     "release 暗示已在多客户端场景验证过"
-    ],
-    "prereqs": [
-     {
-      "name": "memory",
-      "status": "unknown"
-     },
-     {
-      "name": "multi-agent",
-      "status": "unknown"
-     },
-     {
-      "name": "retrieval-augmented generation",
-      "status": "unknown"
-     },
-     {
-      "name": "model context protocol",
-      "status": "unknown"
-     }
-    ],
-    "difficulty": 2,
-    "related": [
-     "ReAct",
-     "retrieval-augmented generation"
-    ],
-    "mermaid": "graph LR\nA[Conversation docs code] --> B[Extract assets]\nB --> C[Chat Memory]\nB --> D[Skill]\nB --> E[Wiki]\nB --> F[Code Graph]\nC --> G[Hub governance]\nD --> G\nE --> G\nF --> G\nG --> H[Proxy to agents]",
-    "read_level": "L2"
-   }
-  },
-  {
-   "id": "repo:volcengine/openviking",
-   "kind": "project",
-   "title": "volcengine/OpenViking",
-   "url": "https://github.com/volcengine/OpenViking",
-   "summary": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
-   "source": "github_trending",
-   "published": "",
-   "authors": [],
-   "org": "volcengine",
-   "hf_upvotes": 0,
-   "stars": 35128,
-   "stars_today": 7321,
-   "forks": 2693,
-   "language": "Python",
-   "code_url": "https://github.com/volcengine/OpenViking",
-   "pdf_url": "",
-   "categories": [],
-   "keywords": [
-    "agent",
-    "rag",
-    "memory"
-   ],
-   "core_score": 8.9,
-   "wide_score": 9.6,
-   "score_reason": "启发式打分（无 API key）",
-   "tier": "core",
-   "ptype": "",
-   "board": "monthly",
-   "digest": {
-    "one_liner": "把 Agent 上下文做成 viking:// 文件系统，L0-L2 分层加载；0.3.22 在 LoCoMo 上提到 80–83%。",
-    "why": "很适合看 context database 和长上下文替代方案",
-    "architecture": "它解决的是一个反直觉问题：Agent 记忆越多，不一定越聪明，反而更容易在向量库里“搜到但读不对”。传统 memory/RAG 把上下文当黑盒检索，难以判断为什么命中、该读到多深。OpenViking 的关键改变是把 memories、resources、skills 统一成 `viking://` 目录树，先在写入时生成 L0 abstract、L1 overview、L2 details，再按任务深度按需加载；目录递归检索先找最高分目录，再逐层下钻，阻断“命中碎片但丢上下文”的失败。最直接的证据是它报告在 LoCoMo 上三种 agent 集成都到 80–83% accuracy，同时 token 和 latency 明显下降；这是对“分层加载 + 目录式检索”是否真省上下文的实证支撑。新意在组件层加系统组织层：既是数据结构，也是检索运行时。",
-    "verdict": "如果你关心 Agent memory / 长上下文，建议精读。",
-    "why_now": "作者报告 0.4.17.1 于 2026-08-31 发布。",
-    "key_points": [
-     "把 context 做成可浏览文件系统，而不是黑盒向量库",
-     "分层加载主打省 token，但依赖写入时先处理好层级",
-     "复现难点在于需要完整的目录检索和层级生成管线"
+     "2.0.1 有明确 release 和多客户端接入",
+     "强项是团队级资产治理，不只是检索",
+     "README 说 zero-code integration，需看实际适配质量"
     ],
     "prereqs": [
      {
@@ -869,125 +663,393 @@
       "status": "unknown"
      },
      {
-      "name": "long context",
-      "status": "unknown"
-     }
-    ],
-    "difficulty": 3,
-    "related": [
-     "graph RAG",
-     "retrieval-augmented generation"
-    ],
-    "mermaid": "graph TD\nA[Input context] --> B[Write tiers]\nB --> C[L0 abstract]\nB --> D[L1 overview]\nB --> E[L2 details]\nF[Query] --> G[Find directory]\nG --> H[Drill down]\nH --> I[Load only needed depth]",
-    "read_level": "L3"
-   }
-  },
-  {
-   "id": "repo:tt-a1i/archify",
-   "kind": "project",
-   "title": "tt-a1i/archify",
-   "url": "https://github.com/tt-a1i/archify",
-   "summary": "Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.",
-   "source": "github_trending",
-   "published": "",
-   "authors": [],
-   "org": "tt-a1i",
-   "hf_upvotes": 0,
-   "stars": 43359,
-   "stars_today": 25469,
-   "forks": 2773,
-   "language": "JavaScript",
-   "code_url": "https://github.com/tt-a1i/archify",
-   "pdf_url": "",
-   "categories": [],
-   "keywords": [
-    "agent"
-   ],
-   "core_score": 8.1,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
-   "tier": "core",
-   "ptype": "",
-   "board": "weekly",
-   "digest": {
-    "one_liner": "Archify用typed JSON IR+deterministic render把系统描述变成可验证HTML图，输出PNG/SVG/WebM",
-    "why": "做Agent/RAG架构汇报和面试图，能直接拿来用",
-    "architecture": "它解决的是一个反直觉问题：同一套系统图，作者想强调的方向、边界和路径，到了别的工具里常被重排成“看起来对、事实却不对”的图。普通 diagram 工具要么靠手工拖拽，要么把生成图交给模型自由发挥，都会在方向、路径和引用来源上失真。Archify 的关键改变是把“图”拆成 typed JSON IR，再由 deterministic compiler 固定成 HTML/SVG：IR 负责约束结构，编译器负责阻断幻觉拓扑和不稳定渲染；验证层负责拦住未证实边、重复边、错误路由。最直接的证据不是宣传页，而是它公开的 traced repository case：对 `mco-org/mco` 做源码追踪后生成 checked map，并提供 Before/Delta/After、upstream/downstream reach、route probe 这些可核验视图。新意主要在系统组织层，不是单一绘图库，而是“生成—验证—交互—导出”一体的 agent skill。",
-    "verdict": "适合精读：看它怎么把可验证图谱做成 agent skill",
-    "why_now": "",
-    "key_points": [
-     "源码追踪后还能保留 authored direction 和 exact route",
-     "自带验证 receipts，但原文未明确覆盖到哪些错误类型",
-     "复现门槛低，核心是理解 IR schema 和渲染约束"
-    ],
-    "prereqs": [
-     {
-      "name": "agent",
-      "status": "unlisted"
-     },
-     {
-      "name": "typed JSON",
-      "status": "unlisted"
-     },
-     {
-      "name": "deterministic rendering",
-      "status": "unlisted"
-     },
-     {
-      "name": "graph RAG",
+      "name": "model context protocol",
       "status": "unknown"
      }
     ],
     "difficulty": 2,
     "related": [
-     "Mermaid",
-     "D3.js"
+     "RAG",
+     "graph RAG"
     ],
-    "mermaid": "graph TD\nA[System description] --> B[Typed JSON IR]\nB --> C[Deterministic compile]\nC --> D[HTML SVG Cards]\nD --> E[Route probe]\nD --> F[Reach trace]\nD --> G[Before Delta After]",
+    "mermaid": "graph TD\nA[chat docs code] --> B[extract assets]\nB --> C[memory hub]\nC --> D[inject to agent]\nD --> E[less rework]\nE --> F[team memory]\nF --> C",
     "read_level": "L2"
    }
   },
   {
-   "id": "repo:diegosouzapw/omniroute",
+   "id": "repo:volcengine/openviking",
    "kind": "project",
-   "title": "diegosouzapw/OmniRoute",
-   "url": "https://github.com/diegosouzapw/OmniRoute",
-   "summary": "Never stop coding. Free MIT AI gateway: one endpoint, 352 providers (150+ free), 1200+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 550+ contributors",
+   "title": "volcengine/OpenViking",
+   "url": "https://github.com/volcengine/OpenViking",
+   "summary": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
    "source": "github_trending",
    "published": "",
    "authors": [],
-   "org": "diegosouzapw",
+   "org": "volcengine",
    "hf_upvotes": 0,
-   "stars": 60195,
-   "stars_today": 23410,
-   "forks": 8364,
-   "language": "TypeScript",
-   "code_url": "https://github.com/diegosouzapw/OmniRoute",
+   "stars": 35130,
+   "stars_today": 7321,
+   "forks": 2693,
+   "language": "Python",
+   "code_url": "https://github.com/volcengine/OpenViking",
    "pdf_url": "",
    "categories": [],
    "keywords": [
-    "dpo"
+    "agent",
+    "memory",
+    "rag"
    ],
-   "core_score": 8.1,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
+   "core_score": 8.0,
+   "wide_score": 9.0,
+   "score_reason": "自进化上下文数据库，契合 agent 记忆方向",
    "tier": "core",
-   "ptype": "",
+   "ptype": "infra",
    "board": "monthly",
    "digest": {
-    "one_liner": "OmniRoute用一个免费网关接352个providers，作者报告约1.51B free tokens/月",
-    "why": "LLM 工程里常见的多模型路由、降本和 MCP 接入都对口",
-    "architecture": "它解决的是“免费额度分散到几十家 provider、还会随时失效”的现实痛点。单纯把所有 API 拼成一个转发层，问题会变成：不知道哪个模型真有额度、哪个池子共享同一预算、哪个请求该降级到别的后端。OmniRoute 的关键设计是把 provider 目录、quota-aware scheduling、telemetry 和 compression 绑在同一个 gateway 里：检测到额度紧张就走 Quota-Share/auto-fallback，检测到上下文太长就先做 RTK+Caveman compression，再把请求发到可用后端。作者报告 v3.8.50 有 352 providers、1312 model IDs，并新增 vision/audio/video bridge、radar free catalog、live quota telemetry；这是成熟度信号，因为它不只是列表页，而是有 release、cycle stats、MCP/CLI 兼容和持续审计。和常见 proxy 相比，它差在“路由+配额感知+压缩+多模态桥”是一体的运行时机制，而不只是 API 代理。",
-    "verdict": "值得看项目成熟度和网关编排，不必深挖全部文档",
-    "why_now": "最近 release：v3.8.50（2026-08-26），并新增 Quota-Share 与 live telemetry",
+    "one_liner": "用 viking:// 统一 Agent 上下文，LoCoMo 准确率到 80–83%",
+    "why": "适合看 Agent memory / RAG 架构取舍",
+    "architecture": "反直觉点在于：Agent 真正的上下文管理，不是“查到相似向量就塞回去”，而是“同一份记忆要能像文件系统一样被确定性浏览、分层读取、还能追踪每次检索路径”。传统黑盒 vector store 解决不了调试和按需加载：你只能看到返回了什么，看不到为什么走到这条路径，也很难把“目录级语义”保住。OpenViking 的关键改变是把 memories/resources/skills 统一成 `viking://` 虚拟文件系统：URI 负责稳定定位，L0/L1/L2 负责把写入时就压缩好的不同粒度内容拆开，递归检索先命中目录再向下钻，阻断“检索命中但上下文碎掉”和“全量读入导致 token 爆炸”两类失败；会话提交后异步抽取长期记忆，则把短期交互闭环进长期上下文。最直接的证据是 LoCoMo：同样的 agent integrations 接到 OpenViking 后到 80–83%，同时输入 token 和延迟明显下降；这比单纯涨分更能说明“分层加载 + 目录式检索”确实在控成本。新东西主要在系统组织层，不是新 embedding 模型。",
+    "verdict": "值得精读，尤其看上下文组织层设计",
+    "why_now": "",
     "key_points": [
-     "作者报告 352 providers、1312 model IDs",
-     "最强证据是 release cycle 统计，未见独立基准",
-     "价值在降本路由；是否稳定取决于各 provider 配额变动"
+     "LoCoMo 80–83%，token 与延迟同步下降",
+     "未证明跨任务泛化边界",
+     "复现依赖其目录语义与分层处理管线"
     ],
     "prereqs": [
      {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MemGPT",
+     "Graph RAG"
+    ],
+    "mermaid": "graph TD\nA[Context input] --> B[viking uri]\nB --> C[Directory retrieve]\nC --> D[L0 L1 L2 load]\nD --> E[Agent use]\nE --> F[Session commit]\nF --> G[Memory extract]\nG --> A",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:nousresearch/hermes-agent",
+   "kind": "project",
+   "title": "NousResearch/hermes-agent",
+   "url": "https://github.com/NousResearch/hermes-agent",
+   "summary": "The agent that grows with you",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "NousResearch",
+   "hf_upvotes": 0,
+   "stars": 239894,
+   "stars_today": 529,
+   "forks": 49063,
+   "language": "Python",
+   "code_url": "https://github.com/NousResearch/hermes-agent",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multi-agent",
+    "reasoning"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "高关注agent开源，适合讨论记忆/规划/评测",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用内置学习环让 agent 自建技能，v0.21.0 强化多人协作与记忆",
+    "why": "适合看 agent 循环、MCP 与多端编排",
+    "architecture": "这个项目解决的是“agent 能跑，但每次都像新手”的痛点：工具会调用，任务做完却不会把经验变成可复用能力。Hermes 的关键不是再堆一个聊天壳，而是把 agent 做成循环系统：任务中可创建 skill，结束后把轨迹压成可复用技能；会话和历史被持续搜索，记忆被定期 nudges 促进沉淀；再叠加 cron、subagents、MCP，把单次对话扩成可持续执行的工作流。它把失败模式从“每次从零开始”改成“经验可回流到后续任务”。最直接的支持来自 release 文案：v0.21.0 明确把 Bot Mode、group chats、cron memory/continuity、live steering、MCP command center 放进同一版，说明核心重心已经从单机聊天迁到多 agent 组织与持续记忆。新意主要在系统组织层和产品成熟度，不是单点算法。",
+    "verdict": "看你关心 agent 组织与产品化，值得速读后再选点精读",
+    "why_now": "v2026.8.31；release 文案明确强调 Bot Mode、group chats、cron memory",
+    "key_points": [
+     "v0.21.0 规模很大，且明确引入 Bot Mode",
+     "未给出系统级基准，只能看功能与 release 信号",
+     "复现门槛在多端集成和持续运行配置"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
       "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "AutoGen"
+    ],
+    "mermaid": "graph TD\nA[Task] --> B[Tool use]\nB --> C[Skill create]\nC --> D[Memory update]\nD --> E[Next task]\nE --> B\nB --> F[Subagents]\nF --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:rohitg00/agentmemory",
+   "kind": "project",
+   "title": "rohitg00/agentmemory",
+   "url": "https://github.com/rohitg00/agentmemory",
+   "summary": "#1 Persistent memory for AI coding agents based on real-world benchmarks",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "rohitg00",
+   "hf_upvotes": 0,
+   "stars": 27937,
+   "stars_today": 519,
+   "forks": 2414,
+   "language": "TypeScript",
+   "code_url": "https://github.com/rohitg00/agentmemory",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "benchmark"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "持久记忆专注agent，且基于真实基准",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用统一 memory server 让多 agent 共享记忆，npx 一步装好",
+    "why": "适合看 agent memory 工程与 MCP 集成",
+    "architecture": "它解决的是“同一个人换了 Claude Code、Cursor、Codex 之后，记忆又断了”的真实痛点。现在很多 agent memory 只绑单一客户端，或者把长期记忆做成黑盒索引，迁移和调试都差。agentmemory 的承重组件是一个共享 memory server，再通过 hooks、MCP、REST 接入不同 agent；核心取舍是 keyless 时先用 BM25 保底检索，有 embedding 时再做语义回忆，知识图谱按需补强结构匹配。检测条件到处理动作很明确：捕获到会话/观察/技能信号就写入，`AGENTMEMORY_AUTO_COMPRESS=true` 才启用 LLM 压缩；`memory_recall` 走 BM25，`memory_smart_search` 才融合图结构。成熟度信号不错：README 给了 npx 直装、Windows/WSL/Docker 路径、benchmarks、connectors 和多语言文档，但它更像横向集成平台，不是单一模型论文。和同类相比，它的差异在于“跨 agent 共享”和“hooks 级自动捕获”而不是只做一个向量库。",
+    "verdict": "值得看项目成熟度与多 agent 共享记忆方案",
+    "why_now": "最近 release 到 v0.9.29，新增 Cursor/Devin 连接器与更多 hooks",
+    "key_points": [
+     "新增 connect 和 hooks，偏集成平台",
+     "keyless 可用但语义召回要依赖 embedding",
+     "复现成本主要在各客户端适配与权限配置"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Mem0",
+     "MemGPT"
+    ],
+    "mermaid": "graph TD\nA[Agent events] --> B[Hooks]\nB --> C[Memory server]\nC --> D[BM25 recall]\nC --> E[Graph match]\nC --> F[Embedding search]\nD --> G[Shared recall]\nE --> G\nF --> G",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:2akouwu/reverify",
+   "kind": "project",
+   "title": "2akouwu/reverify",
+   "url": "https://github.com/2akouwu/reverify",
+   "summary": "Verified reverse engineering: AI RE grounded on deterministic tools - results checked against the binary, not hallucinated.",
+   "source": "github_search",
+   "published": "2026-08-31",
+   "authors": [],
+   "org": "2akouwu",
+   "hf_upvotes": 0,
+   "stars": 542,
+   "stars_today": 0,
+   "forks": 112,
+   "language": "Python",
+   "code_url": "https://github.com/2akouwu/reverify",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "verified-re",
+    "binary-analysis"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "把 AI 结果用确定性工具复核，符合可靠性方向",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "",
+   "digest": {
+    "one_liner": "用 deterministic RE 工具验模型猜测，64 测试把结论分成 VERIFIED/REFUTED/INCONCLUSIVE",
+    "why": "适合做 agent 可靠性与二进制分析谈资",
+    "architecture": "反直觉点是：二进制 RE 里，LLM 最容易“编”出偏移、字段和控制流，而这类错误比源码场景更致命，因为你很难靠肉眼看出它是不是在胡说。Reverify 的关键改变不是再加一个更强的模型，而是把模型降级成 proposer，把纯 Python 的解析、disasm、pattern scan、micro-emulation 变成 judge：claim 只有在真实字节、真实指令序列或真实执行结果上对上，才会被报成 VERIFIED；对不上直接 REFUTED，证据不足则 INCONCLUSIVE。最直接的支撑是 `verify` CLI 和 `re_verify_claim` MCP tool：同一套 claim 可以批量跑，任何一个被 refute 都能让 CI 或 agent 退出非零，说明它不是 demo，而是把“可检查性”嵌进闭环。新意主要在系统组织层：不是做更多 RE 功能，而是把 RE 过程改造成可门控的 verification loop。",
+    "verdict": "值得看，核心是 agent 可靠性闭环",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 claim 级三态判定",
+     "只覆盖作者列出的 7 类 claim",
+     "纯 Python 但重度依赖工具完备性"
+    ],
+    "prereqs": [
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Ghidra",
+     "Frida"
+    ],
+    "mermaid": "graph TD\nLLM --> Claim\nClaim --> Judge\nJudge --> Bytes\nJudge --> Disasm\nJudge --> Emu\nBytes --> VERIFIED\nDisasm --> REFUTED\nEmu --> INCONCLUSIVE",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:jordyzomer/lemmalog",
+   "kind": "project",
+   "title": "JordyZomer/lemmalog",
+   "url": "https://github.com/JordyZomer/lemmalog",
+   "summary": "A Datalog engine for LLM agent memory: stratified rules, provenance-tracked facts, incremental derivation, and an MCP server that lets your harness use it as a shared brain.",
+   "source": "github_search",
+   "published": "2026-08-27",
+   "authors": [],
+   "org": "JordyZomer",
+   "hf_upvotes": 0,
+   "stars": 257,
+   "stars_today": 0,
+   "forks": 18,
+   "language": "Rust",
+   "code_url": "https://github.com/JordyZomer/lemmalog",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent-memory",
+    "kg",
+    "mcp"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "代理记忆的 datalog 推理与可验证溯源",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "用 Datalog 做 agent memory，靠 450 随机程序和增量维护把查询延迟压到约100µs",
+    "why": "面试里讲 agent memory 比 vector store 更硬",
+    "architecture": "一个典型悖论是：agent 越跑越久，记忆越多，但每次都把全部历史塞回上下文，既贵又容易把旧信息重新“想一遍”。Lemmalog 的关键改变是把 memory 明确定义成 deductive database：LLM 只负责在 ingestion boundary 产出 base facts，Datalog 负责从事实里机械推出 closure、时间投影、冲突候选和 relevance diffusion，且每个 fact 都带 provenance，查询时不再“回忆”，而是 `ask`/`why` 在可追溯的事实图上求值。最能说明这点的是它把 per-turn 更新做成 seminaive / scoped recompute，并给出 point lookups 在 4M facts 规模下约100µs、再加上 450 个随机程序对 naive fixpoint oracle 的 differential testing，证明这不是概念稿，而是维护了增量正确性。新意在系统组织层，外加实证层：把 agent memory 从 prompt 技巧变成可维护的数据系统。",
+    "verdict": "值得精读，能学到 agent memory 的数据系统化",
+    "why_now": "",
+    "key_points": [
+     "最强证据是增量查询和 differential testing",
+     "没证明通用 LLM 记忆一定优于向量库",
+     "规则增多时仍依赖索引和分层约束"
+    ],
+    "prereqs": [
+     {
+      "name": "Datalog",
+      "status": "unlisted"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Neo4j",
+     "RAG"
+    ],
+    "mermaid": "graph TD\nEpisode --> Facts\nFacts --> Rules\nRules --> Derived\nDerived --> Ask\nDerived --> Why\nAsk --> Answer\nWhy --> Provenance",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:unslothai/unsloth",
+   "kind": "project",
+   "title": "unslothai/unsloth",
+   "url": "https://github.com/unslothai/unsloth",
+   "summary": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4, MiniMax-H3, Gemma 4, FLUX and more.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "unslothai",
+   "hf_upvotes": 0,
+   "stars": 75483,
+   "stars_today": 6327,
+   "forks": 6853,
+   "language": "Python",
+   "code_url": "https://github.com/unslothai/unsloth",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "finetune",
+    "llmops",
+    "quantization"
+   ],
+   "core_score": 7.0,
+   "wide_score": 9.0,
+   "score_reason": "本地训练与微调工具，行业热且可直接用",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "用桌面端把训练、推理和 MCP 接起来，作者报告 Qwen3.8-Flash-Next 可快 2x",
+    "why": "适合跟踪本地训练、量化和 agent 工具链",
+    "architecture": "它解决的是本地部署和训练太碎：要么只能调模型，要么只会跑 UI，要么得自己拼推理、微调、RAG 和 agent 工具。Unsloth 的承重点不是单一算法，而是把模型训练、推理、数据处理和 agent 接口做成一套桌面/Studio/Core 体系：用户可以从 desktop 或 CLI 起服务，走 OpenAI-compatible API、MCP、LAN/HTTPS 访问，再把 LoRA、QLoRA、GRPO、DPO、GGUF、量化和多 GPU 规划串起来。最直接的证据是它最新 release 把 MTP 默认打开，并报告在 Qwen3.8-Flash-Next 和 GLM-5.3-Flash 上可到 2x 提速，同时还有 170+ training/chat/performance 改进，说明它的价值更多来自工程打包和运行时整合而不是单点论文式创新。新意主要在系统组织层：把“模型实验室”做成可装、可连 agent、可部署的产品化栈。",
+    "verdict": "看速览即可，主要价值是工程整合",
+    "why_now": "最近 release：v0.1.806-beta、v0.1.805-beta、v0.1.804-beta",
+    "key_points": [
+     "作者报告 Qwen3.8-Flash-Next 可快 2x",
+     "release 强调 MCP、MTP、multi-GPU 改进",
+     "更像集成型平台，不是单一新算法"
+    ],
+    "prereqs": [
+     {
+      "name": "LoRA",
       "status": "unknown"
      },
      {
@@ -995,80 +1057,88 @@
       "status": "unknown"
      },
      {
-      "name": "speculative decoding",
+      "name": "GRPO",
       "status": "unknown"
      },
      {
-      "name": "KV cache",
+      "name": "MCP",
       "status": "unknown"
      }
     ],
     "difficulty": 2,
     "related": [
-     "OpenRouter",
-     "LiteLLM"
+     "vLLM",
+     "bitsandbytes"
     ],
-    "mermaid": "graph TD\nA[User request] --> B[Gateway]\nB --> C[Quota check]\nC --> D[Auto fallback]\nC --> E[Quota Share]\nB --> F[Compression]\nF --> G[Provider route]\nG --> H[Response]",
-    "read_level": "L2"
+    "mermaid": "graph TD\nUI --> Serve\nServe --> Models\nServe --> MCP\nModels --> Train\nModels --> Infer\nTrain --> Export\nInfer --> API",
+    "read_level": "L1"
    }
   },
   {
-   "id": "repo:public-apis/public-apis",
+   "id": "repo:modular/modular",
    "kind": "project",
-   "title": "public-apis/public-apis",
-   "url": "https://github.com/public-apis/public-apis",
-   "summary": "A collective list of free APIs",
+   "title": "modular/modular",
+   "url": "https://github.com/modular/modular",
+   "summary": "The Modular Platform (includes MAX & Mojo)",
    "source": "github_trending",
    "published": "",
    "authors": [],
-   "org": "public-apis",
+   "org": "modular",
    "hf_upvotes": 0,
-   "stars": 474478,
-   "stars_today": 21253,
-   "forks": 52399,
-   "language": "Python",
-   "code_url": "https://github.com/public-apis/public-apis",
+   "stars": 29465,
+   "stars_today": 2891,
+   "forks": 3134,
+   "language": "Mojo",
+   "code_url": "https://github.com/modular/modular",
    "pdf_url": "",
    "categories": [],
-   "keywords": [],
-   "core_score": 7.3,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
+   "keywords": [
+    "moe",
+    "training",
+    "platform"
+   ],
+   "core_score": 7.0,
+   "wide_score": 9.0,
+   "score_reason": "训练/架构平台化，热度高且体系完整",
    "tier": "wide",
-   "ptype": "",
+   "ptype": "infra",
    "board": "monthly",
    "digest": {
-    "one_liner": "public-apis是一个社区维护的免费 API 索引，收录跨领域接口入口",
-    "why": "适合做产品原型和数据源备忘，但不算研究热点",
-    "architecture": "它解决的是“想找一个现成 API 时，信息散在各处、质量参差”的检索痛点。这个仓库本质上不是运行时系统，而是人工整理的目录：把按领域分类的 free APIs、文档入口和示例链接集中起来，降低发现成本。正文里能看到它与 APILayer 套件的推广内容混在一起，说明它更像生态型索引页而非技术架构项目；原文未明确自动验证、版本化审计或运行时机制。对于想快速接入天气、股票、地理编码、搜索等外部能力的人，它的价值在于覆盖面和长期维护，而不是质量控制或统一协议。相较同类列表，它差异主要在规模和社区维护历史；但它不提供你真正需要的工程承重组件。",
-    "verdict": "看速览即可，适合作为资源索引而非精读对象",
-    "why_now": "原文未明确",
+    "one_liner": "用 Mojo+MAX 做统一 AI 平台，作者报告新增 M1/M5 GPU 支持与 TTFT 加速",
+    "why": "看它理解推理系统与编译器协同",
+    "architecture": "它解决的不是“再做一个推理框架”，而是同一套 AI 平台里编译器、GPU kernel、serve、benchmark 各自割裂，导致能力复用差、硬件适配慢。关键改变是把 GPU 编程 API 从 Mojo stdlib 挪到顶层 max 包，并把这些 API 直接并入 MAX accelerator library：组件 → 它阻断“语言库和加速库分叉”这个失败；同时保留 AI kernels、serve-model、profile-model 等工作流，让模型上线、压测、评估和 profiling 共享同一运行底座。最直接的证据是作者报告 M5 上加入 hardware-MMA flash-attention prefill 以降低 TTFT，同时把 Apple silicon GPU 支持回扩到 M1，说明它在真实硬件覆盖和首 token 延迟上都在继续打通。新东西主要在系统组织层，不是单个 kernel。",
+    "verdict": "适合看平台边界怎么划，不必只当推理框架看",
+    "why_now": "",
     "key_points": [
-     "核心是目录，不是工具链或 SDK",
-     "未见自动测试、验证或统一接口层",
-     "适合找 API，不适合判断接口质量"
+     "作者报告：M1 回扩、M5 prefill 降 TTFT",
+     "没看到公开基准对比，收益边界原文未明确",
+     "要复现得碰编译器、kernel、serve 三层"
     ],
     "prereqs": [
      {
-      "name": "API",
-      "status": "unlisted"
+      "name": "KV cache",
+      "status": "unknown"
      },
      {
-      "name": "REST",
-      "status": "unlisted"
+      "name": "flash attention",
+      "status": "unknown"
      },
      {
-      "name": "Postman",
-      "status": "unlisted"
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
      }
     ],
-    "difficulty": 1,
+    "difficulty": 3,
     "related": [
-     "RapidAPI",
-     "Awesome lists"
+     "vLLM",
+     "flash attention"
     ],
-    "mermaid": "graph TD\nA[Need an API] --> B[Public catalog]\nB --> C[Category filter]\nC --> D[Docs link]\nD --> E[Use in product]",
-    "read_level": "L1"
+    "mermaid": "graph LR\nA[Mojo stdlib] --> B[GPU APIs scattered]\nB --> C[hard to reuse]\nD[max package] --> E[GPU APIs unified]\nE --> F[MAX kernels]\nF --> G[serve and profile]\nG --> H[lower TTFT]",
+    "read_level": "L2"
    }
   },
   {
@@ -1082,7 +1152,7 @@
    "authors": [],
    "org": "openai",
    "hf_upvotes": 0,
-   "stars": 120933,
+   "stars": 120934,
    "stars_today": 18251,
    "forks": 18517,
    "language": "Rust",
@@ -1090,166 +1160,120 @@
    "pdf_url": "",
    "categories": [],
    "keywords": [
-    "agent"
+    "agent",
+    "tool-use",
+    "coding"
    ],
-   "core_score": 8.0,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "终端coding agent，和agent方向高度相关",
    "tier": "wide",
-   "ptype": "",
+   "ptype": "tool",
    "board": "monthly",
    "digest": {
-    "one_liner": "OpenAI 终端 coding agent，本地跑；作者主打 CLI/IDE/桌面三入口。",
-    "why": "你关心 agent 工程和 coding workflow，这类工具会进面试谈资。",
-    "architecture": "它解决的悖论是：真正能改代码的 agent，往往卡在“要进编辑器、要云端、要复杂配置”这三道门，结果使用门槛比能力更高。Codex 的关键改变不是新规划算法，而是把 coding agent 做成本地可执行的入口层：CLI 直接在终端跑，IDE 插件和桌面端把同一能力挂到不同工作流上，阻断“模型能做事但用户接不住”的失败。正文里最直接的证据是它的安装与启动路径：Mac/Linux/Windows 都有一行安装，且支持 ChatGPT 账号或 API key 两种认证；这说明它优先解决分发与接入，而不是先展示复杂推理链。新意主要在系统组织层。",
-    "verdict": "看速览即可，更多是产品化入口，不是方法论文。",
-    "why_now": "",
+    "one_liner": "用本地终端 coding agent 跑代码与改文件，作者报告 v0.153.0-alpha.6 仍在高频发布",
+    "why": "你做 agent 工程/评测时可直接对照",
+    "architecture": "它解决的是“LLM 会写代码，但离真正改仓库还差一层执行闭环”。原文的关键点不是聊天，而是 Codex CLI 作为本地 coding agent 直接在终端跑，且同时提供 IDE、desktop、web 三种入口。核心机制是把模型输出接到本地执行环境和仓库上下文里：检测到用户要开发时，agent 在本地运行、读写代码、再把结果回到终端；这阻断了纯对话式 agent 容易停在建议、不触碰文件系统的失败。最直接的证据是 README 明确把产品拆成 local CLI、IDE 插件、desktop app 和 cloud web 四种形态，说明它的重心是交互和部署形态，而不是单一模型能力。新在系统组织层：把 coding agent 的入口、鉴权和安装链路产品化。",
+    "verdict": "值得看它把 coding agent 产品化到哪一步",
+    "why_now": "作者报告最新 release 是 2026-09-02 的 alpha 版本",
     "key_points": [
-     "作者报告：Stars 120933，today +18251",
-     "原文未明确公开评测与任务成功率",
-     "复现门槛低，但核心 agent 逻辑未展开"
+     "作者报告：0.153.0-alpha.6 持续发版",
+     "README 直接给本地/IDE/云端多入口",
+     "原文未给 agent 成败率或 SWE-bench 数字"
     ],
     "prereqs": [
      {
-      "name": "agent",
-      "status": "unlisted"
+      "name": "planning",
+      "status": "unknown"
      },
      {
-      "name": "planning",
+      "name": "ReAct",
       "status": "unknown"
      },
      {
       "name": "model context protocol",
       "status": "unknown"
-     }
-    ],
-    "difficulty": 1,
-    "related": [
-     "ReAct",
-     "SWE-bench"
-    ],
-    "mermaid": "graph LR\nA[Terminal]\nB[IDE]\nC[Desktop]\nD[Codex Agent]\nE[Codebase]\nA-->D\nB-->D\nC-->D\nD-->E",
-    "read_level": "L1"
-   }
-  },
-  {
-   "id": "repo:bilawalsidhu/gods-eye-view",
-   "kind": "project",
-   "title": "bilawalsidhu/gods-eye-view",
-   "url": "https://github.com/bilawalsidhu/gods-eye-view",
-   "summary": "A spy satellite simulator in your browser, except the data is real. Live open source spatial intelligence on a photorealistic 3D globe.",
-   "source": "github_trending",
-   "published": "",
-   "authors": [],
-   "org": "bilawalsidhu",
-   "hf_upvotes": 0,
-   "stars": 15683,
-   "stars_today": 12042,
-   "forks": 3159,
-   "language": "JavaScript",
-   "code_url": "https://github.com/bilawalsidhu/gods-eye-view",
-   "pdf_url": "",
-   "categories": [],
-   "keywords": [],
-   "core_score": 7.0,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
-   "tier": "wide",
-   "ptype": "",
-   "board": "weekly",
-   "digest": {
-    "one_liner": "浏览器里做实时地球情报：光学球体+公开数据+语音代理，v0.1.1 修可靠性。",
-    "why": "适合看 agent+多模态+地理可视化的产品化整合。",
-    "architecture": "它解决的不是“有没有数据”，而是“公开信号太散，难以形成可操作态势图”的问题。作者把世界信号收进一个 photorealistic 3D globe：前端负责地球、轨迹、检测框、语音控制，后端/数据层拉飞行、船只、卫星、地震、交通和公开视频源，核心取舍是把“浏览器里的情报浏览器”做成单一空间界面，而不是一堆 tab。关键机制是按信号类型自动落到不同可视化：例如 live contacts、camera handoff、trail、share link，把“看见”直接变成“跟踪/切换/回放”。最直接的证据是 v0.1.1 的修复集中在 one-click setup 和 live-data ingestion：Pinokio 安装状态、macOS 无 key 启动、Active Fires 批次保留、GBFS 响应大小按字节限制，说明它已经在处理真实数据流的边界条件。新意主要在系统组织层。",
-    "verdict": "值得看一眼产品整合，但速览已够判断成熟度。",
-    "why_now": "v0.1.1（2026-09-01）",
-    "key_points": [
-     "作者报告：#1 on GitHub Trending, stars +12042 today",
-     "修复点集中在安装和实时摄取稳定性",
-     "原文未明确完整测试覆盖与回归范围"
-    ],
-    "prereqs": [
-     {
-      "name": "VLM",
-      "status": "unknown"
      },
      {
-      "name": "agent",
-      "status": "unlisted"
-     },
-     {
-      "name": "multi-agent",
+      "name": "SWE-bench",
       "status": "unknown"
      }
     ],
     "difficulty": 2,
     "related": [
-     "Google Earth Studio",
-     "ArcGIS"
+     "ReAct",
+     "SWE-bench"
     ],
-    "mermaid": "graph TD\nA[Public feeds]\nB[3D globe]\nC[Voice agent]\nD[Track and handoff]\nE[Share link]\nA-->B\nB-->C\nC-->D\nD-->E",
-    "read_level": "L1"
+    "mermaid": "graph TD\nA[User task] --> B[Local CLI]\nB --> C[Read repo]\nC --> D[Edit and run]\nD --> E[Check result]\nE --> B\nB --> F[Done]",
+    "read_level": "L2"
    }
   },
   {
-   "id": "repo:ayghri/i-have-adhd",
+   "id": "repo:titanwings/distilly",
    "kind": "project",
-   "title": "ayghri/i-have-adhd",
-   "url": "https://github.com/ayghri/i-have-adhd",
-   "summary": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
+   "title": "titanwings/distilly",
+   "url": "https://github.com/titanwings/distilly",
+   "summary": "Distilly — Distill how they think into reusable Skills for any Agent or Bot. Formerly Colleague Skill（原同事 Skill）.",
    "source": "github_trending",
    "published": "",
    "authors": [],
-   "org": "ayghri",
+   "org": "titanwings",
    "hf_upvotes": 0,
-   "stars": 26612,
-   "stars_today": 11429,
-   "forks": 1668,
+   "stars": 24275,
+   "stars_today": 3718,
+   "forks": 2129,
    "language": "Python",
-   "code_url": "https://github.com/ayghri/i-have-adhd",
+   "code_url": "https://github.com/titanwings/distilly",
    "pdf_url": "",
    "categories": [],
    "keywords": [
-    "agent"
+    "agent",
+    "distillation",
+    "skills",
+    "reusability"
    ],
-   "core_score": 7.7,
-   "wide_score": 10.0,
-   "score_reason": "启发式打分（无 API key）",
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "把思维蒸馏成可复用 agent skills，方向契合",
    "tier": "wide",
-   "ptype": "",
+   "ptype": "tool",
    "board": "monthly",
    "digest": {
-    "one_liner": "给 coding agent 加输出约束，强制先给行动项、编号步骤、少废话。",
-    "why": "很适合面试里讲 agent 交互层与提示规范设计。",
-    "architecture": "它解决的场景很具体：模型明明已经找到答案，却把关键动作埋在长段解释里，导致用户看完仍不知道下一步。这个 skill 不改模型推理，而是改输出协议：先给 next action，再把多步任务编号，限制列表长度，最后必须落一个 concrete next step。它阻断的是“答案存在但不可执行”的失败，尤其适合 coding agent 的交互回路。最直接的证据是 README 里的 Before/After 对照：同一个代码修复建议，改造后从解释式段落变成“先改哪一行、先跑什么测试、失败后贴哪一行”。新意在系统组织层与交互层，不在模型层；它更像一个可复用的 agent output policy。",
-    "verdict": "看速览即可，价值在可直接套用的输出约束。",
-    "why_now": "v0.1.0/0.1.1 未提供；原文未明确",
+    "one_liner": "用 source-grounded workflow 把人物材料蒸馏成可复用 Skill，作者报告已过 20K ⭐",
+    "why": "适合看 agent memory / persona 层怎么产品化",
+    "architecture": "它解决的是“人走了、上下文散了，agent 只能记零碎对话”的问题。Distilly 的关键改变不是做聊天机器人，而是把 messages、docs、interviews、public sources 变成一个可安装的 Person Profile，再打包成 Agent Skill；组件 → 它阻断“人物知识停留在原始材料里、无法被 host 复用”的失败。它还按 colleague、relationship、celebrity 三类来源结构分别处理，这说明它不是一套通吃抽象，而是按材料类型切不同分析维度。最直接的证据是 README 明确写出 source material → Person Profile → Agent/Bot 的单向产物链，并列出 Lark、Slack、WeChat、PDF、EML 等输入源和 8 个 host 的本地 Skill discovery。新在项目组织层：把 persona 建模和 skill 分发接起来。",
+    "verdict": "值得看它怎么把 persona 变成可分发 skill",
+    "why_now": "作者报告 2026-08-13 已超过 20K ⭐，且 2026-08-24 补了多 host 本地发现",
     "key_points": [
-     "作者展示了明确 Before/After 对照",
-     "没有模型评测，只是交互规范",
-     "复现几乎零成本，主要看约束是否适配你的 agent"
+     "作者报告：2026-08-13 过 20K ⭐",
+     "输入源和 host 覆盖都写得很具体",
+     "没看到生成质量评测，效果边界原文未明确"
     ],
     "prereqs": [
      {
-      "name": "agent",
-      "status": "unlisted"
+      "name": "memory",
+      "status": "unknown"
      },
      {
-      "name": "planning",
+      "name": "multi-agent",
       "status": "unknown"
      },
      {
       "name": "prompt injection",
       "status": "unknown"
+     },
+     {
+      "name": "self-instruct",
+      "status": "unknown"
      }
     ],
-    "difficulty": 1,
+    "difficulty": 2,
     "related": [
      "ReAct",
-     "self-instruct"
+     "memory"
     ],
-    "mermaid": "graph LR\nA[Model answer]\nB[Buried result]\nC[Skill rules]\nD[Action first]\nE[Numbered steps]\nA-->B\nA-->C\nC-->D\nD-->E",
-    "read_level": "L1"
+    "mermaid": "graph LR\nA[Messages docs interviews] --> B[Source cleanup]\nB --> C[Profile build]\nC --> D[Pack as Skill]\nD --> E[Agent host]\nE --> F[Reuse persona]",
+    "read_level": "L2"
    }
   }
  ]
