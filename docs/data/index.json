@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-05",
+   "papers": 8,
+   "projects": 10,
+   "top": "Rethinking On-Policy Distillation of Large Language Models II: One Training Example"
+  },
+  {
    "date": "2026-09-04",
    "papers": 8,
    "projects": 10,
