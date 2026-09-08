@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-08",
+   "papers": 8,
+   "projects": 10,
+   "top": "Bilevel Coordinated Reflection: A Game-Theoretic Approach to Multi-Agent LLM Systems"
+  },
+  {
    "date": "2026-09-07",
    "papers": 8,
    "projects": 10,

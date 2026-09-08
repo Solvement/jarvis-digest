@@ -1,0 +1,1189 @@
+{
+ "date": "2026-09-08",
+ "stats": {
+  "collected": 467,
+  "filtered": 134,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 8 calls, 19255 in / 7816 out; gpt-5.4-mini: 6 calls, 46921 in / 8730 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.02750",
+   "kind": "paper",
+   "title": "Bilevel Coordinated Reflection: A Game-Theoretic Approach to Multi-Agent LLM Systems",
+   "url": "https://arxiv.org/abs/2609.02750",
+   "summary": "Multi-agent LLM systems commonly use an orchestrator to decompose a task for a team of workers and then improve through textual reflection. Despite strong empirical results, these systems lack a unified account of coordination, memory improvement, and the role of external verification. We model orchestrator-worker interaction as a bilevel coordination game: under bounded coupling, the workers' local-update game is an approximate potential game whose equilibrium slack is controlled by decomposition quality. We then analyse reflection as stochastic movement over semantic memory states. For free-form reflection, we derive a finite-time upper bound, prove worst-case tightness, and give a positive lower bound under a falsifiable persistent-harm condition. We further prove an information-theoretic impossibility result: no gate that observes only the generated transcript can improve uniformly over text-indistinguishable environments, whereas an environment-grounded gate can. Motivated by this separation, we introduce Stochastic Reflective Memory Ascent (SRMA), which accepts a candidate memory only after a grounded evaluation risk strictly decreases. Under calibration and non-degenerate corrective mass, SRMA converges exactly, geometrically or polynomially; matching constructions show that both rate regimes are order-tight. We also provide confidence gating for stochastic evaluation and re-anchoring guarantees for piecewise-stationary environments. Experiments instantiate these objects with environment-grounded metrics and test the predicted coordination and drift laws. On 500 SWE-bench instances, the complete Kimi-based system resolves 72.2% versus a 70.8% public mini-SWE-agent reference. Code: https://github.com/YihangChen9/Bilevel-Coordinated-Reflection",
+   "source": "hf_papers",
+   "published": "2026-09-02",
+   "authors": [
+    "Yihang Chen",
+    "Yuxiang Chen",
+    "Yuxuan Huang",
+    "Meng Fang",
+    "Weilin Luo",
+    "Jun Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 125,
+   "stars": 8,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/YihangChen9/Bilevel-Coordinated-Reflection",
+   "pdf_url": "https://arxiv.org/pdf/2609.02750",
+   "categories": [],
+   "keywords": [
+    "multi-agent",
+    "game-theory",
+    "reasoning"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "多智能体反思的理论框架，且有代码可跟",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 bilevel coordination + SRMA 解释多智能体反思，SWE-bench 解出 500 题",
+    "why": "做 Agent/RAG 研究和面试都很对口",
+    "architecture": "这篇先解决一个反直觉点：多智能体系统明明能靠 orchestrator 分工、再靠 reflection 迭代，为什么常常只是“看起来在变好”，却不保证协调真的稳定、记忆真的在进步。作者把 orchestrator-worker 过程改写成 bilevel coordination game：上层负责分解和节奏，下层 worker 的局部更新在 bounded coupling 下近似 potential game，分解质量直接变成 equilibrium slack，等于把“任务切得好不好”变成可分析的协调误差。再往下，reflection 不再被当成泛化的自我改写，而是语义记忆状态上的随机游走；最关键的改变是加入 environment-grounded gate，SRMA 只有在 grounded evaluation risk 下降时才提交记忆，专门阻断“只看 transcript 也许自洽、但实际在漂移”的失败。最直接的证据是作者在 hidden-cap contest、Overcooked 和 SWE-bench 上同时验证协调、漂移和 gated 收敛规律；在 SWE-bench 上完整 Kimi 系统对 500 题给出解答，支撑的是机制层解释而不只是分数。新意主要在系统组织层：把 multi-agent loop、反思记忆和外部 verifier 放进同一套可证明框架。",
+    "verdict": "值得精读，适合补齐 multi-agent 机制理解",
+    "why_now": "",
+    "key_points": [
+     "最强证据：SWE-bench 500 题 + 可控环境三线验证",
+     "只靠 transcript 的 gate 有不可避免的信息不完备",
+     "SRMA 复现难点在 grounded verifier 和记忆状态设计"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "AutoGen",
+     "Reflexion"
+    ],
+    "mermaid": "graph LR\nQ[Task] --> O[Orchestrator]\nO --> D[Decompose]\nD --> W[Workers]\nW --> R[Reflect]\nR --> G[Grounded Gate]\nG --> M[Memory Commit]\nM --> O\nG -->|decrease risk| M",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2608.25936",
+   "kind": "paper",
+   "title": "One Symptom, Three Levers: A Critical Review of On-Policy Self-Distillation",
+   "url": "https://arxiv.org/abs/2608.25936",
+   "summary": "On-policy distillation trains a language model on its own generations while a teacher scores them token by token. It combines the dense supervision of imitation learning with the on-policy sampling of reinforcement learning. But it requires a second, larger model to act as teacher. On-Policy Self-Distillation (OPSD) removes that cost. The teacher is the model itself, conditioned on privileged information the student will not have at test time, such as a reference solution, a plan, or environment feedback. The teacher is no stronger than the student, only better informed. Early results were promising, with accuracy comparable to reinforcement learning at a fraction of the generated tokens. But the same asymmetry that produces the signal also biases it. One failure mode now dominates the field: collapse, the progressive narrowing of the set of reasoning paths the model can produce. Collapse is not specific to OPSD, though privileged information aggravates it. This review treats collapse as a symptom governed by three levers: (i) where the signal is applied, that is, how tokens are weighted; (ii) what the teacher is shown, that is, the nature of the privileged information; and (iii) when the signal changes, that is, the teacher's dynamics and the decay of guidance. We restrict our scope to mathematical reasoning, where the method originated and where its failure modes are best documented. We report no new experiments. The contribution is structural: a shared vocabulary for phenomena named differently across papers, and a clear line between what is settled and what is still disputed.",
+   "source": "hf_papers",
+   "published": "2026-08-26",
+   "authors": [
+    "Justin Robert",
+    "Raheel Qader"
+   ],
+   "org": "",
+   "hf_upvotes": 10,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2608.25936",
+   "categories": [],
+   "keywords": [
+    "rlhf",
+    "distillation",
+    "on-policy",
+    "llm"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "On-policy 自蒸馏关键综述，方法面试可讲。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "梳理 OPSD 三个旋钮，解释 collapse 为什么会发生",
+    "why": "补齐后训练与 on-policy distillation 这条线",
+    "architecture": "这篇不是新方法，而是把一个已经热起来的训练范式拆成可讨论的结构：OPSD 用“自己当 teacher、但给 teacher privileged information”来保留 on-policy 的同时拿到 token-level dense signal。悖论在于，这个信号越密，模型越容易把 reasoning path 收窄，最后 collapse。作者把问题收束成三个 levers：signal applied where、teacher sees what、guidance changes when；也就是 token 权重怎么放、teacher 能看到多少额外信息、以及 guidance 是否随训练衰减或切换。真正有价值的是它把不同论文里分散的失败现象统一成同一症状框架，而不是再发明一个训练配方。文中最直接支持这一点的是对数学推理场景的结构化回顾：它对哪些机制已被证实、哪些还在争议，给出明确边界，但不做新实验。新意在实证层的结构整理，不在组件层。",
+    "verdict": "看速览即可，适合当综述索引",
+    "why_now": "",
+    "key_points": [
+     "最强证据：把 collapse 统一成三旋钮问题",
+     "没做新实验，结论来自文献结构化归纳",
+     "主要约束在数学推理，泛化到多模态原文未明确"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "DeepSeek-R1",
+     "MiniLLM"
+    ],
+    "mermaid": "graph LR\nS[Student rollouts] --> T[Self teacher]\nT --> P[Privileged info]\nP --> W[Token weights]\nP --> G[Guidance schedule]\nW --> C[Collapse risk]\nG --> C\nC --> O[Tradeoff analysis]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.04010",
+   "kind": "paper",
+   "title": "Unlocking Lossless Speedups in LLMs via Discrete Diffusion",
+   "url": "https://arxiv.org/abs/2609.04010",
+   "summary": "Large Language Models (LLMs) owe much of their success to next-token prediction (NTP), but their autoregressive (AR) structure requires slow, sequential token generation. To overcome this bottleneck, we introduce diffusion-augmented LLMs, a new class of models that defines an AR model distribution while using diffusion to draw multiple tokens in parallel from that distribution. We decouple the parameters of these models into two sets: AR weights, trained using the standard NTP objective, and lightweight diffusion weights, trained to generate multiple tokens simultaneously. The diffusion weights are learned through a simple Diffusion Distillation phase that adds negligible overhead to existing LLM training pipelines. We also introduce Ψ-Spec, a family of samplers that enables lossless acceleration and inference-time scaling at a fixed context length. Unlike speculative decoding, our method requires no separate draft model. Unlike diffusion LLMs (d-LLMs), it accelerates generation without sacrificing the quality of the underlying AR model. The resulting models, called Uno, can be trained from scratch or built by augmenting existing open-weight AR LLMs. Uno achieves higher throughput than leading speculative-decoding methods at every evaluated batch size and delivers up to 3times speedups over the base AR model, including at the largest batch size supported by the device. Notably, our 8B Uno model outperforms the leading open d-LLM, the 26B DiffusionGemma, and the proprietary Mercury 2 across all evaluated benchmarks in agentic tool use, coding, and long-context reasoning. We release code and checkpoints at: https://s-sahoo.github.io/uno/",
+   "source": "hf_papers",
+   "published": "2026-09-03",
+   "authors": [
+    "Subham Sekhar Sahoo",
+    "Lingjie Chen",
+    "Khiem Pham",
+    "Jonathan Geuter",
+    "Chaitanya Dwivedi",
+    "Varad Pimpalkhute"
+   ],
+   "org": "",
+   "hf_upvotes": 65,
+   "stars": 50,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/ifm-ai/uno",
+   "pdf_url": "https://arxiv.org/pdf/2609.04010",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "diffusion",
+    "inference"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "并行离散扩散加速，推理范式新且可读",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 discrete diffusion 给 AR LLM 做无损加速，最高快 3 倍",
+    "why": "直击推理加速，和 KV cache/ speculative decoding 同赛道",
+    "architecture": "它解决的是一个很现实的悖论：AR LLM 的质量强，但生成天生是逐 token 串行，吞吐被 next-token prediction 的顺序依赖卡死。作者没有改掉 AR 分布本身，而是把模型拆成两套权重：AR weights 继续负责标准 NTP 训练，轻量 diffusion weights 负责一次并行生成多个 token；再用 Diffusion Distillation 把这部分几乎无额外成本地学出来。核心机制是 Ψ-Spec：在固定 context length 下做 lossless acceleration 和 inference-time scaling，意思是加速只改变采样路径，不改底层 AR 分布的质量。它阻断的失败是“并行了就掉点”或“快了但换模型语义”的常见加速代价。作者报告 Uno 在评测里比主流 speculative decoding 方法吞吐更高，最高对 base AR 模型到 3×；并且不需要单独 draft model。新意主要在组件层和推理层组织：把 diffusion 变成 AR 的加速外挂，而不是替代架构。",
+    "verdict": "值得通读，推理加速方向很有价值",
+    "why_now": "",
+    "key_points": [
+     "最强证据：无损加速 + 固定 context length",
+     "不需要 draft model，少一个推理组件",
+     "与 d-LLM 的差别在不牺牲底座 AR 质量"
+    ],
+    "prereqs": [
+     {
+      "name": "next-token prediction",
+      "status": "unknown"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "speculative decoding",
+     "d-LLM"
+    ],
+    "mermaid": "graph LR\nA[AR model] --> N[NTP]\nA --> D[Diffusion weights]\nD --> P[Parallel tokens]\nP --> S[Psi Spec]\nS --> O[Lossless speedup]\nO --> Q[Same AR quality]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.04523",
+   "kind": "paper",
+   "title": "MaxKernel: Agentic Kernel Generation for TPUs",
+   "url": "https://arxiv.org/abs/2609.04523",
+   "summary": "Designing and authoring high-performance custom kernels for accelerators is a complex task that requires deep hardware-level expertise. Large Language Models (LLM) can be leveraged together with real-time compiler feedback to build agentic systems for kernel generation. In this work, we present MaxKernel, a multi-agent system that implements three distinct paradigms for TPU kernel development: (1) a Human-in-the-Loop (HITL) agent for collaborative, step-by-step design; (2) an Autonomous (Auto) agent that executes a fully automated, metric/trace-driven optimization loop; and (3) a Graph-Based Autonomous Search that scales the Auto agent for global exploration of the design space. All three paradigms leverage a shared pool of specialized sub-agents to handle planning, implementation, self-debugging, testing, and hardware profiling. We evaluate MaxKernel on JaxBench, a comprehensive suite of 50 diverse kernel tasks for TPUs, alongside complex, real-world workloads from state-of-the-art open-source models. We demonstrate that MaxKernel consistently generates highly optimized implementations, matching expert hand-tuned baselines and delivering significant performance across the benchmark. Our agent is open-sourced and available https://github.com/AI-Hypercomputer/accelerator-agents/tree/main/MaxKernel.",
+   "source": "hf_papers",
+   "published": "2026-09-03",
+   "authors": [
+    "Shangkun Wang",
+    "Nina Cai",
+    "Charles Hoong",
+    "Julian Walker",
+    "Gerson Kroiz",
+    "George Vanica"
+   ],
+   "org": "",
+   "hf_upvotes": 12,
+   "stars": 66,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/AI-Hypercomputer/accelerator-agents",
+   "pdf_url": "https://arxiv.org/pdf/2609.04523",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "tpu",
+    "inference",
+    "kernel"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "面向Agent化生成TPU核，偏系统硬核",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "MaxKernel用多智能体+编译反馈自动写 TPU kernel，JaxBench 平均提速 1.58×",
+    "why": "做推理加速/系统面试很对口",
+    "architecture": "反直觉点是：kernel 写对了不等于跑快，TPU 上还会被内存层级、DMA pipeline、tiling 和编译器报错卡死。MaxKernel 的关键改动不是“更会写代码”，而是把 kernel 开发拆成闭环：规划、实现、自调试、测试、profiling 由不同 sub-agent 分工，外层再用 HITL、Auto、Graph search 三种编排方式决定人介入多少、搜索铺多宽；其中编译失败和 XProf 指标不是日志，而是下一轮改写的控制信号，直接阻断“生成后就盲目执行”的失败。最直接的证据是它在 JaxBench 50 个 TPU kernel 上做到 1.58× geometric mean speedup，且在 8 个有人工实现的生产 kernel 上达到 2.32×，超过 human-written baseline 的 2.02×。新意主要在系统组织层：把 agentic loop 真正接到 accelerator compiler/profile 工具链里，而不是只做代码补全。",
+    "verdict": "值得精读，能学到 agentic 系统怎么接硬件反馈",
+    "why_now": "",
+    "key_points": [
+     "强证据：JaxBench 1.58×，生产 kernel 2.32×",
+     "没证明通用到所有 accelerator；原文主打 TPU",
+     "复现难点在 TPU 工具链与 profiling 闭环"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Halide",
+     "TVM"
+    ],
+    "mermaid": "graph LR\nA[Kernel需求] --> B[规划]\nB --> C[实现]\nC --> D[编译反馈]\nD --> B\nC --> E[测试]\nE --> F[profiling]\nF --> B\nB --> G[更优kernel]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.01281",
+   "kind": "paper",
+   "title": "EmbodiedSkills: A Unified Framework for Orchestrating, Training, and Deploying VLA Agents",
+   "url": "https://arxiv.org/abs/2609.01281",
+   "summary": "Vision-language-action (VLA) models map visual observations and language instructions directly to robot actions, but long-horizon tasks require more than action prediction. An agent must coordinate perception, planning, execution, progress verification, and recovery as the physical state evolves. An action prediction or a model-generated skill decision does not, by itself, guarantee that the proposed operation is valid in the current state or that its outcome will be verified. We propose EmbodiedSkills, a unified framework that treats each skill decision as an execution proposal: the runtime checks its prerequisites before execution and verifies the outcome afterward. A shared executable-skill interface connects high-level skill selection, bounded low-level VLA execution, and post-action verification within a single agent loop. Because this interface remains fixed, low-level VLA policies can be replaced or adapted without changing the agent loop. The interface also records planning, execution, verification, and recovery events as structured trajectories, which provide supervision for individual components and can support optional online adaptation when interactive feedback is available. We instantiate EmbodiedSkills with Qwen3-VL and OpenPI/pi0.5 on RoboTwin 2.0 and LIBERO. Task-adapted low-level VLA policies achieve an average success rate of 86.20% across 50 RoboTwin 2.0 tasks and 97.40% across the four LIBERO suites. These results establish the execution performance of the task-adapted low-level VLA policies used in EmbodiedSkills. On four memory-dependent RMBench tasks, the same task-adapted execution approach achieves 12.5% average success. The framework provides a trainable and inspectable agent layer for turning these policies into closed-loop embodied systems.",
+   "source": "hf_papers",
+   "published": "2026-09-01",
+   "authors": [
+    "Wei Wang",
+    "Wenqiao Zhang",
+    "Yutong Lin",
+    "Yuqian Yuan",
+    "Tianwei Lin",
+    "Jinhao Mao"
+   ],
+   "org": "",
+   "hf_upvotes": 10,
+   "stars": 26,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/DCDmllm/EmbodiedSkills",
+   "pdf_url": "https://arxiv.org/pdf/2609.01281",
+   "categories": [],
+   "keywords": [
+    "vla",
+    "agents",
+    "robotics"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "VLA 代理的执行/验证框架，适合面试",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "EmbodiedSkills用可执行 skill 接口把 VLA 变成闭环机器人 agent，RoboTwin 2.0 达 86.20%",
+    "why": "VLA/机器人 agent 方向值得看",
+    "architecture": "反直觉点是：VLA 直接输出动作并不等于能完成长程任务，因为当前物理状态可能不允许这个 skill 执行，执行后也未必真的达成子目标。EmbodiedSkills 的核心改动是把每个 skill 定义成“执行提案”：高层 policy 先提议结构化操作，runtime 在执行前检查 prerequisites、phase compatibility、输入是否新鲜、状态转移是否合法，执行后再做 verification 和 recovery；这样阻断的是“模型看起来合理但在当前状态不可执行”的失败。真正关键的不是单次动作精度，而是 shared executable-skill interface 把高层 skill selection、低层 bounded VLA、后验验证放进同一个 AgentLoop，并且把 planning/verification/recovery 轨迹都记成可监督数据。最直接的证据是它在 RoboTwin 2.0 50 个任务上报告 86.20%，在 LIBERO 四个 suite 上 97.40%；但 RMBench 的 memory-dependent 任务只有 12.5%，说明记忆依赖和长时序状态仍会崩。新意主要在系统组织层：用固定接口把 VLA policy 变成可检查、可回放、可训练的闭环 agent。",
+    "verdict": "值得精读，适合看机器人 agent 的运行时设计",
+    "why_now": "",
+    "key_points": [
+     "强证据：RoboTwin 2.0 86.20%，LIBERO 97.40%",
+     "RMBench 仅 12.5%，记忆依赖仍弱",
+     "难点在接口设计和闭环数据记录，不是单点 policy"
+    ],
+    "prereqs": [
+     {
+      "name": "VLA",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "PaLM-E"
+    ],
+    "mermaid": "graph TD\nA[观测] --> B[提议 skill]\nB --> C[前置检查]\nC --> D[低层执行]\nD --> E[结果验证]\nE --> F[恢复或继续]\nF --> B",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.03241",
+   "kind": "paper",
+   "title": "FlowBalance: Verifier-Grounded Self-Improvement from On-Policy Reasoning Experience",
+   "url": "https://arxiv.org/abs/2609.03241",
+   "summary": "A reasoning model can improve from its own on-policy experience, but this inner loop is fragile: terminal verifiers provide reliable yet sparse supervision, while dense same-model guidance can reinforce false confidence or overconcentrate learning on a narrow solution mode. We introduce FlowBalance, a verifier-grounded self-improvement method that learns a normalized distribution over complete responses. For each on-policy trajectory, a frozen training-time view of the same policy uses privileged context to produce token-level log-probability gains, which are aggregated into a trajectory-level self-guidance score. FlowBalance calibrates this score with the verifier-derived group advantage: guidance is retained on positive-advantage trajectories, reversed on negative-advantage trajectories, and disabled when the rollout group provides no outcome preference. The resulting energy exponentially reweights a reference policy, and profiled trajectory balance fits the normalized target with one log-partition estimate per rollout group. This realizes outcome-calibrated self-guidance via trajectory balance, without a separate token-level imitation loss. Our analysis establishes within-group contrast preservation, a minimum-change reverse-KL characterization, monotonic verifier control of target reward, and an exact correction against false-positive self-guidance on rejected responses. On mathematical reasoning, FlowBalance improves average performance over FlowRL on both Qwen3-4B and Qwen3-8B, while also improving training speed and stability, avoiding direct OPSD's response-length collapse, and exhibiting higher correct-strategy diversity in a controlled AIME24 diagnostic.",
+   "source": "hf_papers",
+   "published": "2026-09-03",
+   "authors": [
+    "Zixun Huang",
+    "Kishan Panaganti",
+    "Haitao Mi",
+    "Leowei Liang"
+   ],
+   "org": "",
+   "hf_upvotes": 55,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/alexhuang13/FlowBalance",
+   "pdf_url": "https://arxiv.org/pdf/2609.03241",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "self-improvement",
+    "reasoning"
+   ],
+   "core_score": 6.0,
+   "wide_score": 4.0,
+   "score_reason": "基于验证器的自改进，方向贴但代码少",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "FlowBalance用 verifier 校准 on-policy 自训练，Qwen3-8B 在 AIME24 更稳",
+    "why": "后训练 / RLVR 面试很有谈资",
+    "architecture": "反直觉点是：只靠 verifier 的终局奖励太稀疏，只靠模型自己的 dense guidance 又会把错的自信越训越强。FlowBalance 的关键改动是把“同一个 policy 的 privileged hindsight 打分”先压成 trajectory-level self-guidance，再用 verifier 的 group advantage 决定方向：正优势保留、负优势反转、无偏好就关闭；它阻断的是“模型自己觉得对、结果却被 verifier 判错”的自确认。作者不是再加一个 token imitation loss，而是用 trajectory balance 学一个归一化的 complete-response 分布，这样 dense guidance 只负责细化 verifier 的方向，不会覆盖 outcome 信号。最直接的证据是它在 Qwen3-4B/8B 上相对 FlowRL 拿到更好的整体平均，并且在 Qwen3-8B 上达到 AIME24 验证精度的步数更少、训练更稳定，还避免 direct OPSD 的 response-length collapse。新意主要在方法层：把 verifier-grounded self-improvement 写成分布匹配而不是局部 token 模仿。",
+    "verdict": "值得精读，适合理解 on-policy 自改进的机制",
+    "why_now": "",
+    "key_points": [
+     "强证据：比 FlowRL 更稳，且 AIME24 收敛更快",
+     "没证明能替代外部 verifier；依赖 group advantage",
+     "数学味重，复现门槛高"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "trajectory balance",
+      "status": "unlisted"
+     },
+     {
+      "name": "on-policy",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "FlowRL",
+     "GRPO"
+    ],
+    "mermaid": "graph TD\nA[on-policy rollout] --> B[verifier]\nA --> C[privileged scoring]\nB --> D[校准方向]\nC --> D\nD --> E[trajectory balance]\nE --> F[新policy]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.04753",
+   "kind": "paper",
+   "title": "Beneath the Surface of Chains-of-Thought: A Mechanistic Interpretation of Reasoning Operations in LLMs",
+   "url": "https://arxiv.org/abs/2609.04753",
+   "summary": "Reasoning in large language models unfolds through diverse functional operations, such as problem formulation, goal decomposition, and deduction. Although these operations are explicitly distinguished in text, little is known about how they are geometrically organized in representation spaces. To this end, we investigate whether distinct reasoning operations exhibit corresponding geometric structure in hidden representations. We find that operations are separable in held-out representations, with separability peaking in middle layers, and verify that this structure is not explained by lexical or positional confounds. Across layers, token-wise operation-alignment becomes more distributed over spans, while identical surface tokens are represented differently depending on the operation of its surrounding chunk. Attention-masking interventions further show that operation-aligned representations at chunk onset depend on preceding reasoning context. Consequently, our work demonstrates that language models maintain representational correspondence between linguistic reasoning expressions and their internal geometric structures. Code and project materials are available at https://github.com/naver-ai/beneath-cot.",
+   "source": "hf_papers",
+   "published": "2026-09-04",
+   "authors": [
+    "Seogyeong Jeong",
+    "Jaehui Hwang",
+    "Dongyoon Han",
+    "Geonmo Gu",
+    "Alice Oh",
+    "Taekyung Kim"
+   ],
+   "org": "",
+   "hf_upvotes": 13,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/naver-ai/beneath-cot",
+   "pdf_url": "https://arxiv.org/pdf/2609.04753",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "mechanistic",
+    "reasoning"
+   ],
+   "core_score": 6.0,
+   "wide_score": 3.0,
+   "score_reason": "推理算子可分解的机理解释，研究可用",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 hidden state 分离 CoT 操作，证明中层最可分",
+    "why": "面试讲 reasoning 机理很加分",
+    "architecture": "这篇先打破一个直觉：同样写着“decomposition / recall / deduction”的 CoT，模型内部未必只是按字面词在编码。作者把 reasoning trace 切成有功能的 span，问的是“同一操作在 hidden state 里是否共享几何结构”。关键改变是把 CoT 从文本序列变成 operation chunks，再用 held-out representations 去检验可分性；对应失败被阻断的是 lexical confound 和 positional confound，而 attention-masking 用来检查 chunk 开头的表示是否真依赖前文 reasoning context。最直接的证据是操作向量在中层最可分，且 identical surface tokens 会因所属 operation 不同而落在不同表示区域；掩码掉前文后，chunk onset 的 operation-aligned 表示明显受损。新意主要在实证层：不是再证明 CoT 有用，而是把“语言里的 reasoning 操作”和“内部几何结构”连起来。",
+    "verdict": "值得精读，能补 reasoning 机理直觉",
+    "why_now": "",
+    "key_points": [
+     "中层最可分，且非词面或位置伪相关",
+     "前文 reasoning context 对 chunk onset 有因果作用",
+     "需要 span 标注与 probing，复现门槛偏高"
+    ],
+    "prereqs": [
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     },
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "hidden representations",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Chain-of-Thought Prompting",
+     "probing"
+    ],
+    "mermaid": "graph LR\nA[CoT trace] --> B[切成 operation chunk]\nB --> C[Probe hidden states]\nC --> D[看几何可分]\nD --> E[中层最强]\nB --> F[mask 前文]\nF --> G[验证上下文因果]\nE --> H[操作与表示对应]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.02998",
+   "kind": "paper",
+   "title": "Verify Before You Distill: Prompt-Level Teacher Gating for On-Policy Distillation",
+   "url": "https://arxiv.org/abs/2609.02998",
+   "summary": "On-policy distillation (OPD) accelerates post-training by providing dense token-level supervision from a frozen teacher on the student's own rollouts. Vanilla OPD applies this supervision uniformly across prompts, without checking whether the teacher is reliable for each prompt. Because reverse KL is mode-seeking, a confidently wrong teacher can induce a strong yet misleading update. Distributional proxies, such as entropy or teacher-student likelihood agreement, measure uncertainty or agreement but do not directly verify outcome correctness. We introduce Teacher-Gated On-Policy Distillation (TGOPD), built on the principle that teacher reliability should be verified at the prompt level before dense supervision is admitted. TGOPD estimates reliability from a small set of verifier-scored teacher probes and routes each prompt exclusively to dense OPD when the reliability check passes or to verifier-grounded GRPO otherwise. Across 4B and 35B students in mathematics, code, and instruction following, TGOPD outperforms Vanilla OPD in all six single-domain settings and achieves higher seven-benchmark averages at both scales under multi-domain training. By using otherwise-idle teacher capacity for reliability estimation, TGOPD also reduces teacher-side compute waste in asynchronous OPD, increasing teacher-node GPU utilization from 9.8% to 78.9% in the measured 4B single-domain run.",
+   "source": "hf_papers",
+   "published": "2026-09-02",
+   "authors": [
+    "Zhiwei Zhang",
+    "Zechen Sun",
+    "Fei Zhao",
+    "Kang Peng",
+    "Bin Liang",
+    "Huayu Deng"
+   ],
+   "org": "",
+   "hf_upvotes": 8,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.02998",
+   "categories": [],
+   "keywords": [
+    "distillation",
+    "on-policy",
+    "alignment"
+   ],
+   "core_score": 6.0,
+   "wide_score": 4.0,
+   "score_reason": "Teacher gating 改进OPD，方法细但热度一般",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 verifier 先验门控 OPD，4B/35B 全面胜出",
+    "why": "对 on-policy distillation 和 GRPO 取舍很实用",
+    "architecture": "这篇解决的是一个反直觉问题：OPD 看起来比 RLVR 更高效，因为 teacher 给的是 dense token-level signal，但如果 teacher 在某个 prompt 上自信地错，reverse KL 会把学生往错误模式上推。作者的关键改动不是换一个损失，而是把“teacher 是否可靠”提升成 prompt-level admission gate：先用少量 verifier-scored teacher probes 估计可靠性，可靠才放行 dense OPD；不可靠就直接切到 verifier-grounded GRPO。这样组件的分工很明确：teacher probes 负责筛掉会放大错误的 prompt，GRPO 负责在 teacher 不可信时提供正确方向。最直接的证据是 4B 和 35B 在数学、代码、指令跟随六个单域设置都优于 Vanilla OPD，且作者报告 teacher-node GPU utilization 从 9.8% 提到 78.9%，说明门控不是白花算力。新意在系统组织层：把两种训练信号做 routing，而不是混合。",
+    "verdict": "值得精读，适合学 OPD 何时会翻车",
+    "why_now": "",
+    "key_points": [
+     "最强证据是六个单域设置全胜",
+     "teacher 低可靠时，confidence 不能替代 correctness",
+     "需要 verifier 和异步 teacher 管线，工程依赖较重"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "reverse KL",
+      "status": "unlisted"
+     },
+     {
+      "name": "verifier",
+      "status": "unlisted"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MiniLLM",
+     "DeepSeekMath"
+    ],
+    "mermaid": "graph TD\nA[Student rollouts] --> B[Teacher probes]\nB --> C[Verifier scores]\nC --> D{可靠}\nD -->|是| E[Dense OPD]\nD -->|否| F[GRPO]\nE --> G[更新 student]\nF --> G",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:okf-memory/okf-agent-memory",
+   "kind": "project",
+   "title": "okf-memory/okf-agent-memory",
+   "url": "https://github.com/okf-memory/okf-agent-memory",
+   "summary": "Git-native persistent memory for AI coding agents. Implements Google OKF v0.2 with sub-300µs in-memory BM25 search, embedded MCP server, and progressive disclosure. Slashes token bloat by 80% with zero external databases or dependencies. Built in pure Go.",
+   "source": "github_search",
+   "published": "2026-09-05",
+   "authors": [],
+   "org": "okf-memory",
+   "hf_upvotes": 0,
+   "stars": 489,
+   "stars_today": 0,
+   "forks": 27,
+   "language": "Go",
+   "code_url": "https://github.com/okf-memory/okf-agent-memory",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent-memory",
+    "bm25",
+    "mcp"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "agent持久记忆，BM25+token省，工程可复现",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "Git 原生 agent memory，BM25 <300µs，Token 省 80%",
+    "why": "agent / MCP / 长上下文落地很对口",
+    "architecture": "它解决的是 coding agent 的真实痛点：上下文窗口一关，架构决策、项目事实和操作约定就散了，靠临时 markdown 或黑盒 vector DB 都不稳。这个项目把 memory 直接落在仓库里的 `knowledge/`，核心承重件是纯 Go 的 OKF bundle 解析、校验和 in-memory BM25 搜索，再用 embedded MCP server 把它暴露给 agent；progressive disclosure 的意思是先给索引和摘要，只有命中时才逐层展开，检测条件是检索命中或用户显式展开，处理动作是返回更深层文档，从而压低 token bloat。成熟度信号比较强：有明确 release，README 给出 `make build`、`validate`、`search`、`bootstrap` 和 MCP 配置，还声称有 benchmark 与兼容性文档；但原文未明确是否有外部测试覆盖或真实用户规模。和 Mem0 / Letta 这类方案比，它更偏 Git-native、零外部依赖和规范化 bundle，而不是单纯的记忆服务。",
+    "verdict": "值得试用，适合关注 agent memory 基建",
+    "why_now": "v0.1.4；2026-09-08 持续维护",
+    "key_points": [
+     "作者报告 token bloat 降 80%，BM25 <300µs",
+     "有 recent release、MCP、benchmark，成熟度较高",
+     "更像仓库内存层，不是通用向量记忆服务"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Mem0",
+     "Letta"
+    ],
+    "mermaid": "graph TD\nA[Agent context reset] --> B[knowledge bundle]\nB --> C[BM25 search]\nC --> D[progressive disclosure]\nD --> E[MCP server]\nE --> F[Agent reads memory]\nF --> G[token bloat down]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:vercel-labs/agent-browser",
+   "kind": "project",
+   "title": "vercel-labs/agent-browser",
+   "url": "https://github.com/vercel-labs/agent-browser",
+   "summary": "Browser automation CLI for AI agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "vercel-labs",
+   "hf_upvotes": 0,
+   "stars": 42213,
+   "stars_today": 515,
+   "forks": 2818,
+   "language": "Rust",
+   "code_url": "https://github.com/vercel-labs/agent-browser",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "browser",
+    "automation"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "AI浏览器自动化，agent工程高相关。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用原生 Rust CLI 给 agent 做浏览器操作，快照+ref 点击。",
+    "why": "你做 agent/RAG 时会碰到网页执行与评测。",
+    "architecture": "这类工具最反直觉的点是：agent 真正卡住的不是“会不会点”，而是页面状态一变，selector 立刻失效、点击还会被弹窗/遮罩拦住。agent-browser 的关键改法不是再堆一层自然语言接口，而是把浏览器交互收敛成“snapshot 产出 accessibility tree + ref，后续 click/fill 直接按 ref 执行”。这样它阻断的是动态 DOM 和覆盖层导致的脆弱 selector 失败；命中遮挡时会早失败并要求先处理 covering element，再重新 snapshot，避免把错误动作悄悄打到错误控件上。最直接的证据是它在示例里明确展示了 snapshot→click @e2→fill @e3 的闭环，以及“click fails early when another element covers the target”的失败处理。新意主要在系统组织层：它把 agent 浏览器控制做成 native CLI + daemon + API 子集，而不是单纯脚本封装。",
+    "verdict": "值得看，适合补 agent 浏览器控制的工程底座。",
+    "why_now": "2026-09-08 有 v0.37.1 / v0.37.0 连续 release。",
+    "key_points": [
+     "最强证据是 ref-based 闭环和早失败遮挡检测",
+     "原文未明确大规模 benchmark 或稳定性边界",
+     "复现门槛低，核心是 Chrome/CDP 与 accessibility tree"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Playwright",
+     "Selenium"
+    ],
+    "mermaid": "graph LR\nA[snapshot] --> B[ref tree]\nB --> C[click fill get]\nC --> D[page action]\nD --> E[early fail on cover]\nE --> A",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:hpcaitech/open-sora",
+   "kind": "project",
+   "title": "hpcaitech/Open-Sora",
+   "url": "https://github.com/hpcaitech/Open-Sora",
+   "summary": "Open-Sora: Democratizing Efficient Video Production for All",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "hpcaitech",
+   "hf_upvotes": 0,
+   "stars": 29699,
+   "stars_today": 212,
+   "forks": 3079,
+   "language": "Python",
+   "code_url": "https://github.com/hpcaitech/Open-Sora",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "video",
+    "diffusion",
+    "generation"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "高质量开源视频生成，和多模态方向强相关。",
+   "tier": "core",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Open-Sora 2.0 以 11B 开源视频模型，对标 HunyuanVideo/Step-Video。",
+    "why": "你关注视频生成、diffusion 和大模型训练配方。",
+    "architecture": "视频生成最难的悖论是：想要更长、更清晰、更稳定的片段，算力和显存却会先爆掉，很多开源项目只能停在短分辨率 demo。Open-Sora 的关键思路不是只换一个更大的 backbone，而是沿着“视频压缩→Transformer 架构→多阶段训练→条件控制”一起改，去阻断时序冗余、训练不稳和长视频退化这三类失败。这里的 upgraded video compression 是把输入视频先压到更紧凑的表示，减少生成端负担；Enhanced ST-DiT 负责在压缩表征上建模时空依赖；multi-stage training 则避免一次性学长高分辨率导致优化崩掉。作者最直接的支持证据是 2025-03-12 的 2.0：报告称 11B checkpoint 和 training code 完全开源，且在 VBench 与 Human Preference 上对标 11B HunyuanVideo 和 30B Step-Video。新意主要在系统组织层和实证层：不是单点结构 trick，而是可复现的视频生成训练栈。",
+    "verdict": "值得精读，适合看视频生成训练栈怎么拼起来。",
+    "why_now": "",
+    "key_points": [
+     "作者报告 11B 在 VBench 和 Human Preference 上对标更大模型",
+     "1.3 引入 upgraded VAE、ST-DiT、3D-VAE、rectified flow",
+     "原文未明确详细消融，工程复现成本仍高"
+    ],
+    "prereqs": [
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     },
+     {
+      "name": "flow matching",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Stable Diffusion",
+     "DiT"
+    ],
+    "mermaid": "graph TD\nA[video input] --> B[compression]\nB --> C[ST DiT]\nC --> D[multi stage training]\nD --> E[long video output]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:carloslfu/slotstream",
+   "kind": "project",
+   "title": "carloslfu/slotstream",
+   "url": "https://github.com/carloslfu/slotstream",
+   "summary": "Run Qwen3.8-Flash-Next (125B MoE, 104 GB at 4-bit) on Macs with a fraction of that RAM by streaming experts from SSD. MLX + Swift, Ollama-compatible API.",
+   "source": "github_search",
+   "published": "2026-08-28",
+   "authors": [],
+   "org": "carloslfu",
+   "hf_upvotes": 0,
+   "stars": 323,
+   "stars_today": 0,
+   "forks": 19,
+   "language": "Swift",
+   "code_url": "https://github.com/carloslfu/slotstream",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm-inference",
+    "moe",
+    "quantization"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "MoE专家流式SSD推理，工程系统相关",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "用 SSD 流式供权重，让 48GB Mac 跑 125B MoE，约 12 tok/s。",
+    "why": "你关心推理加速、KV cache、量化和本地大模型部署。",
+    "architecture": "这类系统解决的是真实痛点：125B MoE 即使 4-bit 后也远超很多 Mac 的内存，传统做法不是跑不动就是得把整模型常驻 RAM。slotstream 的核心取舍是把“模型权重常驻内存”改成“专家权重按需从 SSD 流式加载”，让运行时只保留当前 decode 真正需要的部分；再配合 4-bit 量化和 speculative decode，可把 105GB 级模型塞进 48GB Mac。它阻断的是两种失败：一是内存爆掉，二是下载/安装时损坏或中断导致不可用，所以 pull 里做了断点续传、hash 校验、压缩包恢复原模型、并发连接自适应。作者报告 48GB M5 Pro 上 warm decode 约 12 tok/s，且 2026-09-06 的 release 重点修了 Hugging Face mirror 下载与校验流程。新意主要在运行时机制层：不是换模型，而是把 MoE 权重搬运、校验和 API 封装做成可用的本地推理栈。",
+    "verdict": "值得看，适合学本地大模型推理系统的承重设计。",
+    "why_now": "2026-09-06 连续 release，且下载格式与 mirror 方案刚更新。",
+    "key_points": [
+     "作者报告 48GB Mac 上 warm decode 约 12 tok/s",
+     "核心证据是 SSD 流式专家与 4-bit 组合",
+     "对磁盘、带宽和 Mac 型号依赖强，非通用推理方案"
+    ],
+    "prereqs": [
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "llama.cpp",
+     "vLLM"
+    ],
+    "mermaid": "graph LR\nA[query] --> B[route experts]\nB --> C[load from SSD]\nC --> D[4 bit weights]\nD --> E[decode]\nE --> F[output token]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:advaitpaliwal/feynman",
+   "kind": "project",
+   "title": "advaitpaliwal/feynman",
+   "url": "https://github.com/advaitpaliwal/feynman",
+   "summary": "The open source AI research agent.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "advaitpaliwal",
+   "hf_upvotes": 0,
+   "stars": 9215,
+   "stars_today": 268,
+   "forks": 1053,
+   "language": "TypeScript",
+   "code_url": "https://github.com/advaitpaliwal/feynman",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "research",
+    "tool-use"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "开源AI研究agent，贴近agent工程",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用多代理研究循环做检索与核验，给出可引用的研究简报",
+    "why": "对 Agent/RAG 面试很对口，能看 harness 设计",
+    "architecture": "反直觉点是：做研究最容易卡在“信息很多但结论不稳”，单轮检索只能堆材料，不能保证每个判断都能追到来源。Feynman 的关键改变不是再加一个聊天壳，而是把研究拆成循环式 workflow：先并行搜索与读文献，再把候选发现交给 synthesis 和 verification，必要时继续追问或补证据。组件的作用不是“提供功能清单”，而是分别阻断幻觉、遗漏引用和只看表面摘要这三类失败。最直接的证据是 `deepresearch`/`rank`/`paper --fetch-full-text` 这些命令：它们把 citation、full-text、critique、synthesis 分层加入评分与产出流程，说明系统不是只做搜索，而是把“可审计证据链”作为主输出。新意主要在系统组织层：用 agent loop + provenance + local/remote knowledge graph 组织研究，而不是单点检索。",
+    "verdict": "值得看，重点学它怎么把研究 agent 做成可审计循环",
+    "why_now": "",
+    "key_points": [
+     "`rank`可加 full-text 和 citation 证据",
+     "输出会标注来源 session / paper",
+     "本质是研究工作台，不是纯聊天入口"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph LR\nA[Query] --> B[Search]\nB --> C[Read papers]\nC --> D[Critique]\nD --> E[Verify]\nE --> F[Brief]\nF --> G[Sources]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:huggingface/funes",
+   "kind": "project",
+   "title": "huggingface/funes",
+   "url": "https://github.com/huggingface/funes",
+   "summary": "Durable, searchable memory of your past agent sessions.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "huggingface",
+   "hf_upvotes": 0,
+   "stars": 318,
+   "stars_today": 68,
+   "forks": 23,
+   "language": "Rust",
+   "code_url": "https://github.com/huggingface/funes",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "rag"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "Agent 会话可检索记忆，贴近RAG/agent",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "给 agent 会话做持久记忆，跨工具可检索还能发布到 Hub",
+    "why": "和记忆型 agent、RAG 很贴近，适合看工程化记忆层",
+    "architecture": "痛点是 agent 每次开新会话就失忆：Claude Code、Codex、pi、Hermes 各自积累的决策和排错记录分散，切模型后上下文也断。funes 的关键设计是把会话轨迹索引成可搜索 memory，并让 recall 在任务中自动被调用；同时用 pinned embeddings + reranker 保证“先找回相关经历，再把它交给当前模型”。它还把 memory 当 dataset 处理，能 push 到 Hugging Face Hub，阻断了“记忆只在本机、无法共享/迁移”的失败。最强证据是它已经支持跨 agent 统一索引、`funes add` 自动挂 hook、`funes recall/ask/push` 这些完整闭环，而且 release 里还在持续强化 remote memory、session listing 和 digest。新意主要在系统组织层，外加一点实证层：把 agent memory 做成可发布的数据资产，而不是单机缓存。",
+    "verdict": "适合看它怎么把 memory 做成可迁移基础设施",
+    "why_now": "v1.3.0（2026-09-01）",
+    "key_points": [
+     "跨 Claude Code/Codex/pi/Hermes 统一记忆",
+     "有自动 hook 与 publish 流程",
+     "但公开摘要未给出检索效果基准"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "retrieval-augmented generation",
+     "graph RAG"
+    ],
+    "mermaid": "graph LR\nA[Agent sessions] --> B[Index]\nB --> C[Embedding]\nC --> D[Rerank]\nD --> E[Recall]\nE --> F[Current agent]\nF --> G[Hub dataset]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:shareai-lab/learn-claude-code",
+   "kind": "project",
+   "title": "shareAI-lab/learn-claude-code",
+   "url": "https://github.com/shareAI-lab/learn-claude-code",
+   "summary": "Bash is all you need - A nano claude code–like 「agent harness」, built from 0 to 1",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "shareAI-lab",
+   "hf_upvotes": 0,
+   "stars": 76345,
+   "stars_today": 82,
+   "forks": 12283,
+   "language": "Python",
+   "code_url": "https://github.com/shareAI-lab/learn-claude-code",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "tool-use",
+    "prompting"
+   ],
+   "core_score": 4.0,
+   "wide_score": 8.0,
+   "score_reason": "agent harness类，热度高且具可复用性",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 Bash 搭一个 Claude Code 风格 agent harness 教程",
+    "why": "偏工程入门，但能快速建立 agent harness 心智模型",
+    "architecture": "它解决的是真实工程痛点：很多人把“agent”写成一串 prompt 和 if-else，却不知道模型、工具、上下文、权限到底怎么分工。这个项目把核心论点讲得很直白：agency 来自模型训练，代码层做的是 harness，也就是 tools、knowledge、observation、action、permissions 的承重结构。关键设计取舍是把工具做成原子动作、把知识按需加载、把观察信号和权限边界显式化，避免把所有东西塞进一条线性流水线。成熟度信号很强：stars 很高、README 细到解释 CLI/loop/ctx 的组织方式，但它更像教学型框架，不是一个强调 benchmark 或 production SLA 的系统。想要的是“能搭 agent 壳”的能力，它比通用教程更偏 Claude Code 语境，比研究型 agent 更偏 harness 组织。",
+    "verdict": "速览够了；除非你要补 agent harness 基础",
+    "why_now": "原文未明确",
+    "key_points": [
+     "核心是 harness 而非新模型",
+     "更像教学框架，不是研究系统",
+     "README 结构化，适合快速上手"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "tool-use",
+      "status": "unlisted"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph LR\nA[Model] --> B[Tools]\nA --> C[Knowledge]\nB --> D[Actions]\nC --> D\nD --> E[Agent result]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:can1357/oh-my-pi",
+   "kind": "project",
+   "title": "can1357/oh-my-pi",
+   "url": "https://github.com/can1357/oh-my-pi",
+   "summary": "⌥ Coding agent with the IDE wired in",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "can1357",
+   "hf_upvotes": 0,
+   "stars": 30176,
+   "stars_today": 7509,
+   "forks": 3091,
+   "language": "TypeScript",
+   "code_url": "https://github.com/can1357/oh-my-pi",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "coding-agent",
+    "ide",
+    "agent"
+   ],
+   "core_score": 4.0,
+   "wide_score": 6.0,
+   "score_reason": "IDE内coding agent，能用于工程实践",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "⌥ Coding agent with the IDE wired in",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:openbmb/minicpm",
+   "kind": "project",
+   "title": "OpenBMB/MiniCPM",
+   "url": "https://github.com/OpenBMB/MiniCPM",
+   "summary": "MiniCPM5: SOTA on-device LLMs, small yet powerful.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "OpenBMB",
+   "hf_upvotes": 0,
+   "stars": 10598,
+   "stars_today": 239,
+   "forks": 716,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/OpenBMB/MiniCPM",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "on-device",
+    "small-llm"
+   ],
+   "core_score": 6.0,
+   "wide_score": 6.0,
+   "score_reason": "开源小模型路线，与压缩/部署方向相关",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "MiniCPM5: SOTA on-device LLMs, small yet powerful.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:datawhalechina/zero-to-sglang",
+   "kind": "project",
+   "title": "datawhalechina/zero-to-sglang",
+   "url": "https://github.com/datawhalechina/zero-to-sglang",
+   "summary": "面向大模型开发者的 SGLang 系统化开源教程：从推理基础与环境搭建开始，逐步学习模型部署、结构化生成、服务开发和性能优化，   结合实战案例带你从 0 到 1 掌握 SGLang，构建高性能 LLM 推理应用",
+   "source": "github_search",
+   "published": "2026-08-27",
+   "authors": [],
+   "org": "datawhalechina",
+   "hf_upvotes": 0,
+   "stars": 549,
+   "stars_today": 0,
+   "forks": 40,
+   "language": "Python",
+   "code_url": "https://github.com/datawhalechina/zero-to-sglang",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "infra",
+    "kv-cache"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "推理部署与SGLang细节强，贴训练/系统方向",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "",
+   "digest": {
+    "one_liner": "面向大模型开发者的 SGLang 系统化开源教程：从推理基础与环境搭建开始，逐步学习模型部署、结构化生成、服务开发和性能优化，   结合实战案例带你从 0 到 1 掌握 SGLang，构建高性能 LLM 推理应用",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
