@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-09",
+   "papers": 8,
+   "projects": 10,
+   "top": "NeoHorse-1: Towards Recursive Self-Improvement via Agentic Post-Training with Routing Harness"
+  },
+  {
    "date": "2026-09-08",
    "papers": 8,
    "projects": 10,

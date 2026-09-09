@@ -1,0 +1,1276 @@
+{
+ "date": "2026-09-09",
+ "stats": {
+  "collected": 695,
+  "filtered": 305,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 17 calls, 57752 in / 17415 out; gpt-5.4-mini: 6 calls, 45073 in / 8786 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.08183",
+   "kind": "paper",
+   "title": "NeoHorse-1: Towards Recursive Self-Improvement via Agentic Post-Training with Routing Harness",
+   "url": "https://arxiv.org/abs/2609.08183",
+   "summary": "Recursive self-improvement (RSI) requires a concrete mechanism through which an AI system observes its capabilities and converts that evidence into the next round of learning. We present NeoHorse-1, a family of agent-native models developed to explore this path through agentic post-training. Our system combines a heterogeneous model pool with intelligent routing, recording the predicted capability demand, selected service tier, and subsequent interaction for each user turn. These records are converted into training examples that preserve interleaved reasoning, tool calls, and harness context, and are admitted through structural validation, six-dimensional semantic evaluation, and subscene-level labeling. Routing signals organize supervised fine-tuning into a three-stage curriculum and extend to routing-guided on-policy distillation, where a teacher supervises student-generated responses under the same progression. Capability-guided allocation then converts evaluation feedback into the next training mixture, closing an evaluation-selection-update loop in which what the system learns to do shapes what it learns from next. Across eleven benchmarks covering harness-based agents, tool use, coding, and instruction following, post-training raises the macro-average from 58.94 to 64.87 at 4B and from 65.60 to 69.04 at 9B, substantially narrowing the aggregate gap between the post-trained 4B model and the 9B base model. NeoHorse-1 provides an initial prototype of this feedback-driven process and a path toward harness-mediated RSI across successive iterations.",
+   "source": "hf_papers",
+   "published": "2026-09-08",
+   "authors": [
+    "NeoHorse Team",
+    "Guoliang Cao",
+    "Guohao Dai",
+    "Tianyu Guo",
+    "Kai Han",
+    "Hailin Hu"
+   ],
+   "org": "",
+   "hf_upvotes": 338,
+   "stars": 70,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/TokenRhythm/NeoHorse",
+   "pdf_url": "https://arxiv.org/pdf/2609.08183",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rlhf",
+    "post-training"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "agent化后训练+路由记录，RSI范式很对口",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "NeoHorse-1 用 routing harness 做 agentic post-training，4B 均分 58.94→64.87",
+    "why": "适合看 RSI 和 agent post-training 怎么闭环",
+    "architecture": "它解决的悖论是：agent 已经在真实执行里暴露“会什么/不会什么”，但传统 post-training 只把轨迹当静态监督，学不到“下一轮该学什么”。NeoHorse-1 的关键改动是把 routing harness 里的三类信号——预测能力需求、实际服务层级、后续交互——变成训练分配依据；再把交互切成保留 reasoning、tool calls、harness context 的 user-turn 样本，用结构校验、六维语义评估和 subscene 标注筛掉脏样本。更关键的是，它把 routing 信号同时喂给三阶段 curriculum SFT 和 routing-guided on-policy distillation，前者阻断“难度分布混乱”，后者阻断“离策略分布偏移”。最直接的证据是 4B/9B 在十个基准上的 macro-average 都上升，且 4B 从 58.94 到 64.87，明显缩小和 9B base 的总差距。新意主要在系统组织层：不是单纯新模型，而是 evaluation-selection-update 的闭环。",
+    "verdict": "想看 agent 自举训练链路，值得精读",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 4B 总分抬升且逼近 9B base",
+     "没证明 RSI 会稳定跨轮次成立",
+     "复现难点在 routing 记录和样本切分"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "curriculum learning",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Agentic Routing",
+     "FireAct"
+    ],
+    "mermaid": "graph LR\nA[Routing harness] --> B[能力需求记录]\nB --> C[样本筛选]\nC --> D[三阶段课程]\nD --> E[SFT]\nD --> F[On policy distillation]\nE --> G[更新模型]\nF --> G\nG --> H[新交互]\nH --> B",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.08368",
+   "kind": "paper",
+   "title": "Miles v0.1: Production-Level Post-Training",
+   "url": "https://arxiv.org/abs/2609.08368",
+   "summary": "We present Miles v0.1, a full-stack, production-ready system for frontier post-training. Building upon the clean design of slime, Miles designs each stage of the reinforcement-learning (RL) training loop around a single principle: components should be verified, clean, and customizable. With accuracy, efficiency, reliability, and scalability as first-class goals, Miles aims to make frontier-scale RL accessible to researchers and enterprises alike. This report walks through the system end to end: rollout engines built on SGLang, a trainer with a choice of two backends (NVIDIA Megatron-LM and PyTorch FSDP), and three weight-synchronization transports for different deployment topologies. Beyond full-parameter RL, Miles also supports LoRA RL, on-policy distillation, supervised fine-tuning, and true-on-policy rollout-training alignment, and extends the same architecture to diffusion models. We close with an end-to-end case study: fully asynchronous agentic RL on a GLM-5.2 744B-A40B model over terminal-use coding tasks, running on 64 NVIDIA GB300 GPUs with a median step time of 263 seconds over the first 30 measured steps. Miles is open-sourced at https://github.com/radixark/miles, with the project website at https://miles.radixark.com.",
+   "source": "hf_papers",
+   "published": "2026-09-08",
+   "authors": [
+    "RadixArk",
+    "Tom Chen",
+    "Mao Cheng",
+    "Shi Dong",
+    "Kangrui Du",
+    "Yanbin Jiang"
+   ],
+   "org": "",
+   "hf_upvotes": 44,
+   "stars": 2696,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/radixark/miles",
+   "pdf_url": "https://arxiv.org/pdf/2609.08368",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "post-training",
+    "infra"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "生产级post-training系统+RL训练细节",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Miles v0.1 把 frontier post-training 做成全栈系统，64 卡跑 263 秒步时",
+    "why": "适合看 RL post-training 工程化怎么落地",
+    "architecture": "它解决的痛点是：agentic RL 已经不是“生成一段答案再更新”了，而是多轮 rollout、tool use、异步环境和超大 MoE 同时出现，容易把吞吐、精度和权重同步一起拖垮。Miles 的关键改变是把整条 RL loop 拆成可验证、可替换的三段：rollout 侧用 SGLang 扛多轮生成，并用 affinity 把同一 session 固定到持有 KV cache 的引擎，阻断“换机重算前缀”导致的吞吐塌陷；trainer 侧用 Megatron-LM 或 FSDP 吃完整 trajectory groups，阻断 rollout 与更新的数值/并行栈割裂；weight sync 侧在 in-flight rollout 尽量不停顿地回传新权重，阻断训练和采样互相等。最直接的证据是它给出一个端到端 case study：GLM-5.2 744B-A40B、64 张 GB300、前 30 步中位 step time 263 秒。新意主要在系统组织层和运行时机制，不是单个算法点。",
+    "verdict": "做 RL 系统或训练平台，值得通读",
+    "why_now": "",
+    "key_points": [
+     "最强证据是端到端异步 agentic RL case study",
+     "没证明所有精度格式和同步路径都成熟",
+     "复现门槛高，依赖 SGLang 和大规模集群"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "SGLang",
+      "status": "unlisted"
+     },
+     {
+      "name": "FSDP",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "slime",
+     "vLLM"
+    ],
+    "mermaid": "graph LR\nA[Prompt groups] --> B[Affinity rollout]\nB --> C[Trajectory groups]\nC --> D[Trainer]\nD --> E[Weight sync]\nE --> B\nB --> F[KV cache reuse]\nD --> G[RL update]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.08599",
+   "kind": "paper",
+   "title": "Graph-Based Personalized Memory for LLM Agents: Representation, Evolution, Retrieval, and Evaluation",
+   "url": "https://arxiv.org/abs/2609.08599",
+   "summary": "Large Language Model (LLM) agents are evolving from single-session tools toward long-term personal assistants that must adapt to individual users across tasks, contexts, and interactions. This shift makes memory a core requirement for personalization, since user preferences, goals, constraints, relationships, and past experiences are accumulated gradually and often change over time. Graph-based personalized memory provides a structured way to model such user information through explicit relations, temporal context, and evidence links. Such representations can model not only what an agent remembers about a user but also how memories are connected, revised, and retrieved to support personalized decisions. However, existing work remains fragmented across personalized agents and generic graph memory frameworks, making it difficult to understand the design space as a whole. This survey develops a lifecycle-oriented view of graph-based personalized memory for LLM agents. We organize existing studies around memory representation, memory evolution, memory retrieval, and memory evaluation. We further compare key design choices, discuss current evaluation practices, and open challenges in building reliable long-term personalized agents. This survey aims to clarify how graph-based memory can support adaptive, controllable, and user-centric LLM agents.",
+   "source": "arxiv",
+   "published": "2026-09-08",
+   "authors": [
+    "Dac Duy Anh Nguyen",
+    "Zhangchi Qiu",
+    "Shigeng Chen",
+    "Alan Wee-Chung Liew"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.08599",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "memory",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "图结构个性化记忆，覆盖表示/检索/评测。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "图记忆综述：把 LLM agent 个性化 memory 拆成表示、演化、检索、评测",
+    "why": "适合补 agent memory 设计空间，面试好讲",
+    "architecture": "它解决的不是一个单点算法，而是一个长期场景里的结构性矛盾：个人助手要跨会话记住偏好、关系和变化，但纯 context window 装不下，flat log 又说不清事实之间怎么连、怎么变、怎么追溯证据。作者把 graph-based personalized memory 定义为“存放在模型外、以显式图组织的用户状态”，并用生命周期视角重排整个领域：representation 负责把事实、时间、关系、经历编码成可连接结构；evolution 负责把新证据并入图、修订旧结论；retrieval 负责沿多跳关系找回与当前请求相关的用户上下文；evaluation 负责判断图是否真支持个性化而不只是存了数据。最直接的支撑不是实验涨幅，而是它把已有工作按这四层对齐，指出现有评测常忽略 graph quality、user control 和 lifecycle validity。新意主要在实证/综述层：给出统一设计坐标系。",
+    "verdict": "想做长期 personalized agent，建议精读",
+    "why_now": "",
+    "key_points": [
+     "最强价值是统一了 fragmented 的 memory 设计空间",
+     "没证明哪种图结构一定最好",
+     "对真实长期个性化评测仍不充分"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "GraphRAG",
+     "MemGPT"
+    ],
+    "mermaid": "graph LR\nA[User events] --> B[Graph memory]\nB --> C[Update and revise]\nC --> D[Retrieve context]\nD --> E[Personalized action]\nE --> A",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.09115",
+   "kind": "paper",
+   "title": "MeClear: Cooperative Game-Theoretic Attribution and Risk-Aware Memory Clearance for Long-Horizon LLM Agents",
+   "url": "https://arxiv.org/abs/2609.09115",
+   "summary": "Long horizon Large Language Model (LLM) agents rely on external memory systems to preserve user preferences and task knowledge across extended interactions. Conventional retrieval mechanisms optimize semantic compatibility rather than downstream utility, frequently introducing outdated, misleading, or conflicting evidence into the active context. We present MeClear, a task conditioned memory clearance framework that identifies memories featuring negative downstream utility through cooperative attribution and selectively suppresses them from agent execution. MeClear combines Leave One Out screening with sampled cooperative Shapley attribution to distribute utility across interacting evidence, effectively resolving redundant conflict masking where single removal evaluations fail. Utilizing attribution rankings, MeClear executes a query scoped minimal clearance strategy over a nested filtration, verifying task recovery on the cleared context without permanently altering the persistent memory bank. Comprehensive experimental evaluations across ten long dialogue memory pools demonstrate that MeClear achieves a target recall of 85.9% and an overall task recovery rate of 82.3%, representing a 25.5 percentage point improvement over Leave One Out (LOO) baselines.",
+   "source": "arxiv",
+   "published": "2026-09-08",
+   "authors": [
+    "Boyu Yang",
+    "Jiazheng Sun",
+    "Zilong Lu",
+    "Zhi Qiu",
+    "Xin Peng",
+    "Jun Zheng"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.09115",
+   "categories": [
+    "cs.AI",
+    "cs.SE"
+   ],
+   "keywords": [
+    "agent",
+    "rag",
+    "memory"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "长程agent记忆清理与风险抑制，贴合核心方向。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "MeClear 用协同 Shapley 清掉有害记忆，10 个库任务恢复率 82.3%",
+    "why": "适合做 agent memory 和 RAG 可靠性面试谈资",
+    "architecture": "反直觉点在于：检索命中不等于有用，甚至会把过时、冲突但语义相近的记忆塞进上下文，导致 long-horizon agent 任务失败。单条删除也不够，因为“坏记忆”常被别的冗余证据遮住，删一条看不出变化。MeClear 的关键改动是把 memory maintenance 变成 task-conditioned clearance：先用 LOO 筛掉强正证据，再用 sampled cooperative Shapley 把一组记忆的边际贡献摊开，专门破解 redundant conflict masking；随后只在当前 query 的候选子集里做最小清除，并在清除后的上下文上先验证 task recovery，再决定是否放行输出，避免永久改写记忆库。最直接的证据是作者报告在 10 个 long dialogue memory pools 上，target recall 达 85.9%，overall task recovery rate 达 82.3%，比 LOO 基线高 25.5 个点。新意主要在组件层与系统组织层：不是更强 retriever，而是把“判毒—清除—回收验证”串成可逆流程。",
+    "verdict": "值得精读，能补 agent memory 失效机理",
+    "why_now": "",
+    "key_points": [
+     "最强证据：10 个 memory pools，恢复率 82.3%",
+     "没证明永久编辑更优，只是检索时清除",
+     "Shapley 近似，复现受采样预算影响"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "Shapley value",
+      "status": "unlisted"
+     },
+     {
+      "name": "Leave One Out",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Shapley value",
+     "Leave One Out"
+    ],
+    "mermaid": "graph LR\nA[Retrieved memories] --> B[LOO screen]\nB --> C[Sampled Shapley]\nC --> D[Rank harmful blocks]\nD --> E[Minimal clearance]\nE --> F[Recover task]\nF --> G[Keep or suppress]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.08887",
+   "kind": "paper",
+   "title": "Q2D-Web: A Large-Scale Benchmark for Retrieval in Agentic RAG Systems",
+   "url": "https://arxiv.org/abs/2609.08887",
+   "summary": "Evaluating first-stage retrievers in large-scale production RAG requires a benchmark that pairs a large-scale corpus with a large set of agent-reformulated search queries based on real user queries and their conversation threads, and that labels many relevant documents per query. No existing public benchmark evaluates this setting: large-scale collections typically provide only a small number of evaluation queries, whereas benchmarks with many queries generally contain only millions of documents. Moreover, most benchmarks assess human-written queries, while the first-stage retrievers in agentic RAG pipelines serve machine-written reformulations whose distribution differs from human search behavior. To overcome these evaluation gaps, we introduce Q2D-Web (Query2Doc-Web), a large-scale agentic retrieval benchmark consisting of a 190M-document web corpus and 70k agentic search queries in ten languages, reformulated from real-world user queries in production systems. Q2D-Web provides three sets of fixed relevance judgments: agent citations, production rankings, and a combined set that unions both signals and adds LLM-based judgments of unlabeled pooled documents to reduce false negatives. We benchmark 13 retrievers including lexical, dense, and late-interaction models and find that their relative ordering is largely insensitive to the choice of judgment set, while diverging substantially across topical domains, query languages, and query types. To enable fast evaluation, we also study subcorpus sampling as an approximation to full-corpus evaluations. Retaining a third of the corpus, selected by reciprocal rank fusion over pooled retriever runs, preserves the full-corpus model ranking under the combined judgments while raising absolute Recall@1000 only by 3 to 7 points. The public leaderboard is accessible under: https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard",
+   "source": "arxiv",
+   "published": "2026-09-08",
+   "authors": [
+    "Maximilian Schall",
+    "Sedigheh Eslami",
+    "Markus Krimmel",
+    "Antoine Chaffin",
+    "Louis Milliken",
+    "Bo Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.08887",
+   "categories": [
+    "cs.IR",
+    "cs.CL"
+   ],
+   "keywords": [
+    "benchmark",
+    "rag",
+    "retrieval"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "面向agentic RAG的检索基准，评测价值高。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Q2D-Web 用 1.9 亿网页和 7 万 agent 查询评 retriever",
+    "why": "RAG 方向面试很容易被问评测集缺什么",
+    "architecture": "问题是：生产里的 first-stage retriever 不是在答人写的 query，而是在答 agent 改写后的 query；同时还要在 1.9 亿级网页里把相关文档压过大量“语义像但不相关”的候选。现有 benchmark 要么 corpus 太小，要么 query 太少，要么只测 human-written queries，和 agentic RAG 的分布不一致。Q2D-Web 的核心改动是把评测对象改成“生产采样的 agent reformulation”，再配上 190M-document web corpus 和 70k 多语种 queries，并用三套 relevance judgments 降低 false negatives：agent citations、production rankings、以及合并两者再补 LLM 标注的集合。最直接的支持证据不是单个分数涨幅，而是作者报告：13 个 retrievers 的相对排序在不同 judgment set 下基本稳定，但会随 topic、language、query type 明显变化；另外保留三分之一子语料还能近似 full-corpus ranking，只让 Recall@1000 提升 3–7 点。新在实证层和 benchmark 组织层。",
+    "verdict": "值得通读，主要看评测设计而非榜单",
+    "why_now": "",
+    "key_points": [
+     "最强证据：190M 文档、70k 生产采样 query",
+     "没证明某类 retriever 最强，只证明排序稳",
+     "子语料近似全量，降低评测成本"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "dense retrieval",
+      "status": "unlisted"
+     },
+     {
+      "name": "late interaction",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MS MARCO",
+     "BrowseComp"
+    ],
+    "mermaid": "graph LR\nA[User thread] --> B[Agent reformulation]\nB --> C[190M web corpus]\nC --> D[Deep judgments]\nD --> E[Retriever ranking]\nE --> F[Subcorpus approx]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.08566",
+   "kind": "paper",
+   "title": "BIO-MEMART: Biometric-Aware KV Cache Memory for Multi-User LLM Agents",
+   "url": "https://arxiv.org/abs/2609.08566",
+   "summary": "KV cache is evolving from a serving optimization into an external memory substrate for long-term LLM agents. In a shared multi-user deployment, however, reusable KV blocks introduce a missing access-control question: semantic relevance alone cannot determine whether a memory block is authorized for the current physical user. We propose Bio-MemArt, a biometric-aware KV-cache memory framework for multi-user LLM agents. Bio-MemArt attaches a normalized biometric template to each stored KV memory block, filters the shared memory pool with the current user's biometric probe, and then runs the original MemArt retrieval and KV reuse pipeline only inside the authorized candidate pool. This design preserves latent-space retrieval, direct cache reuse, and decoupled position encoding while adding physical-user access control to shared KV memory. We evaluate Bio-MemArt under Owner and Non-owner query conditions on long-term dialogue QA with face and palmprint benchmarks. Across face benchmarks, the average owner and non-owner biometric success rates are 95.71% and 0.86%; across palmprint benchmarks, they are 97.60% and 2.00%. In the efficiency study, average prefill tokens drop from 18,781.96 under full-context prompting to 28.57 with Bio-MemArt, showing that biometric gating preserves the low-token operating regime of KV-cache memory.",
+   "source": "arxiv",
+   "published": "2026-09-08",
+   "authors": [
+    "Yanhong Qian",
+    "Xuanying He",
+    "Qingguo Meng",
+    "Shihao Ding",
+    "Xingbo Dong",
+    "Zhe Jin"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.08566",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "memory",
+    "kv-cache"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "生物特征KV缓存访问控制，长程agent系统价值高。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Bio-MemArt 给 KV cache 加生物特征门禁，作者报告面部认证 95.71%",
+    "why": "你做 agent 系统时很可能会碰多用户记忆隔离",
+    "architecture": "问题不是 KV cache 能不能复用，而是共享部署里“相关”不代表“授权”：同一套记忆池里，语义上匹配的 KV block 可能属于另一个物理用户。传统 KV 管理只管搬运、压缩、复用，不管谁能激活它。Bio-MemArt 的关键改动是把 biometric template 挂到每个 KV block 上，查询时先用当前用户的 biometric probe 做身份过滤，只有 cosine similarity 超阈值的块才进入授权候选池，之后才走原始 MemArt 的 latent retrieval、直接 KV reuse 和 decoupled position encoding。这样身份门禁发生在语义检索之前，避免把别人的私有上下文激活出来，同时不破坏低 prefill 成本。最直接的证据是作者报告：face benchmarks 上 owner/non-owner biometric success rates 为 95.71%/0.86%，palmprint 为 97.60%/2.00%，prefill tokens 从 full-context 的 18,781.96 降到 28.57。新意在系统组织层：给 memory substrate 加访问控制。",
+    "verdict": "值得精读，适合看共享 agent 记忆架构",
+    "why_now": "",
+    "key_points": [
+     "最强证据：Owner/Non-owner 成功率分离极大",
+     "没证明跨设备泛化，传感器依赖强",
+     "生物特征门禁在检索前，保留 KV 复用"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "positional encoding",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MemArt",
+     "KV cache"
+    ],
+    "mermaid": "graph LR\nA[User probe] --> B[Biometric filter]\nB --> C[Authorized KV pool]\nC --> D[MemArt retrieval]\nD --> E[KV reuse]\nE --> F[Low prefill output]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.09133",
+   "kind": "paper",
+   "title": "ExecCritic: Learn to Test, Test to Improve for Coding Agents",
+   "url": "https://arxiv.org/abs/2609.09133",
+   "summary": "Execution feedback can guide coding agents toward correct repository repairs, but only when the tests capture the behavior requested by the issue. Agent-generated tests can encode incomplete or incorrect behavioral targets; when the same trajectory writes both the patch and the test, their errors can agree and create false confidence. We introduce ExecCritic, combining a test--verify--revise scaffold with a role-specific reinforcement learning recipe for training agents within it. The scaffold separates test construction from source-code repair: a Test agent independently generates repository-native tests, a fail-closed harness qualifies and freezes them, and a Repair agent revises source code from their execution feedback without changing the tests. Both roles use Qwen-3.5-35B-A3B as the backbone and are trained separately. In Learn to Test, the Test agent learns to produce behaviorally valid tests that distinguish correct from incorrect patches. In Test to Improve, the Repair agent learns both direct task resolution and feedback-guided revision. On SWE-bench Verified, test quality determines whether feedback helps: holding the base Repair agent fixed, tests from the base Test agent reduce resolved rate from a no-test baseline of 61.2% to 57.3%, whereas tests from GPT-5.6-sol raise it to 65.3%. Role-specific post-training raises the Qwen Test agent's Base-to-Gold success from 22.2% to 62.2%; composing the two post-trained Qwen agents reaches 72.6%, an 11.4-point gain over the original no-test baseline without stronger-model or Oracle feedback at evaluation time. Code is publicly available at https://github.com/MSR-Orchard/execcritic.",
+   "source": "arxiv",
+   "published": "2026-09-08",
+   "authors": [
+    "Leitian Tao",
+    "Baolin Peng",
+    "Haorui Wang",
+    "Hang Wang",
+    "Hao Cheng",
+    "Wenlin Yao"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/MSR-Orchard/execcritic.",
+   "pdf_url": "https://arxiv.org/pdf/2609.09133",
+   "categories": [
+    "cs.AI",
+    "cs.CL",
+    "cs.SE"
+   ],
+   "keywords": [
+    "agent",
+    "coding",
+    "execution-feedback"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "编码智能体端到端改进，安全且贴合你核心",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "把测试和修复分开训练，SWE-bench Verified 提升到72.6%",
+    "why": "适合看 coding agent 评测与后训练设计",
+    "architecture": "反直觉点是：同一个 agent 既写 patch 又写 test 时，错误会互相“认证”，一个坏测试能把坏修复伪装成成功。传统 execution feedback 只在测试真能刻画 issue 行为时才有用，但仓库里的自生成测试常漏掉边界条件或把 issue 误读成别的行为。ExecCritic 的关键改动是把循环拆成 test–verify–revise：Test agent 先独立生成仓库原生 test，fail-closed harness 只接受能在 buggy repo 上稳定失败的测试并冻结它，Repair agent 只能看这个固定反馈改源码，不能回头改测试。最强证据是 SWE-bench Verified 上，固定 Repair agent 时，base Test 生成的测试把 resolved rate 从 61.2% 拉到 57.3%，而 GPT-5.6-sol 生成的测试升到 65.3%，直接证明瓶颈不是“有没有反馈”，而是反馈是否刻画了正确行为。新意主要在系统组织层：不是新修一个补丁器，而是用角色隔离+角色特定 RL 约束测试和修复的分工。",
+    "verdict": "适合精读：它讲清 coding agent 里反馈为何会失真",
+    "why_now": "",
+    "key_points": [
+     "base tests 反而伤害修复，说明反馈质量是瓶颈",
+     "没证明任意仓库都稳；依赖可执行测试与工具链",
+     "复现要同时训 Test/Repair，工程量不低"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "SWE-agent",
+     "Reflexion"
+    ],
+    "mermaid": "graph TD\nA[Issue] --> B[Test agent]\nB --> C[Fail closed harness]\nC --> D[Fixed test]\nD --> E[Repair agent]\nE --> F[Execution feedback]\nF --> E\nE --> G[Submit]\nG --> H[Official evaluator]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.04971",
+   "kind": "paper",
+   "title": "BeaconKV: Key-Value Cache Compression Guided by Beacon Queries for Efficient Large Reasoning Model Inference",
+   "url": "https://arxiv.org/abs/2609.04971",
+   "summary": "Large Reasoning Models (LRMs) achieve superior problem-solving through extended Chain-of-Thought (CoT) generation, but the resulting key-value (KV) cache grows linearly with sequence length and creates severe memory bottlenecks, often exceeding GPU capacity for long reasoning traces. Existing KV cache compression methods rely on recent queries to estimate future token importance, implicitly assuming these serve as reliable proxies for future attention patterns. We demonstrate that this assumption fails in long-horizon reasoning: certain decoding steps generate Thought Revisiting Tokens (TRT) that re-attend to distant previous context, such as task-solving plans formulated early in the trace. Through systematic analysis, we discover that queries corresponding to the TRT cluster into a small number of similarity groups in the embedding space. Based on this insight, we propose BeaconKV, a training-free KV cache compression method that maintains beacon queries, compact representatives for each global query cluster, to anticipate which KV pairs will be revisited without storing the entire query history. Across four open-source LRMs and diverse reasoning benchmarks, BeaconKV generally outperforms existing compression methods, achieving up to 5.8times memory reduction while nearly preserving full cache accuracy and improving throughput by over 4.3times.",
+   "source": "hf_papers",
+   "published": "2026-09-04",
+   "authors": [
+    "Janghyeon Kim",
+    "Minsoo Kim",
+    "Kyuhong Shim",
+    "Jungwook Choi"
+   ],
+   "org": "",
+   "hf_upvotes": 31,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/aiha-lab/BeaconKV",
+   "pdf_url": "https://arxiv.org/pdf/2609.04971",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "kv-cache",
+    "reasoning"
+   ],
+   "core_score": 8.0,
+   "wide_score": 4.0,
+   "score_reason": "KV压缩面向长推理，推理加速直接可用",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 beacon queries 压缩 KV cache，4个LRM最高省5.8倍显存",
+    "why": "",
+    "architecture": "反直觉点是：长 CoT 里，最近几步 query 不一定代表“接下来会看谁”。作者观察到有一类 Thought Revisiting Tokens 会回看很早的计划、约束和中间结论，所以按“最近 query 重要”来淘汰 KV，容易把后面真会被重访的旧上下文删掉。BeaconKV 的关键概念是 beacon queries：它不存完整 query 历史，而是把全局 query 分成少量相似簇，用代表 query 预测哪些 KV 将被远距离重访；再配合 continual FPS 在线选出这些代表，保持小内存的同时尽量保留未来会用到的证据。最直接的证据是作者在 4 个 open-source LRM 上做对比，显示 BeaconKV 在激进压缩下还能接近 full cache accuracy，同时最高做到 5.8x memory reduction 和 4.3x+ throughput。新意主要在组件层：不是换模型，而是改 KV 淘汰的决策依据。",
+    "verdict": "值得看：把 KV 压缩的失效模式讲得很清楚",
+    "why_now": "",
+    "key_points": [
+     "核心证据是 TRT 和 query 聚类，不是更复杂打分器",
+     "对长程重访有效；若未来 attention 更局部，收益会掉",
+     "训练-free，复现主要卡在推理栈与测评细节"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "attention",
+      "status": "unlisted"
+     },
+     {
+      "name": "sparse attention",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "H2O",
+     "StreamingLLM"
+    ],
+    "mermaid": "graph TD\nA[Long CoT] --> B[Recent queries]\nA --> C[Thought revisiting]\nC --> D[Global query clusters]\nD --> E[Beacon queries]\nE --> F[KV keep or evict]\nF --> G[Smaller cache]\nG --> H[Higher throughput]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:fareedkhan-dev/all-agentic-architectures",
+   "kind": "project",
+   "title": "FareedKhan-dev/all-agentic-architectures",
+   "url": "https://github.com/FareedKhan-dev/all-agentic-architectures",
+   "summary": "35 production-grade agentic AI architectures (Reflexion, LATS, GraphRAG, MemGPT, Voyager, BrowserAgent, ...) — a Python library and runnable textbook with multi-provider LLM support and a 17-task benchmark leaderboard.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "FareedKhan-dev",
+   "hf_upvotes": 0,
+   "stars": 4463,
+   "stars_today": 126,
+   "forks": 759,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/FareedKhan-dev/all-agentic-architectures",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rag",
+    "benchmark"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "Agent 框架汇总+可运行基准，贴近核心方向。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "35种 agent 架构可运行教材，283 测试，17项基准",
+    "why": "看 agent 论文时可当对照库，面试也好讲",
+    "architecture": "它解决的是真实痛点：agent 论文里“反思、检索、多智能体、记忆”常被写成概念图，但很难快速看出每种模式到底如何跑、何时停、和别的模式差在哪。这个仓库把 35 个经典/常见 agentic patterns 包成统一的 `Architecture` 类，每个 pattern 都有可执行 notebook 和同一套 `.run(task)` 接口；承重组件是 LangGraph state machine，再加上 multi-provider LLM 支持，让同一任务能横向切换 Reflection、ReAct、GraphRAG、MemGPT、LATS 等实现。关键设计取舍是 deterministic-picker：当 LLM 只负责输出离散特征，最终决策交给 Python 组合，避免 LLM-as-Scorer 的“平分带”问题。成熟度信号很强：README 明确写 283 tests 通过、17-task leaderboard、最近 release v0.3.0，并且有 PyPI 包和文档站。想要的是“能跑的 agent 架构对照表”，它比教程合集强在统一接口和基准对比。",
+    "verdict": "值得装，但主要价值是查阅和对照",
+    "why_now": "最近 release：v0.3.0（2026-05-28）",
+    "key_points": [
+     "283 tests + PyPI + docs，成熟度高",
+     "不是单一 agent，而是可比的架构库",
+     "基准是 17-task，偏教学与对照，不是单点 SOTA"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "LangGraph",
+     "SWE-agent"
+    ],
+    "mermaid": "graph TD\nA[Task] --> B[Choose pattern]\nB --> C[LangGraph state machine]\nC --> D[LLM calls]\nD --> E[Deterministic picker]\nE --> F[Action]\nF --> G[Benchmark score]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:openhands/openhands",
+   "kind": "project",
+   "title": "OpenHands/OpenHands",
+   "url": "https://github.com/OpenHands/OpenHands",
+   "summary": "🙌 OpenHands: AI-Driven Development",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "OpenHands",
+   "hf_upvotes": 0,
+   "stars": 87072,
+   "stars_today": 208,
+   "forks": 11412,
+   "language": "TypeScript",
+   "code_url": "https://github.com/OpenHands/OpenHands",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "coding",
+    "workflow"
+   ],
+   "core_score": 8.0,
+   "wide_score": 9.0,
+   "score_reason": "头部开源 AI 开发体，agent 研发价值高。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "OpenHands 用多后端 Agent Canvas 管开发流程，v1.16.0 支持本地/云切换与自动化。",
+    "why": "Agent 编排与代码助手热点，面试常问。",
+    "architecture": "它解决的不是“会不会写代码”，而是“长任务谁来持续跑”：本地一关机，agent 的会话、后台自动化和工具状态就断了；单一模型后端又把能力锁死在一种部署里。OpenHands 的关键改变是把系统拆成 Agent Canvas + 可切换 backend：前端负责会话与自动化编排，后端可落在本机、Docker、VM、云或 ACP-compatible agent 上，阻断了“模型/环境绑定导致的停机”和“不同 agent 不能共用同一控制面”的失败。release 里最直接的证据是 live phase、LLM provider 选择、LLM-switch toggle、以及 explicit allow-list skills，这些都在把“运行中可见、可切、可控”做成控制面能力，而不是把 agent 当一次性聊天。新意主要在系统组织层，而不是单个 agent 算法。",
+    "verdict": "值得看系统组织怎么把 agent 产品化。",
+    "why_now": "v1.16.0（2026-08-27）",
+    "key_points": [
+     "强证据是多后端切换和自动化入口，不是单一 coding demo",
+     "原文未明确给出任务成功率或基准提升",
+     "复现门槛主要在后端/沙箱与工具接入"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "Claude Code"
+    ],
+    "mermaid": "graph LR\nA[User task] --> B[Canvas]\nB --> C[Choose backend]\nC --> D[Local Docker VM Cloud]\nD --> E[Agent runs]\nE --> F[Automations Slack GitHub]\nF --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:memvid/memvid",
+   "kind": "project",
+   "title": "memvid/memvid",
+   "url": "https://github.com/memvid/memvid",
+   "summary": "Memory layer for AI Agents. Replace complex RAG pipelines with a serverless, single-file memory layer. Give your agents instant retrieval and long-term memory.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "memvid",
+   "hf_upvotes": 0,
+   "stars": 16531,
+   "stars_today": 30,
+   "forks": 1420,
+   "language": "Rust",
+   "code_url": "https://github.com/memvid/memvid",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "rag",
+    "inference"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "Agent memory/RAG替代流水线，工程可用",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Memvid 把 agent memory 压成单文件 .mv2，作者报告 LoCoMo +35% 且 P50 0.025ms。",
+    "why": "RAG/长记忆/推理加速三者交叉，很适合面试讲系统设计。",
+    "architecture": "反直觉点是：做 agent memory 不一定要上“向量库 + 检索管线 + 服务端”，因为最常见的失败不是召回不准，而是系统太重、不可携、写入易坏、还难回看历史状态。Memvid 的关键概念改变是把 memory 组织成 append-only 的 Smart Frames：每个 frame 是带时间戳、校验和和元数据的不可变单元，先保证写入不改旧数据，再在单文件里做索引、压缩和并行读取；这阻断的是 WAL/索引损坏、跨环境迁移困难、以及“只能看当前态不能回放”的失败。最直接的证据是作者报告的 LoCoMo +35% SOTA 和 0.025ms P50/0.075ms P99，并且还给出可复现基准；但它没证明在超大规模在线多租户场景下是否仍能保持同样的延迟与一致性。新意主要在组件层加系统组织层：用视频式分帧来重写 memory 存储模型。",
+    "verdict": "若你关心 agent memory 架构，这条值得细读。",
+    "why_now": "",
+    "key_points": [
+     "作者报告 LoCoMo +35%，但基准场景仍是受控长对话",
+     "单文件与不可变帧是核心，重建索引是设计前提",
+     "复现要看 Rust 存储实现与压缩/索引细节"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "RAG",
+     "vector database"
+    ],
+    "mermaid": "graph TD\nA[Inputs] --> B[Smart Frames]\nB --> C[Append only file]\nC --> D[Index and compress]\nD --> E[Fast local recall]\nE --> F[Long term memory]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:tigerless-labs/agent-memory",
+   "kind": "project",
+   "title": "tigerless-labs/agent-memory",
+   "url": "https://github.com/tigerless-labs/agent-memory",
+   "summary": "Long-term memory runtime for AI agents — plain Markdown as the source of truth, local ranked retrieval, and an independent sleep-time Manage layer. Claude Code and Codex share one store. No API key.",
+   "source": "github_search",
+   "published": "2026-09-01",
+   "authors": [],
+   "org": "tigerless-labs",
+   "hf_upvotes": 0,
+   "stars": 667,
+   "stars_today": 0,
+   "forks": 38,
+   "language": "Python",
+   "code_url": "https://github.com/tigerless-labs/agent-memory",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent-memory",
+    "retrieval",
+    "storage"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "长程agent记忆运行时，方法可借鉴",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "agent-memory 用 Markdown 作为真源，给 Claude Code 和 Codex 共用本地长记忆。",
+    "why": "很像能落地的 agent memory runtime，适合看工程取舍。",
+    "architecture": "它解决的场景很具体：agent 一关会话就忘，跨 Claude Code、Codex 和 shell 工具又各存各的，导致记忆分裂、迁移不了、还不便审计。它的核心设计是“文件系统是真源，SQLite 只是可删缓存”：记忆写成可 grep、可 git、可读的 Markdown，旁边的 local index 只负责 ranked retrieval；检索先给 L0 路径和摘要，再按需打开全文，避免把整段文本硬塞进上下文。系统里最关键的机制是边界触发写入和 sleep-time Manage：在会话边界自动整理、按价值遗忘，且删除只能以 proposal 形式进入，阻断的是“靠 agent 自觉写记忆导致漏写”和“索引坏了就丢知识”的失败。成熟度信号很强：有 pytest、ruff、mypy，README 明确写出 `mem recall`/`mem read`/`mem context`，还把 `.index` 说成可重建缓存。和同类相比，它更偏可审计、可迁移的本地 runtime，而不是单纯的向量检索封装。",
+    "verdict": "想看 agent memory 工程化，这个值得装着试。",
+    "why_now": "原文未明确",
+    "key_points": [
+     "强证据是测试与可重建缓存，而非只写 README",
+     "原文未明确公开更大规模基准",
+     "检索返回 path 而不是 pasted text，利于可审计"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "BM25",
+      "status": "unlisted"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Memvid",
+     "RAG"
+    ],
+    "mermaid": "graph LR\nA[Markdown files] --> B[SQLite index]\nB --> C[Ranked recall]\nC --> D[Path first]\nD --> E[Open file by need]\nE --> F[Sleep time manage]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:mirros-lab/code-as-world",
+   "kind": "project",
+   "title": "MirroS-Lab/Code-as-World",
+   "url": "https://github.com/MirroS-Lab/Code-as-World",
+   "summary": "Code as World: Agentic Discovery of Executable World Representations for Physical Reasoning",
+   "source": "github_search",
+   "published": "2026-08-27",
+   "authors": [],
+   "org": "MirroS-Lab",
+   "hf_upvotes": 0,
+   "stars": 421,
+   "stars_today": 0,
+   "forks": 6,
+   "language": "Python",
+   "code_url": "https://github.com/MirroS-Lab/Code-as-World",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "world-model",
+    "reasoning"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "物理推理的可执行世界表征，agent发现范式契合",
+   "tier": "core",
+   "ptype": "paper",
+   "board": "",
+   "digest": {
+    "one_liner": "Code-as-World 用可执行代码建物理世界表征，配套 4B/9B 检查点与 QuantiPhy 评测。",
+    "why": "适合看 agent/world-model 与物理推理怎么落地。",
+    "architecture": "它抓的是一个反直觉点：像素能“看见”现象，但不直接给出世界的 ontology，所以模型容易学到表面相关，却没法稳定解释和预测物理演化。现有纯视觉或纯文本推理，缺少一个能被执行、被验证的中间世界表示。作者把“code”定义成可执行的世界表示：代码里显式写状态、动力学和机制，外部观察只负责提供证据；系统通过 agentic discovery 在“模拟—验证—修正”的循环里逼近能生成观测的程序。最直接的证据是他们在 QuantiPhy 上发布 4B/9B checkpoint 和官方评测流程，说明改动不是只会讲概念，而是能被同一套基准直接跑出结果。新意主要在系统组织层：不是换一个 backbone，而是把物理监督从像素级重构改成可执行表征的发现流程。",
+    "verdict": "值得看架构思路，精读看可执行表征怎么搜出来。",
+    "why_now": "",
+    "key_points": [
+     "最强证据是可直接跑 QuantiPhy 官方评测",
+     "原文未明确训练数据与搜索细节，复现难在发现循环",
+     "没证明通用到非物理推理场景"
+    ],
+    "prereqs": [
+     {
+      "name": "world model",
+      "status": "unlisted"
+     },
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "simulation",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "NeRF",
+     "MuJoCo"
+    ],
+    "mermaid": "graph LR\nA[视频观测] --> B[发现代码表示]\nB --> C[模拟执行]\nC --> D[验证差异]\nD --> E[修正代码]\nE --> B\nB --> F[物理推理输出]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:tinyhumansai/openhuman",
+   "kind": "project",
+   "title": "tinyhumansai/openhuman",
+   "url": "https://github.com/tinyhumansai/openhuman",
+   "summary": "OpenHuman is an open source personal AI for Mac, Windows and Linux — local-first memory, agent orchestration, and deep research.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "tinyhumansai",
+   "hf_upvotes": 0,
+   "stars": 39569,
+   "stars_today": 3709,
+   "forks": 3902,
+   "language": "Rust",
+   "code_url": "https://github.com/tinyhumansai/openhuman",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "local-first",
+    "memory"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "本地first记忆与编排，贴合agent方向",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "OpenHuman 用本地优先记忆树和图式编排做个人 AI，v0.63.12 持续更新。",
+    "why": "适合看 agent orchestration、memory、MCP 集成的工程取舍。",
+    "architecture": "它解决的是“助手知道很多工具，但记不住你、也跑不完长任务”的痛点。OpenHuman 把系统拆成两条承重链：Memory Tree 把邮件、文档、聊天压成本地 SQLite 里的分数化 Markdown 树，再镜像到 Obsidian，阻断的是黑箱 vector store 记忆不可审计的问题；orchestrator 这条链用 durable graph 跑 agent fleet，配合 approval gate、checkpoint 和 root-cause 回传，阻断的是长任务中途卡死后无法恢复的问题。它还加了 TokenJuice 先压缩工具输出，减少大上下文成本。成熟度信号很强：有明确版本 release、安装说明、模型路由、隐私模式和本地/云混合路径；但 README 里很多能力来自文档承诺，原文未明确给出系统测试或崩溃边界。相比一般个人助手，它的差异不在“会聊天”，而在 local-first memory + 可恢复执行图 + 大量 MCP 集成。",
+    "verdict": "值得看项目成熟度和 agent 编排设计，不只看功能。",
+    "why_now": "最近 release：v0.63.12（2026-08-07）；仓库同时强调一周内登顶 GitHub trending 九天。",
+    "key_points": [
+     "最强证据是公开 release 与完整安装/运行路径",
+     "承诺很多，原文未明确测试覆盖与失败边界",
+     "本地记忆与 durable graph 是核心卖点"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[外部数据] --> B[Memory Tree]\nB --> C[本地记忆]\nD[任务请求] --> E[Graph Orchestrator]\nE --> F[Agent Fleet]\nF --> G[Checkpoint and resume]\nG --> H[完成任务]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:anthropics/skills",
+   "kind": "project",
+   "title": "anthropics/skills",
+   "url": "https://github.com/anthropics/skills",
+   "summary": "Public repository for Agent Skills",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "anthropics",
+   "hf_upvotes": 0,
+   "stars": 175411,
+   "stars_today": 2337,
+   "forks": 20766,
+   "language": "Python",
+   "code_url": "https://github.com/anthropics/skills",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "tool",
+    "instruction"
+   ],
+   "core_score": 3.0,
+   "wide_score": 8.0,
+   "score_reason": "Agent skills库，热度高但偏应用层",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "Anthropic Skills 用动态加载的技能包，让 Claude 按任务装载指令和脚本。",
+    "why": "适合看 agent 工具化和 task-specific instruction 的标准化方向。",
+    "architecture": "它针对的不是“模型不会做”，而是“同一个 agent 面对不同专业任务时，提示词和工具组织太脆”。Skills 的硬定义是：一组可动态加载的文件夹，里面放 instructions、scripts、resources，模型只在任务需要时装载它们，从而把特定流程变成可复用、可分发的能力。关键改变是把能力外置成 skill 包：skill 本身阻断的是临时 prompt 拼接带来的不稳定和不可复用；脚本与资源阻断的是纯文本指令无法可靠执行复杂工作流。最直接的证据不是榜单，而是仓库里公开了 spec、template 和大量示例 skill，并明确支持 Claude Code、Claude.ai 和 API；这说明它已经从概念进入产品化接口层。新意在系统组织层：把 agent 能力做成可安装、可发现、可版本化的“插件式技能”。",
+    "verdict": "看 skill 标准化思路即可，适合了解 agent 生态。",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 spec、template、示例和 API 接口齐全",
+     "它证明了可装载框架，不证明每个 skill 都稳",
+     "复现难点在生态与分发，不在单个 skill 写法"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "MCP"
+    ],
+    "mermaid": "graph TD\nA[任务] --> B[加载 Skill]\nB --> C[指令和脚本]\nC --> D[专门化执行]\nD --> E[输出]\nE --> F[复用与分发]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:obra/superpowers",
+   "kind": "project",
+   "title": "obra/superpowers",
+   "url": "https://github.com/obra/superpowers",
+   "summary": "An agentic skills framework & software development methodology that works.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "obra",
+   "hf_upvotes": 0,
+   "stars": 283920,
+   "stars_today": 690,
+   "forks": 25408,
+   "language": "Shell",
+   "code_url": "https://github.com/obra/superpowers",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "framework",
+    "workflow"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "agent 技能框架+工程方法论，较可迁移",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用自动触发 skills 的 agent 工作流，把编码从先写后改变成先定 spec、再 TDD、再 subagent 执行",
+    "why": "做 agent 框架/代码助手面试时很对口",
+    "architecture": "它瞄准的是一个反直觉场景：coding agent 一上来就写代码，结果 spec 漏洞、方案漂移、测试缺失一起爆。传统“给更长 prompt”挡不住，因为失败点不在能力不足，而在流程没有把需求澄清、设计确认、实现和复核分开。Superpowers 的关键改变是把“方法论”做成自动触发的 skills：先逼 agent 退回问目标，再把 spec 分块给人确认，之后输出足够保守的实施计划，最后把任务切给 subagent 循环执行和检查。组件的作用不是增功能，而是分别阻断“未对齐就开工”“计划不可执行”“单 agent 自顾自跑偏”三类失败。正文最直接的证据是它的 core workflow 描述和 release 里对 harness support、session-start hook、brainstorming 分级、plan conflict 继续推进的更新，这说明它把流程钉到了启动阶段和执行循环里。新意主要在系统组织层：不是一个 CLI 工具，而是把 agent 开发流程编码成可自动注入的工作法。",
+    "verdict": "适合看机制，不适合当论文细读",
+    "why_now": "",
+    "key_points": [
+     "最强证据：启动即触发、分级脑暴、冲突可继续",
+     "没证明：并不展示真实代码任务的成功率",
+     "复现门槛高：依赖具体 harness 与插件生态"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "TDD",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph TD\nA 启动 agent --> B 识别建造任务\nB --> C 先问目标\nC --> D 分块确认 spec\nD --> E 生成实施计划\nE --> F subagent 执行\nF --> G 检查与继续\nG --> H 产出代码",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:tauricresearch/tradingagents",
+   "kind": "project",
+   "title": "TauricResearch/TradingAgents",
+   "url": "https://github.com/TauricResearch/TradingAgents",
+   "summary": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "TauricResearch",
+   "hf_upvotes": 0,
+   "stars": 103807,
+   "stars_today": 367,
+   "forks": 19956,
+   "language": "Python",
+   "code_url": "https://github.com/TauricResearch/TradingAgents",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multi-agent",
+    "finance"
+   ],
+   "core_score": 4.0,
+   "wide_score": 8.0,
+   "score_reason": "多智能体交易框架，工程与评测有参考",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用多 agent 分工模拟交易公司，最新 v0.4.0 修掉回测看未来和记忆穿越问题",
+    "why": "多智能体 + 金融回测，面试里很容易被问到",
+    "architecture": "它解决的是一个常见但容易被忽略的悖论：交易框架看起来决策很多、角色很全，但只要数据层有 look-ahead，回测结果就会比真实交易更乐观，整套多 agent 讨论都变成幻觉。旧做法通常只堆 analyst、trader、risk manager，却没把“什么时候信息变得可知”写进系统。作者这版最关键的改变是把 point-in-time 规则下沉到数据和 memory：FRED 宏观数据按 as-of date pin vintage，社媒内容裁到分析窗口，decision-log 只注入在交易日前已解决的经验，等于用数据时间戳和记忆门控去阻断未来信息泄漏。最直接的支持证据是 v0.4.0 的 changelog：专门修了 FRED、social sentiment、decision-log、OHLCV bar 等时间一致性问题，说明核心 bug 不在模型而在时序契约。新意主要在系统组织层和实证层：不是单纯多 agent，而是给交易代理系统补上可审计的时间边界。",
+    "verdict": "值得看它怎么防时间穿越，不必迷信收益",
+    "why_now": "v0.4.0（2026-08-31）",
+    "key_points": [
+     "最强证据：逐项修复 look-ahead 和记忆泄漏",
+     "没证明：不等于能稳定赚钱，作者也不这么承诺",
+     "复现难点：要同时管数据 vintage、缓存、回测时钟"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "backtesting",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph TD\nA 市场数据 --> B 时间对齐\nC 社媒新闻 --> B\nD 交易日期 --> E 记忆门控\nB --> F 分析 agent\nE --> F\nF --> G 风控与交易\nG --> H 回测与执行",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:posthog/posthog",
+   "kind": "project",
+   "title": "PostHog/posthog",
+   "url": "https://github.com/PostHog/posthog",
+   "summary": "🦔 PostHog is the leading platform for building self-driving products. Our developer tools – AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more – capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "PostHog",
+   "hf_upvotes": 0,
+   "stars": 39717,
+   "stars_today": 54,
+   "forks": 3363,
+   "language": "Python",
+   "code_url": "https://github.com/PostHog/posthog",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "observability",
+    "agents",
+    "analytics"
+   ],
+   "core_score": 4.0,
+   "wide_score": 8.0,
+   "score_reason": "AI 可观测/实验/诊断平台，面试好用",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 PostHog 把产品信号接成 self-driving 闭环，v0.61.324 继续加固 agent 安全与事件流",
+    "why": "和 agent observability、MCP、产品闭环都强相关",
+    "architecture": "它解决的不是“有没有埋点”，而是“产品信号能不能直接驱动修复闭环”。纯 analytics 往往停在看板，真正的难点是把 error、rage click、failed query、session replay、flags、logs 这些异构上下文接到 agent，再让 agent 在受控权限下生成报告、PR 和工作流。PostHog 的关键改变是把 observability、decisioning 和 action 放到同一平台里：signals 进来后，self-driving mode 触发研究和修复；MCP 让 Claude Code、Cursor 等外部 agent 读取上下文；而最近 release 里又补了 agent 事件命名、授权头脱敏、未批准 widget tool call 阻断，说明它把“可操作性”建立在权限边界之上，不只是功能堆叠。最直接的证据是产品文档和最近 desktop / agent-skills release 的安全修复，能看出它在把 agent 运行时从可用推向可控。新意在系统组织层：把观测、分析、执行、审计合在一个闭环。",
+    "verdict": "适合关心 agent observability 的人看一眼",
+    "why_now": "desktop-v0.61.324（2026-09-09）",
+    "key_points": [
+     "最强证据：self-driving + MCP + 审计/脱敏联动",
+     "没证明：自动修复仍依赖权限和人工复核",
+     "同类差异：不只是 observability，更是闭环执行"
+    ],
+    "prereqs": [
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "model context protocol",
+     "ReAct"
+    ],
+    "mermaid": "graph TD\nA 产品事件 --> B 观测存储\nB --> C agent 研究\nC --> D 生成报告\nD --> E 人工审核\nE --> F PR 或工作流\nB --> G 权限与审计\nG --> C",
+    "read_level": "L2"
+   }
+  }
+ ]
+}
