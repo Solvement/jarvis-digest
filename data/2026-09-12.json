@@ -1,0 +1,1239 @@
+{
+ "date": "2026-09-12",
+ "stats": {
+  "collected": 450,
+  "filtered": 112,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 6 calls, 15255 in / 6024 out; gpt-5.4-mini: 6 calls, 45578 in / 8556 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.05903",
+   "kind": "paper",
+   "title": "EvoSafeHarness: Evolving Model- and Domain-Specific Harnesses for Securing Agents",
+   "url": "https://arxiv.org/abs/2609.05903",
+   "summary": "Large Language Model (LLM) agents are turning language into real-world effects, making safety necessary against both indirect prompt injections and direct harmful requests. System-level safety harnesses add an enforcement layer beyond model-level defenses, but existing harnesses are usually designed once by experts and applied across heterogeneous models and domains. Effective protection is deployment-dependent: models differ in how much enforcement they need before utility declines, while domains differ in the effects, state, and action sequences that must be governed. A harness that is strict enough for one model may over-block another, and a policy that transfers across domains may miss application-specific safety relations.\n  We present EvoSafeHarness, a safety-specific optimization framework that synthesizes a deployable harness for a frozen model in a target domain. It jointly searches a natural-language policy and executable code logic, guided by model behavior, domain specifications, and fresh-context adversarial review to reject benchmark-specific rules. Across four agent benchmark families, EvoSafeHarness achieves a stronger safety-utility frontier than fixed expert-designed defenses. On DecodingTrust-Agent, it reduces average attack success rate from 45.6% to 10.0% at a 3.3-point utility cost and achieves the best score in 14 of 15 cells. On AgentDojo, it reaches 82.8% utility at 0.0% ASR, twice CaMeL's utility at the same operating point, and transfers unchanged to unseen AgentDyn suites. It also achieves the best score on Agent-SafetyBench for every victim and keeps mean ASR below 20% under adaptive PAIR attacks with a refinement budget of 16. Analysis shows that domain semantics determine which safety relations and trajectory state are needed, while model and runtime behavior determine how and where those relations should be enforced.",
+   "source": "hf_papers",
+   "published": "2026-09-05",
+   "authors": [
+    "Nanxi Li",
+    "Yingzi Ma",
+    "Yulong Cao",
+    "Edward Suh",
+    "Bo Li",
+    "Dawn Song"
+   ],
+   "org": "",
+   "hf_upvotes": 47,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/SaFo-Lab/EvoSafeHarness",
+   "pdf_url": "https://arxiv.org/pdf/2609.05903",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "safety",
+    "eval"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "为agent设计可进化安全评测框架",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "EvoSafeHarness 为冻结 agent 自动搜 harness；DecodingTrust-Agent ASR 45.6%→10.0%。",
+    "why": "你做 agent/RAG 安全或评测会直接碰到",
+    "architecture": "反直觉点在于：同一个安全 harness，换个模型或换个 domain，可能从“很严”变成“过拦”或“漏拦”。作者先否定通用固定规则，原因不是 policy 写得不够细，而是模型差异决定需要多强的外部约束，domain 差异决定要管哪些状态、动作序列和安全关系。EvoSafeHarness 的关键变化，是把 harness 也当成可优化对象：同时搜索自然语言 policy 和可执行 code logic，并用目标模型的行为反馈、domain spec 和 fresh-context adversarial review 去筛掉只对 benchmark artifact 有效的规则。最直接的证据不是最大涨幅，而是它在 15 个独立 model-domain cell 上把 DecodingTrust-Agent 的平均 ASR 压到 10.0%，只付出 3.3 点 utility；这说明它学到的是 deployment-specific 的边界，而不是某个固定防线。新意主要在系统组织层：不是改模型，而是让 harness 随部署自适应。",
+    "verdict": "值得精读，核心是 agent 安全的部署自适应思路",
+    "why_now": "",
+    "key_points": [
+     "DecodingTrust-Agent: ASR 45.6%→10.0%，utility 仅降 3.3",
+     "没证明通用最优；换模型/域仍需重搜",
+     "代码已开源，但 harness 生成链条复现成本高"
+    ],
+    "prereqs": [
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "CaMeL",
+     "Meta-Harness"
+    ],
+    "mermaid": "graph LR\nA target model and domain --> B search policy\nA --> C search code logic\nB --> D fresh context review\nC --> D\nD --> E deployable harness\nE --> F safety utility frontier",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.11561",
+   "kind": "paper",
+   "title": "Memory as Plans: World-Action Modeling with Memory-Grounded Planning",
+   "url": "https://arxiv.org/abs/2609.11561",
+   "summary": "Mainstream robotic policies often adopt a Markovian formulation, but many complex real-world manipulation tasks are inherently non-Markovian, requiring long-horizon memory beyond the current observation. Existing memory mechanisms often rely on language summaries, growing visual windows, or their combinations, and may therefore lose fine-grained visual evidence or face a trade-off between history coverage and execution efficiency. We introduce MaP-WAM, a Memory-as-Plans framework that decomposes memory-dependent world-action modeling into memory-grounded planning and plan-conditioned execution, and uses long-term multimodal episodic context as planning-time evidence rather than repeatedly conditioning the executor on the full history. MaP-WAM represents memory as completed segment records containing language instructions and sparse visual context, and converts this episodic memory into compact plans comprising the next segment-level language plan and corresponding visual guidance. A World-Action-Progress (WAP) model executes each plan over an unknown duration by jointly predicting action chunks and corresponding execution progress at inference time, calibrating predicted progress through plan-observation alignment for adaptive segment transitions and closed-loop context updates. MaP-WAM keeps the executor context length fixed, while structured attention further enables key-value caching in both planning and execution. MaP-WAM achieves state-of-the-art performance on RMBench with an 83.3% success rate and attains 78.0% success on real-robot tasks, while maintaining approximately constant executor inference latency as task history grows.",
+   "source": "hf_papers",
+   "published": "2026-09-10",
+   "authors": [
+    "Sizhe Zhao",
+    "Haozhe Xie",
+    "Weiyu Zhao",
+    "Chenchu Zhang",
+    "Huan Wang",
+    "Chenyang Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 24,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/aipixel/MaP-WAM",
+   "pdf_url": "https://arxiv.org/pdf/2609.11561",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "planning"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "记忆作为计划的世界-行动建模",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "MaP-WAM 把长记忆压成计划；RMBench 83.3%，实机 78.0%。",
+    "why": "你看 VLA、长上下文或机器人记忆会很对口",
+    "architecture": "反直觉点在于：复杂操作任务并不需要每一步都把整段历史喂给执行器；真正需要长记忆的，往往是“下一段该怎么做”的决策，而不是每个 control step 都重读全历史。作者把记忆依赖建模拆成两段：先用 multimodal episodic context 生成 memory-grounded plan，再让固定上下文的 executor 按计划执行。这里的关键组件是 segment record 和 WAP。segment record 只保存已完成片段的语言指令和稀疏视觉帧，阻断“长历史无限膨胀”；WAP 同时预测 action chunks 和 progress，阻断“执行时不知道该什么时候切段”。plan-observation alignment 再用当前观测去校准 progress，阻断长序列里进度漂移。最直接的证据是它在 history 增长时，executor latency 近似恒定，同时拿到 RMBench 83.3% 和实机 78.0%。新意在系统组织层：不是更长窗口，而是把 memory 变成 plan 的中间表示。",
+    "verdict": "值得通读，适合做机器人长记忆/规划的切入点",
+    "why_now": "",
+    "key_points": [
+     "RMBench 83.3%，实机 78.0%，且延迟近似不随历史增长",
+     "没证明所有任务都适合 plan 化；强依赖实时细节时可能受限",
+     "需要规划器、world model、进度对齐，工程复杂度高"
+    ],
+    "prereqs": [
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "world model",
+      "status": "unlisted"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Octo",
+     "DynamicVLA"
+    ],
+    "mermaid": "graph LR\nA episodic memory --> B plan generation\nB --> C visual guidance\nC --> D fixed executor\nD --> E action chunks\nD --> F progress\nF --> G replan\nG --> B",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.11699",
+   "kind": "paper",
+   "title": "Negative Self-Distillation: Learning to Reason by Avoiding Flaws",
+   "url": "https://arxiv.org/abs/2609.11699",
+   "summary": "On-Policy Self-Distillation (OPSD) has emerged as a popular paradigm for large language model (LLM) self-improvement, allowing models to act as their own teachers by leveraging privileged information such as ground-truth solutions. However, recent findings indicate that OPSD can severely degrade the performance of LLMs on complex reasoning tasks: By forcing the student to imitate an artificially confident reasoning trace conditioned on privileged information, OPSD inadvertently suppresses expressions of uncertainty and penalizes the exploratory, self-corrective behaviors required to solve challenging problems. To address this, we introduce Negative Self-Distillation (NSD), a new framework that optimizes LLMs by diverging from flawed reasoning rather than imitating privileged solutions. Instead of relying on ground-truth answers or external supervision, NSD uses the model itself to generate a question-specific negative condition (eg, acting as a ``careless reasoner'') and pushes the student's distribution away from this self-generated negative teacher. Naively applying unlearning objectives to achieve this divergence is problematic, as flawed reasoning tokens are confounded with basic linguistic tokens; indiscriminately penalizing both risks catastrophically degrading the model's foundational language capabilities. We resolve this by designing a dynamic gating mechanism that automatically identifies and isolates reasoning-critical tokens, ensuring gradient updates target only behavioral flaws while preserving the model's linguistic priors. Empirically, NSD consistently outperforms OPSD and other label-free, self-bootstrapping reinforcement learning (RL) baselines.",
+   "source": "hf_papers",
+   "published": "2026-09-10",
+   "authors": [
+    "Rongcan Pei",
+    "Zhepei Wei",
+    "Shuyao Xu",
+    "Xinyu Zhu",
+    "Wei-Lin Chen",
+    "Yu Meng"
+   ],
+   "org": "",
+   "hf_upvotes": 17,
+   "stars": 5,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Prongcan/NSD",
+   "pdf_url": "https://arxiv.org/pdf/2609.11699",
+   "categories": [],
+   "keywords": [
+    "rlhf",
+    "distillation",
+    "reasoning"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "on-policy 自蒸馏改进，贴近推理后训练",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "NSD 用“避开坏推理”自蒸馏；7 个理科基准平均涨 2.3% 到 7.5%。",
+    "why": "你关心 reasoning 后训练和 label-free RL 会很有价值",
+    "architecture": "反直觉点在于：OPSD 这类方法把“带真值的自蒸馏”做得越像老师，模型反而可能越不会想题——因为老师太自信、路径太线性，会压掉探索、犹豫和自我修正，而这些正是难题里真正需要的行为。NSD 的关键改变不是学正确答案，而是先让模型自己构造一个 question-specific 的 negative condition，比如“careless reasoner”，再让学生远离这条坏分布。难点在于，不能把所有被负条件抬高概率的 token 都打掉，否则连基础语言能力也会伤到；所以它引入 token-level gating，只在负条件确实“异常抬高”某个 reasoning-critical token 时才施加 unlikelihood，并配合 bounded objective 和 KL 约束稳住更新。最强证据是它在 1.7B/4B/8B 上都稳定优于 OPSD、Intuitor、TTRL，且作者报告平均提升分别为 2.3%、7.5%、6.0%。新意在组件层：用负样本蒸馏和门控把“不要学坏习惯”变成可训练信号。",
+    "verdict": "值得精读，适合理解后训练里“反向监督”思路",
+    "why_now": "",
+    "key_points": [
+     "7 个数学 reasoning 基准上稳定优于 OPSD 等 baseline",
+     "没证明对所有推理任务都有效；负条件设计可能敏感",
+     "单次 rollout、无外部 teacher，训练效率信号较强"
+    ],
+    "prereqs": [
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "unlikelihood",
+      "status": "unlisted"
+     },
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "OPSD",
+     "OPD"
+    ],
+    "mermaid": "graph LR\nA unlabeled question --> B generate negative condition\nB --> C negative teacher\nA --> D benign reference\nC --> E token gating\nD --> E\nE --> F suppress flawed tokens\nF --> G better reasoning",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.07064",
+   "kind": "paper",
+   "title": "SpatialBlock: Enhancing Spatial Intelligence in LVLMs via Synthetic Block-Stacking Problem",
+   "url": "https://arxiv.org/abs/2609.07064",
+   "summary": "Large Vision-Language Models (LVLMs) have achieved strong performance on diverse visual tasks, yet their ability to reconstruct and reason about the 3D structure of the scene depicted in 2D images -- referred to as spatial intelligence -- remains limited. Existing approaches attempt to address this gap by using real-scene spatial question answering datasets that require dense geometric annotations. However, constructing such labels is costly, time-consuming, and often noisy due to reliance on external perception modules. In this work, we propose a novel paradigm inspired by human cognitive development: learning foundational spatial skills through structured block-manipulation tasks. We introduce SpatialBlock-15k, a synthetic dataset of 15,000 block-stacking problems covering 3D-to-2D projection, viewpoint transformation, and structural combination. The dataset further incorporates controlled color modulation as visual cues to encourage anchor-based reasoning in visually complex conditions. Experiments demonstrate that LVLMs trained on our dataset through either direct answering or reasoning-based prediction significantly outperform baselines and generalize to real-world spatial tasks, despite the dataset's synthetic and compact nature. Code and data are available at https://github.com/rsoohyun/SpatialBlock.",
+   "source": "hf_papers",
+   "published": "2026-09-07",
+   "authors": [
+    "Soohyun Ryu",
+    "Sohee Kim",
+    "Eunho Yang"
+   ],
+   "org": "",
+   "hf_upvotes": 87,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/rsoohyun/SpatialBlock",
+   "pdf_url": "https://arxiv.org/pdf/2609.07064",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "spatial",
+    "benchmark"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "合成空间任务提升LVLM空间能力",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用15k合成积木任务补LVLM空间推理，迁移到真实场景更准",
+    "why": "VLM/空间推理方向，能讲清数据设计价值",
+    "architecture": "反直觉点在于：LVLMs 先把图像问答做得不错，却连简单 block-stacking 的 3D-to-2D 投影都常错，说明瓶颈不在“看见”而在“从2D重建3D结构”。现有 real-scene spatial QA 依赖 dense geometric annotation 和外部 depth/segmentation，贵、慢、还会引入噪声。作者换成“基础空间技能先学会”的路线：SpatialBlock-15k 用合成积木题把能力拆成 projection、viewpoint transformation、structural combination，并用 controlled color modulation 强行给模型锚点，阻断视觉复杂时找不到任务相关对象的失败。最直接的证据是：用这 15k 纯合成数据训练后，direct answer 和 reasoning-based prediction 都显著优于 baseline，而且能泛化到 real-world spatial tasks。新在组件层：不是改 LVLM 架构，而是换训练任务的“空间先验注入”方式。",
+    "verdict": "适合想讲“数据设计如何补空间能力”的论文精读",
+    "why_now": "",
+    "key_points": [
+     "最强证据：纯合成 15k 也能迁移到真实任务",
+     "没证明通用 3D 理解，可能只吃积木分布",
+     "复现成本低，代码和数据都开源"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "contrastive learning",
+      "status": "unknown"
+     },
+     {
+      "name": "spatial reasoning",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MindCube",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[2D image] --> B[Block tasks]\nB --> C[Projection\nviewpoint\ncombination]\nC --> D[Color cues]\nD --> E[Anchor reasoning]\nE --> F[Real scene transfer]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2608.27875",
+   "kind": "paper",
+   "title": "HyQuant: Hybrid-Precision Quantization for LLM Attention",
+   "url": "https://arxiv.org/abs/2608.27875",
+   "summary": "Quantization has been widely adopted in LLM training and inference to reduce cost and improve efficiency. However, low-bit quantization of the attention module often introduces large errors at very low bit-widths, causing performance degradation. Existing methods mainly rely on smoothing techniques to handle outliers, while we propose a hybrid quantization design to better balance accuracy and efficiency. Specifically, we propose HyQuant, an efficient hybrid quantization framework for LLM attention. HyQuant quantizes most attention states into low-bit formats while retaining a small set of vertical-line tokens and local-window states in high precision. These accuracy-critical regions are selected using lightweight vertical-line-aware attention-pattern signals, reducing quantization error with limited overhead. In the Prefill stage, HyQuant uses a hybrid-precision quantized attention operator that preserves vertical-line tokens and a local sliding window in full precision while quantizing the remaining context. In the Decode stage, HyQuant applies the same principle to KV-cache compression and fuses KV dequantization with attention computation to improve memory and hardware efficiency. Across diverse tasks, models, and datasets, HyQuant maintains nearly lossless accuracy with an extremely simple design, demonstrating the efficiency and practical feasibility of hybrid quantization for LLM attention. Code is available at: https://github.com/jerrysfls/HyQuant .",
+   "source": "hf_papers",
+   "published": "2026-08-28",
+   "authors": [
+    "Jiatong Ding",
+    "Bingxin Xing",
+    "Yu Zhang",
+    "Dian Ding",
+    "Xiaodong Yi",
+    "Xianbin Ouyang"
+   ],
+   "org": "",
+   "hf_upvotes": 17,
+   "stars": 8,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/jerrysfls/HyQuant",
+   "pdf_url": "https://arxiv.org/pdf/2608.27875",
+   "categories": [],
+   "keywords": [
+    "quantization",
+    "inference",
+    "attention"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "LLM注意力混合量化，系统推理优化",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "HyQuant 混精度量化 attention，低比特下近乎无损且提速",
+    "why": "推理加速/量化面试很实用",
+    "architecture": "反直觉点在于：long-context inference 里，attention 不是所有 token 都一样重要，uniform low-bit 会把少数“反复被看”的位置压坏，最后比省下的算力更伤精度。作者先把问题拆成 Prefill 的算力瓶颈和 Decode 的带宽瓶颈，再给出同一个核心改法：找出 vertical-line token 和 local window 这类高贡献位置，保留高精度，其余大部分 token 才做低比特压缩。这里的关键组件是“轻量 vertical-line-aware signal → 识别关键位置”，它阻断的是把关键 token 和普通 token 一视同仁导致的误差放大。Prefill 里用 hybrid-precision attention operator 把双路径融合进一个算子；Decode 里同样策略压 KV cache，并把 dequantization 和 attention 融合，减少带宽开销。最直接证据是多模型上 1.32–3.58 倍 decode-kernel speedup，同时 accuracy 基本不掉。新在系统组织层：不是单纯更低 bit，而是按 attention 结构做差异化精度分配。",
+    "verdict": "精度和速度都关心时，值得精读系统设计",
+    "why_now": "",
+    "key_points": [
+     "最强证据：decode-kernel 1.32–3.58x",
+     "只适合有明显垂直注意力结构的长上下文",
+     "实现牵涉 attention/KV 融合，复现偏硬核"
+    ],
+    "prereqs": [
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "flash attention",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "StreamingLLM",
+     "MInference"
+    ],
+    "mermaid": "graph LR\nA[Attention maps] --> B[Find vertical lines]\nB --> C[Keep key tokens fp]\nB --> D[Quantize others]\nC --> E[Prefill fused op]\nD --> E\nC --> F[Decode KV cache]\nD --> F\nE --> G[Fast and accurate]\nF --> G",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.11085",
+   "kind": "paper",
+   "title": "Beyond Solver Verdicts: Generative Reward Models for Autoformalization",
+   "url": "https://arxiv.org/abs/2609.11085",
+   "summary": "Neurosymbolic systems rely on mathematical solvers to guarantee reasoning correctness, yet solvers are fundamentally blind to whether a formal translation maintains strict reference-equivalence to a designated formalization. We formalize this vulnerability as Verdict-Preserving-Unfaithfulness (VPU): a failure mode where an incorrect encoding executes successfully and matches the expected verdict. We theoretically prove that structural, verdict-only verification heuristics are mathematically bounded to chance-level detection on these deceptively valid traces. To resolve this, we introduce Generative Verification (GenV), which distills an offline Z3-equivalence oracle into a reference-free, continuous reference-equivalence score by repurposing the language model's native vocabulary space. Mechanistic analysis via decision-projected logit lenses and sparse autoencoders shows this generative readout natively extracts precise spatial error coordinates without explicit localization training. Empirically, our oracle-mined verifier (GenV+HN) achieves 0.961 AUROC in reference-equivalence verification, generalizes zero-shot across unseen translators and divergent formal styles, and yields an 11.3-point downstream accuracy gain in agentic test-time compute allocation.",
+   "source": "hf_papers",
+   "published": "2026-09-10",
+   "authors": [
+    "Vikash Singh",
+    "Debargha Ganguly",
+    "Aman Goel",
+    "Ali Torkamani",
+    "Xiaoxue Han",
+    "Joseph Lilien"
+   ],
+   "org": "",
+   "hf_upvotes": 13,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.11085",
+   "categories": [],
+   "keywords": [
+    "reward-model",
+    "verification",
+    "autoformalization"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "生成式奖励模型用于形式化验证",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用生成式 verifier 识别 VPU，AUROC 0.961",
+    "why": "适合做 reward model/verification 面试谈资",
+    "architecture": "反直觉点在于：solver verdict 正确，不代表 formalization 和 reference 等价；把比较符号反过来、绑错变量，程序仍可能 satisfiable，于是“只看 verdict”的检查会直接失明。作者把这个漏洞定义成 VPU，并证明任何只依赖 binary verdict 的结构化规则，在这种 matched pair 上理论上只能接近随机。关键概念改动是把“判定式 verifier”换成“generative verification”：先用 bidirectional Z3 离线产出 reference-equivalence 标签，再把这个 oracle 蒸馏进模型原生 token space，用 next-token probability 当连续 equivalence score，阻断的是“只会看执行结果、看不到源问题与候选表达是否语义对齐”的失败。最强证据是 GenV+HN 在 reference-equivalence verification 上 AUROC 0.961，且对 unseen translator 和 formal style zero-shot 泛化。新在实证层 + 监督层：不是新 solver，而是把精确 oracle 标签转成可部署的 reference-free score。",
+    "verdict": "想讲 autoformalization 失败模式和 verifier 设计，值得精读",
+    "why_now": "",
+    "key_points": [
+     "最强证据：reference-equivalence AUROC 0.961",
+     "只看 solver verdict 的方法理论上近随机",
+     "依赖离线 Z3 oracle，部署时不需要 reference"
+    ],
+    "prereqs": [
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "next-token prediction",
+      "status": "unknown"
+     },
+     {
+      "name": "verification",
+      "status": "unlisted"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Lightman et al. Reward Models",
+     "direct preference optimization"
+    ],
+    "mermaid": "graph LR\nA[Problem] --> B[Candidate formalization]\nB --> C[Solver verdict]\nC --> D[Verdict only fails]\nA --> E[Z3 oracle]\nB --> E\nE --> F[Generative verifier]\nF --> G[Reference free score]\nG --> H[VPU detected]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.09143",
+   "kind": "paper",
+   "title": "Studying Image Tokenizers as Visual Languages in Unified Multimodal Models",
+   "url": "https://arxiv.org/abs/2609.09143",
+   "summary": "Image tokenizers define the ``visual language'' of unified multimodal models, yet are commonly studied through isolated metrics or generation-/understanding-only evaluations. These evaluations do not fully capture how visual tokens behave when modeled jointly with text. We build a controlled pure-autoregressive testbed and track task-specific validation losses during multimodal continual pretraining across text, image, text-to-image (T2I), and image-to-text (I2T) prediction. We examine how these losses scale and relate to downstream performance, then use them to study multimodal learnability---how well image and text tokens are jointly modeled---and tokenizer design. We find that (1) losses should be analyzed by task, since they exhibit distinct scaling behavior and rank tokenizers differently. (2) The loss--performance relationship depends on the predicted token space: for a fixed tokenizer, T2I and I2T losses correlate with generation quality, but across tokenizers, the T2I loss--performance relationship shifts with the image-token space, whereas I2T loss, computed over a shared text vocabulary, provides a more consistent signal. I2T loss also correlates with both generation and visual understanding performance after supervised finetuning. Using losses as a lens, we show that (3) better reconstruction does not necessarily yield lower task-specific losses or stronger downstream performance, and that (4) image tokenizer choice can affect text modeling under joint optimization. As case studies, we revisit three tokenizer design axes---the discriminator, semantic supervision, and vocabulary size---to examine their effects on joint modeling and downstream performance. Together, our testbed offers a complementary perspective on image tokenizers as visual languages, highlighting their interplay with text in joint multimodal training.",
+   "source": "hf_papers",
+   "published": "2026-09-08",
+   "authors": [
+    "Siting Li",
+    "Zhengyang Wang",
+    "Simon Shaolei Du",
+    "Xi Chen",
+    "Yang Liu"
+   ],
+   "org": "",
+   "hf_upvotes": 18,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/amazon-far/Tokenizer_UMM",
+   "pdf_url": "https://arxiv.org/pdf/2609.09143",
+   "categories": [],
+   "keywords": [
+    "multimodal",
+    "tokenizer",
+    "pretraining"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "研究图像tokenizer作为统一多模态语言",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用任务级 loss 评 image tokenizer，找出与下游更一致的视觉语言信号",
+    "why": "做统一多模态/RAG 时，得会判断 tokenizer 值不值换",
+    "architecture": "反直觉点在于：image tokenizer 不是只看重建好不好；在 unified AR 训练里，它会同时改写图像、文本、T2I、I2T 四个预测任务的难度。作者的关键改变是把 tokenizer 当成“视觉语言”，不用单一 reconstruction metric，而是搭一个纯 autoregressive continual pretraining testbed，按任务分别看 validation loss。这里的组件因果很清楚：task-specific loss → 阻断“平均 loss 掩盖不同任务缩放差异”的失败；I2T loss → 因为落在共享 text vocabulary 上，能更稳定地跨 tokenizer 对齐下游；T2I loss → 只在固定 tokenizer 内和生成质量相关，跨 tokenizer 会被 image-token space 改写。最直接的证据是：I2T loss 在 supervised finetuning 前后都能稳定关联 generation 和 VQA，而更好的 reconstruction 并不保证更低任务 loss 或更强下游。新意主要在实证层：不是发明新 tokenizer，而是重新定义了评价它的坐标系。",
+    "verdict": "值得精读，核心是把 tokenizer 评价从单指标改成任务级诊断",
+    "why_now": "",
+    "key_points": [
+     "I2T loss 跨 tokenizer 更稳",
+     "重建更好不等于下游更好",
+     "joint 训练会反过来影响 text modeling"
+    ],
+    "prereqs": [
+     {
+      "name": "autoregressive",
+      "status": "unlisted"
+     },
+     {
+      "name": "next-token prediction",
+      "status": "unknown"
+     },
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "pretraining",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Chameleon",
+     "Janus-Pro"
+    ],
+    "mermaid": "graph LR\nA[Tokenizer] --> B[Text loss]\nA --> C[T2I loss]\nA --> D[I2T loss]\nB --> E[Joint pretraining]\nC --> E\nD --> E\nE --> F[Downstream quality]\nD --> G[More stable signal]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.10445",
+   "kind": "paper",
+   "title": "Building Multilingual Bridges: Data Mixing as the Pillar of Generalization for In-Language Reasoning",
+   "url": "https://arxiv.org/abs/2609.10445",
+   "summary": "Reasoning language models have made substantial advances on a variety of complex tasks, yet their capabilities remain overwhelmingly English-centric: models primarily reason in English regardless of the language they are prompted in. This is inaccessible for non-English-speaking users, risks losing the intent of the original question, and forgoes knowledge more readily expressed in the target language. In this work, we advance L2 reasoning, the ability of a model to reason consistently in the language of the user's prompt, thus building an in-language bridge between the prompt and the answer. We approach this problem from a data-centric angle, investigating how to optimize data composition and scheduling in SFT for reasoning generalization. Building Tiny Aya L2-Thinker at 3.35B scale, we achieve an L2 reasoning rate above 93% across 60 languages on 6 benchmarks spanning math, commonsense reasoning, instruction following, open-ended generation, and cultural reasoning while keeping performance strong. We show the path to generalizing L2 reasoning to held-out languages goes through broader language coverage, readily available multilingual non-reasoning data, and a sufficient English reasoning backbone. These findings indicate that reasoning is a language-agnostic behavior that can be transferred across typologically diverse languages through careful data mixing and without requiring reasoning supervision in every target language. We release our model weights and multilingual reasoning data to support further research on accessible, in-language reasoning.",
+   "source": "hf_papers",
+   "published": "2026-09-09",
+   "authors": [
+    "Mehrnaz Mofakhami",
+    "Ananya Sahu",
+    "Alejandro R. Salamanca",
+    "Daniel D&#39;souza",
+    "Alexandre Berard",
+    "Thomas Euyang"
+   ],
+   "org": "",
+   "hf_upvotes": 16,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.10445",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "data-mixing",
+    "reasoning"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "数据混合提升同语言推理，多语言泛化",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用数据混配把 3.35B 模型做成 60 语言都能本语种推理的 L2 Thinker",
+    "why": "做多语种 LLM/Agent 时，能直接判断数据配方价值",
+    "architecture": "悖论是：模型会用非英语回答，却在脑内先用英语推理；这会丢掉语言特定语境，还让中间推理难以审计。作者的关键改法不是再造一种推理监督，而是把 L2 reasoning 视为可迁移行为，通过 SFT 的 data mixing 和 scheduling 去“搭桥”。这里的硬定义是：L2 reasoning 指模型在用户提示语言内完成推理链，再用同语种给出答案。组件因果上，broader language coverage → 阻断“只会把推理迁移到少数高资源语言”的失败；multilingual non-reasoning data → 阻断“指令跟随和跨语种对齐不足”；English reasoning backbone → 保留推理能力底座，再把它迁移到目标语言。作者报告 Tiny Aya L2-Thinker 在 60 种语言、6 个 benchmark 上 L2 reasoning rate 超过 93%，且保留较强任务性能。最强支撑是他们把“是否本语种推理”与“任务分数”分开看，证明这不是单纯的语言风格问题。新意在系统组织层：不是模型结构新，而是训练数据编排新。",
+    "verdict": "值得精读，适合面试讲 multilingual reasoning 的数据路线",
+    "why_now": "",
+    "key_points": [
+     "93% L2 reasoning rate，覆盖 60 语言",
+     "靠 data mixing 转移推理，不靠每语种监督",
+     "held-out language 仍是主要检验点"
+    ],
+    "prereqs": [
+     {
+      "name": "reasoning",
+      "status": "unlisted"
+     },
+     {
+      "name": "SFT",
+      "status": "unknown"
+     },
+     {
+      "name": "instruction following",
+      "status": "unlisted"
+     },
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Magistral",
+     "Qwen3"
+    ],
+    "mermaid": "graph LR\nA[English reasoning] --> D[Mixed SFT]\nB[Multilingual data] --> D\nC[Non reasoning data] --> D\nD --> E[L2 reasoning]\nE --> F[60 languages]\nE --> G[Strong task scores]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:youssofal/mtplx",
+   "kind": "project",
+   "title": "youssofal/MTPLX",
+   "url": "https://github.com/youssofal/MTPLX",
+   "summary": "3x faster speeds on MLX | Qwen 3.8 27B | Native MTP Speculative Decoding On Apple Silicon With No External Drafter.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "youssofal",
+   "hf_upvotes": 0,
+   "stars": 2272,
+   "stars_today": 1111,
+   "forks": 167,
+   "language": "Python",
+   "code_url": "https://github.com/youssofal/MTPLX",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "speculative",
+    "quant"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "MTP 猜测解码加速，面向推理与工程",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "在 Apple Silicon 上用原生 MTP speculative decoding，把本地推理提到 1.6x 到 2.24x",
+    "why": "做本地推理/推理加速项目时，很适合看它的运行时取舍",
+    "architecture": "",
+    "verdict": "值得看项目成熟度和 decoding 机制，偏系统实现参考",
+    "why_now": "作者报告最近 release：v2.11.2（2026-09-06），修了长会话和 27B 机型的正确性问题；v2.11.1（2026-09-04），v2.10.2（2026-09-01）",
+    "key_points": [
+     "MTP head 直接复用，不要外部 drafter",
+     "用 exact rejection sampling 保持分布不变",
+     "2.11.2 修了长会话与 27B verify 路径"
+    ],
+    "prereqs": [
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "rejection sampling",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Leviathan and Chen rejection sampling theorem",
+     "speculative decoding"
+    ],
+    "mermaid": "graph TD\nA[Draft several tokens] --> B[Single verify pass]\nB --> C[Accept or reject]\nC --> D[Residual correction]\nD --> E[Exact output]\nE --> F[Faster decoding]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:jordan-gibbs/hyperresearch",
+   "kind": "project",
+   "title": "jordan-gibbs/hyperresearch",
+   "url": "https://github.com/jordan-gibbs/hyperresearch",
+   "summary": "Agent-driven research knowledge base. Agents collect, search, and synthesize web research into a persistent, searchable wiki.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "jordan-gibbs",
+   "hf_upvotes": 0,
+   "stars": 2993,
+   "stars_today": 712,
+   "forks": 282,
+   "language": "Python",
+   "code_url": "https://github.com/jordan-gibbs/hyperresearch",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rag",
+    "research",
+    "wikipedia"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "agent驱动检索+综合，RAG/知识库契合",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 16 步 agent 研究流水线，做出可追溯报告；作者报告内部 RACE 领先",
+    "why": "适合看 agent+RAG 研究架构",
+    "architecture": "它解决的反直觉点是：做深度 research 时，信息越多不一定越可靠，反而更容易被重复转载、断章取义和上下文漂移带偏。现有线性“搜一轮→写报告”会把证据、论点、批评揉在一起，后面步骤越跑越容易丢上下文。作者把关键改动放在“循环 + 中间件”上：16 步不是顺序脚本，而是按 tier 选择的可恢复 pipeline；`vault` 负责把每个来源持久化并可复用，`critic`/`cite-checker` 负责阻断幻觉引用，independence audit 阻断把 syndication 当共识，tool-locked patcher 只允许外科式改写，阻断模型事后重写证据链。最直接的证据是作者报告：`premier` profile 在单轮里拉到 250+ sources，且每条引用在出报告前都要过支持性检查；他们还给出“citation actually supports the sentence”这类硬门槛。新意主要在系统组织层，不是单个检索器：把 research 任务拆成可审计、可恢复、可复用的多阶段 agent 协作。",
+    "verdict": "想看 agentic research 如何做成系统，值得精读",
+    "why_now": "",
+    "key_points": [
+     "作者报告 16 步、250+ sources/轮",
+     "未证明第三方泛化，内部榜单",
+     "复现门槛高：依赖 Claude Code 与多 agent"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph LR\nA[Query] --> B[Decompose]\nB --> C[Search Waves]\nC --> D[Evidence Vault]\nD --> E[Critics]\nE --> F[Cite Check]\nF --> G[Patch]\nG --> H[Report]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:fitchmultz/pi-posthorse",
+   "kind": "project",
+   "title": "fitchmultz/pi-posthorse",
+   "url": "https://github.com/fitchmultz/pi-posthorse",
+   "summary": "Posthorse: fresh context, same journey. Native no-summary context windows for the fitchmultz/pi fork of the Pi coding agent, with rollover tools, durable notes, and history recovery.",
+   "source": "github_search",
+   "published": "2026-08-31",
+   "authors": [],
+   "org": "fitchmultz",
+   "hf_upvotes": 0,
+   "stars": 242,
+   "stars_today": 0,
+   "forks": 7,
+   "language": "TypeScript",
+   "code_url": "https://github.com/fitchmultz/pi-posthorse",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "coding-agent",
+    "context"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "增强编码智能体长上下文与持久记忆",
+   "tier": "core",
+   "ptype": "skill",
+   "board": "",
+   "digest": {
+    "one_liner": "给 Pi agent 加无摘要换窗；保留完整转录与可恢复 notes",
+    "why": "适合看 context rollover 机制",
+    "architecture": "它解决的是：长对话一旦触发 compaction，模型最需要的“最近状态、未消耗工具结果、手工 notes”最容易被摘要丢掉，后续工具调用就会断档。Posthorse 的关键设计不是再做一个摘要器，而是把“换窗”变成协议：`get_context_remaining` 只做预算判断，`new_context` 在整批工具成功后原子提交边界，rollover 时把 direct user inputs、未消费的 tool batch、可恢复 checkpoint 写入新窗，同时把旧窗从 active context 里移走；`notes` 和 `history` 则作为持久层兜底恢复。最直接的支持是它明确区分了支持配置和不支持配置：当模型可用 token 不足时，自动行为关闭，保留 Pi 自己的 compaction，不强行越界。新意在运行时机制层：不是功能堆叠，而是把上下文预算、边界提交和恢复状态做成一套可执行 policy。",
+    "verdict": "做 coding agent 运行时的人值得看",
+    "why_now": "最近 release：v0.4.5 / v0.4.4 / v0.4.3（2026-09-05~09-06）",
+    "key_points": [
+     "支持 native rollover、notes、history recovery",
+     "不支持官方未打补丁的 Pi",
+     "复现要改 fork 并重启 Pi"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "context window",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph LR\nA[Turn] --> B[Budget check]\nB --> C[Checkpoint]\nC --> D[Tool batch]\nD --> E[Atomic rollover]\nE --> F[Fresh window]\nF --> G[Notes and history]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:marin-community/marin",
+   "kind": "project",
+   "title": "marin-community/marin",
+   "url": "https://github.com/marin-community/marin",
+   "summary": "Open-source framework for the research and development of foundation models.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "marin-community",
+   "hf_upvotes": 0,
+   "stars": 3621,
+   "stars_today": 2414,
+   "forks": 291,
+   "language": "Python",
+   "code_url": "https://github.com/marin-community/marin",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "foundation-models",
+    "framework",
+    "training"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "基金会模型研发框架，可能可迁移",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "开源训练平台 Marin，公开从数据到模型全流程，做出 5e24 FLOPs MoE 计划",
+    "why": "适合看训练配方与系统化复现",
+    "architecture": "它解决的是：大模型训练常见“只给最终 checkpoint，不给过程知识”，导致别人能看结果却学不到配方。Marin 的核心改变是把训练当成可追踪的 research program：数据处理、tokenization、pretraining、posttraining、evaluation 都在同一套实验编排里，并把失败实验也保留下来。`StepRunner`/依赖式步骤把训练流程组织成可复用 DAG，避免脚本式流水线在长实验里失控；Delphi 则把小规模模型、scaling recipe 和 scaling law 放在一起，阻断“只会拟合大模型点、不会外推”的失败。最强证据是作者公开了 checkpoints、training mixture pipelines、recipe code 和 plot-ready data，说明它不是只发 blog，而是把可复现材料一并放出。新意主要在系统组织层兼实证层：把 foundation model 研发过程本身产品化，并用 scaling suite 做可外推验证。",
+    "verdict": "想补训练系统视角，值得通读",
+    "why_now": "最近 release：dev-wheels（2026-08-13）；其余为 prerelease/实验分支",
+    "key_points": [
+     "公开 checkpoints、mixture、recipe、数据",
+     "作者报告 5e24 FLOPs MoE 计划",
+     "是研发平台，不是单模型仓库"
+    ],
+    "prereqs": [
+     {
+      "name": "pretraining",
+      "status": "unknown"
+     },
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "scaling laws",
+      "status": "unknown"
+     },
+     {
+      "name": "Adam",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Pythia",
+     "Megatron-LM"
+    ],
+    "mermaid": "graph LR\nA[Data] --> B[Tokenize]\nB --> C[Train]\nC --> D[Eval]\nD --> E[Scaling law]\nE --> F[Next recipe]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:openai/plugins",
+   "kind": "project",
+   "title": "openai/plugins",
+   "url": "https://github.com/openai/plugins",
+   "summary": "OpenAI Plugins",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "openai",
+   "hf_upvotes": 0,
+   "stars": 6516,
+   "stars_today": 1063,
+   "forks": 859,
+   "language": "JavaScript",
+   "code_url": "https://github.com/openai/plugins",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "plugins",
+    "tool-use",
+    "llm"
+   ],
+   "core_score": 6.0,
+   "wide_score": 6.0,
+   "score_reason": "插件生态历史重要，利于工具调用理解",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 `.codex-plugin` 清单组织 Codex 插件，给多端能力分发。",
+    "why": "适合看 agent 工具链与 plugin 生态怎么落地",
+    "architecture": "这是一个插件样板库，不是单一功能应用。它解决的反直觉点是：同样是让模型“会用工具”，如果把能力全塞进一个脚本里，后续的 UI、工作流、权限和上下文会互相污染，agent 很快失控。作者把插件拆成以 `.codex-plugin/plugin.json` 为入口的可装配单元，再允许挂 `skills`、`mcp`、`commands`、`hooks` 等伴随面，这等于把“工具调用”阻断在清晰边界内：manifest 负责被发现，skills 负责行为约束，MCP/commands 负责执行面。最能说明这点的是 `figma`、`notion`、`build-web-apps` 这些 richer examples：它们不是在演示 API，而是在演示同一插件框架如何承载设计、知识、构建和部署这种不同工作流。新意主要在系统组织层：它把 plugin 生态的目录约定、市场分发和多 surface 协同定成了可复用协议，而不是单个 demo。",
+    "verdict": "看它怎么把 plugin 变成可组合工作流即可",
+    "why_now": "",
+    "key_points": [
+     "最强证据是多类 rich examples 共用同一 manifest",
+     "未证明通用性边界，复杂工作流仍依赖外部工具",
+     "复现门槛低，主要看目录约定和配置拼装"
+    ],
+    "prereqs": [
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Model Context Protocol",
+     "OpenAI Codex"
+    ],
+    "mermaid": "graph LR\nA 输入需求 --> B plugin manifest\nB --> C skills\nB --> D mcp\nB --> E commands\nC --> F agent行为\nD --> F\nE --> F\nF --> G 多端工作流",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:stablyai/orca",
+   "kind": "project",
+   "title": "stablyai/orca",
+   "url": "https://github.com/stablyai/orca",
+   "summary": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "stablyai",
+   "hf_upvotes": 0,
+   "stars": 67208,
+   "stars_today": 666,
+   "forks": 4403,
+   "language": "TypeScript",
+   "code_url": "https://github.com/stablyai/orca",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "runtime",
+    "parallel"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "并行多agent运行环境，实用且有热度",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 worktree 和并行 agent 编排编码任务，支持桌面与移动端。",
+    "why": "agent 编排和多工作区设计，面试很常问",
+    "architecture": "它解决的场景是：你同时跑几个 coding agent 时，最怕它们互相改同一份文件、上下文串线、人在外面还不知道谁卡住了。Orca 的关键改变是把“一个任务一个隔离 worktree”作为基本单元，再在其上做并行调度和状态同步：worktree 阻断文件冲突，worker-terminal ownership 阻断多个调度器抢同一执行终端，chat 里暴露子 agent 活动和 changed files 阻断黑箱式执行。真正支撑这个架构的是运行时，不是功能清单：桌面端承载 terminal、browser、repo 视图，remote runtime 负责 SSH/自动重连，mobile 只做监控和接管。作者报告最近 release 持续在修复 orchestration、startup 和 browser 相关回收问题，说明它的难点就在并发与恢复语义，而不是 UI。新意在系统组织层：把“并行 agent + worktree + 多端接管”做成一个协同运行时。",
+    "verdict": "想看并行 agent 运行时，这个值得通读",
+    "why_now": "最近 release：v1.4.200、v1.4.199、v1.4.198，连续在修 orchestration 与恢复。",
+    "key_points": [
+     "最强证据是并行 worktree 和终端归属机制",
+     "黑箱并行会失控，依赖 CLI agent 和 git worktree 习惯",
+     "复现难度中等，核心在调度和状态恢复"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "OpenAI Codex",
+     "Claude Code"
+    ],
+    "mermaid": "graph LR\nA 一个任务 --> B 多个worktree\nB --> C agent1\nB --> D agent2\nB --> E agent3\nC --> F changed files\nD --> F\nE --> F\nF --> G 选择并合并\nH 手机 --> I 监控接管\nI --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:mattpocock/skills",
+   "kind": "project",
+   "title": "mattpocock/skills",
+   "url": "https://github.com/mattpocock/skills",
+   "summary": "Skills for Real Engineers. Straight from my .agents directory.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "mattpocock",
+   "hf_upvotes": 0,
+   "stars": 260347,
+   "stars_today": 10571,
+   "forks": 21957,
+   "language": "Shell",
+   "code_url": "https://github.com/mattpocock/skills",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "skills",
+    "tooling"
+   ],
+   "core_score": 2.0,
+   "wide_score": 8.0,
+   "score_reason": "海量agent skills集合，质量参差但热度高",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用可组合 `SKILL.md` 约束 agent，降低误解和调试失真。",
+    "why": "很贴近 agent 工作流，适合做项目级方法参考",
+    "architecture": "它解决的不是“让 agent 更聪明”，而是“让 agent 少犯系统性工程错误”。反直觉点在于：很多失败不是模型能力不够，而是任务定义、术语和调试信息被过程本身弄乱了。作者把 skills 做成小而可编辑的 `SKILL.md`，再配套安装器和 `/setup-matt-pocock-skills`，让技能既能被订阅也能被 fork；关键机制是把对齐、共享语言、逐步调试和红action 写进流程里。比如 `grill-me` 先逼 agent 反问澄清，阻断“以为理解了其实没理解”；`diagnosing-bugs` 先 redaction，阻断 secrets 泄漏和无效日志污染；shared language 文档阻断术语漂移，让后续命名、搜索和推理都收敛。最近 release 还专门强化了 secrets redaction，说明作者在把这个方法向真实工程约束收紧。新意主要在系统组织层和实证层：不是提出新模型，而是把 agent 协作失败模式拆成可执行的 skill。",
+    "verdict": "更像 agent 工程方法库，适合速览后挑技能试",
+    "why_now": "最近 release：v1.2.3、v1.2.2、v1.2.0，新增 redaction 约束。",
+    "key_points": [
+     "最强证据是把对齐、语言、调试写成可执行 skill",
+     "没证明对所有模型都稳，仍依赖使用者选对流程",
+     "复现最容易，直接是文本/脚本级模板"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "Claude Code",
+     "Model Context Protocol"
+    ],
+    "mermaid": "graph TD\nA 任务开始 --> B grill questions\nB --> C shared language\nC --> D small steps\nD --> E bug trace\nE --> F redact secrets\nF --> G 更稳的agent协作",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:heygen-com/hyperframes",
+   "kind": "project",
+   "title": "heygen-com/hyperframes",
+   "url": "https://github.com/heygen-com/hyperframes",
+   "summary": "Write HTML. Render video. Built for agents.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "heygen-com",
+   "hf_upvotes": 0,
+   "stars": 49173,
+   "stars_today": 5100,
+   "forks": 4488,
+   "language": "TypeScript",
+   "code_url": "https://github.com/heygen-com/hyperframes",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "video",
+    "render"
+   ],
+   "core_score": 4.0,
+   "wide_score": 7.0,
+   "score_reason": "面向agent的视频渲染框架，跨模态相关",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 HTML→MP4 确定性渲染，支撑 agents 产出视频",
+    "why": "你做 LLM/Agent 时会碰到视频生成落地",
+    "architecture": "它解决的是一个反直觉痛点：同一段生成式内容，预览里看着正常，导出后却因为状态漂移、seek 不一致、浏览器重载而变成另一段视频。现有“给 agent 一个渲染器”不够，因为真正失败点在编辑循环里：预览、动画时钟、媒体加载、lint、render 之间没有统一的确定性边界。HyperFrames 的关键改变是把“写 HTML”变成“可 seek 的确定性视频程序”：HTML/CSS/媒体负责表达，router 型 skills 决定该走哪条创作流程，而渲染核心把动画、seek、导出约束到同一条生产链，阻断预览与最终 MP4 语义分叉。最直接的证据是 v0.8.36 的修复说明：暂停预览后子动画仍在跑、编辑时 iframe 会重载、打开项目会重复 re-encode，这些都说明作者在修的是“编辑态和导出态必须同态”。新意主要在系统组织层，不是新渲染算法。",
+    "verdict": "适合看速览：价值在 agent 生产链，不在渲染算法",
+    "why_now": "最近 release：v0.8.36",
+    "key_points": [
+     "最强证据是预览/导出不同步的修复",
+     "原文未明确测试覆盖与可复现脚本",
+     "像技能系统，复现更依赖 agent 环境"
+    ],
+    "prereqs": [
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "video generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Remotion",
+     "FFmpeg"
+    ],
+    "mermaid": "graph LR\nA[HTML CSS Media] --> B[Seekable Animation]\nB --> C[Deterministic Preview]\nC --> D[MP4 Render]\nE[Agent Skills] --> B\nE --> A\nD --> F[Video Output]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:k2-fsa/omnivoice",
+   "kind": "project",
+   "title": "k2-fsa/OmniVoice",
+   "url": "https://github.com/k2-fsa/OmniVoice",
+   "summary": "High-Quality Voice Cloning TTS for 600+ Languages",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "k2-fsa",
+   "hf_upvotes": 0,
+   "stars": 12729,
+   "stars_today": 546,
+   "forks": 1942,
+   "language": "Python",
+   "code_url": "https://github.com/k2-fsa/OmniVoice",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "tts",
+    "voice",
+    "multilingual",
+    "audio"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "高质量多语TTS模型发布，音频生成相关",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "High-Quality Voice Cloning TTS for 600+ Languages",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:tt-a1i/archify",
+   "kind": "project",
+   "title": "tt-a1i/archify",
+   "url": "https://github.com/tt-a1i/archify",
+   "summary": "Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "tt-a1i",
+   "hf_upvotes": 0,
+   "stars": 59454,
+   "stars_today": 11006,
+   "forks": 3895,
+   "language": "JavaScript",
+   "code_url": "https://github.com/tt-a1i/archify",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "diagram",
+    "skill"
+   ],
+   "core_score": 4.0,
+   "wide_score": 6.0,
+   "score_reason": "架构图生成agent skill，偏表达层",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 typed JSON IR 把系统描述渲染成可验证架构图",
+    "why": "适合做 agent 可视化与系统讲解，面试很能讲",
+    "architecture": "它解决的是“图看起来对，但其实不可证”的老问题：架构图、数据流图、时序图常被手工画到失真，尤其在 agent 场景里，路径、回路、边界和证据源混在一起，改一处就乱一片。Archify 的关键改变是先把自然语言或代码库分析收敛成 typed JSON IR，再由确定性 renderer 生成 HTML/SVG，并在同一套验证里保留事实、路线和来源证据，从而阻断“图像美观但拓扑不可信”的失败。最直接的证据是它支持 Before / Delta / After、route probe、upstream/downstream reach，并在 release 里持续修复 Intent Trace 方向、边界可读性、SVG Legend 遮挡这类语义/渲染问题，说明作者在打磨的是“可验证表达”而不是单纯出图。新意在系统组织层：IR、验证、导出、交互阅读一起组成闭环。",
+    "verdict": "值得看，尤其适合学 agent/系统图的可信表达",
+    "why_now": "最近 release：v2.16.0 / v2.15.0",
+    "key_points": [
+     "typed IR + deterministic compile 是核心证据",
+     "原文未明确是否有自动化测试覆盖率",
+     "图的可信度比纯美化工具高一维"
+    ],
+    "prereqs": [
+     {
+      "name": "JSON",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "sequence",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Mermaid",
+     "D3.js"
+    ],
+    "mermaid": "graph TD\nA[System Text] --> B[Typed JSON IR]\nB --> C[Validation]\nC --> D[Deterministic Render]\nD --> E[HTML SVG PNG]\nD --> F[Route Trace]\nF --> G[Verified Story]",
+    "read_level": "L2"
+   }
+  }
+ ]
+}
