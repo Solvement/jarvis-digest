@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-13",
+   "papers": 0,
+   "projects": 10,
+   "top": "huggingface/transformers"
+  },
+  {
    "date": "2026-09-12",
    "papers": 8,
    "projects": 10,
