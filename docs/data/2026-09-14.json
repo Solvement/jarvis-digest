@@ -1,0 +1,1204 @@
+{
+ "date": "2026-09-14",
+ "stats": {
+  "collected": 458,
+  "filtered": 109,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 7 calls, 15511 in / 6006 out; gpt-5.4-mini: 6 calls, 48110 in / 9287 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.08418",
+   "kind": "paper",
+   "title": "Feyospace-v1: How the Cyber Mercury Seven Trained Frontier Cyber Models",
+   "url": "https://arxiv.org/abs/2609.08418",
+   "summary": "Training capable cyber agents is often treated primarily as a problem of model scale, yet open-weight post-training is constrained more directly by the cost of executable environments, reliable multi-turn supervision, and access to strong teachers. We present a data-centric framework that addresses these bottlenecks through five complementary systems: Choulea analyzes hidden reasoning signatures, SkyReal reduces teacher-sampling cost, Hongzwang bypasses API restrictions on teacher execution, PSBreakup restores capabilities weakened by model merging, and Kreator converts expert interventions into trainable reasoning. Our data engine constructs resettable coding, vulnerability, CTF, kernel-history, full-exploit, firmware, and device-backed environments. Candidate trajectories are retained only after execution verification and evidence auditing, yielding 164,269 trajectories for long-context supervised fine-tuning. The three checkpoints improve over their starting models by an average of 23.76% on the full CyberGym suite and 10.49% across the pooled CTF suites. As of September 1, 2026, Feyospace-s1 achieves a verified success rate of 63.24% and ranks 10th on the official CyberGym leaderboard, while all three checkpoints rank 1st among models at comparable parameter scales. To our knowledge, this is the first end-to-end demonstration that a seven-person independent team can train open-weight models with leading agentic cyber capability.",
+   "source": "hf_papers",
+   "published": "2026-09-08",
+   "authors": [
+    "Zongjie Li",
+    "Alan Z. W",
+    "John Nicolas J",
+    "Walter H. F",
+    "Scott Donald L",
+    "Gordon Y. P"
+   ],
+   "org": "",
+   "hf_upvotes": 74,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.08418",
+   "categories": [],
+   "keywords": [
+    "agents",
+    "post-training",
+    "cyber"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "前沿网络安全模型训练数据系统，细节强。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "七人团队用 16.4 万条审计轨迹，训出 CyberGym 63.24% 的开放权重 cyber agent",
+    "why": "LLM 后训练 + agent/cyber，面试很能讲",
+    "architecture": "这篇的反直觉点是：做 frontier cyber agent，瓶颈不在单纯 scale，而在“可执行环境、可靠多轮监督、强 teacher”三件事。作者先把问题拆成五种失败：轨迹不真、采样太贵、闭源 teacher 不配合、开权重合并后能力掉、专家经验不会变成可训轨迹。关键改变不是再造一个更大的模型，而是把“数据生成”做成系统：Choulea 先分析 reasoning signature，阻断把过程监督写成摘要；SkyReal / Hongzwang 降低 teacher rollout 成本和 API 约束下的失真；PSBreakup 先恢复被 model merging 压扁的域能力；Kreator 把人类关键干预改写成 teacher-native continuation。最强证据是执行验证+证据审计后仍能得到 164,269 条轨迹，并让三个 checkpoint 平均提升 23.76%，其中 s1 在 CyberGym verified success rate 到 63.24%。新意主要在系统组织层：不是单一算法，而是把监督获取、环境构造、过滤和训练闭环化。",
+    "verdict": "适合精读，重点看数据引擎怎么闭环",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 164,269 条审计轨迹+63.24%",
+     "没证明通用 cyber 外的迁移",
+     "复现难：环境、teacher、审计全都重"
+    ],
+    "prereqs": [
+     {
+      "name": "post-training",
+      "status": "unlisted"
+     },
+     {
+      "name": "supervised fine-tuning",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "model merging",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA 受限teacher与真实环境\nB Choulea采轨迹签名\nC SkyReal降采样成本\nD PSBreakup恢复合并后能力\nE Kreator转人类干预\nF 审计轨迹入库\nG SFT训练cyber agent\nA --> B --> F\nA --> C --> F\nA --> D --> F\nA --> E --> F\nF --> G",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.11682",
+   "kind": "paper",
+   "title": "COBRA-Skills: Contextual Bandit-Guided Evolution for Agent Skill Optimization",
+   "url": "https://arxiv.org/abs/2609.11682",
+   "summary": "Large language model (LLM) agents can benefit from reusable skills distilled from prior task experience, yet existing skill optimization methods often rely on costly execution-based evaluation and substantial task data. We introduce COBRA-Skills, an efficient framework that formulates skill optimization as budgeted sequential optimization over a dynamically evolving candidate space. COBRA-Skills couples contextual-bandit-guided prioritization with evidence-grounded skill evolution, selectively allocating evaluations to promising or informative candidates while continually refining the skill population from execution feedback. Across six heterogeneous agent benchmarks and three target models, COBRA-Skills consistently achieves the strongest average performance among compared methods, while reducing optimization cost by 55--58\\% relative to SkillOpt and using only 50 unique optimization examples per benchmark. Further analyses show that COBRA-Skills remains robust to changes in the agent harness and performs effectively when the target model itself is used for skill generation and refinement.",
+   "source": "hf_papers",
+   "published": "2026-09-10",
+   "authors": [
+    "Pingchen Lu",
+    "Xiangyi Wang",
+    "Xiang Li",
+    "Jie Mao",
+    "Zikun Qu",
+    "Junfeng Luo"
+   ],
+   "org": "",
+   "hf_upvotes": 29,
+   "stars": 8,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Jerry-LuP/COBRA-Skills",
+   "pdf_url": "https://arxiv.org/pdf/2609.11682",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "bandit",
+    "skills"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "带预算的技能优化，直接对齐agent技能。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "COBRA-Skills 用 contextual bandit+进化，把技能优化成本降 55–58%",
+    "why": "agent skills 与 test-time 评测很对口",
+    "architecture": "这篇解决的是一个很现实的悖论：技能越依赖 execution feedback，越容易把预算花在“先天就不行”的候选上，而且每轮还要反复跑 LLM 分析轨迹，token 成本比优化本身还重。作者把 skill optimization 改写成“带预算的 sequential optimization”：每个 skill 当成一只 arm，先用语义 embedding 和 reward predictor 估计收益，再用 LinearUCB bonus 处理不确定性，阻断“只看历史高分导致局部收敛”。更关键的是，它不是静态选技能，而是周期性 evolution：regeneration、rollout mutation、crossover 都用已收集的成功/失败证据生成新候选，阻断“候选空间枯竭”。最直接的证据是六个 agent benchmark 上平均最优，同时比 SkillOpt 省 55–58% 成本、每个 benchmark 只用 50 个 unique optimization examples。新意在系统组织层：bandit 负责分配评测预算，evolution 负责扩展候选空间。",
+    "verdict": "值得通读，核心是 bandit 如何接管技能搜索",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 50 个样本还省 55–58%",
+     "没证明在极弱 harness 下仍稳定",
+     "实现要同时管 reward model 和 evolution loop"
+    ],
+    "prereqs": [
+     {
+      "name": "contextual bandit",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "LinearUCB",
+     "SkillOpt"
+    ],
+    "mermaid": "graph TD\nA 候选技能池\nB Reward predictor\nC LinearUCB排序\nD 目标agent执行\nE 轨迹与奖励回流\nF 进化算子\nG 新技能池\nA --> B --> C --> D --> E --> F --> G\nG --> C",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.10297",
+   "kind": "paper",
+   "title": "TRACE: Trajectory-robust Admission with Evidence Ordering for Efficient GUI Agents",
+   "url": "https://arxiv.org/abs/2609.10297",
+   "summary": "GUI agents accumulate high-resolution screenshots as the trajectory unfolds, increasing inference latency and memory usage. Training-free visual token pruning can reduce this cost, but cache reuse introduces a fundamental constraint. Once tokens are discarded, the corresponding visual evidence cannot be recovered without re-encoding. Pruning therefore becomes an irreversible admission decision that must remain useful for unknown future targets while preserving coverage of operable regions under tight budgets. To address these challenges, we propose \\method{}, a training-free framework for \\textbf{Trajectory-robust Admission and Coverage-aware Evidence ordering}. Specifically, we combine a query-independent layout-derived interaction prior with instruction relevance and feature novelty to rank visual evidence according to both potential future utility and diversity. Then, we reserve part of the budget for native visual tokens distributed across the screen, repairing missing spatial coverage without breaking the ordering. Together, these mechanisms produce a nested token order, allowing retained visual evidence to shrink monotonically across budgets while remaining reusable throughout the trajectory. Finally, our monotone KV contraction incrementally contracts retired frames into compact session state, avoiding repeated visual encoding or pruning. Extensive experiments across six GUI benchmarks and diverse models verify the effectiveness of our proposed  under tight budgets. The source code will be released.",
+   "source": "hf_papers",
+   "published": "2026-09-09",
+   "authors": [
+    "Yuhao Wang",
+    "Mu Qiao",
+    "Xindong Zhang",
+    "Yunzhi Zhuge",
+    "Lei Zhang",
+    "Huchuan Lu"
+   ],
+   "org": "",
+   "hf_upvotes": 2,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/924973292/TRACE",
+   "pdf_url": "https://arxiv.org/pdf/2609.10297",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "inference",
+    "gui"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "GUI agent证据排序与剪枝，直接影响推理效率/评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "TRACE 让 GUI agent 在缓存复用下，仍能按预算剪 token 而不重编码",
+    "why": "长上下文+KV cache+多模态 agent 很贴近你的方向",
+    "architecture": "这篇的悖论很具体：GUI agent 一旦把截图写进 session cache，后续步骤读的是历史缓存而不是原图，所以“剪掉 token”不再是可反悔的选择，而是一次性的 admission。旧方法的问题在于它们默认每步都能重选 token，但这里一旦丢了，未来任何 query 都补不回来，只能重编码，等于把省下的算力又吐回去。作者的关键概念改写是 lifecycle-aware visual pruning：把 pruning 变成 write-time visual evidence commitment，再要求保留下来的 token 在更小预算下必须是前缀嵌套。LIP 用 layout-derived interaction prior 阻断“只看当前指令导致后续目标缺失”；NEO 把 relevance、novelty 和布局信息融合成 nested order，阻断“不同预算要重新选导致不可复用”；NCR 用 native tokens 修补覆盖，阻断“只保留显著区域导致可操作区域空洞”；MKC 把退休帧压成 session state，阻断“每步重编码历史帧”。最直接的证据是六个 GUI benchmark 的单步和多步设置都验证有效。新意主要在系统组织层，尤其是把 pruning 和 cache 生命周期绑在一起。",
+    "verdict": "值得精读，核心机制新且和 agent 推理强相关",
+    "why_now": "",
+    "key_points": [
+     "最强证据是多步 GUI 下仍保持嵌套 keep set",
+     "没证明对所有视觉 backbone 都同等有效",
+     "实现难点在 NEO+MKC 的缓存状态管理"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "GUI agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "visual token pruning",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "FastV",
+     "PruMerge"
+    ],
+    "mermaid": "graph TD\nA 截图与历史缓存\nB LIP布局先验\nC NEO嵌套排序\nD NCR覆盖修补\nE MKC单调收缩\nF 可复用会话状态\nA --> B --> C --> D --> E --> F",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.06107",
+   "kind": "paper",
+   "title": "DataFlex-RL: An Evaluation Platform for RLVR Data Policies",
+   "url": "https://arxiv.org/abs/2609.06107",
+   "summary": "Data policies for reinforcement learning with verifiable rewards (RLVR) determine which rollouts are used, how strongly they are weighted, and which domains contribute to subsequent training batches. We introduce DataFlex-RL, an evaluation platform for comparing these choices under a common GRPO recipe. Our primary experiment evaluates 13 configurations across 12 matched seeds using Qwen2.5-7B-Base and 12 mathematics, logic, and science benchmarks. Uniform GRPO improves the domain-balanced average accuracy by 7.76 percentage points over the untrained checkpoint. None of the eight rollout-selection or reweighting methods achieves a paired 95% confidence interval that excludes zero relative to uniform sampling, and none of the three adaptive mixtures outperforms a fixed equal mixture at the same level of precision. A corrected 12-seed extension on Llama-3.1-8B-Base places the additional methods on the same score scale as the original controls, but does not reveal a consistent winner in terms of observed mean performance. We also quantify evaluation sensitivity by rescoring nine Qwen2.5-7B-Instruct runs using a math-heavy six-benchmark summary, consisting of five mathematics benchmarks and GPQA-Diamond but no logic benchmark, and comparing it with the domain-balanced 12-benchmark summary. The resulting rankings are negatively correlated, with a correlation coefficient of -0.33, whereas summaries that retain all 12 benchmarks largely agree. Across the controlled settings studied here, changing the data policy measurably changes the training process but does not produce a reproducible improvement over uniform training.",
+   "source": "hf_papers",
+   "published": "2026-09-05",
+   "authors": [
+    "Hao Liang",
+    "Mingrui Chen",
+    "Hengyi Feng",
+    "Meiyi Qiang",
+    "Wentao Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 96,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.06107",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "evaluation",
+    "grpo"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "RLVR数据策略评估平台，Agent训练相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "DataFlex-RL 用 13 组 RLVR 数据策略在 12 个种子上对比，发现均匀 GRPO 最稳，其他策略没复现实质增益",
+    "why": "你做 RLHF/GRPO 选数据时最该先看这类负结果",
+    "architecture": "反直觉点是：RLVR 里大家默认“更聪明的数据策略”会比均匀采样更强，但作者把选择、重加权、混合自适应都放进同一个 GRPO 配方后，发现它们并没有稳定赢过 uniform。关键概念是把“数据策略”当成可独立评估的变量，而不是和训练细节缠在一起：DataFlex-RL 通过同一训练 recipe、匹配 seeds、同一套 12 个 benchmark，把不同策略的增益和噪声分开，避免把偶然波动误判成方法提升。最直接的证据是 12-seed 主实验：uniform GRPO 相比未训练 checkpoint 提升 7.76 个百分点，但 8 个 selection/reweighting 方法的 paired 95% CI 都没排除 0，3 个 adaptive mixture 也没超过固定均匀混合。它的新意主要在实证层：不是新算法，而是把 RLVR 数据策略做成可比较、可复现的评价平台。",
+    "verdict": "适合先读，帮你校准 RLVR 数据策略预期",
+    "why_now": "",
+    "key_points": [
+     "12-seed 后仍无稳定赢家",
+     "数学重权评分会改排名，r=-0.33",
+     "结论只限当前 GRPO 与 12 benchmark 设定"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "rejection sampling",
+      "status": "unknown"
+     },
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "DPO",
+     "PPO"
+    ],
+    "mermaid": "graph LR\nA[RLVR data policy] --> B[selection]\nA --> C[reweighting]\nA --> D[mixture]\nB --> E[common GRPO recipe]\nC --> E\nD --> E\nE --> F[evaluate on 12 benchmarks]\nF --> G[compare with matched seeds]\nG --> H[no reproducible winner]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.11115",
+   "kind": "paper",
+   "title": "Benchmark Radar: A Living Database and Search Engine for AI Benchmarks and Evaluation",
+   "url": "https://arxiv.org/abs/2609.11115",
+   "summary": "Benchmark researchers and developers of large language models (LLMs) and other AI systems need to find relevant evaluations, locate their benchmark datasets and code, and understand the settings behind reported scores. We present Benchmark Radar, a living database and search engine for retrieval and discovery of AI benchmarks, covering LLM evaluation, agentic and tool-use benchmarks, coding, reasoning, safety, and domain-specific evaluations. The system combines daily discovery of benchmark papers, repositories, datasets, and releases with a searchable benchmark catalog, mentions in model cards and technical reports, and score histories. It retains source identities and citations so readers can inspect candidate benchmarks and their evaluation evidence. Daily discovery draws on 37 sources: 13 direct connectors and 24 first-party research and engineering feeds. The catalog contains 1,283 source records drawn from 4 benchmark catalogs and 12,916 numeric observations on 790 records. We describe collection and retrieval, audit the full catalog, and examine benchmark saturation, adoption trends, and the limits of score comparisons. A worked example walks through a complete prior-art search, showing how to query the catalog and inspect benchmark evidence when designing a new evaluation. We release the web dashboard with a benchmark leaderboard, a Pareto frontier view of score against measured use, saturation and trend views, daily feeds, downloadable evidence, a command-line interface (CLI) for offline queries, and reproducible analysis.",
+   "source": "hf_papers",
+   "published": "2026-09-10",
+   "authors": [
+    "Koutian Wu",
+    "Junjie Zhou",
+    "Ergan Shang",
+    "Jiayu Wang",
+    "Pengqian Han",
+    "Junkai Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 73,
+   "stars": 201,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/ktwu01/benchmark-radar",
+   "pdf_url": "https://arxiv.org/pdf/2609.11115",
+   "categories": [],
+   "keywords": [
+    "evaluation",
+    "benchmark",
+    "retrieval"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "基准/评测发现数据库，面试与研究都高用。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Benchmark Radar 把 1,283 个 benchmark 记录做成可检索数据库，连论文、代码、分数和来源一起追踪",
+    "why": "做 benchmark 或面试聊 eval 体系时很实用",
+    "architecture": "痛点不是“找不到 benchmark 名字”，而是找不到它的原始数据、代码、评分设置和后续被谁用过，导致同分数根本不可比。Benchmark Radar 的关键改变是把 benchmark 当成带 provenance 的记录系统：日更抓取论文、repo、dataset 和 release，再把 model card、tech report 里的提及和分数历史挂回同一条目，保留 source identity 和 citation，避免只剩一个排行榜数字。最直接的证据是它的全库审计：来自 37 个来源，累计 1,283 条 source records、12,916 个 numeric observations，且提供可复现的 web dashboard、CLI 和 downloadable evidence；正文还给了一个完整 prior-art search 的案例，说明它不是静态名单而是能追溯证据链的检索系统。新意在系统组织层：把 discovery、retrieval、source inspection 合并成一个 living benchmark index。",
+    "verdict": "很值得扫一遍，做 eval 检索会反复用到",
+    "why_now": "有明确 release：v0.11.0 目录与 dashboard/CLI 已公开",
+    "key_points": [
+     "1,283 条记录，12,916 个观测",
+     "保留来源身份与 citation",
+     "分数历史和 catalog 可离线查询"
+    ],
+    "prereqs": [
+     {
+      "name": "benchmark",
+      "status": "unlisted"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "OpenCompass",
+     "LLM Stats"
+    ],
+    "mermaid": "graph TD\nA[paper repo release feeds] --> B[daily discovery]\nB --> C[benchmark catalog]\nD[model cards reports] --> C\nC --> E[search and filter]\nC --> F[source inspection]\nE --> G[score history]\nF --> G\nG --> H[prior art search]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2608.30597",
+   "kind": "paper",
+   "title": "PLC-DPO: Posterior Label Correction in Noisy and Ambiguous Preference Optimization",
+   "url": "https://arxiv.org/abs/2608.30597",
+   "summary": "Direct Preference Optimization (DPO) simplifies alignment through pairwise comparisons but assumes all observed preferences are reliable. Real data often violates this assumption, leading to reversed, weak, or ambiguous labels that cause harmful policy updates. To address this, we propose Posterior Label Correction DPO (PLC-DPO) to robustly optimize preferences by routing each pair's training signal as a clean, flip, or tie case. The key idea is to use the calibrated policy-reference margin as online evidence to take appropriate correction actions. This reframes noisy preference learning as actively correcting supervision direction and strength rather than merely filtering suspicious examples. Across 57 dataset-model-benchmark cells, PLC-DPO obtains the best mean win rate against DPO (60.5 vs. 55.5 for the next-best method). Injected-noise and tie stress tests, human disagreement analysis, and self-confirmation diagnostics further show that the routing remains stable and distinguishes flipped from weakly directional pairs.",
+   "source": "hf_papers",
+   "published": "2026-08-31",
+   "authors": [
+    "Boryeong Cho",
+    "Sumyeong Ahn",
+    "Se-Young Yun"
+   ],
+   "org": "",
+   "hf_upvotes": 23,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/VennTum99/PLC-DPO",
+   "pdf_url": "https://arxiv.org/pdf/2608.30597",
+   "categories": [],
+   "keywords": [
+    "dpo",
+    "alignment",
+    "preference"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "噪声偏好校正DPO，后训练方法实用。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PLC-DPO 用“clean / flip / tie”路由修正噪声偏好，57 组设置里平均胜率 60.5%",
+    "why": "偏好优化里最常见的坑就是标签噪声和模糊偏好",
+    "architecture": "反直觉点是：DPO 把一对偏好默认当成绝对真值，但真实数据里既可能标反了，也可能根本没有明确方向，硬推只会把错误梯度放大。PLC-DPO 的关键概念改变是把每个 pair 的标签看成 latent state：clean 就强化原方向，flip 就反转监督，tie 就不施加强方向梯度；路由依据不是外部 reward model，而是 policy-reference margin 的在线证据，再配合 EMA 校准、stop-gradient、warm-up 和 confidence gate，避免训练早期乱改标签。最直接的证据是作者在 57 个 dataset-model-benchmark cells 上报告最高 mean win rate，且注入噪声、tie stress test 和 human-disagreement set 上路由能区分 flipped 与 weakly directional pairs。新意主要在组件层：不是换一个 preference objective，而是把“纠错”直接塞进 DPO 的 pair label 入口。",
+    "verdict": "值得精读，偏好噪声处理思路很面试友好",
+    "why_now": "",
+    "key_points": [
+     "把 pair 标签分成 clean flip tie 三态",
+     "57 组设置 mean win rate 60.5%",
+     "是否优于 DPO 仍依赖噪声与 tie 比例"
+    ],
+    "prereqs": [
+     {
+      "name": "DPO",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     },
+     {
+      "name": "Bradley-Terry model",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "DPO",
+     "KTO"
+    ],
+    "mermaid": "graph TD\nA[pair preference] --> B[policy reference margin]\nB --> C[EMA calibration]\nC --> D[route clean flip tie]\nD --> E[forward DPO]\nD --> F[reversed DPO]\nD --> G[tie loss]\nE --> H[policy update]\nF --> H\nG --> H",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.10824",
+   "kind": "paper",
+   "title": "Studying Without a Syllabus: Task-Agnostic Environment Preprocessing",
+   "url": "https://arxiv.org/abs/2609.10824",
+   "summary": "Before an LLM agent tackles tasks in a new environment, it can inspect available corpora and tools and construct reusable resources such as indices, scripts, or procedural guidance. Most automated adaptation methods, however, rely on task examples, trajectories, or evaluation feedback to decide what to build. Existing task-agnostic approaches avoid this supervision but commit in advance to a preparation strategy for a particular type of environment. We study a more open-ended setting: can an agent study an unfamiliar environment without a syllabus, i.e. before test time and without knowledge of the downstream task distribution, and choose how to prepare it? We formalize task-agnostic environment preprocessing, in which a studying system explores an environment under a budget and produces artifacts for a frozen solver. We compare unaided and archive-equipped meta-agents with fixed synthetic-practice and corpus-processing methods across six heterogeneous benchmarks. A meta-agent variant achieves the highest Avg@3 reward on five benchmarks, while fixed corpus processing remains best on the largest corpus benchmark. Larger study budgets do not reliably improve downstream reward. Nevertheless, studied artifacts reduce the test-time sampling needed to reach a given score, demonstrating how reusable preparation can shift computation from repeated test-time attempts to a pre-task study phase.",
+   "source": "hf_papers",
+   "published": "2026-09-09",
+   "authors": [
+    "Vinay Samuel",
+    "Varun Ursekar",
+    "Vijay S. Kalmath",
+    "Apaar Shanker",
+    "Veronica Chatrath",
+    "Yuan Xue"
+   ],
+   "org": "",
+   "hf_upvotes": 3,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.10824",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rl",
+    "planning"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "无任务大环境预处理，契合agent/RL前置准备",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用任务无关的study预算构造环境工件，5/6基准上Avg@3最佳",
+    "why": "很像Agent版预处理，适合看系统设计",
+    "architecture": "反直觉点在于：新环境里还没见到下游任务，就能先‘读书’并产出对后续求解有用的工件。传统方法要么依赖task examples、trajectory或feedback来决定该建什么，要么先验绑定某类环境；这篇把问题改成 task-agnostic environment preprocessing：studying system 先在预算内探索环境，再把索引、脚本、procedural guidance 等文件型 artifact 留给 frozen solver。关键改变是把‘适配’从针对任务的优化，改成针对环境内容的自选式准备；artifact 阻断的是 test-time 反复试错的高采样成本。最直接的证据是六个异构 benchmark 上，archive-equipped Meta-Agent 在五个上拿到最高 Avg@3，而且 studied artifacts 让达到同分数所需的 test-time sampling 下降。新意主要在系统组织层：不是又一个固定 corpus-processing workflow，而是让 meta-agent 决定学什么、产什么。",
+    "verdict": "值得看，核心是把计算前移到study阶段",
+    "why_now": "",
+    "key_points": [
+     "5/6 基准上 Avg@3 最好",
+     "大 study budget 不稳定变好",
+     "复现难点在环境与工件设计"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Machine Studying",
+     "RAPTOR"
+    ],
+    "mermaid": "graph LR\nA[未知环境] --> B[study 探索]\nB --> C[产出工件]\nC --> D[frozen solver]\nD --> E[更少test采样]\nF[固定流程] --> G[先验绑定]\nG --> D",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.12641",
+   "kind": "paper",
+   "title": "Breaking the Vision-Action Shortcut: Latent Interface Training for Generalizable Robotics Foundation Models",
+   "url": "https://arxiv.org/abs/2609.12641",
+   "summary": "Robot foundation models achieve strong in-distribution performance but often degrade under visual distribution shifts. When learning to generate actions from pretrained visual representations, models may exploit task-irrelevant visual cues that correlate with demonstrated actions within the training distribution. Such vision-action shortcuts can undermine generalization when these correlations change under distribution shifts. Mitigating these shortcuts requires constraining how visual information is used for action generation while preserving task-relevant spatial information. We propose Latent Interface Training (LIT), a framework-agnostic two-stage strategy that first establishes a spatial-goal-conditioned action prior without images, then constrains visual conditioning through a pose-supervised latent interface. Stage 1 trains the action expert to generate action chunks conditioned on language, robot state, and each demonstrated chunk's terminal SE(3) end-effector pose, learning goal-directed action generation independently of visual cues. Stage 2 introduces a latent interface that aggregates visual and semantic representations and serves as the pretrained action expert's only visual conditioning pathway. The interface is supervised to reconstruct the terminal pose previously used to condition Stage 1, encouraging it to retain the goal-relevant spatial information needed for action generation. Across four vision-language-action and world-action architectures (Pi0.5, MolmoAct2, FAST-WAM, and ImageWAM), LIT improves overall LIBERO-Plus success by 3.87-10.70 percentage points while preserving or improving average LIBERO success. Real-world evaluations show 13.30-16.70 percentage-point gains in success aggregated across three tasks under unseen camera configurations, lighting variations, and distractors.",
+   "source": "hf_papers",
+   "published": "2026-09-11",
+   "authors": [
+    "Jianman Lin",
+    "Shailesh Shailesh",
+    "Zhongyi Luo",
+    "Jiafei Duan"
+   ],
+   "org": "",
+   "hf_upvotes": 62,
+   "stars": 26,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/MAGICLAB-NUS/LIT",
+   "pdf_url": "https://arxiv.org/pdf/2609.12641",
+   "categories": [],
+   "keywords": [
+    "robotics",
+    "generalization",
+    "vision"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "机器人视觉-动作短路与泛化，面向具身。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用LIT切断视觉捷径，LIBERO-Plus提升3.87–10.70点",
+    "why": "机器人VLA泛化的训练机制，面试很能聊",
+    "architecture": "问题很具体：机器人在训练集里常把某些视觉线索和动作偶然绑定，结果一换相机、光照或干扰物就掉点。以前的做法要么强化表示、往里塞更多几何信息，要么先做image-free pretraining，但都没真正限制 action expert 该怎么用视觉。LIT 的核心变化是两阶段：Stage 1 先不用图像，只用 language、robot state 和每段动作 chunk 的 terminal SE(3) pose 学一个 spatial-goal-conditioned action prior；Stage 2 再让 latent interface 成为唯一视觉入口，并用 pose reconstruction 监督它还原同一个 terminal pose。这个设计阻断的是“直接吃视觉捷径”，同时保住与动作生成相关的空间目标信息。最强证据是跨四种 VLA/WAM 架构都提升 LIBERO-Plus 3.87–10.70 个点，且真实场景在未见相机、光照、干扰下也涨 13.3–16.7 点。新意在组件层加系统层：不是换 backbone，而是重写视觉到动作的接口约束。",
+    "verdict": "值得精读，关键在‘接口约束’这个泛化思路",
+    "why_now": "",
+    "key_points": [
+     "四种架构都能插，涨幅 3.87–10.70 点",
+     "没证明对所有任务都更好，仍依赖 pose 监督",
+     "复现需要机器人数据和分阶段训练"
+    ],
+    "prereqs": [
+     {
+      "name": "VLA",
+      "status": "unlisted"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "robot foundation model",
+      "status": "unlisted"
+     },
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Diffusion Policy",
+     "RT-2"
+    ],
+    "mermaid": "graph TD\nA[视觉输入] --> B[latent interface]\nB --> C[pose监督]\nC --> D[action expert]\nE[Stage 1 无图像] --> D\nD --> F[更稳泛化]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:pacifio/atlas",
+   "kind": "project",
+   "title": "pacifio/atlas",
+   "url": "https://github.com/pacifio/atlas",
+   "summary": "Source control for agents. Use multiple coding agents, track their changes and query them in one place",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "pacifio",
+   "hf_upvotes": 0,
+   "stars": 4400,
+   "stars_today": 1077,
+   "forks": 273,
+   "language": "Rust",
+   "code_url": "https://github.com/pacifio/atlas",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "versioning",
+    "multi-agent"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "agent代码/变更追踪，贴合核心方向",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "给coding agents做source control，4.4k stars，9/6发alpha-0.3.1",
+    "why": "Agent 工程化基础设施，适合看成熟度",
+    "architecture": "它解决的是多 agent 开发里最烦的痛点：每个 agent run 都会改代码，但谁改了什么、为什么改、和之前哪次尝试有关，往往散在终端滚屏和各自的记忆文件里。Atlas 的承重组件是 checkpoint 体系：每次 agent session 都落到本地 `.atlas/sessions.db`，commit 再反向链接回产生它的 session、prompt、tool calls 和 reasoning；共享 memory 则把 plan、failures、architecture notes 在不同 agent 间复用，避免切换 Claude Code / Codex 时从零开始。检测条件很明确：当你在 commit、换 agent、或 `@` 引用文件/笔记/历史 session 时，Atlas 先在本地解析与聚合，再把统一上下文送给外部 agent。成熟度信号不错：有 CI、docs、release，且最近连续发了 alpha/exp 版；README 的‘source control for coding agents’也和可见机制一致。和普通编辑器/聊天壳的差别在于，它不是只提供聊天入口，而是把 agent 历史、版本控制、共享记忆绑成一个运行时。",
+    "verdict": "值得关注，属于agent工作流基础设施",
+    "why_now": "最近 release：alpha-0.3.1（2026-09-06）",
+    "key_points": [
+     "4.4k stars，近日报 release",
+     "有 CI、docs、release，可见证据较足",
+     "只支持 macOS，Linux/Windows 未测"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MCP",
+     "MemGPT"
+    ],
+    "mermaid": "graph LR\nA[agent run] --> B[checkpoint]\nB --> C[sessions db]\nC --> D[shared memory]\nD --> E[下个agent]\nF[@引用] --> G[本地解析]\nG --> E",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:langwatch/langwatch",
+   "kind": "project",
+   "title": "langwatch/langwatch",
+   "url": "https://github.com/langwatch/langwatch",
+   "summary": "The platform for LLM evaluations and AI agent testing",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "langwatch",
+   "hf_upvotes": 0,
+   "stars": 4780,
+   "stars_today": 1251,
+   "forks": 386,
+   "language": "TypeScript",
+   "code_url": "https://github.com/langwatch/langwatch",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "eval",
+    "agent",
+    "benchmark"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "LLM评测与agent测试平台，和核心方向高度匹配",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 LangWatch 统一 LLM trace、eval、routing，开源可自托管",
+    "why": "做 Agent/RAG 评测与线上观测都能直接看",
+    "architecture": "这类工具的痛点不是“能不能跑”，而是 agent 一旦进了真实业务，日志、评测、路由、治理会散在不同系统里，出了 prompt injection、成本飙升或工具调用失控，很难把一次失败追到具体 LLM call。LangWatch 的关键改变是把每次 LLM/agent 调用都当成可追踪事件，再围绕这条事件链挂 observability、agent testing、evaluations、prompt management、AI gateway 和 governance；这些组件分别阻断“看不见失败”“测不出回归”“控不住预算”“管不住权限”四类问题。正文里最直接的证据是它把 coding agents、frameworks、model providers、governance sources 都接进同一套平台，还支持本地 self-host 和 open-source；但原文未明确公开一组统一基准来证明哪类 agent 测试最有效。新意主要在系统组织层：不是单点评测库，而是把线上监控、离线测试和企业治理收进同一控制面。",
+    "verdict": "适合做 Agent 评测/观测栈选型",
+    "why_now": "",
+    "key_points": [
+     "更像 LLM Ops 平台，不是单一 benchmark",
+     "覆盖 coding agents 到治理源，集成面广",
+     "原文未明确统一评测协议，效果难横比"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "evaluation",
+      "status": "unlisted"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "OpenTelemetry",
+     "LangSmith"
+    ],
+    "mermaid": "graph LR\nA[LLM call] --> B[trace]\nB --> C[eval]\nB --> D[routing]\nB --> E[governance]\nC --> F[regressions found]\nD --> G[bounds cost]\nE --> H[policy enforced]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:multimodal-art-projection/yue",
+   "kind": "project",
+   "title": "multimodal-art-projection/YuE",
+   "url": "https://github.com/multimodal-art-projection/YuE",
+   "summary": "YuE2: frontier music generation with symbolic planning, zero-shot covers, and agentic music editing.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "multimodal-art-projection",
+   "hf_upvotes": 0,
+   "stars": 8263,
+   "stars_today": 578,
+   "forks": 899,
+   "language": "Python",
+   "code_url": "https://github.com/multimodal-art-projection/YuE",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "music",
+    "agent",
+    "planning",
+    "multimodal"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "符号规划+生成音乐，偏多模态与agent思路",
+   "tier": "core",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用符号规划+flow matching 做 YuE2，最佳 8 次均分 6.9632",
+    "why": "多模态生成里少见的“可编辑”音乐系统",
+    "architecture": "反直觉点在于：直接从 lyrics 到音频，往往更像黑箱采样，能出声但很难改旋律、和弦或结构；而纯符号生成又常停在“谱面好看、声音不行”。YuE2 的关键改变是把音乐拆成可编辑的 symbolic plan 再落到 audio：AR–NAR Mixture-of-Transformers 先自回归预测 score 和 semantic tokens，随后用 flow matching 生成 acoustic latents，最后由 VAE 解码成 stereo audio。这个分工阻断了两类失败：规划阶段保住可读可改，声学阶段负责补足音色与质感。最直接的证据是 WildSongBench 上 best-of-8 的 6.9632 SongBench Avg，作者把它放在与 Suno v5/v6 的对比里；同时 demo 里能做 zero-shot covers 和 9 步 14 版的 agentic editing，说明“同一 checkpoint 支持生成、翻唱、修改”不是口号。新意在组件层加系统组织层：符号规划作为中间表示，把音乐生成变成可干预流程。",
+    "verdict": "想看可编辑音乐生成，值得精读",
+    "why_now": "2026-09-09 release",
+    "key_points": [
+     "best-of-8 6.9632，直接对标商业系统",
+     "能先改 score 再渲染，编辑性是核心证据",
+     "24GB BF16 才够跑，复现门槛不低"
+    ],
+    "prereqs": [
+     {
+      "name": "AR",
+      "status": "unlisted"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "flow matching",
+      "status": "unknown"
+     },
+     {
+      "name": "VAE",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "AudioLM",
+     "MusicLM"
+    ],
+    "mermaid": "graph LR\nA[lyrics style] --> B[plan score]\nB --> C[semantic tokens]\nC --> D[acoustic latents]\nD --> E[VAE decode]\nB --> F[editable]\nE --> G[audio output]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:microsoft/ai-engineering-coach",
+   "kind": "project",
+   "title": "microsoft/AI-Engineering-Coach",
+   "url": "https://github.com/microsoft/AI-Engineering-Coach",
+   "summary": "better agentic engineering",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 4116,
+   "stars_today": 112,
+   "forks": 560,
+   "language": "TypeScript",
+   "code_url": "https://github.com/microsoft/AI-Engineering-Coach",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "engineering",
+    "eval"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "面向agent工程实践，较贴合",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "读本地 AI 日志做 Coach，发现 45 类坏习惯",
+    "why": "面试聊 agent 开发流程与 context management 很顺",
+    "architecture": "它解决的是一个很真实的痛点：很多人有大量 Copilot、Claude Code、terminal session，但只知道“今天用了多少”，不知道自己的提示词、上下文、工具使用哪里在拖后腿。AI Engineer Coach 的承重组件是本地日志解析加规则化诊断，再把结果组织成 Dashboard、Timeline、Coding Moments、Output、Patterns 和 Anti-Patterns；检测到重复提示、上下文管理差、instruction file 异常时，给出分数、趋势和具体动作。成熟度信号不错：README 明确给出本地构建、VSIX 安装、GitHub Copilot app canvas 跑法，并强调 no data leaves your machine；但它不是商店上架版，需自己打包，且部分能力依赖本地 VS Code model，在 canvas 模式下会隐藏。和同类工具比，它更偏“训练/教练”而非纯 observability：不仅看发生了什么，还试图把 session 变成可复用 skills。",
+    "verdict": "适合想系统改进 agent 使用习惯的人看",
+    "why_now": "原文未明确",
+    "key_points": [
+     "45 条规则，覆盖 prompt 到 context management",
+     "本地处理日志，隐私边界清楚",
+     "部分能力依赖 VS Code model，canvas 下会缩水"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "OpenTelemetry",
+     "LangSmith"
+    ],
+    "mermaid": "graph LR\nA[local logs] --> B[rule checks]\nB --> C[score trends]\nB --> D[anti patterns]\nB --> E[skills]\nD --> F[action tips]\nC --> G[dashboard]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:experientiallabs/experiential",
+   "kind": "project",
+   "title": "experientiallabs/experiential",
+   "url": "https://github.com/experientiallabs/experiential",
+   "summary": "Experiential is the open source, zero markup gateway for BYOK, self-hosted and 1000+ marketplace models. It learns from your traffic to cut costs, recommend better models, and train a specialized model you own.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "experientiallabs",
+   "hf_upvotes": 0,
+   "stars": 4849,
+   "stars_today": 4416,
+   "forks": 174,
+   "language": "Python",
+   "code_url": "https://github.com/experientiallabs/experiential",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm-routing",
+    "cost",
+    "mcp"
+   ],
+   "core_score": 6.0,
+   "wide_score": 6.0,
+   "score_reason": "自托管多模型网关，偏推理成本优化",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "Experiential is the open source, zero markup gateway for BYOK, self-hosted and 1000+ marketplace models",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "It learns from your traffic to cut costs, recommend better models, and train a specialized model you own."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:ruvnet/ruview",
+   "kind": "project",
+   "title": "ruvnet/RuView",
+   "url": "https://github.com/ruvnet/RuView",
+   "summary": "π RuView turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection — all without a single pixel of video.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "ruvnet",
+   "hf_upvotes": 0,
+   "stars": 93774,
+   "stars_today": 370,
+   "forks": 12426,
+   "language": "Rust",
+   "code_url": "https://github.com/ruvnet/RuView",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "sensing",
+    "spatial",
+    "rf",
+    "ml"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "WiFi信号到空间/生命体征，属于视觉替代感知",
+   "tier": "core",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "π RuView turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection — all without a single pixel of video.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:panniantong/agent-reach",
+   "kind": "project",
+   "title": "Panniantong/Agent-Reach",
+   "url": "https://github.com/Panniantong/Agent-Reach",
+   "summary": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Panniantong",
+   "hf_upvotes": 0,
+   "stars": 81115,
+   "stars_today": 640,
+   "forks": 7064,
+   "language": "Python",
+   "code_url": "https://github.com/Panniantong/Agent-Reach",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "retrieval",
+    "web",
+    "evaluation"
+   ],
+   "core_score": 5.0,
+   "wide_score": 8.0,
+   "score_reason": "强agent抓取能力，面向真实检索/工具调用",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Give your AI agent eyes to see the entire internet",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:harry0703/moneyprinterturbo",
+   "kind": "project",
+   "title": "harry0703/MoneyPrinterTurbo",
+   "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+   "summary": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "harry0703",
+   "hf_upvotes": 0,
+   "stars": 123628,
+   "stars_today": 499,
+   "forks": 19128,
+   "language": "Python",
+   "code_url": "https://github.com/harry0703/MoneyPrinterTurbo",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "video",
+    "generation",
+    "workflow",
+    "automation"
+   ],
+   "core_score": 3.0,
+   "wide_score": 7.0,
+   "score_reason": "短视频生成热，但偏流程套壳",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "一键把主题变高清短视频，作者报告 v1.3.7 新增逐词字幕和停顿控制",
+    "why": "适合看 agent 工作流和多模态内容生产边界",
+    "architecture": "它面对的痛点很具体：你只有一个主题或关键词，但要交付的是脚本、配音、素材、字幕、配乐和成片，手工串起来最容易在脚本节奏、TTS 停顿和字幕对齐上出错。它的关键改变不是“加了很多功能”，而是把短视频生产拆成可插拔的 AI Agent + WebUI + API + CLI 工作流：LLM 负责脚本和检索词，TTS 负责旁白，素材检索和剪辑各自独立，中间用统一任务流衔接，阻断的是单点模型输出不稳定导致的整条链路失败。最直接的证据是最新 release 里把逐词字幕、弹出动画、背景音乐预览、Azure TTS 原生 pause 做成独立控制项，说明它在补“生成后对齐与可控性”这层短板，而不是只追求一键出片。新意主要在系统组织层：把内容生成、时序控制和多模型接入做成流水线式编排，而不是单模型生成器。",
+    "verdict": "看速览即可，像工程编排多于研究方法",
+    "why_now": "最近 release：v1.3.7（2026-09-13）",
+    "key_points": [
+     "逐词字幕和 pause 直接补时序对齐",
+     "支持多家 LLM/TTS，链路可替换",
+     "纯看 README 不等于可稳定复现整条产线"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "text-to-speech",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "AutoGPT"
+    ],
+    "mermaid": "graph LR\nA[Topic] --> B[Script]\nB --> C[TTS]\nB --> D[Assets]\nC --> E[Subtitles]\nD --> F[Edit]\nE --> G[Video]\nF --> G[Video]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:openbmb/voxcpm",
+   "kind": "project",
+   "title": "OpenBMB/VoxCPM",
+   "url": "https://github.com/OpenBMB/VoxCPM",
+   "summary": "VoxCPM2: Tokenizer-Free TTS for Multilingual Speech Generation, Creative Voice Design, and True-to-Life Cloning",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "OpenBMB",
+   "hf_upvotes": 0,
+   "stars": 37313,
+   "stars_today": 204,
+   "forks": 4238,
+   "language": "Python",
+   "code_url": "https://github.com/OpenBMB/VoxCPM",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "tts",
+    "speech",
+    "multilingual",
+    "cloning"
+   ],
+   "core_score": 4.0,
+   "wide_score": 7.0,
+   "score_reason": "TTS新方法+开源，语音生成热度高",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "VoxCPM2 用 tokenizer-free diffusion autoregressive 生成语音，2B 模型支持 30 语种和可控克隆",
+    "why": "适合看 TTS 新架构、vLLM-Omni 部署和语音克隆面试题",
+    "architecture": "它要解决的反直觉点是：高自然度语音不一定要先离散成 tokenizer，再像 LLM 那样预测 token。传统 TTS 往往被离散化和声学码本限制，细腻的韵律、情绪和克隆细节会在编码阶段丢失。VoxCPM2 的关键概念改变是 tokenizer-free：直接生成连续语音表示，再用 diffusion autoregressive 架构把文本条件下的声学轨迹一步步拉到可听波形；VAE 负责把 16kHz 参考和 48kHz 输出对接，阻断的是“分辨率不够、细节被上采样补丁掩盖”的失败模式。最直接的支撑是它报告 2B 参数、超过 200 万小时、多语言和 48kHz 输出，并在 vLLM-Omni 上给出 RTF ~0.13 的服务形态，说明这不是只会离线合成的研究原型。新意主要在组件层和系统层：前者是无 tokenizer 的连续语音建模，后者是把它做成可流式、可多租户的 OpenAI-compatible 语音服务。",
+    "verdict": "值得精读，TTS 架构和部署都很新",
+    "why_now": "最近 release：2.0.3（2026-05-11）",
+    "key_points": [
+     "核心证据是多语种+克隆+48kHz 一体化",
+     "没证明极端低资源语种是否稳",
+     "复现门槛高，训练和推理都吃算力"
+    ],
+    "prereqs": [
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "autoregressive image generation",
+      "status": "unknown"
+     },
+     {
+      "name": "text-to-speech",
+      "status": "unlisted"
+     },
+     {
+      "name": "vLLM",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "VALL-E",
+     "AudioLM"
+    ],
+    "mermaid": "graph TD\nA[Text] --> B[Continuous speech]\nR[Ref audio] --> C[VAE encode]\nB --> D[Diffusion AR]\nC --> D\nD --> E[48kHz audio]\nE --> F[Streaming serve]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:tashfeenahmed/freellmapi",
+   "kind": "project",
+   "title": "tashfeenahmed/freellmapi",
+   "url": "https://github.com/tashfeenahmed/freellmapi",
+   "summary": "7.4 billion tokens per month. 34 free LLM providers. 635 free model endpoints. All behind one /v1 endpoint, plus any custom OpenAI-compatible endpoint. Smart routing, automatic failover, encrypted keys. Personal experimentation only.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "tashfeenahmed",
+   "hf_upvotes": 0,
+   "stars": 26183,
+   "stars_today": 7674,
+   "forks": 3567,
+   "language": "TypeScript",
+   "code_url": "https://github.com/tashfeenahmed/freellmapi",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm-routing",
+    "api",
+    "inference"
+   ],
+   "core_score": 3.0,
+   "wide_score": 6.0,
+   "score_reason": "LLM路由/多供应商，主要是工程封装",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "FreeLLMAPI 把 34 家免费 LLM 和 635 个端点收进一个 /v1，作者报每月 74 亿 token",
+    "why": "适合看 LLM 路由、fallback 和 OpenAI-compatible 生态",
+    "architecture": "它解决的是很现实的痛点：你想稳定做实验、写 agent 或批量调用，但单一免费 API 容易撞限额、换模型又要改一堆 SDK。它的关键做法不是“聚合列表”，而是把多个 provider 放进统一 router：请求先匹配可用模型，再按 key 的健康、配额和失败状态做 failover，阻断的是某家限流或失效把整个调用打断。另一个关键机制是 signed catalog 自动更新，减少你手动同步模型和 quota 变化的成本。最直接的证据是它明确支持 OpenAI-style 的 chat、responses、embeddings、audio 等 surface，并且给出 Claude Code、Codex CLI、Cursor 等工具的一键接入，说明它把“能接上”做成了工程闭环。新意主要在系统组织层和运行时机制：统一 API、动态路由、密钥加密和自动配置生成。",
+    "verdict": "看速览即可，核心是工程路由不是新模型",
+    "why_now": "最近 release：v0.9.9（2026-09-10）",
+    "key_points": [
+     "路由会跳过没健康 key 的平台",
+     "signed catalog 免手动 git pull",
+     "免费额度依赖外部 provider，稳定性有上限"
+    ],
+    "prereqs": [
+     {
+      "name": "OpenAI-compatible API",
+      "status": "unlisted"
+     },
+     {
+      "name": "routing",
+      "status": "unlisted"
+     },
+     {
+      "name": "failover",
+      "status": "unlisted"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "LiteLLM",
+     "OpenRouter"
+    ],
+    "mermaid": "graph TD\nA[Client] --> B[OpenAI /v1]\nB --> C[Router]\nC --> D[Health and quota]\nD --> E[Provider A]\nD --> F[Provider B]\nE --> G[Response]\nF --> G[Response]",
+    "read_level": "L1"
+   }
+  }
+ ]
+}

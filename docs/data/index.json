@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-14",
+   "papers": 8,
+   "projects": 10,
+   "top": "Feyospace-v1: How the Cyber Mercury Seven Trained Frontier Cyber Models"
+  },
+  {
    "date": "2026-09-13",
    "papers": 0,
    "projects": 10,
