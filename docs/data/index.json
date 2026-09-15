@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-15",
+   "papers": 12,
+   "projects": 6,
+   "top": "RSIAgent: Autonomous Exploration for Recursive Self-improvement in New Environments"
+  },
+  {
    "date": "2026-09-14",
    "papers": 8,
    "projects": 10,
