@@ -1,0 +1,1204 @@
+{
+ "date": "2026-09-16",
+ "stats": {
+  "collected": 692,
+  "filtered": 285,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 17 calls, 55626 in / 17671 out; gpt-5.4-mini: 6 calls, 44028 in / 8444 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.14858",
+   "kind": "paper",
+   "title": "Dream-RSI: Recursive Self-Improvement through Evolving Worlds",
+   "url": "https://arxiv.org/abs/2609.14858",
+   "summary": "Recursive self-improvement is becoming increasingly vital for autonomous AI agents, where progress hinges on discovering high-value solutions across complex domains. The driver of this process is effective exploration, however, managing and improving exploration strategies remains a major bottleneck. Current systems face a fundamental dilemma: fixed strategies fail to adapt as search spaces scale, while online policy optimization requires navigating vast meta-search spaces under delayed and expensive feedback over long-horizon rollouts. We introduce Dream-RSI, a framework for scalable and recursively self-improving exploration. A lightweight orchestration layer makes exploration explicit and programmable while leaving the underlying coding agent unchanged. Our key insight is that accumulated discovery history can serve as a replay simulator over the realized search space. By performing dreaming in the replay simulator constructed from historical discovery trees, Dream-RSI secures immediate, low-cost off-policy feedback to evaluate and refine exploration policies without invoking repetitive, expensive online evaluations. The improved policy is subsequently redeployed online to drive further discovery, continuously expanding the simulator pool in a self-improving loop. Across algorithm engineering, mathematical optimization, and GPU kernel engineering, Dream-RSI achieves competitive or improved discovery quality while substantially reducing discovery cost in several settings.",
+   "source": "hf_papers",
+   "published": "2026-09-14",
+   "authors": [
+    "Tong Zheng",
+    "Xidong Wu",
+    "Zheng Zhang",
+    "Zhankui He",
+    "Chaoyi Zhang",
+    "Benjamin Coleman"
+   ],
+   "org": "",
+   "hf_upvotes": 277,
+   "stars": 132,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/zhengkid/Dream-RSI",
+   "pdf_url": "https://arxiv.org/pdf/2609.14858",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rsi",
+    "exploration",
+    "framework"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "高热度RSI探索框架，和agent研究强相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Dream-RSI 用历史发现树做 replay simulator，8 任务上更省调用",
+    "why": "适合看 agent/RSI 的循环组织与探索优化",
+    "architecture": "反直觉点是：探索策略的反馈不必每次都真跑一遍。作者先把 coding agent 的历史 discovery tree 变成 replay simulator，让“过去走过的分支”充当可读的世界模型；新策略只在这个 simulator 里 dreaming，就能用低成本 off-policy 反馈比较不同 branching、parallel、stopping 方案，避免在线 policy optimization 被长回合、延迟回报拖死。最关键的概念改变是把 exploration 显式交给一层轻量 orchestration：组件不是新 agent，而是“调度层 + 历史树 + dreaming 评估”，分别阻断策略不可编程、反馈昂贵、meta-search 空间太大这三类失败。最直接的证据是跨 algorithm engineering、mathematical optimization、GPU kernel engineering 的 8 个任务：作者报告在若干设置里达到相近或更好的 discovery quality，同时显著减少 discovery cost。新在系统组织层：它把 RSI 从在线试错改成“在线采样—离线梦境—再上线”的闭环。",
+    "verdict": "值得精读，核心是把探索自改造成可编程闭环",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 8 任务的降本增效",
+     "没证明 simulator 外推到未见搜索分布",
+     "复现要能跑 discovery tree 与多轮评估"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "off-policy",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "World Models",
+     "model-based reinforcement learning"
+    ],
+    "mermaid": "graph TD\nA[online explore] --> B[discovery tree]\nB --> C[replay simulator]\nC --> D[dream policy search]\nD --> E[better policy]\nE --> A",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.15134",
+   "kind": "paper",
+   "title": "HazardAuditor: From Executable Threats to Safer Computer-Use Agents",
+   "url": "https://arxiv.org/abs/2609.15134",
+   "summary": "Computer-use agents increasingly interact with browsers, terminals, file systems, and external services, introducing safety risks that emerge through runtime behavior rather than generated content alone. Existing guard models target static prompts and responses and are poorly suited to agent execution; existing executable safety platforms produce evaluation verdicts rather than the normalized supervision a guard model needs to learn across heterogeneous agent frameworks. We introduce HazardAuditor, an execution-grounded framework that closes both gaps. Its infrastructure runs heterogeneous agents (Claude Code, Codex, Hermes, and OpenClaw) in controlled environments and normalizes their interactions into a canonical event representation for cross-framework supervision. We further observe that token-level post-training objectives create a structural mismatch for generative guards, causing longer rationales to dominate gradient updates. Guard Policy Optimization (GuardPO) addresses this by converting deterministic safety outcomes into sequence-level advantages and normalizing rationale and verdict regions, making the safety decision the effective unit of optimization. Across multiple benchmarks and heterogeneous computer-use systems, HazardAuditor improves accuracy by up to 16.5 percentage points over the strongest prior guard. Code, models, and evaluation artifacts will be available at https://yunhao-feng.github.io/HazardAuditor/.",
+   "source": "hf_papers",
+   "published": "2026-09-14",
+   "authors": [
+    "Yunhao Feng",
+    "Ruixiao Lin",
+    "Ming Wen",
+    "Yanming Guo",
+    "Xingjun Ma",
+    "Yutao Wu"
+   ],
+   "org": "",
+   "hf_upvotes": 14,
+   "stars": 19,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Yunhao-Feng/HazardAuditor",
+   "pdf_url": "https://arxiv.org/pdf/2609.15134",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "safety",
+    "computer-use",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "执行期安全审计框架，和智能体安全强相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "HazardAuditor 把执行日志标准化后训练 guard，准确率最高提 16.5 点",
+    "why": "做 computer-use agent 安全、评测和 guard 很对口",
+    "architecture": "反直觉点是：computer-use agent 的危险不只在文本里，而在执行过程中一步步累积；静态 prompt/response 级 guard 会漏掉“每步都正常、合起来越界”的行为。作者先建一个 executable safety infrastructure，把 Claude Code、Codex、Hermes、OpenClaw 的运行日志统一成 canonical event representation，这一步阻断的是“跨框架日志无法监督同一 guard”的失败；再用 GuardPO 把确定性安全结果变成 sequence-level advantage，并对 rationale / verdict 区域做归一化，阻断“长解释抢走梯度”的结构性偏差。最直接的证据是 balanced cross-agent execution diagnostic CUA-EXEC，上面准确率相对 strongest prior guard 最高提升 16.5 个百分点，且跨不同 agent framework 都能受益。新在组件层 + 训练层：前者解决监督来源，后者解决 generative guard 的优化目标错位。",
+    "verdict": "值得精读，既是安全数据管线也是 guard 训练法",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 CUA-EXEC 上 16.5 点提升",
+     "没证明对未知工具/新框架同样稳",
+     "复现门槛在于可控执行环境和日志规范化"
+    ],
+    "prereqs": [
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "agent safety",
+      "status": "unlisted"
+     },
+     {
+      "name": "DPO",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "BraveGuard",
+     "ReAct"
+    ],
+    "mermaid": "graph TD\nA[agent rollout] --> B[canonical events]\nB --> C[GuardPO]\nC --> D[runtime guard]\nD --> E[safety verdict]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.17119",
+   "kind": "paper",
+   "title": "An Empirical Study of Counterfactual Self-Explanations in LLMs",
+   "url": "https://arxiv.org/abs/2609.17119",
+   "summary": "Large language models can easily generate explanations for their own outputs, but such self-explanations are not necessarily faithful to the model's behavior. We study this issue through counterfactual self-explanations, where a model minimally edits an input so that its own prediction changes. Across sentiment analysis and natural language inference, we evaluate ten instruction-tuned models from the LLaMA-3 and Qwen-2.5 families, measuring faithfulness, minimality, and alignment with human-annotated rationales. Our results show that model scale is the strongest determinant of explanation quality: larger models are substantially more likely to generate counterfactuals that flip their own predictions and target decision-relevant evidence. In contrast, the rationale-guided condition produces edit-minimal counterfactuals that are also more human-aligned. However, it does not consistently improve faithfulness. Overall, counterfactual self-explanations can provide useful behavioral evidence about model decisions, but their reliability depends strongly on model capacity and should be empirically validated rather than assumed.",
+   "source": "arxiv",
+   "published": "2026-09-15",
+   "authors": [
+    "Giannis Kalyvas",
+    "Giorgos Filandrianos",
+    "Orfeas Menis Mastromichalakis",
+    "Vassilis Lyberatos",
+    "Giorgos Stamou"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.17119",
+   "categories": [
+    "cs.CL"
+   ],
+   "keywords": [
+    "vla",
+    "intrinsic-reward",
+    "rl"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "VLA表示用于自评估+策略改进，强契合具身/后训练",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "研究 LLM 自我反事实解释：大模型更会翻转自身预测",
+    "why": "适合看解释是否真反映模型决策",
+    "architecture": "反直觉点是：模型能写出像样解释，不代表这些解释真的碰到它做决定的证据。作者让同一模型先分类，再做 counterfactual self-explanations，即最小改写输入使自身预测翻转，用 faithfulness、minimality、human alignment 三个维度同时验。关键改变不是新模型，而是把“解释好不好”拆成可操作的行为指标，并用 ESMP 硬定义“是否改到了人类标注的证据”。最直接的证据是十个 LLaMA-3 / Qwen-2.5 指令模型的对比：模型规模越大，越容易产出能翻转自身预测的 counterfactual；rationale-guided 让编辑更小、也更贴近人工 rationale，但不稳定提升 faithfulness。新在实证层：它不是提出方法，而是把 self-explanation 的可靠性边界量化出来。",
+    "verdict": "值得看速览，重点是解释可靠性的边界",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 scale 与 faithfulness 的一致相关",
+     "没证明 rationale-guided 能稳定提升 faithful",
+     "复现主要在 prompt 和评测定义，不是训练"
+    ],
+    "prereqs": [
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     },
+     {
+      "name": "hallucination",
+      "status": "unknown"
+     },
+     {
+      "name": "contrastive learning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ERASER",
+     "counterfactual explanations"
+    ],
+    "mermaid": "graph TD\nA[input] --> B[predict]\nB --> C[minimal edit]\nC --> D[re predict]\nD --> E[faithfulness and alignment]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.17474",
+   "kind": "paper",
+   "title": "Coupled Calibration and Learning: Mitigating Teacher Bias in LLM Distillation without Target-Domain Reward Feedback",
+   "url": "https://arxiv.org/abs/2609.17474",
+   "summary": "Large language model (LLM) distillation aims to transfer the capabilities of a powerful teacher to a smaller student. Direct imitation, however, can also transfer the teacher's systematic bias and errors. This challenge is particularly pronounced under covariate shift, when the teacher's reliability on target questions is uncertain and target-domain reward feedback is unavailable. We propose Coupled Calibration and Learning (CCL), an LLM distillation algorithm that couples teacher calibration with student updates through token-level branching, using reward feedback only on source questions. Each iteration calibrates the teacher using source feedback and then uses the calibrated teacher to train the student on target questions. The updated student, in turn, informs subsequent calibration. In an autoregressive policy framework, we prove that the output student's expected average Kullback-Leibler divergence to the oracle student converges to zero at a polynomial rate in the number of iterations. The oracle maximizes the true reference-regularized target reward within the student class, which need not represent the unrestricted optimal policy. Our analysis quantifies the progress of projected student gradient updates while controlling the error in teacher calibration. We further establish a separation from regularized direct matching: its error relative to the oracle student can remain bounded away from zero even when the teacher achieves higher regularized target reward than every student policy. These results demonstrate that LLM distillation can overcome persistent teacher bias and recover the optimal student through coupled calibration and learning, without target-domain reward feedback.",
+   "source": "arxiv",
+   "published": "2026-09-15",
+   "authors": [
+    "Haichen Hu",
+    "Yuheng Zhang",
+    "David Simchi-Levi"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.17474",
+   "categories": [
+    "cs.LG",
+    "cs.AI",
+    "math.ST",
+    "stat.ML"
+   ],
+   "keywords": [
+    "rlhf",
+    "distillation",
+    "alignment"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "蒸馏抗教师偏差、配合校准学习，和后训练强对口",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "CCL 用源域 reward 校准 teacher，再蒸馏 target，作者证明 KL 收敛到 0",
+    "why": "适合看 distillation 如何抗 teacher bias",
+    "architecture": "反直觉点是：teacher 在 source 上很强，直接照抄到 target 还是会把系统性偏差一起蒸进去，而且 target 又没有 reward feedback，常规 distillation 没法知道什么时候该信 teacher。CCL 的关键改动是把“校准 teacher”和“训练 student”绑成迭代回路：先用 source reward 修正 teacher 的偏差，再拿这个被校准的 teacher 去监督 target 上的 student；而 student 的新状态又反过来影响下一轮校准，阻断了固定 teacher 偏差被一次性复制的路径。最直接的证据是作者给出的 separation：regularized direct matching 甚至在 teacher 的 target reward 高于所有 student policy 时，和 oracle student 的 KL 仍可能卡在正值；而 CCL 的 expected average KL 对 oracle student 以 polynomial rate 收敛到 0。新意主要在系统组织层：不是换一个 distillation loss，而是重排了 teacher feedback 与 student update 的时序耦合。",
+    "verdict": "适合精读，核心价值是给出无 target reward 的可证明纠偏路线",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 direct matching 的严格分离",
+     "没证明在真实 LLM 上一定稳，主要是理论",
+     "实现要做 token-level branching，复现偏难"
+    ],
+    "prereqs": [
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Hinton et al. 2015",
+     "Direct Preference Optimization"
+    ],
+    "mermaid": "graph TD\nA[source reward] --> B[teacher calibration]\nB --> C[calibrated teacher]\nC --> D[target student update]\nD --> E[student feedback]\nE --> B\nD --> F[oracle student]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.17527",
+   "kind": "paper",
+   "title": "Agentic Societies Need a Social Harness",
+   "url": "https://arxiv.org/abs/2609.17527",
+   "summary": "An agentic society is a collection of AI agents that coordinate autonomously across trust boundaries, on behalf of different principals whose objectives may only partially align. We show experimentally that in agentic societies even honest, competent agents often fail to reach satisfactory outcomes with existing harnesses and messaging primitives, and that faulty or malicious agents can stall collaboration, influence outcomes, and pursue other harmful goals by exploiting vulnerabilities in communication (``speech''). We argue that agentic societies need a \\emph{social harness} for inter-agent interactions, in addition to each agent's \\emph{personal harness}, which manages its private context and communication with its principal. We propose a layered architecture for social harnesses which (i) prevents classes of failures outright, (ii) enables agents to detect invalid messages at runtime, and (iii) supports post-facto investigation and consequences, and highlight directions for future research to realize these capabilities.",
+   "source": "arxiv",
+   "published": "2026-09-15",
+   "authors": [
+    "Tapan Chugh",
+    "Vidushi Singh",
+    "Krish Jain",
+    "Arvind Krishnamurthy",
+    "Ratul Mahajan"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.17527",
+   "categories": [
+    "cs.MA",
+    "cs.AI",
+    "cs.NI"
+   ],
+   "keywords": [
+    "agent",
+    "multi-agent",
+    "safety"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "agent society通信“社会约束”，高相关高质量",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "社会 harness 把 agent 间通信分层，阻断错消息和恶意操控",
+    "why": "和你做 agent 系统、MCP、安全面试都直接相关",
+    "architecture": "反直觉点是：就算 agent 本身“诚实且能干”，只要它们跨信任边界自治协作，现有 messaging primitive 也会让合作频繁失败；一旦混入故障或恶意 agent，还会通过“speech”卡进度、操纵结果。作者的核心概念改变是把 agent 系统从“单个 agent 的 personal harness”扩展成“社会 harness”：前者管私有上下文和对主人通信，后者管 agent 之间的交互。它不是功能清单，而是按失败模式分层阻断：身份层防 spoofing，可靠有序通信层防乱序与丢消息，规范层防不符合当前任务状态的消息，治理层负责事后调查和惩罚。最直接的证据是他们在 meeting scheduling 里观察到，随着 agent 数和并发任务数增加，现有基础设施下即便 honest agents 也难达成满意结果；这说明问题不在模型单点能力，而在交互协议。新意在系统组织层。",
+    "verdict": "值得看，能补上 agent 系统里常被忽略的交互安全层",
+    "why_now": "原文未明确",
+    "key_points": [
+     "最强证据是 meeting scheduling 的失败模式",
+     "没证明这套分层已可落地，偏研究框架",
+     "对通信协议和治理栈要求高"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "A2A",
+     "AutoGen"
+    ],
+    "mermaid": "graph TD\nA[agent A] --> B[social harness]\nC[agent B] --> B\nB --> D[ordered safe messages]\nD --> E[task progress]\nB --> F[detect invalid]\nF --> G[investigate and punish]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.16937",
+   "kind": "paper",
+   "title": "Beyond Token-Local Imitation: Reward-Compatible Temporal Credit Assignment for On-Policy Distillation",
+   "url": "https://arxiv.org/abs/2609.16937",
+   "summary": "On-policy distillation (OPD) has emerged as an effective approach for large language model post-training, yet existing objectives face a trade-off between objective fidelity and optimization stability. Token-level OPD provides stable but local supervision, whereas sequence-level OPD captures future credit at the cost of horizon-dependent variance. We establish a unified temporal-credit view of these formulations, showing that practical token-level OPD can be interpreted as a temporal approximation to the sequence-level reverse-KL gradient. Building on this connection, we propose $γ$OPD, which uses discounted temporal credit assignment to balance long-horizon supervision and optimization stability, while admitting a horizon-independent variance bound. We further develop a reward-compatible bounded mixing (RBM) mechanism for $γ\\mathrm{OPD}$ that balances verifiable outcome feedback with the discounted OPD advantage to move beyond purely teacher-dependent optimization. Experiments on mathematical and code reasoning demonstrate consistent improvements over existing OPD methods across vanilla, size-mismatched, and multi-teacher distillation settings.",
+   "source": "arxiv",
+   "published": "2026-09-15",
+   "authors": [
+    "Shiqi Liu",
+    "Zeyu He",
+    "Letian Tao",
+    "Guojian Zhan",
+    "Jiaxin Gao",
+    "Feihong Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.16937",
+   "categories": [
+    "cs.LG",
+    "cs.AI",
+    "cs.PL"
+   ],
+   "keywords": [
+    "rlhf",
+    "distillation",
+    "on-policy"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "OPD 时序信贷分配，强后训练方法相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "γOPD 用折扣 temporal credit 改写 OPD，并加 RBM 融合 reward",
+    "why": "你做后训练和 reasoning 蒸馏时会碰到",
+    "architecture": "反直觉点是：token-level OPD 虽然稳定，但它只看当前 token，等于把后面几步推理的代价和收益都截断了；sequence-level OPD 虽然能看见未来 credit，却会随着长度变长方差暴涨。作者的关键改动是把这两种目标放进统一 temporal-credit 视角：token-level 不是“另一种方法”，而是 sequence-level reverse-KL 梯度的时间近似；然后用 discounted credit 让监督既保留未来影响，又把方差压到 horizon-independent。为避免完全依赖 teacher，他们再加 RBM，把 verifiable reward 和 discounted teacher advantage 做有界混合，阻断 teacher 信号压过任务级反馈。最直接的证据是数学和 code reasoning 上，在 vanilla、size-mismatched、multi-teacher 三种设置都稳定优于现有 OPD。新意主要在组件层：把 OPD 的 credit assignment 重新定义了。",
+    "verdict": "值得通读，适合补 OPD 与 RLVR 的连接",
+    "why_now": "",
+    "key_points": [
+     "最强证据是多设置下的稳定提升",
+     "没证明最优折扣如何选，调参敏感性原文未充分展开",
+     "需要能稳定做 on-policy rollouts"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "reverse KL",
+      "status": "unlisted"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "verifiable rewards",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "On-Policy Distillation",
+     "RLVR"
+    ],
+    "mermaid": "graph TD\nA[current policy rollouts] --> B[discounted temporal credit]\nB --> C[γOPD update]\nD[verifiable reward] --> E[RBM]\nC --> E\nE --> F[student policy]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.16995",
+   "kind": "paper",
+   "title": "PaperDoctor: Evidence-Grounded and Actionable Feedback for Scientific Papers in Progress",
+   "url": "https://arxiv.org/abs/2609.16995",
+   "summary": "Autoresearch agents are reshaping the research ecosystem, but they can also let flawed claims enter the literature at scale. Human advisors catch such issues in drafts through careful, traceable feedback, yet advisor-style assessment requires extensive manual effort and does not scale. To shift automated paper assessment from a judge to a diagnostician, we introduce PaperDoctor, an agent framework for pre-submission feedback with three key innovations. First, a holistic hierarchical framework evaluates writing, layout, references, code, theory, prior work, and experiments through three layers: L1 surface screening, L2 typed verifiers that route each claim to the appropriate evidence, and L3 reproducers that rerun experiments by priority. Second, each finding contains an observation, a pointer to specific evidence such as a sentence, equation, or code line, and a revision suggestion, making critiques auditable and actionable. Third, PaperDoctor selectively rebuilds and reruns experiments based on claim importance and compute budget, surfacing reproducibility gaps and quantitative limitations that are invisible from the manuscript alone. We evaluate PaperDoctor on 30 in-progress papers, yielding 70.6% agreement and all positive holistic scores, and on 40 manuscripts across machine learning, natural science, and social science, covering human- and AI-authored papers with code. Overall, PaperDoctor produces more auditable feedback than human and other agentic reviewers, pairs critiques with concrete suggestions by design, and complements dimensions often overlooked by human reviewers. We also develop an interactive interface that lets authors browse findings grounded in their paper. PaperDoctor reframes automated paper assessment as diagnosis rather than verdict, taking a concrete step toward AI advisors for more rigorous AI-assisted scientific discovery.",
+   "source": "arxiv",
+   "published": "2026-09-15",
+   "authors": [
+    "Kevin Qinghong Lin",
+    "Siyuan Hu",
+    "Pan Lu",
+    "Yu Chen",
+    "Yanzhe Chen",
+    "Owen Queen"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/QinghongLin/paperdoctor",
+   "pdf_url": "https://arxiv.org/pdf/2609.16995",
+   "categories": [
+    "cs.CL",
+    "cs.MA"
+   ],
+   "keywords": [
+    "agent",
+    "paper-review",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "PaperDoctor：证据路由的预审agent框架很对口",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PaperDoctor 用三层诊断框架查论文问题，30 篇稿子达 70.6% 一致",
+    "why": "适合看 agent 评测与论文自动审稿",
+    "architecture": "反直觉点在于：自动审稿如果只给 accept/reject，作者其实拿不到“哪里错、为什么错、怎么改”，这更像门卫，不像导师。现有 reviewer/agent 卡在这里，因为它们把所有问题都压成同一层判断，无法按证据成本分流。PaperDoctor 的关键变化是把论文当成可分层诊断对象：L1 先做稿面筛查，挡住格式、引用、排版这类低成本硬错；L2 把原子 claim 路由给对应 verifier，分别用 web search、VLM、code analysis、theory verifier 去堵“证据不对口”的失败；L3 再按重要性和算力选择性复跑实验，堵“论文写得对但跑不出来”的失败。最直接的证据是 30 篇 in-progress papers 的 human study：作者报告 70.6% agreement，且 holistic score 全正，说明它不是只会挑刺，而是能稳定给出作者认可的诊断。新意主要在系统组织层：不是发明单一 verifier，而是把“诊断—证据—修订建议”做成可审计闭环。",
+    "verdict": "适合精读：它在讲 agent 审稿该怎么分层",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 30 篇人工一致性 70.6%",
+     "没证明能替代人工审稿，偏预提交诊断",
+     "复现难点在多 verifier 和代码重跑"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "ReAct"
+    ],
+    "mermaid": "graph TD\nA[Paper and code] --> B[L1 surface screen]\nB --> C[L2 claim verifiers]\nC --> D[L3 reproduction]\nD --> E[Evidence grounded feedback]\nE --> F[Revision suggestion]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.13285",
+   "kind": "paper",
+   "title": "Grouped Value Attention: Efficient KV Caching via On-Demand Key Reconstruction",
+   "url": "https://arxiv.org/abs/2609.13285",
+   "summary": "The KV cache is a primary bottleneck for Transformer decoding: its memory footprint and cache-read traffic grow with sequence length. Grouped-query attention (GQA) reduces this cost by sharing key-value heads, but still stores both a key and a value at every step. We introduce Grouped Value Attention (GVA), which stores grouped values and reconstructs content keys with a learned linear map. At inference, the map can be absorbed into the query, eliminating the need to materialize content keys in the intended decode path. A small shared decoupled RoPE channel retains positional information through a separately cached positional key. For the configurations studied, this representation reduces persistent cache scalars by approximately 45-47% relative to matched GQA. At the 350M-parameter scale with 30B FineWeb-Edu tokens, the 16-dimensional positional variant reaches 44.18 average accuracy across five tasks, compared with 44.36 for GQA and 43.88 for MLA. These results demonstrate near-GQA benchmark accuracy with a more compact cache representation. To translate this compact representation into faster autoregressive inference, we have developed custom decoding kernels and are currently evaluating their end-to-end inference performance with an open-source release planned soon.",
+   "source": "hf_papers",
+   "published": "2026-09-08",
+   "authors": [
+    "Vishesh Tripathi",
+    "Abhay Kumar",
+    "Ramsha Khan"
+   ],
+   "org": "",
+   "hf_upvotes": 64,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.13285",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "attention",
+    "kv-cache",
+    "efficiency"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "KV缓存效率新做法，推理加速直接相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "GVA 用重建 key 的方式压缩 KV cache，较 GQA 少约 45-47% cache",
+    "why": "适合看长上下文推理和 KV cache 设计",
+    "architecture": "反直觉点在于：decode 阶段真正需要的不是“完整 key 和 value 都永久缓存”，而是能做打分的内容表示加上能保留位置信息的少量通道。GQA 已经共享了 KV 头，但还是两条流一起存，cache 读写仍重。GVA 的关键改法是把 persistent state 改成 grouped values，只把用于打分的 content key 用 learned linear map 从 value 里重建；推理时这个线性映射还能吸收到 query 里，于是 intended decode path 不必 materialize content keys。为了不让 RoPE 破坏这种吸收，作者再加一个 shared decoupled RoPE channel，单独缓存短 positional key，阻断“位置编码迫使回到完整 key cache”的失败。最直接的证据是 350M、30B FineWeb-Edu 设定下，16 维 positional variant 的平均准确率 44.35，几乎贴住 GQA 的 44.36，同时 persistent cache scalar 下降约 45-47%。新意在组件层：不是新 attention 公式，而是改了缓存状态的分解方式与 decode 路径。",
+    "verdict": "值得精读，核心是 cache 状态重构而非刷分",
+    "why_now": "",
+    "key_points": [
+     "最强证据是近 GQA 准确率下少约 45-47% cache",
+     "没证明端到端吞吐提升，原文说还在评测",
+     "复现难点在自定义 decoding kernels"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "grouped-query attention",
+      "status": "unlisted"
+     },
+     {
+      "name": "RoPE",
+      "status": "unknown"
+     },
+     {
+      "name": "linear attention",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Grouped-Query Attention",
+     "Multi-head Latent Attention"
+    ],
+    "mermaid": "graph TD\nA[Values cached] --> B[Linear map reconstructs key]\nB --> C[Query absorbs map]\nC --> D[No full key cache]\nD --> E[Shared RoPE channel]\nE --> F[Smaller cache]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:anthropics/claude-code",
+   "kind": "project",
+   "title": "anthropics/claude-code",
+   "url": "https://github.com/anthropics/claude-code",
+   "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "anthropics",
+   "hf_upvotes": 0,
+   "stars": 145392,
+   "stars_today": 155,
+   "forks": 23461,
+   "language": "TypeScript",
+   "code_url": "https://github.com/anthropics/claude-code",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "coding",
+    "tooluse"
+   ],
+   "core_score": 8.0,
+   "wide_score": 10.0,
+   "score_reason": "旗舰级agent编码工具，近期热度与实用性强",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Claude Code 把终端变成 agentic coding 工具，支持自然语言改代码和管 Git",
+    "why": "面试里常被问 terminal agent 与 MCP",
+    "architecture": "这个项目解决的是“代码库大、操作碎、上下文切换多”时，开发者不想在 IDE、shell、git、文档之间来回跳。它的承重形态是一个跑在 terminal 里的 agent，README 明确它能理解 codebase、执行 routine tasks、解释复杂代码、处理 git workflows；近期 release 还补了 MCP 断连自动重连、remote-control session fork、权限检查修复和 gateway hint headers，说明它不是静态 demo，而是在补运行时边界条件。成熟度信号比较强：stars 145k+，有连续日更 release，README 给出安装、插件、bug 报告和文档入口，且出现了权限与会话管理这类生产问题修复。和同类相比，它的差异不在“能不能聊天写代码”，而在终端原生、MCP 接入、会话控制和权限/安全处理这套运行时组织。",
+    "verdict": "可快速扫一遍，重点看运行时和 MCP 设计",
+    "why_now": "最近 release：v2.1.273、v2.1.272、v2.1.271，且持续日更",
+    "key_points": [
+     "最强证据是持续 release 和权限/会话修复",
+     "没法仅凭 README 判断实际代码质量",
+     "同类差异在 terminal 原生和 MCP 运行时"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[Terminal command] --> B[Agent reads codebase]\nB --> C[Tool calls and git actions]\nC --> D[Permission checks]\nD --> E[MCP servers]\nE --> F[Code change and summary]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:cline/cline",
+   "kind": "project",
+   "title": "cline/cline",
+   "url": "https://github.com/cline/cline",
+   "summary": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "cline",
+   "hf_upvotes": 0,
+   "stars": 68259,
+   "stars_today": 102,
+   "forks": 7380,
+   "language": "TypeScript",
+   "code_url": "https://github.com/cline/cline",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "coding",
+    "ide"
+   ],
+   "core_score": 8.0,
+   "wide_score": 9.0,
+   "score_reason": "IDE/CLI自治编码agent，开源活跃度高",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用共享 agent 内核做 IDE/CLI/桌面编码助手，支撑 6.8 万星",
+    "why": "Agent 工程化样板，面试能聊工具调用和人类在环",
+    "architecture": "它面对的悖论是：编码 agent 想自治，就会把错误改进、命令执行和长任务都吞进一次运行里，结果最容易失控；而只做单轮补全又没法跨文件修复。Cline 的关键变化不是“加更多功能”，而是把 agent 做成共享核心 + 多端壳：同一套引擎在 SDK、CLI、VS Code、JetBrains、Desktop 间复用，外层只负责交互和权限，把“编辑、跑命令、浏览器/插件/MCP、multi-agent”这些动作都放进带审批的循环里。它的阻断点很明确：每次文件编辑和终端命令都要 human approval，Plan/Act 先对齐再执行；长任务继续监听输出，遇到编译/测试失败可在运行中接着修。最直接的证据是 README 里对 diff、checkpoint、实时命令监控和多模型兼容的描述，加上本周 desktop 和 sdk 连续 release，说明它在持续打磨交互与底层复用。新意主要在系统组织层，不是新算法。",
+    "verdict": "值得看架构，适合理解 agent 产品化",
+    "why_now": "本周有 desktop-v0.0.29 和 sdk/v0.0.83 连续 release，原文未明确更大事件。",
+    "key_points": [
+     "最强证据是共享内核跨多端复用",
+     "不证明 agent 自主修复的上限",
+     "复现难点在工具链与交互闭环"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph TD\nA[代码库] --> B[共享 agent 核心]\nB --> C[Plan 对齐]\nC --> D[审批编辑和命令]\nD --> E[实时监控输出]\nE --> F[修复和继续]\nB --> G[SDK CLI Desktop IDE]\nG --> H[多端复用]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:memtensor/memos",
+   "kind": "project",
+   "title": "MemTensor/MemOS",
+   "url": "https://github.com/MemTensor/MemOS",
+   "summary": "Self-evolving memory OS for LLM & AI Agents: ultra-persistent memory, hybrid-retrieval, and cross-task skill reuse, with 35.24% token savings and DeepSeek Harness support.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "MemTensor",
+   "hf_upvotes": 0,
+   "stars": 11391,
+   "stars_today": 39,
+   "forks": 1044,
+   "language": "TypeScript",
+   "code_url": "https://github.com/MemTensor/MemOS",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "rag"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "持久记忆+混合检索，面向agent可用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用混合检索做 LLM 持久记忆，宣称省 35.24% token",
+    "why": "RAG / memory 方向很相关，能看 agent 记忆怎么落地",
+    "architecture": "它解决的是 agent 每次都像失忆：历史偏好、工具轨迹、跨任务技能都在上下文里反复重放，token 越用越贵。MemOS 的关键概念不是“再做一个向量库”，而是把 memory 变成可管理的 OS：统一 add/retrieve/edit/delete，底层把结构化图、FTS5 和 vector 结合成 hybrid-retrieval，再用异步 MemScheduler 把写入和检索解耦，避免高并发下内存操作拖慢主任务。它还把记忆分成 KB、tool memory、persona 和 multi-cube，这样不同用户/项目/agent 的记忆可以隔离或共享，不必把所有东西塞进一个黑箱 embedding store。最直接的证据是作者报告的 35.24% token savings，以及 OpenClaw 上任务完成率从 36.63% 到 50.87% 的提升；但这些结果依赖具体插件和任务形态，原文未明确对通用编码 agent 的外推。新意在系统组织层和实证层，核心是“可编辑记忆”而不是单纯检索。",
+    "verdict": "值得看 memory OS 怎么比 RAG 更工程化",
+    "why_now": "最近 release 有 v2.0.33 和 local plugin 版本更新，且站内强调 DeepSeek Harness 接入，原文未明确更大事件。",
+    "key_points": [
+     "作者报告 35.24% token savings",
+     "OpenClaw 任务完成率 36.63%→50.87%",
+     "没证明通用任务都受益，依赖记忆写入质量"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "retrieval-augmented generation",
+     "graph RAG"
+    ],
+    "mermaid": "graph TD\nA[任务上下文] --> B[写入记忆]\nB --> C[图与 FTS5 和向量]\nC --> D[混合检索]\nD --> E[可编辑记忆]\nE --> F[更少 token]\nE --> G[跨任务复用]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:cloudflare/security-audit-skill",
+   "kind": "project",
+   "title": "cloudflare/security-audit-skill",
+   "url": "https://github.com/cloudflare/security-audit-skill",
+   "summary": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "cloudflare",
+   "hf_upvotes": 0,
+   "stars": 6635,
+   "stars_today": 1249,
+   "forks": 393,
+   "language": "JavaScript",
+   "code_url": "https://github.com/cloudflare/security-audit-skill",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "security",
+    "tooluse"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "多阶段安全审计agent，结构化可复现发现输出",
+   "tier": "core",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "把 coding agent 变成六阶段安全审计器，产出可验证 findings",
+    "why": "Agent 安全与工具编排很适合面试，能看审计闭环设计",
+    "architecture": "它面对的反直觉问题是：安全审计最怕“看起来像漏洞”的幻觉，单个 agent 一边找一边下结论，覆盖会漏、验证会偏。这个 skill 的关键改变是把审计拆成带独立验证的循环：先做 reconnaissance 和 coverage-led ledger，明确架构、信任边界和覆盖单位；再让隔离的 hunters 按 ledger 追缉，coverage critics 专门找盲区；每个 candidate 交给新的 verifier 试图证伪，最后只把 source trace 完整的结果写进 confirmed / needs_validation / rejected。最强证据不是分数，而是它把“发现、反驳、记录、报告”强制解耦，并且对 ledger 和 findings 做多次 validator 检查；Cloudflare 还说明这套 skill 是后续 fleet-wide harness 的起点。新在系统组织层：把审计从单 agent 任务变成可复核的多阶段协议。",
+    "verdict": "值得精读，能学 agent 安全工作流",
+    "why_now": "原文未明确；最近 stars 增长很快，且文档显示它是 Cloudflare 漏洞发现 harness 的起点。",
+    "key_points": [
+     "最强证据是独立 verifier + 结构化 findings",
+     "不证明一定找到真实漏洞，需 sandbox",
+     "复现门槛高：要多 agent 和隔离执行"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[目标代码库] --> B[Recon]\nB --> C[Coverage ledger]\nC --> D[Isolated hunters]\nD --> E[Fresh verifier]\nE --> F[Confirmed or rejected]\nF --> G[Structured report]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:vercel/eve",
+   "kind": "project",
+   "title": "vercel/eve",
+   "url": "https://github.com/vercel/eve",
+   "summary": "The Open Framework for Building Agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "vercel",
+   "hf_upvotes": 0,
+   "stars": 5202,
+   "stars_today": 40,
+   "forks": 556,
+   "language": "TypeScript",
+   "code_url": "https://github.com/vercel/eve",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "framework",
+    "orchestration"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "通用agent框架，工程上可落地",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The Open Framework for Building Agents",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:pascalorg/editor",
+   "kind": "project",
+   "title": "pascalorg/editor",
+   "url": "https://github.com/pascalorg/editor",
+   "summary": "Open-source 3D architectural editor with a local CLI, MCP tools, and practical workflows for humans and AI agents.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "pascalorg",
+   "hf_upvotes": 0,
+   "stars": 23981,
+   "stars_today": 1374,
+   "forks": 2972,
+   "language": "TypeScript",
+   "code_url": "https://github.com/pascalorg/editor",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "3d",
+    "mcp",
+    "agent"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "3D编辑+MCP工具化，面向AI工作流。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "Open-source 3D architectural editor with a local CLI, MCP tools, and practical workflows for humans and AI agents.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:jamiepine/voicebox",
+   "kind": "project",
+   "title": "jamiepine/voicebox",
+   "url": "https://github.com/jamiepine/voicebox",
+   "summary": "The open-source AI voice studio. Clone, dictate, create.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "jamiepine",
+   "hf_upvotes": 0,
+   "stars": 54256,
+   "stars_today": 409,
+   "forks": 6782,
+   "language": "TypeScript",
+   "code_url": "https://github.com/jamiepine/voicebox",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "voice",
+    "tts",
+    "multimodal"
+   ],
+   "core_score": 3.0,
+   "wide_score": 9.0,
+   "score_reason": "AI语音开源工作室，热度高但偏应用",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The open-source AI voice studio",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Clone, dictate, create."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:kunchenguid/firstmate",
+   "kind": "project",
+   "title": "kunchenguid/firstmate",
+   "url": "https://github.com/kunchenguid/firstmate",
+   "summary": "Talk to one agent. Ship with a crew.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "kunchenguid",
+   "hf_upvotes": 0,
+   "stars": 6171,
+   "stars_today": 1056,
+   "forks": 1906,
+   "language": "Shell",
+   "code_url": "https://github.com/kunchenguid/firstmate",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multi-agent",
+    "tool-use"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "多智能体/代理编排强，热度高且可上手。",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 agent distro 管多 agent 协作，作者称可并行出 PR/报告",
+    "why": "agent 编排与 worktree 隔离，适合面试谈系统设计",
+    "architecture": "它解决的是“一个 coding agent 能做事，但一旦三件任务并行就开始互相污染上下文、你还得手动盯终端”的悖论。firstmate 的关键变化不是再做一个 agent，而是把它做成 agent distro：把 instructions、skills、tooling、policies、state conventions 统一成可移植目录，让首席 agent 只负责调度和升级决策，crewmates 在各自独立 git worktree / tmux backend 里执行。这样阻断的是上下文串线、分支冲突、以及人类在多会话间来回拷贝信息的失败。最直接的证据是它支持 ship tasks 产出可授权改动、scout tasks 产出独立报告，并且有 event-driven、zero-token supervision 和 restart-proof 状态回收，说明它把“持续监督”从人工轮询改成了后台事件。新东西主要在系统组织层：不是单 agent 能力增强，而是把多 agent 运行时、状态、边界和恢复机制打包成一套分发系统。",
+    "verdict": "值得看系统组织层设计，不是单纯工具合集",
+    "why_now": "",
+    "key_points": [
+     "强证据：独立 worktree + 事件驱动监督",
+     "没证明模型更强，只证明协作更稳",
+     "复现要接入支持的 harness 和本地后端"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "worktree",
+      "status": "unlisted"
+     },
+     {
+      "name": "Git",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "MCP"
+    ],
+    "mermaid": "graph TD\nA[单 agent 接任务] --> B[首席 agent 调度]\nB --> C[crewmate 独立 worktree]\nB --> D[事件监督]\nC --> E[产出 PR 或报告]\nD --> F[恢复与回收]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:microsoft/ai-agents-for-beginners",
+   "kind": "project",
+   "title": "microsoft/ai-agents-for-beginners",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners",
+   "summary": "18 Lessons to Get Started Building AI Agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 74886,
+   "stars_today": 618,
+   "forks": 24689,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/microsoft/ai-agents-for-beginners",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "beginner",
+    "framework"
+   ],
+   "core_score": 5.0,
+   "wide_score": 7.0,
+   "score_reason": "代理入门教程，和方向相关但偏基础。",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 18 课讲 AI agents，作者提供多语言教程和代码样例",
+    "why": "适合补 agent 基础和面试话术，门槛低",
+    "architecture": "它解决的是“想入门 AI agents，但不知道从 planning、memory、tool use、评测到安全该按什么顺序学”的痛点。这个仓库本质上是课程，不是框架：用 lesson 切片把 agent 的基础概念、代码样例和额外资源串起来，并且明确基于 Microsoft Agent Framework 和 Microsoft Foundry Agent Service V2 跑示例。关键设计取舍是降低入门门槛而不是追求系统承重，因此它把复杂性放在讲解结构里，而不是运行时机制里。最直接的成熟度信号是有 18 课、源码样例、多语言自动翻译和活跃 issue/PR 入口，但正文里原文未明确持续 release 机制或严格测试覆盖。相较同类教程，它的差异在于企业栈对齐更强，适合把 agent 基础和 Microsoft 生态一起学。",
+    "verdict": "看作系统化入门课，速览后按需补课",
+    "why_now": "原文未明确",
+    "key_points": [
+     "强证据：18 课 + 代码样例 + 多语言",
+     "没证明通用性，主要是教学组织",
+     "更偏入门，不是可直接上生产的架构"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "LangChain"
+    ],
+    "mermaid": "graph TD\nA[概念课] --> B[代码样例]\nB --> C[Agent Framework]\nC --> D[Foundry service]\nD --> E[练习与作业]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:yyjeqhc/webcodex",
+   "kind": "project",
+   "title": "yyjeqhc/webcodex",
+   "url": "https://github.com/yyjeqhc/webcodex",
+   "summary": "Give cloud AI agents a real development environment on your own machines.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "yyjeqhc",
+   "hf_upvotes": 0,
+   "stars": 955,
+   "stars_today": 431,
+   "forks": 127,
+   "language": "Rust",
+   "code_url": "https://github.com/yyjeqhc/webcodex",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "dev-env",
+    "inference"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "为云端代理提供本地开发环境，实用度高。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "让云端 agent 直接用本地开发环境，v0.4.1 主打可靠性",
+    "why": "agent 开发环境和执行边界是面试高频点，且有 release 线索",
+    "architecture": "它解决的是“云端 coding agent 能聊天，但一碰真实仓库、长任务、Git 和本地工具链就不得不搬家或丢上下文”的矛盾。WebCodex 的关键变化是把 AI client、MCP/HTTPS 接口和你机器上的 repository、Git、compilers/tests 连起来，让 agent 在本机真实开发环境里工作；Server/Runner 的分层则把长任务、可见执行和人类可审查操作拆开，避免单轮对话必须全程在线。正文里最直接的支持是：temporary `share` 只适合短试用，而 full Server + Runner 才是推荐的日常形态，说明作者明确区分了试用与承重架构；v0.4.1 的 release 进一步把 Desktop 日常可用性、Windows/network-path、job/file 边界和安全写操作收紧。新东西主要在系统组织层和实证层：不只是“能连上本地仓库”，而是把生命周期、权限边界、后台可恢复执行做成可发布产品。",
+    "verdict": "值不值得装看你是否需要本地真环境 agent",
+    "why_now": "最近 release：v0.4.1（2026-09-10）; v0.4.0（2026-09-07）; v0.3.9（2026-08-26）",
+    "key_points": [
+     "最强证据：v0.4.1 强调边界和可靠性",
+     "短试用 share 不等于长期 Server",
+     "复现依赖本机工具链和受控权限边界"
+    ],
+    "prereqs": [
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "Git",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MCP",
+     "OpenAI Secure MCP Tunnel"
+    ],
+    "mermaid": "graph TD\nA[AI client] --> B[MCP or HTTPS]\nB --> C[WebCodex Server]\nC --> D[本机仓库]\nC --> E[Git和测试]\nC --> F[长任务监督]",
+    "read_level": "L2"
+   }
+  }
+ ]
+}

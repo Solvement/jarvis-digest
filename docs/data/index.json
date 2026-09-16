@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-16",
+   "papers": 8,
+   "projects": 10,
+   "top": "Dream-RSI: Recursive Self-Improvement through Evolving Worlds"
+  },
+  {
    "date": "2026-09-15",
    "papers": 12,
    "projects": 6,
