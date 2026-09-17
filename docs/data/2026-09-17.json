@@ -1,0 +1,1295 @@
+{
+ "date": "2026-09-17",
+ "stats": {
+  "collected": 689,
+  "filtered": 287,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 15 calls, 52522 in / 16361 out; gpt-5.4-mini: 6 calls, 45735 in / 8967 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.19138",
+   "kind": "paper",
+   "title": "In-Context Robot Learning with VLM Agents",
+   "url": "https://arxiv.org/abs/2609.19138",
+   "summary": "Enabling robots to adapt to unfamiliar environments as readily as humans remains a moonshot goal of embodied AI. No finite collection of demonstrations can cover every task and situation a robot will encounter, making the ability to learn from context at deployment essential for generalization. Such in-context learning (ICL), however, remains largely beyond the reach of existing robotic policies. The broad agentic capabilities of commercial vision-language models (VLMs), such as GPT-6 Astra, raise a compelling question: can these models learn from demonstrations, examples, and interaction feedback, then translate that information into executable and verifiable robot behavior from a new initial state without gradient updates or persistent changes to task-specific parameters? We introduce GPT-Policy, a general-agent framework for in-context robot learning. GPT-Policy integrates a context compiler that preserves task-relevant visual transitions, a VLM that proposes robot-tool actions, and a constrained controller that verifies and executes each action and reports its outcome. We evaluate its reliability and limitations through task success and efficiency metrics, matched comparisons across models, and controlled context ablations. In real-robot trials, human video demonstrations improve task completion even without robot action labels, while aligned action references yield further gains on contact-sensitive tasks. These findings position GPT-Policy as a step toward robot adaptation through in-context learning, providing an empirical foundation for translating the general-purpose capabilities of VLMs into physical behavior and clarifying the challenges that must be overcome for reliable deployment.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Dongzhou Cheng",
+    "Taoran Yi",
+    "Ye Fang",
+    "Xingwu Zhang",
+    "Fan Feng",
+    "Yixuan Li"
+   ],
+   "org": "",
+   "hf_upvotes": 14,
+   "stars": 178,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/cheng-haha/GPT-Policy",
+   "pdf_url": "https://arxiv.org/pdf/2609.19138",
+   "categories": [
+    "cs.CV",
+    "cs.RO"
+   ],
+   "keywords": [
+    "vlm",
+    "agent",
+    "robotics"
+   ],
+   "core_score": 10.0,
+   "wide_score": 7.0,
+   "score_reason": "VLM in-context 机器人策略，agent可落地",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "GPT-Policy 用 VLM+受限控制器做零微调机器人 ICL，真人视频也能提升完成率",
+    "why": "你做 LLM/Agent 和具身都能对上，面试好讲闭环控制",
+    "architecture": "这篇先打一个反直觉点：机器人在新环境里常常卡在“看懂了但做不稳”——现有 imitation policy 依赖固定训练分布，遇到新物体摆放、接触误差或人类示范缺动作标签时，往往既不会从上下文学，也不会把反馈转成下一步动作。作者的关键改法不是再训一个 robot policy，而是把 general-purpose VLM 接进机器人工具链：context compiler 负责保留任务相关的视觉转移和动作参考，阻断“上下文太杂导致关键信息被淹没”；VLM 负责提议参数化 tool actions，阻断“只会看不会计划”；constrained controller 负责验证、执行并回传结果，阻断“模型输出不可落地、不可回滚”。最直接的证据是实机实验：human video 即使没有 robot action labels 也能提升 task completion，aligned action references 在 contact-sensitive 任务上进一步增益，说明真正起作用的是上下文里的可迁移行为线索，而不是单纯多看几段视频。新意主要在系统组织层：它把 robotic ICL 做成通用 VLM 的闭环接口，而不是专用 policy 的训练配方。",
+    "verdict": "值得看闭环设计，不是只看机器人分数。",
+    "why_now": "",
+    "key_points": [
+     "最强证据：实机里 human video 也能涨成功率",
+     "没证明安全与精细接触已解决",
+     "复现难点在机器人工具与受控执行"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "Show-Harness"
+    ],
+    "mermaid": "graph LR\nA[Task and context] --> B[Context compiler]\nB --> C[VLM proposes action]\nC --> D[Constrained controller]\nD --> E[Execute and verify]\nE --> F[Feedback to context]\nF --> C",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.19134",
+   "kind": "paper",
+   "title": "ScienceIDE: Turning World's Scientific Codebase into Agent Learnable Environments",
+   "url": "https://arxiv.org/abs/2609.19134",
+   "summary": "Scientific code repositories encode decades of human knowledge in executable models, methods, and tools. Yet fragmented toolchains, implicit domain conventions, and specialized correctness criteria make this knowledge difficult to convert into reliable learning experience-a challenge we call the scientific experience bottleneck. We introduce ScienceIDE, infrastructure for turning the world's scientific code into programmable environments for scientific agents. Guided by expert-defined scientific cases and acceptance criteria, agents transform repositories into executable environments that support task generation, execution, and scientific verification. These environments provide a shared foundation for supervised fine-tuning, reinforcement learning, and evaluation. Using verified interaction trajectories, we train PhAI-IDE-72B, PhAI-IDE-9B, and PhAI-IDE-4B. The model family shows gains in held-out scientific-code repair and across selected general-purpose benchmarks in code, reasoning, and knowledge, providing evidence of positive transfer from scientific experience to broader capabilities. ScienceIDE lays the foundation for an integrated workspace for agent learning and scientific practice, making humanity's scientific software a shared substrate for developing scientific intelligence. Code: https://github.com/aitofound/ScienceIDE",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Hejia Geng",
+    "Zesen Huang",
+    "Haoyang Li",
+    "Wenbin Li",
+    "Koutian Wu",
+    "Zihan Zhou"
+   ],
+   "org": "",
+   "hf_upvotes": 69,
+   "stars": 16,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/aitofound/ScienceIDE",
+   "pdf_url": "https://arxiv.org/pdf/2609.19134",
+   "categories": [
+    "cs.CL",
+    "cs.CY"
+   ],
+   "keywords": [
+    "agent",
+    "environment",
+    "benchmark"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "把科学代码转为可验证agent环境，强相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "ScienceIDE 把科学代码库编成可学环境，训出 72B/9B/4B 修复模型",
+    "why": "很适合看 agent 评测和环境化训练，面试能讲基础设施",
+    "architecture": "这篇的悖论是：科学代码仓库明明最像“可交互经验”，却最难直接变成 agent 能学的环境，因为工具链碎、正确性标准隐含、数值误差要按领域容忍度判断。现有 benchmark 只能测能力，不能把仓库变成可反复采样的训练场。作者的关键改变是把“科学经验”编译成 environment：scientific module 定义一个有责任边界和可执行覆盖的单元，environment 把代码、runtime、scientific checks 打包，factory 再按这个边界生成 repair/implementation/acceleration 等任务，阻断“同一个仓库每次只能手工造题”。真正支撑这个设计的证据是：他们用 verified interaction trajectories 训练出 PhAI-IDE-72B/9B/4B，并报告在 held-out scientific-code repair 以及部分通用 code/reasoning/knowledge benchmark 上都有收益，说明环境化经验确实能转成可迁移能力。新意在系统组织层和实证层：不是发一个榜，而是给科学代码一个可复用的 agent learning substrate。",
+    "verdict": "值得精读，核心是环境化训练范式。",
+    "why_now": "",
+    "key_points": [
+     "最强证据：verified trajectories 训出三档模型",
+     "没证明跨所有科学域都稳定泛化",
+     "复现门槛高，依赖领域专家与环境化流程"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "reinforcement learning",
+      "status": "unlisted"
+     },
+     {
+      "name": "evaluation",
+      "status": "unlisted"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "SWE-bench",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[Scientific repo] --> B[Module boundary]\nB --> C[Executable environment]\nC --> D[Factory makes tasks]\nD --> E[Agent trajectories]\nE --> F[Verified data]\nF --> G[SFT and RL]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.18842",
+   "kind": "paper",
+   "title": "Infinite-Parameter LLMs: Generating and Adapting Weights from Live Data",
+   "url": "https://arxiv.org/abs/2609.18842",
+   "summary": "The scaling laws hold that a language model grows more capable with more parameters and more training data, and Mixture-of-Experts (MoE) architectures have ridden these laws to remarkable results, activating only a fraction of an enormous stored parameter bank for each token. That success is built on static pretraining data. A deployed model faces a different world, where much of the data that would make it more useful is not in its training set but in the live interaction it is currently handling, such as the facts a user supplies or the corrections they give. A conventional model cannot learn from this data, because its weights are frozen after training. Instead, the knowledge and behaviour supplied at run time are placed in the prompt, by retrieval or instruction, and re-read on every request only to be discarded once the request ends. We ask how an architecture could learn from live interaction by writing it into its weights. Taking inspiration from MoE, we propose the \\textbf{Infinite-Parameter LLM}. A compact hypernetwork turns the data given at run time into a low-rank modulation of a shared base network, so the feed-forward weights are generated from live data rather than stored in a fixed bank. Where prior weight generators read the context once and freeze, we carry a Bayesian belief over the generator's latent code and update it online, so the effective weight is re-derived from that evolving belief as the session proceeds rather than fixed after one read. The stored footprint stays fixed, yet the weights the model can compile are effectively infinite. For the knowledge and behaviour supplied at run time, carrying them in the weights rather than the prompt is amortized in compute, frees the context window, persists across turns, and can generalise better than in-context use. We specify an evaluation protocol that tests exactly this against in-context learning and retrieval.",
+   "source": "arxiv",
+   "published": "2026-09-16",
+   "authors": [
+    "Jinli Hu",
+    "Ross M. Clarke",
+    "Yichuan Zhang",
+    "José Miguel Hernández-Lobato"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.18842",
+   "categories": [
+    "cs.AI",
+    "cs.LG"
+   ],
+   "keywords": [
+    "llm",
+    "learning",
+    "moe",
+    "online"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "从在线数据生成/适配权重，方向高度匹配",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Infinite-Parameter LLM 用 live data 生成低秩权重，试图让模型在推理时学习",
+    "why": "对你做推理、长上下文、MoE 和在线适应都很对口",
+    "architecture": "这篇先指出一个常见悖论：部署后最有价值的数据不是预训练语料，而是当前交互里的事实、纠错和行为偏好，但传统 LLM 只能把这些塞进 prompt，用完就丢。MoE 虽然是动态计算，但它的 expert bank 仍是静态存储，不能从当下交互真正学进去。作者的关键改法是用 hypernetwork 把 live data 编译成共享底座的 low-rank modulation，并且不在读完上下文后就冻结，而是对 generator latent code 维持 Bayesian belief 并在线更新，阻断“只读一次、turn 内不再适应”的问题。这个设计把“写入权重”当成比“写进上下文”更可持续的记忆。摘要里他们主张这样可 amortize compute、释放 context window、跨 turn 持久，但正文当前截取处还没给出完整实证细节，因此最直接可确认的是架构思路而不是性能结论。新意在组件层：把 test-time adaptation 从 prompt/retrieval 推到可更新权重。",
+    "verdict": "概念很新，但先看架构，等实证再定精读。",
+    "why_now": "",
+    "key_points": [
+     "最强点：把推理时数据写进权重而非 prompt",
+     "原文未明确完整实证数字",
+     "实现难点在在线贝叶斯更新与稳定性"
+    ],
+    "prereqs": [
+     {
+      "name": "MoE",
+      "status": "unknown"
+     },
+     {
+      "name": "hypernetwork",
+      "status": "unlisted"
+     },
+     {
+      "name": "low-rank adaptation",
+      "status": "unlisted"
+     },
+     {
+      "name": "Bayesian belief",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Mixture of Experts",
+     "LoRA"
+    ],
+    "mermaid": "graph LR\nA[Live data] --> B[Hypernetwork]\nB --> C[Low rank modulation]\nC --> D[Base network]\nD --> E[Outputs]\nA --> F[Bayesian update]\nF --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.18471",
+   "kind": "paper",
+   "title": "First Token Matters: Understanding Safety Collapse in Large Reasoning Models",
+   "url": "https://arxiv.org/abs/2609.18471",
+   "summary": "Large Reasoning Models (LRMs) exhibit strong problem-solving abilities, yet their safety alignment often degrades when handling harmful queries. Existing approaches to improving safety largely rely on additional training or preference optimization, while offering limited understanding of the internal mechanisms behind safety failures. In this work, we investigate this failure through a token-level positional analysis of refusal dynamics and identify a localized vulnerability at the onset of reasoning, which we term Onset Refusal Collapse (ORC). We find that the refusal-related signal of LRMs drops sharply at the first generated token under harmful queries, which is associated with unsafe response generation. Motivated by this finding, we propose SafeToken, a lightweight inference-time intervention that injects a learned continuous safety anchor precisely at reasoning onset. Despite updating only a single token embedding, SafeToken effectively mitigates ORC, improves safety on harmful-query benchmarks, and largely preserves reasoning utility. These results suggest that safety failures in LRMs can arise from a transient breakdown at the critical transition from understanding to generation.",
+   "source": "arxiv",
+   "published": "2026-09-16",
+   "authors": [
+    "Yizheng Yang",
+    "Haining Yu",
+    "Yuechen Wang",
+    "Yikai Hou",
+    "Xing Fu",
+    "Jinbo Yang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.18471",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "safety",
+    "reasoning",
+    "alignment"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "推理起始token触发安全崩塌，机理分析很对口",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用首 token 安全锚点定位 ORC，单 token 注入缓解安全崩塌",
+    "why": "懂 LRM 安全失效机理，面试可讲机制",
+    "architecture": "反直觉点在于：模型在 prompt 阶段还“知道”危险，却一到第一个生成 token 就突然转向不拒答，说明问题不是全程失忆，而是理解到生成的过渡点失稳。现有做法多靠再训练或 preference optimization，只能改参数分布，难抓住这个瞬时断点。作者的关键改变是把拒绝表征当成可在 token 级追踪的共享方向：先从 instruction-tuned 同背骨模型里抽出 refusal vectors，再看 LRM 隐状态在各位置上的投影，发现 harmful query 下 refusal strength 在首个生成 token 突降，这就是 ORC。SafeToken 进一步只在 onset 注入 learned continuous safety anchor，相当于把首 token 的拒绝信号扶住，阻断“明知危险但生成时滑出拒答区”的失败。最直接证据是 refusal vector steering 在 LRM 上呈双向可控，且 harmful benchmark 上 ORC 被压低、reasoning utility 基本保留。新意主要在组件层加上少量推断时干预，而不是系统组织层重训。",
+    "verdict": "值得精读，因它把安全崩塌定位到可干预的生成起点",
+    "why_now": "",
+    "key_points": [
+     "首 token 的 refusal gap 变化最直接",
+     "只改一个 token embedding，说明脆弱点很局部",
+     "原文未明确对更强 jailbreak 的鲁棒性"
+    ],
+    "prereqs": [
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     },
+     {
+      "name": "instruction tuning",
+      "status": "unlisted"
+     },
+     {
+      "name": "activation steering",
+      "status": "unlisted"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "activation steering",
+     "mechanistic interpretability"
+    ],
+    "mermaid": "graph LR\nA[Harmful prompt] --> B[Prompt encoding]\nB --> C[First token]\nC --> D[ORC drop]\nD --> E[Unsafe output]\nC --> F[SafeToken anchor]\nF --> G[Refusal retained]\nG --> H[Safer answer]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.18805",
+   "kind": "paper",
+   "title": "ProgramDistill: From Interactive Web Apps to Verifiable Reference-Guided SWE Tasks",
+   "url": "https://arxiv.org/abs/2609.18805",
+   "summary": "Coding agents are typically evaluated with desired behavior specified through issues or instructions. In practical web development, however, agents may need to infer behavior from working software and implement it in an incomplete application. We introduce ProgramDistill, a benchmark evaluating coding agents on features discovered through interaction with fully functional reference applications. We build ProgramDistill by factorizing applications into features of different granularities, each associated with replayable behaviors executable via its gold patch. Our pipeline, mine-craft-patch, discovers 1,975 replay-verified behaviors across 26 applications and constructs 4,063 tasks without human intervention. Across nine frontier coding agents, GPT-6 Astra and Claude Opus 5 achieve 49.2% and 28.8% success on cumulative workflows in full-application reconstruction. In partial-application reconstruction, success falls from 100% to 64.0% and from 96% to 32% as restoration depth increases from 1 to 8. ProgramDistill thus provides a scalable benchmark with controlled difficulty for evaluating and diagnosing coding agents, and a natural basis for future curriculum-based training.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Jeonghye Kim",
+    "Minseon Kim",
+    "Young Jin Kim",
+    "Matheus Pereira",
+    "Marc-Alexandre Côté",
+    "Alessandro Sordoni"
+   ],
+   "org": "",
+   "hf_upvotes": 44,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.18805",
+   "categories": [
+    "cs.SE",
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "coding",
+    "benchmark"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "SWE任务从交互提取特征，评测设计实用",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 mine craft patch 生成 4,063 个可回放 SWE 任务，测参考驱动修复",
+    "why": "做 coding agent 评测/训练的人很值得看",
+    "architecture": "它解决的是一个老痛点：真实 web app 的需求往往不是 issue 文本，而是“看着一个能跑的参考版本，猜它该怎么改”，现有 SWE benchmark 很难系统化地给出这种参考驱动任务。作者把应用拆成不同粒度的 feature，再把每个 feature 绑定到可重放的 browser trace 和 gold patch，形成 prerequisite lineages；这样任务不是孤立题，而是能沿依赖链累积修复，控制 restoration depth。核心机制是 mine-craft-patch：先 mining 找到可重复行为，再 crafting 屏蔽对应实现生成缺失版本，最后 patch 让 agent 只靠 reference 恢复行为，成功标准是 replay trace 在修补后逐步一致。最强证据是 26 个应用上自动挖出 1,975 个 replay-verified behaviors，拼出 4,063 任务；并且深度从 1 到 8 时，Astra 和 Opus 的成功率显著掉，说明它确实在测“参考到当前”的信息获取与修复负担。新的是系统组织层：不是单题 benchmark，而是可控深度的任务生成框架。",
+    "verdict": "值得通读，适合看 benchmark 设计和失败分析",
+    "why_now": "原文未明确",
+    "key_points": [
+     "4,063 题且无人工标注，生成链条完整",
+     "深度增大时成功率下滑很明显",
+     "对比的是 frontier agents，复现门槛高"
+    ],
+    "prereqs": [
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "ProgramBench"
+    ],
+    "mermaid": "graph TD\nA[Reference app] --> B[Mine behavior]\nB --> C[Craft task]\nC --> D[Mask feature]\nD --> E[Agent repairs]\nE --> F[Replay check]\nF --> G[Pristine match]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.18094",
+   "kind": "paper",
+   "title": "Agora: Git as Shared Memory for Collective AutoResearch",
+   "url": "https://arxiv.org/abs/2609.18094",
+   "summary": "Autonomous research loops such as AutoResearch show that one coding agent can improve a training setup unattended. Run several of them and each session starts from scratch, so more agents tend to mean more duplicated search rather than more discovery. Agora is a shared memory for such agents: research is recorded as an append-only directed acyclic graph (DAG) stored in Git, so that every claim is a commit anyone can check out and rerun. Each result, insight, hypothesis, verification, and report is an immutable commit whose parent edges say what it builds on; a derived index exposes the frontier, the neglected branches, and the verification status of each claim, and a diversity-aware selection rule keeps the community from collapsing onto one leader. We describe the system and report its first sustained use: a run of nearly 12 days in which 13 language-model workers, with no assigned tasks and no central planner, worked on a weight-transfer problem. Given 141 pretrained donor models and a frozen 119.6M-parameter attention-SSM hybrid whose dimensions match no donor, the workers had to initialize the target without training data or gradient updates. They published 1,703 contributions and drove the evaluator from 3.39 to 1.899 bits per byte, closing 62% of the gap to a trained GPT-2 124M. The winning recipe compresses donor next-token statistics into the target's embedding and output head, then adds a short-range context signal through sparse edits to attention, feed-forward, and state-space blocks. Its 145-commit ancestry spans 15 accounts, and 165 independent reproductions were posted, none of which failed. We describe the single mid-run human intervention that pulled the community out of a monoculture, what the trace does and does not establish, and the controlled comparison that would settle whether shared research state improves discovery per unit of compute.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Yifan Zhang",
+    "Yunheng Zou",
+    "Shaokun Zhang",
+    "Jian Hu",
+    "Hao Zhang",
+    "Binfeng Xu"
+   ],
+   "org": "",
+   "hf_upvotes": 37,
+   "stars": 7,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/yifanzhang-pro/Agora",
+   "pdf_url": "https://arxiv.org/pdf/2609.18094",
+   "categories": [],
+   "keywords": [
+    "autonomous-research",
+    "multi-agent",
+    "infra"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "Git共享记忆推动多agent研究闭环",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 Git 当共享记忆，13 个 agent 12 天做出 1,703 次贡献",
+    "why": "做多 agent / autonomous research 很对口",
+    "architecture": "它针对的悖论是：多开几个 research agent，本该更多发现，却常变成每个 session 重新摸底、重复试错。Agora 的关键改变是把研究状态从临时 transcript 提升成 append-only DAG，并直接存进 Git：每个 claim、result、verification 都是 commit，parent edge 说明它依赖什么，外加索引暴露 frontier、冷门分支和验证状态，避免大家都扎堆追一个 leader。也就是说，Git 不是代码仓库，而是共享记忆和协调协议，阻断“状态丢失导致重复搜索”和“信息不可追溯导致无法复验”两类失败。最直接证据是那次 12 天的无中心调度：13 个 LLM workers、无分配任务，完成 1,703 个贡献，把 evaluator 从 3.39 降到 1.899 bpb，且 145-commit ancestry 可追踪、165 次独立复现都成功。新意在系统组织层和运行时机制层：不是单个 agent 更强，而是群体如何共享状态、分配注意力、留下可验证谱系。",
+    "verdict": "值得精读，适合学多 agent 共享记忆的系统设计",
+    "why_now": "近 12 天持续运行，原文给出首个 sustained use",
+    "key_points": [
+     "Git DAG 是唯一状态，便于回放和复验",
+     "165 次独立复现都成功，工程证据强",
+     "原文也承认还缺对照实验来定因果"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "Git",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "AutoResearch",
+     "AI Scientist"
+    ],
+    "mermaid": "graph LR\nA[Worker] --> B[Read Git DAG]\nB --> C[Find frontier]\nC --> D[Propose commit]\nD --> E[Verify and index]\nE --> F[Shared memory grows]\nF --> A",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.17523",
+   "kind": "paper",
+   "title": "ScienceBuddy: Recursive-in-Recursive Self-Improvement for Interactive Scientific Agents",
+   "url": "https://arxiv.org/abs/2609.17523",
+   "summary": "We introduce and release ScienceBuddy, an interactive scientific research workspace that brings continually improving scientific agents into researchers' everyday workflows. ScienceBuddy supports researchers in carrying out scientific tasks while transforming their requests, feedback, and execution evidence into tasks and evaluation rubrics for continual learning. At its core is recursive-in-recursive self-improvement, a paradigm that couples harness evolution with model reinforcement learning: the inner recursion improves the harness with the model fixed, while the outer recursion trains the model under the improved harness. Harness evolution shapes training experience, and model learning creates new opportunities for harness adaptation. We present case studies of researcher interaction, harness refinement, and model learning, with the benchmark cases spanning four scientific task families. By releasing ScienceBuddy as a research product, we make this paradigm available to the scientific community and take a step toward discovery intelligence: scientific AI that advances through sustained collaboration with researchers and evolves alongside the research it supports. Website: http://science-buddy.io",
+   "source": "hf_papers",
+   "published": "2026-09-15",
+   "authors": [
+    "Shuhan Xue",
+    "Jianyuan Zhong",
+    "Ziyuan Nan",
+    "Wenbin Li",
+    "Zhaochen Yu",
+    "Jinchao Ding"
+   ],
+   "org": "",
+   "hf_upvotes": 20,
+   "stars": 45,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Gen-Verse/ScienceBuddy",
+   "pdf_url": "https://arxiv.org/pdf/2609.17523",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "science",
+    "self-improvement"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "递归自改进科学助手；具备工作流与持续学习",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "ScienceBuddy 用递归自改 harness+RL 让科学 agent 持续变强",
+    "why": "适合看 agent 评测与自我改进范式",
+    "architecture": "先有个反直觉点：科研 agent 不是“答对一次就完”，而是要在研究者持续追问、补证据、改约束的过程中越用越好。旧法通常把交互日志只当展示，或者只做一次性 RL，结果任务定义和训练信号都静态，学到的改进很快失效。ScienceBuddy 的关键改变是把“研究者交互”变成可学习的任务与 rubric，再把系统分成两层递归：inner recursion 固定模型，只改 harness，靠诊断失败与受限 procedural edits 阻断“模型没变导致系统只会重复同类错”；outer recursion 固定新 harness，做 on-policy rollouts + GRPO，阻断“训练目标和真实科研流程脱节”。最直接的证据是作者展示了两轮递归动态：先 harness 适配、再模型更新，且在线服务持续可用，说明它不是离线数据集，而是闭环产品。新意在系统组织层：不是单个 agent 算法，而是把科研工作区、评估规约和持续学习绑成同一套运行时。",
+    "verdict": "值得精读，核心是把 agent 变成持续学习系统",
+    "why_now": "",
+    "key_points": [
+     "最强证据是两轮递归改进案例",
+     "没证明通用科研能力上限",
+     "复现要同时搭 workspace 和训练闭环"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "on-policy",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "Self-Instruct"
+    ],
+    "mermaid": "graph TD\nA[Researcher input] --> B[Tasks and rubrics]\nB --> C[Inner harness edit]\nC --> D[Fixed model eval]\nD --> E[Better harness]\nE --> F[On policy rollouts]\nF --> G[GRPO update]\nG --> H[Updated model]\nH --> A",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.19144",
+   "kind": "paper",
+   "title": "A Zeroth-Order Paradigm for LLM Preference Alignment",
+   "url": "https://arxiv.org/abs/2609.19144",
+   "summary": "Direct preference alignment methods are widely used to align large language models (LLMs) with human preferences because of their computational and memory efficiency. However, likelihood displacement motivates alternative ways to extract information from preference pairs with small likelihood margins. In this paper, we propose and analyze Comparison-based Preference Optimization (ComPO), a zeroth-order alignment method based on comparison oracles. ComPO extracts directional information from these pairs without directly optimizing a differentiable preference loss on them. We establish a convergence guarantee for its basic offline scheme under smoothness, gradient sparsity, and compatibility between the oracle and a latent objective. We further introduce online ComPO, which retains the offline comparison mechanism and uses unlabeled policy generations for reverse-KL control relative to a reference policy. Following the coverage perspective of preference fine-tuning, we establish a performance guarantee for a basic constrained scheme under local coverage and in-distribution pairwise reward accuracy. Experiments on Mistral, Llama, Gemma-2, Qwen3, and Gemma-3 models demonstrate improvements over existing direct alignment methods, including length-controlled win rates, with pair-level diagnostics providing evidence consistent with mitigating likelihood displacement.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Peter Chen",
+    "Xi Chen",
+    "Wotao Yin",
+    "Tianyi Lin"
+   ],
+   "org": "",
+   "hf_upvotes": 22,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.19144",
+   "categories": [
+    "cs.CL",
+    "cs.AI",
+    "cs.LG"
+   ],
+   "keywords": [
+    "rlhf",
+    "preference",
+    "optimization"
+   ],
+   "core_score": 8.0,
+   "wide_score": 4.0,
+   "score_reason": "LLM偏好对齐新范式：ComPO零阶对比优化",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "ComPO 用 comparison oracle 做零阶偏好对齐，缓解 likelihood displacement",
+    "why": "很适合面试讲 DPO 的局限和替代思路",
+    "architecture": "先看悖论：DPO 这类 direct alignment 明明在拉大“好/坏”概率差，却可能把好回复的绝对概率一起压低，甚至把 refusal 推成 compliance，这就是 likelihood displacement。现有修正多是加正则或直接过滤 noisy pairs，但前者还在用同一个有偏梯度，后者把“弱但有用”的比较信号全扔掉。ComPO 的关键概念改动是把偏好对当成 comparison oracle：先对当前 policy 做小扰动，只问“preferred 是否更高、dispreferred 是否更低”，再把一比特比较结果汇成更新方向，所以它利用的是方向信息而不是直接最小化一个可导 preference loss。最强证据是它在 Mistral、Llama、Gemma-2、Qwen3、Gemma-3 上都报告优于现有 direct alignment，并且 pair-level diagnostics 和 length-controlled win rate 一起指向 displacement 被缓解。新在实证层加理论层：不是新 reward model，而是给 preference alignment 换成 zeroth-order 视角并补了收敛/覆盖分析。",
+    "verdict": "值得通读，能补齐 DPO 之外的对齐视角",
+    "why_now": "",
+    "key_points": [
+     "最强证据是多模型 win rate 改善",
+     "只对 noisy pairs 有价值，干净 pair 仍靠别法",
+     "比较 oracle 估方向，优化方差可能不低"
+    ],
+    "prereqs": [
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     },
+     {
+      "name": "KL regularization",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "DPO",
+     "RLHF"
+    ],
+    "mermaid": "graph TD\nA[Preference pairs] --> B[Small perturbations]\nB --> C[Compare likelihoods]\nC --> D[One bit signal]\nD --> E[Update direction]\nE --> F[Policy]\nF --> G[Reverse KL control]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:openai/codex",
+   "kind": "project",
+   "title": "openai/codex",
+   "url": "https://github.com/openai/codex",
+   "summary": "Lightweight coding agent that runs in your terminal",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "openai",
+   "hf_upvotes": 0,
+   "stars": 124897,
+   "stars_today": 19131,
+   "forks": 19342,
+   "language": "Rust",
+   "code_url": "https://github.com/openai/codex",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "coding",
+    "inference"
+   ],
+   "core_score": 7.0,
+   "wide_score": 9.0,
+   "score_reason": "权威代码智能体，面试谈资且工程价值高。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "OpenAI Codex CLI 把 coding agent 装进终端，最近发到 v0.155.0-alpha.16",
+    "why": "做 agent 工程和产品判断都很直接",
+    "architecture": "它解决的是“我想让模型直接在本地仓库里干活，但不想切到网页或重搭一套壳”的痛点。承重组件很清楚：终端 CLI 负责接管本地文件与命令执行，IDE/desktop/web 只是不同入口；README 还明确有 install script、npm、brew、GitHub release 多种分发，说明它不是 demo 而是可安装产品。关键设计取舍是本地运行与远端能力分层：用户可以 sign in with ChatGPT，也可以走 API key；安装器默认从 releases.openai.com 拉取，失败再回退 GitHub Releases，说明它在做稳定分发而不是单一渠道。成熟度信号较强：有高频 release，今天可见最新是 0.155.0-alpha.16，star 增长也很快；但当前仍是 alpha，README 里的核心是安装和入口，关于安全边界、任务规划细节和失败恢复机制原文未明确。若只想要 coding agent，Codex 和一般套壳客户端差在“终端本地执行+OpenAI 官方持续迭代+多入口统一”。",
+    "verdict": "值得跟进，适合看产品化 coding agent 怎么落地",
+    "why_now": "最近 release：rust-v0.155.0-alpha.16（2026-09-17）",
+    "key_points": [
+     "最新 release 很近，说明还在高频迭代",
+     "当前信息偏安装与入口，机制细节原文未展开",
+     "alpha 阶段，稳定性与安全边界需再看"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "SWE-bench",
+     "ReAct"
+    ],
+    "mermaid": "graph TD\nA[Terminal] --> B[Codex CLI]\nB --> C[Local files]\nB --> D[Command execution]\nB --> E[ChatGPT sign in]\nB --> F[API key]\nC --> G[Code changes]\nD --> G\nG --> H[Repo workflow]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:volcengine/openviking",
+   "kind": "project",
+   "title": "volcengine/OpenViking",
+   "url": "https://github.com/volcengine/OpenViking",
+   "summary": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "volcengine",
+   "hf_upvotes": 0,
+   "stars": 37875,
+   "stars_today": 9270,
+   "forks": 2932,
+   "language": "Python",
+   "code_url": "https://github.com/volcengine/OpenViking",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "agent-memory",
+    "vector-db"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "自演化上下文库，agent记忆+RAG相关。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "OpenViking 用 viking:// 统一记忆与RAG，LoCoMo 准确率 80–83%",
+    "why": "适合看 agent memory 与 RAG 架构",
+    "architecture": "它先解决一个反直觉问题：agent 记住得越多，越容易把长会话和知识库搞成一坨不可控上下文，检索慢、重复存、还会把旧经验和新任务混在一起。OpenViking 的关键改变是把 context 变成一个可寻址的 virtual filesystem：resources、memories、skills 都挂在 viking:// 下，directory summary 先做 L0/L1 过滤，真正内容只在需要时下钻到 L2，阻断“全量塞上下文”导致的 token 浪费和误召回；session commit 后再做 background extraction，按 policy 判断新记忆是 create、merge 还是 skip，阻断记忆无限膨胀。最直接的证据是 LoCoMo：相对 native memory，三种 agent integration 准确率升到 80–83%，同时 input tokens 降 34.3–91.0%、query latency 降 58.45–66.10%。新意主要在系统组织层，不是单个检索器，而是把 memory、RAG、skill 统一到同一 context database 和分层加载协议里。",
+    "verdict": "值得精读，尤其想讲清 agent memory 设计时",
+    "why_now": "",
+    "key_points": [
+     "LoCoMo 80–83%，输入token降34.3–91.0%",
+     "没证明通用任务都收益；依赖 embedding/VLM 配置",
+     "复现不只装库，还要配模型与后台任务链路"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RAG",
+     "MemGPT"
+    ],
+    "mermaid": "graph TD\nA[Session or Resource] --> B[Commit or Import]\nB --> C[Create summaries]\nC --> D[L0 L1 filter]\nD --> E[Load L2 on demand]\nB --> F[Extract memories]\nF --> G[Merge or skip]\nE --> H[Agent context]\nG --> H[Agent context]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:max-sixty/worktrunk",
+   "kind": "project",
+   "title": "max-sixty/worktrunk",
+   "url": "https://github.com/max-sixty/worktrunk",
+   "summary": "Worktrunk is a CLI for Git worktree management, designed for parallel AI agent workflows",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "max-sixty",
+   "hf_upvotes": 0,
+   "stars": 7920,
+   "stars_today": 998,
+   "forks": 272,
+   "language": "Rust",
+   "code_url": "https://github.com/max-sixty/worktrunk",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "workflow",
+    "cli"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "面向AI agent的工作流CLI",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "Worktrunk 用 wt 管理 worktree，支撑多 agent 并行开发",
+    "why": "看 agent 并行工作流和 CLI 设计",
+    "architecture": "它解决的痛点很具体：AI agent 能同时跑 5–10 个任务，但原生 git worktree 操作太碎，建一个分支要反复写路径和分支名，切换、清理、看状态都很费手。Worktrunk 的核心设计是把 worktree 按 branch 作为主键管理，路径由模板推导，`wt switch` 负责创建和切换，`wt remove` 负责清理，`wt list` 负责把各 worktree 的状态、ahead/behind、日志和 CI 信息放到同一视图；再用 hooks 把创建、合并前后、commit 等动作自动化，检测条件是工作流事件，处理动作是执行本地脚本或模板。成熟度信号比较强：有持续高频 release、完整 docs、跨平台安装说明、CI/Codecov/签名说明，而且 release notes 明确写了 breaking change 与迁移策略。和裸 git 相比，它赢在把 worktree 变成面向 agent 的操作对象，而不是让你手工拼命令。",
+    "verdict": "适合速览：是好用的工程工具，不是研究论文",
+    "why_now": "最近 release：v0.78.0（2026-09-16）",
+    "key_points": [
+     "release 频繁，且有 breaking migration 说明",
+     "没证明大规模团队协作，只证明本地并行工作流",
+     "复现门槛低，核心是 CLI 交互与 hooks"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "git worktree",
+     "gh"
+    ],
+    "mermaid": "graph TD\nA[Agent task] --> B[wt switch]\nB --> C[Own worktree]\nC --> D[Edit and test]\nD --> E[wt list]\nE --> F[Merge or remove]\nC --> G[Hooks automate]\nG --> D",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:codebuffai/freebuff",
+   "kind": "project",
+   "title": "CodebuffAI/freebuff",
+   "url": "https://github.com/CodebuffAI/freebuff",
+   "summary": "The free coding agent",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "CodebuffAI",
+   "hf_upvotes": 0,
+   "stars": 12267,
+   "stars_today": 76,
+   "forks": 1312,
+   "language": "TypeScript",
+   "code_url": "https://github.com/CodebuffAI/freebuff",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "llm",
+    "coding"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "coding agent工具，方向贴近",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Freebuff 用多专用 agent 做免费 coding，主打终端/桌面/云",
+    "why": "想看 agent 产品包装与分工，可快速扫",
+    "architecture": "它解决的是“单一聊天窗口啥都干”的老问题：编码、研究、浏览器操作和并行改代码，其实需要不同 agent 角色和不同运行环境。Freebuff 的搭法是产品分层而不是单模型：Desktop 负责本地并行 workspaces，CLI 负责终端编码，Web/Cloud 提供沙箱、预览和部署，Chat 负责研究；任务流里由 file-finding、implementation、review、browser research 等专用 agent 分工，检测条件是任务类型和环境需求，处理动作是调用相应 agent 和 workspace。成熟度上，README 给了安装、产品矩阵、模型目录和数据使用说明，也写了 Bun monorepo、Docker、`.env.local`、测试指引，但正文更像产品介绍，原文未明确公开可核验的发布/实验细节。想要“免费 AI coding 工具”时，它和一般套壳的差异在于有明确的 agent 分工和多端载体，不只是一个前端入口。",
+    "verdict": "看产品形态即可，精读价值一般",
+    "why_now": "最近 release：v1.0.420-beta.185（2025-10-21）",
+    "key_points": [
+     "产品矩阵完整，但实验与架构细节偏少",
+     "免费与广告支持是核心卖点，不是研究贡献",
+     "复现主要看 monorepo、Docker、CLI 安装链路"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "Claude Code",
+     "Codex"
+    ],
+    "mermaid": "graph TD\nA[Task] --> B{Type}\nB --> C[Code agent]\nB --> D[Research agent]\nB --> E[Browser agent]\nC --> F[Workspace]\nD --> G[Docs and web]\nE --> H[Preview]\nF --> I[Result]\nG --> I\nH --> I",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:llmquant/quant-mind",
+   "kind": "project",
+   "title": "LLMQuant/quant-mind",
+   "url": "https://github.com/LLMQuant/quant-mind",
+   "summary": "QuantMind is an open source agent-native knowledge extraction and retrieval framework for quantitative finance.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "LLMQuant",
+   "hf_upvotes": 0,
+   "stars": 2977,
+   "stars_today": 94,
+   "forks": 481,
+   "language": "Python",
+   "code_url": "https://github.com/LLMQuant/quant-mind",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "agent",
+    "finance"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "面向知识抽取与检索的 agent 框架",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 agent-native 知识工程把金融原始材料变成可追溯知识图谱，带时间戳和引用",
+    "why": "适合看 RAG/Agent 里的知识抽取与检索组织方式",
+    "architecture": "它解决的是一个很具体的悖论：金融问答里，信息明明来自论文、新闻、公告，但一旦被切块进向量库，时间点、出处、文档结构都丢了，后续检索和推理就很难可信。QuantMind 的关键改变不是“再做一个 RAG”，而是把每条知识先变成 typed artifact：先用 deterministic preprocess 做 fetch/parse/clean，保证 provenance 可回放；再用 cfg 驱动的 `PaperFlow` / `collect_news` 生成带 `as_of`、citation、source ref 的结构树或扁平卡片，阻断“知识和来源脱钩”的失败；最后在 `rag/`、`library/`、`mind/` 上分别支持 chunk 检索、本地持久化语义搜和 agentic retrieval。最直接的证据是它明确区分 `PaperStructureCfg` 和 `PaperSemanticCfg`，前者保留页级节点树，后者保留分页 chunk + 全局摘要，说明作者在结构保真和检索便利之间做了可切换的系统设计。新意主要在系统组织层，不在单个模型算法。",
+    "verdict": "适合看懂 agent 版知识工程怎么落地",
+    "why_now": "",
+    "key_points": [
+     "最强证据：typed artifact 带 citation 和 as_of",
+     "没证明通用金融以外场景也同样稳",
+     "复现门槛在于流程和数据契约而非模型"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RAG",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[原始文档] --> B[确定性预处理]\nB --> C[类型化知识]\nC --> D[结构检索]\nC --> E[语义检索]\nD --> F[Agent 推理]\nE --> F[Agent 推理]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:strands-agents/harness-sdk",
+   "kind": "project",
+   "title": "strands-agents/harness-sdk",
+   "url": "https://github.com/strands-agents/harness-sdk",
+   "summary": "Build an agent harness and control it end-to-end. Open-source SDK for production AI agents in Python & TypeScript - any model, any cloud.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "strands-agents",
+   "hf_upvotes": 0,
+   "stars": 7322,
+   "stars_today": 46,
+   "forks": 1151,
+   "language": "Python",
+   "code_url": "https://github.com/strands-agents/harness-sdk",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "evaluation",
+    "sdk"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "agent harness 控制与评测支撑，工程友好",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用可控 agent harness 统一循环、工具、记忆和评测，Python/TS 双栈同步发布",
+    "why": "适合看 agent 框架怎么做运行时与控制面设计",
+    "architecture": "它解决的不是“再写一个 Agent demo”，而是手写 agent loop 进入生产后常见的失控：turn 数、token 预算、取消、stop reason、工具调用、MCP、多 agent、记忆、观测和评测会散落在业务代码里。Strands 的关键概念是 harness：把 agent loop 当成可控制的运行时，核心组件是生命周期控制、hooks、guardrails、tracing、evals 和 model provider 抽象，阻断“模型一旦开始行动就只能黑盒跑到底”的失败。正文里最强的成熟度信号是它不是单语言玩具，而是 Python 与 TypeScript 双 SDK、配套文档站、生产部署指南，而且最近 release 里还在持续补 context strategy presets、bm25 search、sandbox timeout 细节，说明重点在运行时能力持续加厚。和普通工具箱相比，它更像把 agent 的控制面做成 SDK。",
+    "verdict": "想看生产级 agent 运行时，这个值得看",
+    "why_now": "最近 release：typescript/v1.18.0，python/v1.56.0，python/v1.55.1",
+    "key_points": [
+     "最强证据：turn/budget/hooks/tracing/evals 一体化",
+     "没证明在复杂真实任务上的稳定收益",
+     "双语言但代码面更偏工程框架而非算法"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "MCP"
+    ],
+    "mermaid": "graph TD\nA[Agent 输入] --> B[循环控制]\nB --> C[工具和MCP]\nB --> D[记忆和会话]\nB --> E[hooks和guardrails]\nC --> F[输出]\nD --> F\nE --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.18063",
+   "kind": "paper",
+   "title": "The Other Half of the Memory Wall: Serving 35B MoEs from SSD with Trained Routing Prediction",
+   "url": "https://arxiv.org/abs/2609.18063",
+   "summary": "Mixture-of-experts (MoE) inference on consumer hardware is bounded by weight memory: a 35B-class model is 19.5GB at 4-bit, and sparsity shrinks the compute per token, not the bytes that must be held. Naive offloading to SSD does not help on its own, because layer N+1's experts must be chosen before layer N's output exists, so the reads cannot start early enough to hide behind compute. We present Edge0, a streaming MoE inference engine that closes the gap with a prerouter: a per-layer head predicts the next layer's routing one token ahead, and the prediction is consumed as the routing itself, so the staged expert set equals the routed set and nothing is dropped. An unmerged recovery LoRA, trained on the student path, pays back the quality lost to int4 quantization and routing replacement. On a single 24GB machine, Edge0\n  serves a 35B MoE at 20tok/s inside 3GiB of peak active memory, within a few points of its fp16 teacher on average across five public benchmarks. An 8B tier runs on the same framework, and the framework, checkpoints, and adapters are open source.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Yu Lin",
+    "Yiming Wang",
+    "Runyuan Cai",
+    "Hanze Liu",
+    "Xiaodong Zeng"
+   ],
+   "org": "",
+   "hf_upvotes": 6,
+   "stars": 1858,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Edge0-AI/edge0",
+   "pdf_url": "https://arxiv.org/pdf/2609.18063",
+   "categories": [],
+   "keywords": [
+    "moe",
+    "inference",
+    "offloading"
+   ],
+   "core_score": 8.0,
+   "wide_score": 9.0,
+   "score_reason": "Edge0：SSD流式路由推理，MoE系统级突破",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用预测路由把 35B MoE 从 SSD 流式服务，24GB 机器上峰值活跃内存 3GiB",
+    "why": "很适合你看 MoE 推理、KV 之外的权重内存问题",
+    "architecture": "它打的是一个反直觉场景：MoE 省的是计算，不省权重字节，所以 35B 模型即使 4-bit 也会把 24GB 机器挤爆；而单纯把专家放 SSD 也没用，因为下一层专家要等上一层输出后才能知道，磁盘读不出现在 compute 前。Edge0 的关键概念是 prerouter：用前一个 token 的状态提前一 token 预测下一层 routing，把“预测”直接当“真正路由”使用，于是预取的 expert 集和最终用到的 expert 集一致，阻断了流式加载里最致命的“读错了就白等”失败。另一个设计是 unmerged recovery LoRA：int4 基座不合并 adapter，而是以并行 delta 方式服务，避免 merge 后再量化把恢复效果抹掉。最直接的证据是作者报告在单机 24GB 上把 35B MoE 做到 20 tok/s、峰值活跃内存 3GiB，并在五个公开 benchmark 上接近 fp16 teacher；新意主要在系统组织层加了“预测即路由”的跨 token 调度。",
+    "verdict": "值不值得精读，取决于你关不关心本地 MoE 推理",
+    "why_now": "",
+    "key_points": [
+     "最强证据：3GiB 活跃内存下服务 35B MoE",
+     "没证明对所有 MoE 路由形式都通用",
+     "复现难点在路由预测训练和流式执行对齐"
+    ],
+    "prereqs": [
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Mixtral-offloading",
+     "FlexGen"
+    ],
+    "mermaid": "graph LR\nA[上一 token 状态] --> B[prerouter]\nB --> C[预测路由]\nC --> D[SSD 预取专家]\nD --> E[当前层计算]\nE --> F[下一 token 输出]\nG[int4 基座] --> H[unmerged LoRA]\nH --> E",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:n8n-io/n8n",
+   "kind": "project",
+   "title": "n8n-io/n8n",
+   "url": "https://github.com/n8n-io/n8n",
+   "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "n8n-io",
+   "hf_upvotes": 0,
+   "stars": 204878,
+   "stars_today": 319,
+   "forks": 60737,
+   "language": "TypeScript",
+   "code_url": "https://github.com/n8n-io/n8n",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "workflow",
+    "automation",
+    "agent"
+   ],
+   "core_score": 5.0,
+   "wide_score": 8.0,
+   "score_reason": "AI 能力的工作流平台，热度高",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用可视化工作流+代码编排自动化，接 1500+ 集成",
+    "why": "适合看 agent 编排与生产化落地",
+    "architecture": "它解决的是“agent 能跑 demo，但一进真实业务就卡在工具、审批、监控上”的悖论。纯线性脚本挡不住分支、重试、人工确认和多系统联动，单靠对话式 agent 也难稳定接入现成业务栈。n8n 的关键改变是把 agent 落到“workflow + middleware”上：visual canvas 负责把步骤、条件分支、回调和 human approval 固化成可审计流程，custom code 与 npm 包补上复杂逻辑，1500+ integrations 把失败模式从“自己写适配器”降到“选节点并连线”。作者明确强调 self-host / cloud、role-based access、audit trails，说明它阻断的是权限与可观测性失控，而不只是功能不足。正文里最直接的证据是它把 AI workflows、multi-step agents、tool use、full observability 放在同一套平台里，而不是把 AI 当成单独插件。新意主要在系统组织层：不是新模型，而是把 agent 的运行时、连接器和治理做成可生产部署的平台。",
+    "verdict": "值得看项目架构，理解 agent 生产化怎么做",
+    "why_now": "stable（2026-09-17）；n8n@2.39.7（2026-09-17）",
+    "key_points": [
+     "1500+ 集成是核心护城河，不是单纯模板库",
+     "没证明 agent 智能更强，只证明编排更能落地",
+     "自定义节点多，复现的是平台工程，不是论文算法"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Zapier",
+     "LangChain"
+    ],
+    "mermaid": "graph LR\nA[业务事件] --> B[工作流编排]\nB --> C[工具调用]\nB --> D[人工审批]\nC --> E[条件分支]\nD --> E\nE --> F[输出与审计]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.06986",
+   "kind": "paper",
+   "title": "Continual Learning Mechanisms Compose for Long-Horizon Memorization",
+   "url": "https://arxiv.org/abs/2609.06986",
+   "summary": "Language models may need to internalize information that arrives over time and retain it through many subsequent updates. To study this challenge, we introduce long-horizon memorization, a setting in which a model learns 100 query-answer tasks through continual supervised fine-tuning without retaining earlier training examples or receiving task identifiers at inference. Sequential updates cause catastrophic forgetting, and no single continual learning mechanism we evaluate maintains strong retention at this horizon. We hypothesize that mechanisms addressing complementary sources of forgetting will be more effective when composed. We organize these compositions along two design dimensions. Data, function, and weight anchors specify what prior information each update should preserve, while low-rank allocation rules determine where successive updates are retained. To test this hypothesis systematically, we construct three distinct 100-task memorization datasets. We introduce task-level successive halving to search the combinatorial design space and use a factorial experiment to measure individual and interaction effects. Our best method combines all three anchors with merged LoRA, ranks among the top 3 methods in all datasets, and raises average final retention from 1.2% under naive sequential fine-tuning to 34.9%, a 28-fold improvement. The data anchor and merged LoRA provide the largest average gains and interact super-additively on all three datasets. Together, these results show that composing complementary mechanisms substantially improves long-horizon memorization beyond what any individual mechanism achieves.",
+   "source": "hf_papers",
+   "published": "2026-09-07",
+   "authors": [
+    "Zheyuan Zhang",
+    "Alvin Zhang",
+    "Daniel Khashabi",
+    "Tianmin Shu"
+   ],
+   "org": "",
+   "hf_upvotes": 294,
+   "stars": 14,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/cozheyuanzhangde/compose-cl",
+   "pdf_url": "https://arxiv.org/pdf/2609.06986",
+   "categories": [],
+   "keywords": [
+    "continual-learning",
+    "alignment",
+    "memory"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "长时记忆：持续微调机制组合，热点且方法清晰",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用三类 anchor+merged LoRA，将100任务保留率提到34.9%",
+    "why": "直击 continual learning 与记忆保留，面试好讲",
+    "architecture": "它要解决的反直觉场景是：模型连续学 100 个任务后，明明每次都只学一点新东西，最后却几乎把早先任务忘光。作者先指出单一 continual learning 方法在长 horizon 上都守不住 retention，问题不在“训不够久”，而在不同任务间的遗忘来源不同。关键概念是把机制拆成两轴：anchors 决定“这次更新要保住什么旧信息”，分成 data、function、weight；low-rank allocation 决定“新知识落在哪些参数槽里”，对应 shared LoRA 和 merged LoRA。这样组合的目的不是堆技巧，而是让不同机制分别阻断 replay 缺样本、output 漂移、参数被覆盖这三类失败。最强证据不是最大单项涨幅，而是 factorial experiment：data anchor 和 merged LoRA 在三个数据集上都 super-additive，最终把平均 final retention 从 1.2% 拉到 34.9%。新意在实证层加系统化设计空间：它不只提出方法，还用 successive halving + factorial analysis 证明“组合”本身是决定因素。",
+    "verdict": "值得精读，核心是 continual learning 的组合范式",
+    "why_now": "",
+    "key_points": [
+     "最强结果是 1.2%→34.9%，28 倍提升",
+     "没证明能泛化到非 memorization 任务",
+     "复现难点在 100-task 设定和组合搜索"
+    ],
+    "prereqs": [
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "replay",
+      "status": "unlisted"
+     },
+     {
+      "name": "regularization",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "EWC",
+     "LwF"
+    ],
+    "mermaid": "graph TD\nA[连续SFT] --> B[遗忘]\nB --> C[data anchor]\nB --> D[function anchor]\nB --> E[weight anchor]\nA --> F[LoRA allocation]\nF --> G[shared LoRA]\nF --> H[merged LoRA]\nC --> I[保住旧样本关系]\nH --> J[减少参数覆盖]\nI --> K[更高 retention]\nJ --> K",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:anthropics/knowledge-work-plugins",
+   "kind": "project",
+   "title": "anthropics/knowledge-work-plugins",
+   "url": "https://github.com/anthropics/knowledge-work-plugins",
+   "summary": "Open source repository of plugins primarily intended for knowledge workers to use in Claude Cowork",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "anthropics",
+   "hf_upvotes": 0,
+   "stars": 24508,
+   "stars_today": 287,
+   "forks": 2936,
+   "language": "Python",
+   "code_url": "https://github.com/anthropics/knowledge-work-plugins",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "plugins",
+    "agent",
+    "tool-use"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "Claude 插件生态，利于工作流 agent",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用插件+skills+MCP，把 Claude 变成岗位专用助手",
+    "why": "看 agent 工具栈和 MCP 落地很直接",
+    "architecture": "它解决的是“通用 LLM 会说话，但不知道你团队怎么干活、该连哪些工具、哪些流程不能乱改”的问题。这里的核心不是一个大而全 agent，而是把能力拆成三层：skills 提供岗位方法和工作流约束，commands 提供显式触发的动作入口，connectors 通过 MCP 把 Slack、Notion、Jira、HubSpot 等外部系统接进来。检测条件很简单：相关任务出现时，skills 自动生效；需要确定动作时，用户用 slash command；需要外部事实时，走 connector 拉数据。这样做阻断的是上下文漂移、工具不可控和流程不一致。成熟度信号比较强：有 11 个现成插件、明确的安装方式、目录结构和可定制说明，README 也直接暴露了 plugin.json、.mcp.json、commands、skills 的文件化实现。但它更像岗位工作台，不是自治 agent 框架；差异维度在于“把 knowledge work 结构化到可维护插件包”，而不是追求更强推理。",
+    "verdict": "适合快速判断企业级 agent 工作台形态",
+    "why_now": "原文未明确",
+    "key_points": [
+     "11 个岗位插件，覆盖销售、法务、数据等场景",
+     "文件化实现，门槛低于自研 agent 框架",
+     "没看到测试/发布节奏细节，成熟度主要靠 README 证据"
+    ],
+    "prereqs": [
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MCP",
+     "LangChain"
+    ],
+    "mermaid": "graph TD\nA[岗位任务] --> B[skills]\nA --> C[slash command]\nA --> D[connectors]\nB --> E[流程约束]\nC --> F[显式动作]\nD --> G[外部数据]\nE --> H[Claude输出]\nF --> H\nG --> H",
+    "read_level": "L2"
+   }
+  }
+ ]
+}

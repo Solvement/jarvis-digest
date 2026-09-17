@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-17",
+   "papers": 10,
+   "projects": 8,
+   "top": "In-Context Robot Learning with VLM Agents"
+  },
+  {
    "date": "2026-09-16",
    "papers": 8,
    "projects": 10,
