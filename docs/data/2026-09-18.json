@@ -1,0 +1,1285 @@
+{
+ "date": "2026-09-18",
+ "stats": {
+  "collected": 680,
+  "filtered": 283,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 16 calls, 53074 in / 16081 out; gpt-5.4-mini: 6 calls, 46945 in / 8446 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.19969",
+   "kind": "paper",
+   "title": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression",
+   "url": "https://arxiv.org/abs/2609.19969",
+   "summary": "The widespread adoption of long-horizon agents has made model workloads increasingly input-heavy. Although prior work has substantially reduced the cost of long-context computation, prefill remains computationally expensive, and large KV caches continue to strain HBM and SSD capacity and data-transfer bandwidth. Together, these compute, storage, and bandwidth demands constitute the primary bottleneck to further lowering deployment costs. To address this challenge, we introduce DeepSeek-V4.1-Flash, a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters and support for contexts of up to one million tokens. With its Causal Encoder-Decoder (CED) architecture, the model activates 16B parameters per token during decode but only 8B parameters during prefill, substantially improving cost efficiency for agentic workloads. To push the limits of KV cache compression, DeepSeek-V4.1-Flash combines cross-layer KV cache reuse in Compressed Sparse Attention 2 (CSA2) with FP4 KV caching. These designs reduce its global KV cache footprint (always in HBM) to 890 bytes per token, roughly 1/4 of the corresponding footprint of DeepSeek-V4-Flash. Further, through a dedicated deployment optimization known as SWA Bounded Replay, DeepSeek-V4.1-Flash reduces its persistent KV cache footprint (always on SSD or in host memory) to roughly 1/8 of that of DeepSeek-V4-Flash. Despite its much smaller KV cache footprint, the model delivers substantially better performance than the baseline. In addition, we streamline the DeepSeek-V4 architecture and introduce several efficient architectural extensions. We pretrain DeepSeek-V4.1-Flash on a multimodal corpus comprising 45T tokens and conduct comprehensive post-training, yielding strong performance across diverse text-based and multimodal agentic scenarios. Model checkpoints are available at https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "DeepSeek-AI",
+    "Anyi Xu",
+    "B. Li",
+    "Bangcai Lin",
+    "Bing Xue",
+    "BingCheng Xian"
+   ],
+   "org": "",
+   "hf_upvotes": 53,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.19969",
+   "categories": [
+    "cs.CL"
+   ],
+   "keywords": [
+    "kv-cache",
+    "moe",
+    "inference"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "KV cache 压缩与长上下文推理瓶颈，强相关且高质量",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 CED+CSA2+FP4 把1M上下文的 KV 压到890B/ token",
+    "why": "适合看长上下文推理与部署瓶颈",
+    "architecture": "长上下文 agent 的反直觉点是：模型算力还没先死，HBM/SSD 先被 KV cache 吃满，prefill 也仍然贵，所以只做 attention 加速不够。作者的关键改法不是单点压缩，而是把“谁在什么时候需要什么状态”拆开：CED 让 decode 侧每 token 激活 16B 参数、prefill 只激活 8B，降低输入重计算；CSA2 负责跨层复用 KV 和索引，阻断“每层都存一份历史”的爆炸；FP4 main KV cache 进一步把常驻 KV 精度压低，SWA Bounded Replay 则把 persistent KV 从 HBM 挪到 SSD/host，并限制重放窗口，阻断“长期会话越跑越占显存”。最直接的证据是作者报告 global KV cache 降到 890 bytes/token，约为 DeepSeek-V4-Flash 的 1/4，persistent KV 约为 1/8，同时在 agentic benchmark 上还优于 baseline。新意主要在系统组织层：不是单一压缩算子，而是把模型架构、缓存格式和部署重放策略绑成一套。",
+    "verdict": "值得精读，核心是缓存瓶颈的系统解法",
+    "why_now": "",
+    "key_points": [
+     "作者报告 global KV 仅 890B/token",
+     "persistent KV 约为 baseline 的 1/8",
+     "未明确公开代码，复现偏部署级"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "Mixture of Experts",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "DeepSeek-V4-Flash",
+     "FlashAttention"
+    ],
+    "mermaid": "graph TD\nA[长上下文输入] --> B[CED 分流预填充解码]\nB --> C[CSA2 跨层复用]\nC --> D[FP4 主缓存]\nD --> E[SWA Bounded Replay]\nE --> F[更小 KV footprint]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.18487",
+   "kind": "paper",
+   "title": "ActionPiece: Rethinking Action Tokenization for Autoregressive Vision-Language-Action Models",
+   "url": "https://arxiv.org/abs/2609.18487",
+   "summary": "Action tokenizers play a central role in autoregressive vision-language-action (VLA) models, determining both the targets for policy training and the executable commands recovered from predicted tokens. Their fidelity is commonly evaluated using pointwise reconstruction metrics such as mean squared error (MSE), yet small individual errors do not fully characterize how faithfully action adjustments across demonstrations are preserved. After compression, similar actions may still cluster around a representative motion, while the adjustments needed for different contexts are diminished, distorted, or even reversed. We introduce physical rank consistency (PRC) to measure how well tokenization preserves local physical distance rankings after reconstruction. Evaluating decoded actions provides a common reference across token vocabularies and decoder architectures, complementing pointwise accuracy with a measure of relational fidelity. We further present ActionPiece, which preserves physical action relationships through joint supervision of representation learning and quantization. Physical rank preservation supervises near-far ordering in encoder and quantized feature distances, while quantization regularization applies the same ordering to codeword assignment distributions. Both objectives augment reconstruction, producing discrete action tokens for standard autoregressive policy learning and execution through a frozen decoder. Under the same Qwen3-VL-4B policy training setup, ActionPiece achieves 94.8% on LIBERO and 68.8% on unseen LIBERO-Plus, with additional evaluations reaching 71.9% on SimplerEnv and 51.5% across VLA-Arena L0-L2. Component ablations show that the two objectives jointly improve PRC and policy success, demonstrating the value of physical relationship supervision for action tokenization.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Shijie Lian",
+    "Bin Yu",
+    "Zhaolong Shen",
+    "Xiaopeng Lin",
+    "Yichao Du",
+    "Zhirui Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 39,
+   "stars": 15,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/DeepCybo-PhysAI/ActionPiece",
+   "pdf_url": "https://arxiv.org/pdf/2609.18487",
+   "categories": [],
+   "keywords": [
+    "vla",
+    "action-tokenization",
+    "vision-language-action",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "行动token化重思考，面向具身/VLA关键环节",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 PRC+ActionPiece 让 VLA 动作 token 保住相对物理关系，LIBERO 94.8%",
+    "why": "对 VLA 和机器人 action discretization 很对口",
+    "architecture": "VLA 里一个常见悖论是：MSE 看起来很低，机器人却把“该更靠前一点”学没了，甚至把两个上下文下应不同的微调压成同一个代表动作。作者先改评价，再改 tokenization：PRC 是硬定义的局部物理排序一致性指标，比较重建前后动作邻居的距离排名是否保住，补上了点对点误差看不到的关系损失；ActionPiece 则用 PRP 和 QR 双重监督，把“近的动作在表示空间和 codeword 分配里也该近”写进训练，阻断压缩后动作簇塌到均值、上下文细调被抹平的失败。最直接的证据是同一 Qwen3-VL-4B policy 训练设定下，ActionPiece 在 LIBERO 94.8%、未见 LIBERO-Plus 68.8%，并且 ablation 显示 PRP+QR 要一起上才同时改善 PRC 和成功率。新意主要在组件层加了一个“关系保真”的 tokenization 目标，而不是换一个更大的 policy。",
+    "verdict": "值得精读，改的是 action tokenization 目标",
+    "why_now": "原文未明确",
+    "key_points": [
+     "PRC 评价的是排序保真，不是 MSE",
+     "LIBERO-Plus 上仍有 68.8% 泛化",
+     "基于 frozen decoder，训练链路较清晰"
+    ],
+    "prereqs": [
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "tokenization",
+      "status": "unlisted"
+     },
+     {
+      "name": "contrastive learning",
+      "status": "unknown"
+     },
+     {
+      "name": "autoregressive image generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RT-2",
+     "OpenVLA"
+    ],
+    "mermaid": "graph TD\nA[动作演示] --> B[物理距离排序]\nB --> C[PRP 监督表示]\nB --> D[QR 监督分配]\nC --> E[离散 token]\nD --> E\nE --> F[frozen decoder]\nF --> G[可执行动作]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.20004",
+   "kind": "paper",
+   "title": "EPIG-Tree: Compute-Optimal Branching for Gradient-Efficient Reinforcement Learning",
+   "url": "https://arxiv.org/abs/2609.20004",
+   "summary": "Reward-based reinforcement learning for language models, exemplified by Group Relative Policy Optimization (GRPO), collapses an entire stochastic trajectory into a single scalar reward. This is clean and scalable, but it explores and allocates reward inefficiently: a trajectory may contain many causal decisions, recovery attempts, and environment-randomness events, yet every token or action inherits one trajectory-level advantage. We study tree-based rollout construction as a compute-allocation problem for policy-gradient estimation. Our central claim is that branches should be placed not where the policy is merely uncertain, but where an additional branch most reduces uncertainty about the policy gradient per unit of compute. From a law-of-total-variance decomposition of the local policy-gradient random variable, we derive two allocation laws: new branches reduce decision uncertainty, while repeated suffix rollouts reduce continuation uncertainty. The resulting EPIG-Tree score allocates branches using the already computed rollouts. It estimates occupancy- and score-weighted value uncertainty, along with a suffix law $n_e \\propto w_e \\|\\nabla_θ\\log π(a_e|h_e)\\| σ_e / \\sqrt{c_e}$. Empirically, EPIG reduces gradient MSE in cloned-state control, winning in all nine dense continuous-control environments of a 13-environment sweep and recovering the reference gradient direction near-perfectly, and it improves frozen-LLM gradient calibration relative to entropy branching. In online single-turn math, tree-local credit beats flat GRPO, while branch placement is secondary to token-level credit assignment. In online multi-turn Wordle, EPIG attains the highest final win rate (0.850), overtaking flat GRPO, which saturates early at 0.790, and entropy branching as training proceeds, confirming that the gradient-estimation advantage transfers to a stateful, large-action setting.",
+   "source": "arxiv",
+   "published": "2026-09-17",
+   "authors": [
+    "Nikita Khomich",
+    "Leopold Hermansson",
+    "Ido Hakimi"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.20004",
+   "categories": [
+    "cs.LG",
+    "cs.AI"
+   ],
+   "keywords": [
+    "rl",
+    "grpo",
+    "tree-search"
+   ],
+   "core_score": 9.0,
+   "wide_score": 5.0,
+   "score_reason": "RL算力分配与树式rollout，直接对应GRPO范式",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 EPIG-Tree 替代 entropy branching，让树采样更省算力地降梯度误差",
+    "why": "和 GRPO、tree search、长程 credit assignment 直接相关",
+    "architecture": "在 GRPO 里，一个长轨迹的所有 token 共享同一个标量奖励，问题是：错在中途、后面又补救成功时，正确动作也被一起罚；而只看 entropy 也会把算力浪费在“高不确定但对梯度没影响”的分叉上。作者把树构造改写成梯度估计的算力分配问题：EPIG-Tree 不是问“哪里最不确定”，而是问“再分一枝，哪里最能降低 policy gradient 的不确定性/单位计算”；新分支主要减 decision uncertainty，重复 suffix rollout 主要减 continuation uncertainty。最强证据是 cloned-state continuous control 里梯度 MSE 更低、九个环境全赢，以及在线 multi-turn Wordle 最终 win rate 到 0.850，超过 flat GRPO 的 0.790。新意在实证层和算法层同时落地：它不是新 reward，也不是新 critic，而是把 tree branching 变成 gradient-efficient sampling。",
+    "verdict": "值得精读，能补 GRPO 的树采样视角",
+    "why_now": "",
+    "key_points": [
+     "核心指标是 gradient MSE，不是最终 reward",
+     "在线 Wordle 上 final win rate 0.850",
+     "对 entropy branching 是直接替代关系"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "policy gradient",
+      "status": "unlisted"
+     },
+     {
+      "name": "tree search",
+      "status": "unlisted"
+     },
+     {
+      "name": "entropy",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "GRPO",
+     "TreePO"
+    ],
+    "mermaid": "graph TD\nA[当前前缀] --> B[候选分支]\nB --> C[EPIG 评分]\nC --> D[新分支减决策不确定]\nC --> E[重放后缀减延续不确定]\nD --> F[更准梯度]\nE --> F\nF --> G[更稳更新]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.20519",
+   "kind": "paper",
+   "title": "SoL-Pi: Recursively Scaling Auto-Research Loops for Efficient Agent Harness",
+   "url": "https://arxiv.org/abs/2609.20519",
+   "summary": "As coding agents move from supervised code completion to unattended, around-the-clock exploration, their work expands from isolated predictions into long trajectories of reasoning, tool use, and feedback. Token efficiency therefore becomes important for scaling recursive self-improvement. We take an RSI-inspired approach at the harness layer, scaling auto-research loops across increasingly numerous and diverse environments for harness rollouts. At this scale, the process yields reusable improvements that transfer beyond their development setting, moving automated harness discovery toward production-level outcomes. Four mechanisms survive selection and form SoL-Pi, spanning action execution, context compaction, observation handling, and delegated reading. On the 51-task EdgeBench evaluation, SoL-Pi achieves performance comparable to Pi across GPT-5.6 Sol and Opus 5 while reducing recorded token traffic by 44.7-49.0% and API cost by about one third. In other words, estimated hourly savings are \\$8.75-\\$13.50 relative to native Codex and Claude Code harnesses, and \\$4.36-\\$5.71 relative to Pi.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Haozhe Liu",
+    "Tian Ye",
+    "Sensen Gao",
+    "Qihang Cao",
+    "Yitong Li",
+    "Mingchen Zhuge"
+   ],
+   "org": "",
+   "hf_upvotes": 42,
+   "stars": 2235,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/NVlabs/SoL-Pi",
+   "pdf_url": "https://arxiv.org/pdf/2609.20519",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "auto-research",
+    "harness"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "递归自动研究循环，on-policy/agent harness 很对口",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "SoL-Pi用自动研究循环找 harness，EdgeBench 省44.7–49.0% token",
+    "why": "你做 Agent/RAG 和系统都用得上",
+    "architecture": "它解决的反直觉点是：agent 省 token 不能只靠更快 attention 或量化，因为长任务里真正烧钱的常常是 harness 自己的循环、回读和失败恢复。SoL-Pi 的关键变化是把 harness 优化变成 RSI 式 auto-research：研究 AI 读执行轨迹，提出改动，再用开发环境筛选；但 capability 和 efficiency 的门槛先被冻结，且 held-out 的 EdgeBench 只做最终验证，避免“在搜索集上越改越像答案”。四个保留下来的机制分别卡住 action execution、context compaction、observation handling、delegated reading 四类浪费。最直接的证据是 51-task EdgeBench：性能接近 Pi，但 recorded token traffic 降 44.7–49.0%，API cost 约少三分之一。新意主要在系统组织层，而不是单个算法模块。",
+    "verdict": "值得看系统组织怎么把 agent 省 token 做实",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 EdgeBench 上等性能降 token",
+     "没证明通用到所有 agent harness",
+     "复现难点在大规模搜索与隔离验证"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Meta-Harness",
+     "Recursive Harness Self-Improvement"
+    ],
+    "mermaid": "graph LR\nA 执行轨迹 --> B 研究AI提案\nB --> C 开发环境筛选\nC --> D 能力门槛\nC --> E 效率门槛\nD --> F 机制保留\nE --> F\nF --> G 冻结后评测\nG --> H 更低token",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.17708",
+   "kind": "paper",
+   "title": "Confidence Comes from Experience: Experiential Confidence Estimation from Reasoning to Agents",
+   "url": "https://arxiv.org/abs/2609.17708",
+   "summary": "Reliable confidence estimation is increasingly central to the trustworthy deployment of language models: a calibrated estimate of the probability that an output is correct decides what to ship, what to escalate, and what to retry. Existing confidence estimators, however, share one design premise: they only read the current inference process, either by introspecting on it, scoring its token probabilities, or resampling it. We argue that the current inference is not a sufficient basis for confidence. We propose XConf (eXperiential Confidence): estimating confidence together with the model's accumulated experience. The experience is stored as a record of the model's own graded past episodes, each holding the task, the model's reflection, its stated confidence, the outcome, and a lesson written once the grade arrived. Given a new task, XConf's Recall stage retrieves past episodes on similar tasks met with a similar stated confidence, and reads off their historical success rate; its Reflect stage shows the model this record, has it name its recurring failure mode, and restate a confidence now informed by its own track records. Our estimator is format-general, requiring no logit access or weight updates, and costs only one answer generation. Across nine benchmarks spanning reasoning, coding, multimodal QA, and interactive agents, and four models from three families, XConf beats or matches ten-sample self-consistency in discrimination (AUROC) on 23 of 24 comparisons, with much lower calibration error (ECE), at a tenth of the generation cost. Used for selective prediction, abstaining on the 10% least-confident episodes raises the delivered success rate by up to 8.7 points on agent tasks. We therefore see experiential confidence estimation as a new paradigm for future general-purpose confidence estimation.",
+   "source": "hf_papers",
+   "published": "2026-09-15",
+   "authors": [
+    "Caiqi Zhang",
+    "Xiaochen Zhu",
+    "Chengzu Li",
+    "Yulong Chen",
+    "Dharshan Kumaran",
+    "Nigel Collier"
+   ],
+   "org": "",
+   "hf_upvotes": 52,
+   "stars": 1,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/caiqizh/xconf",
+   "pdf_url": "https://arxiv.org/pdf/2609.17708",
+   "categories": [],
+   "keywords": [
+    "confidence",
+    "agents",
+    "calibration",
+    "inference"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "经验驱动置信度，和agent可靠性强相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "XConf用经验库估置信心，24次对比中23次胜过10样本self-consistency",
+    "why": "做可信 Agent 和选择性拒答很相关",
+    "architecture": "它抓住的悖论是：模型当前这次推理看起来很顺，不代表它真有把握；尤其在 coding 和 agent 任务里，单看 logits、口头自评或重采样，往往只是在看“这次答案像不像对的”，不是“这类题过去有多常对”。XConf 的关键改动是把 confidence 的依据从当前 inference 迁到 accumulated experience：每个历史 episode 记录任务、反思、当时 confidence、最终 outcome 和 lesson；Recall 先按“相似任务+相似自信度”查历史成功率，Reflect 再让模型读这份记录并重述 confidence。最强证据是 9 个 benchmark、4 个模型、23/24 次 AUROC 优于或持平 10-sample self-consistency，而且 ECE 更低、生成成本约十分之一；在 agent 任务上，低置信度 abstain 还能把交付成功率再抬高。新意在实证层加一个新的 confidence basis，而不是训练新模型。",
+    "verdict": "值得精读，尤其是 agent 置信度怎么做",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 23/24 次 AUROC 对比胜出",
+     "不依赖 logit 或 weight update",
+     "弱点是跨模型/跨域经验迁移会掉点"
+    ],
+    "prereqs": [
+     {
+      "name": "confidence estimation",
+      "status": "unlisted"
+     },
+     {
+      "name": "self-consistency",
+      "status": "unlisted"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "hallucination",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "self-consistency",
+     "verbalized confidence"
+    ],
+    "mermaid": "graph TD\nA 新任务 --> B Recall 检索经验\nB --> C 历史成功率\nC --> D Reflect 重估置信心\nD --> E 输出 confidence\nE --> F abstain 或继续\nF --> G outcome 回写经验",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.20784",
+   "kind": "paper",
+   "title": "RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcement Learning",
+   "url": "https://arxiv.org/abs/2609.20784",
+   "summary": "Multi-turn agents trained with reinforcement learning (RL) receive a single scalar reward per trajectory, which motivates self on-policy distillation (OPD) to supply dense token-level supervision from a self-teacher with privileged task skills, letting a skill-free student internalize them. This recipe, however, is undermined by two findings in agentic tasks: privileged information alone does not always make a teacher reliable, and the benefit of teacher supervision is stage-dependent. We therefore propose RetireOPD (Self-Retiring On-Policy Distillation), which first optimizes a decoupled, skill-conditioned teacher with environment rewards and then trains a skill-free student jointly with RL and OPD. Rather than following a predefined distillation schedule, RetireOPD adopts Adaptive Retirement: the student drops the teacher on its own once their discrepancy stops shrinking and it reaches a target fraction of the teacher's success rate, after which training proceeds with RL alone. Across Qwen2.5 models from 1.5B to 7B, RetireOPD improves ALFWorld success rate over RL baseline by 14.1% to 18.8% and WebShop accuracy by 11.8% to 19.0%, and surpasses its own skill-conditioned teacher in every setting.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Yan Yu",
+    "Zhengxi Lu",
+    "Yizhou Liu",
+    "Yichen Pan",
+    "Aozhe Wang",
+    "Qipeng Chen"
+   ],
+   "org": "",
+   "hf_upvotes": 14,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.20784",
+   "categories": [
+    "cs.CL",
+    "cs.AI"
+   ],
+   "keywords": [
+    "opd",
+    "distillation",
+    "rl"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "RetireOPD：agent 任务下的 on-policy distillation 改进",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "RetireOPD让 teacher 会退休，ALFWorld 提升14.1–18.8%",
+    "why": "做 RLHF/GRPO 和 agent 训练很对口",
+    "architecture": "它解决的不是“要不要 distillation”，而是一个更细的悖论：在多轮 agent 里，teacher 一开始能补稀疏 reward 的洞，但当 student 已经学会这套技能后，继续硬贴 teacher 会把 reward optimization 卡住。RetireOPD 先把 teacher 单独用 environment rewards 训成真会用 privileged context 的 policy，再让 student 同时吃 GRPO 和 OPD；关键机制是 Adaptive Retirement：监控 teacher-student discrepancy，只有当它不再下降、且 student 成功率达到 teacher 的某个目标比例时，才把 teacher 按在线信号“退役”，后续只留 RL。最直接的证据是 ALFWorld 和 WebShop 上，RetireOPD 在 1.5B 到 7B 的 Qwen2.5 都稳定优于 RL、纯 distillation 和混合基线，还超过了自己的 skill-conditioned teacher。新意主要在系统组织层：不是换个 teacher，而是决定 teacher 何时退出。",
+    "verdict": "值得看 online retirement 这一招怎么落地",
+    "why_now": "",
+    "key_points": [
+     "最强证据是三种模型尺度都赢基线",
+     "没证明退休阈值对所有任务稳健",
+     "实现要同时追踪差异和成功率"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "OPD",
+     "GRPO"
+    ],
+    "mermaid": "graph TD\nA 环境奖励 --> B 训练 teacher\nB --> C student 加 GRPO 和 OPD\nC --> D 监控 discrepancy\nD --> E 达到阈值\nE --> F 退休 teacher\nF --> G 只留 RL\nG --> H 更高成功率",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.17653",
+   "kind": "paper",
+   "title": "Reflect, Revise, Reuse: Training-Free Skill Evolution for GUI Agents",
+   "url": "https://arxiv.org/abs/2609.17653",
+   "summary": "GUI agents execute long-horizon tasks on dynamic graphical user interfaces, where pop-ups, delayed loads, and relocated widgets routinely invalidate plans fixed before execution. Recent agent-skill frameworks encapsulate reusable procedural knowledge to mitigate this, yet existing skill designs are largely developed without targeting GUI execution dynamics and treat skills as static artifacts produced before deployment rather than living procedural knowledge that improves through it. We argue that what GUI agents need is not better static skills, but skills that can be revised from execution feedback at deployment time, without additional training. We propose EvoSkill-GUI, a training-free framework in which each skill is a structured multi-file package containing retrieval metadata, executable plans, backup localization, failure-recovery rules, accessibility utilities, and failure cases. EvoSkill-GUI operates through a \\emph{reflect-revise-reuse} loop: the executor performs instant in-rollout revisions, an isolated critic diagnoses failed trajectories under strict information isolation, and the executor edits specific skill files through a restricted tool interface. Across MobileWorld, AndroidWorld, and OSWorld, three mainstream GUI benchmarks spanning mobile and desktop platforms, EvoSkill-GUI consistently improves multiple base models without any training, with maximum gains of +16.2%, +6.0%, and +10.5% respectively, and evolved skill libraries continue to benefit related tasks rather than being rebuilt from scratch. Our code is available at https://github.com/ZJU-REAL/EvoSkill-GUI.",
+   "source": "hf_papers",
+   "published": "2026-09-15",
+   "authors": [
+    "Bofan Chen",
+    "Boxuan Zhang",
+    "Fei Tang",
+    "Zhengxi Lu",
+    "Yong Du",
+    "Tongbo Chen"
+   ],
+   "org": "",
+   "hf_upvotes": 10,
+   "stars": 11,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/ZJU-REAL/EvoSkill-GUI",
+   "pdf_url": "https://arxiv.org/pdf/2609.17653",
+   "categories": [],
+   "keywords": [
+    "gui",
+    "agent",
+    "planning",
+    "skill-learning"
+   ],
+   "core_score": 8.0,
+   "wide_score": 2.0,
+   "score_reason": "GUI长程技能演化，贴合agent后训练与评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 reflect-revise-reuse 让 GUI 技能无训练自我修订，MobileWorld 等最高+16.2%",
+    "why": "Agent/RAG 面试里很适合聊在线自我进化",
+    "architecture": "反直觉点在于：GUI 任务最容易挂的不是“不会做”，而是同一技能在执行中被弹窗、延迟加载、控件位移打断；静态 skill 只要写死一次就会失效。作者的关键改法是把 skill 从单文档改成可编辑的多文件 package：retrieval metadata 负责召回相关技能，plan/localization/recovery 分开存，避免失败时整段技能不可改；critic 与 executor 信息隔离，先诊断是哪一类错误，再用受限工具只改对应文件，阻断“错误复用整份技能”的扩散。最直接的证据是跨 MobileWorld、AndroidWorld、OSWorld 都能在不训练的情况下提升，最大增益分别到 +16.2%、+6.0%、+10.5%；这说明收益来自执行反馈写回技能本身，而不是某个模型特化。新意主要在组件层和系统组织层：不是新 RL，而是把 skill 设计成可局部修订、可累积的活文档。",
+    "verdict": "值得精读，核心是训练外的技能在线演化",
+    "why_now": "",
+    "key_points": [
+     "最强证据是三套 GUI 基准都涨，且无需训练",
+     "没证明对非 GUI 场景同样有效",
+     "复现要接入执行器、critic、受限写回链路"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "XSkill",
+     "MMSkills"
+    ],
+    "mermaid": "graph TD\nA[GUI 执行失败] --> B[隔离 critic]\nB --> C[定位错误类型]\nC --> D[受限写回 skill 文件]\nD --> E[更新 package]\nE --> F[再次复用]\nF --> G[相关任务受益]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.19554",
+   "kind": "paper",
+   "title": "VABench: Measuring Embodied Spatial Intelligence through Visual Demonstrations, Active Perception, and Metric Control",
+   "url": "https://arxiv.org/abs/2609.19554",
+   "summary": "Spatial intelligence requires more than describing object locations. Under incomplete observation, models must identify and acquire missing evidence, interpret it in a common spatial frame, and act on it. We introduce VA-Bench to evaluate the complete observe-reason-act-revise loop. General-purpose MLLMs learn procedural context from RGB-only demonstrations, actively select camera viewpoints, issue metric Cartesian commands, and revise them from execution feedback. Models receive no privileged object poses, oracle trajectories, or learned action heads. A fixed model-agnostic controller executes only model-specified targets. VA-Bench contains 14 base task families (11 single-arm and three dual-arm), seven held-out geometry/layout variants, and a long-horizon five-object composition track. We evaluate 12 primary model conditions in three independent runs over the same 20 physically verified seeds per base task, reporting terminal success, nine trajectory-level behavioral diagnostics, and subtask progress. First, the best-performing model scores 100.0% on target localization and 78.9% on spatial relations in the annotated run. Its three-run macro-average task success is only 53.93+/-3.17%. Second, active camera control significantly improves task success over passive multi-view observation. In one matched comparison, success rises from 27.86% to 57.50%. Third, held-out geometric transfer can reduce task success by over 30 percentage points. No model completes a strict long-horizon episode, despite substantial partial progress. VA-Bench thus tests whether general-purpose MLLMs can turn visual demonstrations and actively acquired evidence into successful embodied action.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Zhongbo Zhang",
+    "Jiayi Jin",
+    "Yifan Wang",
+    "Zaibin Zhang",
+    "Haiwen Diao",
+    "Lijun Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 7,
+   "stars": 11,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/zhangzhongbo2213/VABench",
+   "pdf_url": "https://arxiv.org/pdf/2609.19554",
+   "categories": [],
+   "keywords": [
+    "embodied",
+    "rl",
+    "benchmark",
+    "vlm"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "observe-reason-act-revise评测，适配VLA/agent",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 VA-Bench 评测闭环空间智能，12 个模型三跑后成功率仅 53.93%",
+    "why": "适合补 embodied / VLM 面试里的评测视角",
+    "architecture": "反直觉点在于：模型在静态图里能把“左边、上方、近处”说对，不代表它能在真实交互里把视角补齐并转成可执行的机器人动作。作者把空间智能拆成 observe-reason-act-revise 闭环：先要求模型根据 RGB 演示主动选视角，再输出 metric Cartesian command，由固定 controller 执行，最后根据反馈修正；这阻断了“只会描述、不懂补证据”和“会判断但不会落到坐标动作”的两类失败。最直接的证据是 matched comparison 里，主动 camera control 把成功率从 27.86% 提到 57.50%；而且 best model 在 target localization 上能到 100%，整体三跑任务成功却只有 53.93±3.17%，说明诊断分和闭环执行不是一回事。新意主要在实证层：它不是新模型，而是把主动感知、度量控制和反馈修正绑进同一个 benchmark。",
+    "verdict": "值得通读，主要看它怎么拆闭环失败",
+    "why_now": "",
+    "key_points": [
+     "最强证据是主动视角比被动多视角更有效",
+     "没证明这些诊断能单独预测成功",
+     "复现依赖物理仿真和固定 controller"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "CLEVR",
+     "ManipBench"
+    ],
+    "mermaid": "graph TD\nA[RGB 演示] --> B[选视角]\nB --> C[度量坐标动作]\nC --> D[控制器执行]\nD --> E[反馈修正]\nE --> F[继续闭环]\nF --> G[任务成功]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:graphify-labs/graphify",
+   "kind": "project",
+   "title": "Graphify-Labs/graphify",
+   "url": "https://github.com/Graphify-Labs/graphify",
+   "summary": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Graphify-Labs",
+   "hf_upvotes": 0,
+   "stars": 119326,
+   "stars_today": 437,
+   "forks": 11533,
+   "language": "Python",
+   "code_url": "https://github.com/Graphify-Labs/graphify",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "graph",
+    "rag",
+    "agent",
+    "knowledge-graph"
+   ],
+   "core_score": 8.0,
+   "wide_score": 9.0,
+   "score_reason": "从代码/文档到可查询KG，且强调确定性与可解释边。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用本地 AST+知识图谱把代码库变成可查询图，Star 119326",
+    "why": "对做 agent 工具链、代码理解很有参考价值",
+    "architecture": "它解决的是“大代码库读不动、grep 不出跨文件关系”的痛点：README 里给的不是搜索框，而是把代码、文档、SQL、PDF 统一映射成可遍历的 graph。承重组件是本地 deterministic AST 解析和显式边类型；代码侧用 tree-sitter 做跨语言引用解析，避免 embedding 把结构关系揉成相似度，文档/图片/视频才走语义通道。关键取舍是 no vector store、每条边带 EXTRACTED 或 INFERRED 标签，这会阻断“检索结果看起来像、但来源不清”的黑盒问题，也方便追溯路径。成熟度信号强：有明确 recent release v0.9.63–v0.9.61，README 直接给安装、CLI、输出文件和 benchmark；但基准主要是 recall/QA，且宣传里能做的范围很广，真实边界仍要看是否大量依赖语义层。想要“查项目知识”这件事，它和传统 dense RAG 的差别在于结构可解释性和跨文件依赖路径，而不是召回向量近邻。",
+    "verdict": "值得关注，适合想做代码理解工具的人",
+    "why_now": "最近 release：v0.9.63（2026-09-16）、v0.9.62（2026-09-15）、v0.9.61（2026-09-12）",
+    "key_points": [
+     "最强证据是本地 AST 解析加可解释边",
+     "没证明语义层比纯图检索更稳",
+     "复现门槛低，但大仓库索引成本未明"
+    ],
+    "prereqs": [
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge graph",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Graph RAG",
+     "RAG"
+    ],
+    "mermaid": "graph TD\nA[代码 文档 PDF] --> B[AST 解析]\nB --> C[知识图谱]\nC --> D[可解释边]\nD --> E[query path explain]\nE --> F[替代 grep]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:swe-agent/mini-swe-agent",
+   "kind": "project",
+   "title": "SWE-agent/mini-swe-agent",
+   "url": "https://github.com/SWE-agent/mini-swe-agent",
+   "summary": "The 100 line AI agent that solves GitHub issues or helps you in your command line. Radically simple, no huge configs, no giant monorepo—but scores >74% on SWE-bench verified!",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "SWE-agent",
+   "hf_upvotes": 0,
+   "stars": 7749,
+   "stars_today": 357,
+   "forks": 1048,
+   "language": "Python",
+   "code_url": "https://github.com/SWE-agent/mini-swe-agent",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "swe-bench",
+    "tool-use"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "极简高性能agent，SWE-bench表现强",
+   "tier": "core",
+   "ptype": "model",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用仅 bash 的 100 行 agent 解决代码修复，SWE-bench verified >74%",
+    "why": "适合看 agent scaffold 取舍与 SWE-bench 面试谈资",
+    "architecture": "反直觉点在于：做软件工程 agent，不一定要复杂工具和状态化 shell；很多失败其实来自 scaffold 自己把轨迹和消息拆开、把 sandbox 搞脆、把调试面变大。mini-swe-agent 的关键改变是把 agent 收缩成“bash + 线性消息 + subprocess.run”：组件只做动作执行与消息追加，不维护长会话，也不依赖 tool-calling，因而阻断了状态漂移、环境依赖和不可复现这三类失败。作者最直接的证据是它在 SWE-bench verified 上仍然能到 >74%，同时启动更快；这说明高性能不一定来自更厚的 agent 层，而可能来自把 LM 放回中间、把 scaffold 变薄。新意主要在系统组织层，不是新算法。",
+    "verdict": "值得精读，尤其看 agent 组织方式怎么收缩",
+    "why_now": "",
+    "key_points": [
+     "bash only 仍能打到 >74%",
+     "不证明复杂工具没价值；更像强基线",
+     "复现门槛低，核心逻辑很短"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-agent",
+     "Claude Code"
+    ],
+    "mermaid": "graph LR\nA[bash only] --> B[linear history]\nB --> C[subprocess run]\nC --> D[sandbox friendly]\nD --> E[high SWE bench]\nA --> F[less tool calling]\nF --> D",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:higgsfield-ai/higgsfield",
+   "kind": "project",
+   "title": "higgsfield-ai/higgsfield",
+   "url": "https://github.com/higgsfield-ai/higgsfield",
+   "summary": "Fault-tolerant, highly scalable GPU orchestration, and a machine learning framework designed for training models with billions to trillions of parameters",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "higgsfield-ai",
+   "hf_upvotes": 0,
+   "stars": 4574,
+   "stars_today": 250,
+   "forks": 838,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/higgsfield-ai/higgsfield",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "training",
+    "orchestration",
+    "distributed"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "GPU 编排框架，适合规模化训练系统研究",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 GitHub 驱动分布式训练与队列调度，面向万亿参数",
+    "why": "看训练系统编排和 ZeRO/FSDP 组合，适合系统岗",
+    "architecture": "原文的问题是：训练大模型时，真正拖慢进度的常常不是 forward/backward，而是环境、节点、队列和出错后的恢复；一旦实验跨机器，配置地狱和资源争抢会先把人拖垮。Higgsfield 的关键概念是把“实验”提升成可部署、可监控、可排队的工作流：资源分配器负责阻断节点冲突，experiment 装饰器把训练入口标准化，GitHub/GitHub Actions 负责触发与追踪，ZeRO-3/FSDP 则解决参数规模过大时的显存分摊。作者最直接的例子是用几行代码训练 LLaMA 70B，且支持 bf16、AdamW、push_to_hub；这更像在证明编排层能把分布式训练门槛压到工程可操作，而不是证明某个新优化器。新意主要在系统组织层。",
+    "verdict": "偏工程系统，适合看训练编排思路",
+    "why_now": "最近 release：v0.0.4-rc（2024-03-23）",
+    "key_points": [
+     "重点证据是队列、GitHub 集成和分布式封装",
+     "没证明比现成训练框架更强，只是更省配置",
+     "依赖节点和 SSH 环境，部署门槛不低"
+    ],
+    "prereqs": [
+     {
+      "name": "ZeRO",
+      "status": "unknown"
+     },
+     {
+      "name": "Fully Sharded Data Parallel",
+      "status": "unknown"
+     },
+     {
+      "name": "bf16",
+      "status": "unknown"
+     },
+     {
+      "name": "Adam",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "DeepSpeed",
+     "PyTorch FSDP"
+    ],
+    "mermaid": "graph LR\nA[experiment code] --> B[GitHub workflow]\nB --> C[node queue]\nC --> D[distributed train]\nD --> E[checkpoints]\nC --> F[resource isolation]\nF --> D",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:unslothai/unsloth",
+   "kind": "project",
+   "title": "unslothai/unsloth",
+   "url": "https://github.com/unslothai/unsloth",
+   "summary": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4, MiniMax-H3, Gemma 4, FLUX and more.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "unslothai",
+   "hf_upvotes": 0,
+   "stars": 76377,
+   "stars_today": 78,
+   "forks": 6970,
+   "language": "Python",
+   "code_url": "https://github.com/unslothai/unsloth",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "fine-tuning",
+    "quantization",
+    "inference",
+    "tooling"
+   ],
+   "core_score": 8.0,
+   "wide_score": 10.0,
+   "score_reason": "训练/推理加速一体化，业界热点且上手价值高。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用桌面端和核心库把本地训练推理做成一体，更新含 GRPO 与 FP8",
+    "why": "和 LLM 微调、推理加速、agent 本地化都直接相关",
+    "architecture": "原文里的痛点不是单一功能，而是本地跑模型时训练、推理、RAG、agent、部署分散在不同工具里，Windows/Linux/WSL/macOS 和多 GPU 还经常割裂。Unsloth 的关键设计是把它做成“本地模型操作系统”：底层核心库负责训练与推理提速，上层 Desktop/Studio 负责 UI 和账户隔离，再往外接 Claude Code、Codex、MCP、web search、RAG、diffusion 和 OpenAI-compatible API。组件级取舍很明确：通过量化、LoRA/QLoRA、FP8/INT8、vLLM 支持去阻断显存和吞吐瓶颈，通过多平台与 Docker 去阻断环境碎片化。最强证据是最近 release 明确报告了 GRPO 改进、FP8/INT8 diffusion、ARM64 Windows CUDA、AMD RDNA 支持等，说明它不是静态包装，而是在持续把训练和推理入口做宽。成熟度信号强：有 Desktop、Studio、Docker、release、文档和活跃更新。",
+    "verdict": "值得看项目成熟度和本地模型生态整合",
+    "why_now": "最近 release：v0.1.811-beta（2026-09-18）",
+    "key_points": [
+     "作者报告 2x faster、70% less VRAM",
+     "不证明所有模型都同幅度收益，依赖模型与配置",
+     "桌面端+核心库+Docker，成熟度高"
+    ],
+    "prereqs": [
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "vLLM",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "vLLM",
+     "QLoRA"
+    ],
+    "mermaid": "graph LR\nA[local model] --> B[core training]\nA --> C[core inference]\nB --> D[desktop studio]\nC --> D\nD --> E[agents rag api]\nB --> F[quantized low vram]\nC --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:microsoft/agent-lightning",
+   "kind": "project",
+   "title": "microsoft/agent-lightning",
+   "url": "https://github.com/microsoft/agent-lightning",
+   "summary": "The absolute trainer to light up AI agents.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 18335,
+   "stars_today": 70,
+   "forks": 1615,
+   "language": "Python",
+   "code_url": "https://github.com/microsoft/agent-lightning",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "training",
+    "distillation",
+    "rlhf"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "面向agent训练的系统方案，方法可迁移性高。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用代理网关+控制器训练真实 agent harness，6K 样本把 SWE-bench Verified 41.8% 提到 56.4%。",
+    "why": "做 agent/RL 后训练、面试讲“零改动训练”很对口。",
+    "architecture": "反直觉点在于：agent 训练常被迫把工具、上下文、控制流先拆掉，变成“假环境”里学策略，结果学到的不是原始 harness 里的行为。Agent Lightning 的关键改变是把训练面和执行面解耦：Trainer 只负责 `verl`/vLLM 采样与更新；API Gateway 把真实交互代理成训练数据；Rollout Controller 继续用本地或 Kubernetes 跑原 agent。每个组件都在阻断一种失败：Gateway 阻断“交互轨迹拿不到”；Controller 阻断“为了训练改坏 agent”；Trainer 阻断“复杂编排塞进训练循环”。最直接的证据是 Coding Agent 示例：只用 6K 样本，端到端 Qwen3.5-9B 在 SWE-bench Verified 从 41.8% 到 56.4%，而且作者明确说保留了 tools、context、control flow 和 environments in the loop。新意主要在系统组织层，不是新 RL 算法，而是把 agentic RL 的数据采集、执行与更新做成可插拔闭环。",
+    "verdict": "值得看，核心在可训练 agent 系统怎么搭。",
+    "why_now": "",
+    "key_points": [
+     "最强证据：6K 样本提升 14.6 个点",
+     "没证明通用到所有 agent harness",
+     "复现要会 `verl`、vLLM、K8s"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "PPO",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RLHF",
+     "DPO"
+    ],
+    "mermaid": "graph LR\nA[Real agent] --> B[Gateway]\nB --> C[Trainer]\nA --> D[Controller]\nD --> E[Local or K8s run]\nC --> F[Policy update]\nF --> A",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:k-dense-ai/scientific-agent-skills",
+   "kind": "project",
+   "title": "K-Dense-AI/scientific-agent-skills",
+   "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+   "summary": "Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 190,000+ scientists worldwide. 165 ready-to-use validated skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "K-Dense-AI",
+   "hf_upvotes": 0,
+   "stars": 45496,
+   "stars_today": 11830,
+   "forks": 4126,
+   "language": "Python",
+   "code_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "science",
+    "tooluse"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "科学 agent 技能库与数据，迁移性强",
+   "tier": "core",
+   "ptype": "skill",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "用 166 个 scientific skills 给任意 agent 接上研究工作流，覆盖 78+ 数据库。",
+    "why": "适合看 agent 工具层如何产品化，面试也好聊。",
+    "architecture": "它解决的痛点不是“agent 会不会推理”，而是科研里大量步骤是固定 процедурал knowledge：查数据库、做格式化检索、跑特定分析、整理证据链。Scientific Agent Skills 的硬定义是一个可被 Agent Skills / Agent Plugins 标准加载的技能库，每个 skill 封装一段可复用科研流程，让 agent 在调用工具时不必从零生成步骤。组件关系很直接：skill 负责把“该查什么、怎么查、怎么判定结果”写成可执行模板；标准化打包负责阻断“不同客户端不能复用”；测试与安全扫描负责阻断“技能能跑但不稳”。原文给出的成熟度信号是有 `skill-tests`、security scan、release 列表和 BYOK/desktop 工作区；但 README 里的“190,000+ scientists”是作者自报，未见独立验证。它和一般 research agent 的差别不在模型，而在可移植的任务库厚度：你拿到的是流程积木，不是一个单一助手。",
+    "verdict": "想看 agent 工具生态，这个比“聊天助手”更像基础设施。",
+    "why_now": "最近 release：v2.69.0（2026-09-11）; v2.68.0（2026-09-11）; v2.67.0（2026-09-10）",
+    "key_points": [
+     "最强证据：166 个技能+测试流水线",
+     "没证明这些 skill 都同样高质量",
+     "装载到不同 agent 依赖标准支持"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph LR\nA[Agent] --> B[Skill]\nB --> C[Database or tool]\nB --> D[Procedure]\nD --> E[Result]\nE --> A",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:calesthio/openmontage",
+   "kind": "project",
+   "title": "calesthio/OpenMontage",
+   "url": "https://github.com/calesthio/OpenMontage",
+   "summary": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "calesthio",
+   "hf_upvotes": 0,
+   "stars": 59915,
+   "stars_today": 2850,
+   "forks": 7569,
+   "language": "Python",
+   "code_url": "https://github.com/calesthio/OpenMontage",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "video",
+    "workflow"
+   ],
+   "core_score": 5.0,
+   "wide_score": 7.0,
+   "score_reason": "agent化视频生产，工具链完整",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用多 agent 流水线把脚本、素材、剪辑和合成串起来，做可复现的视频生产。",
+    "why": "如果你关心 agent 工作流/多模态生成，它是很直观的系统样例。",
+    "architecture": "它解决的是“一个 prompt 想做成完整视频，但素材、镜头、剪辑、配乐都要分工”的真实痛点。OpenMontage 的核心机制不是单次生成，而是 agentic video production system：先从文本或参考视频提炼叙事和镜头计划，再按 pipeline 拉取/生成素材，最后由编辑与合成阶段输出成片。这里的关键取舍是它不只做 image-based video，而是明确支持从 free stock footage 和 open archives 里构建 corpus、检索真实 motion clips，再用时间线编辑和渲染收束，这阻断了“只有静帧动画、没有真正运动叙事”的失败。成熟度信号还不错：README 给出多个成片、成本、工具链和 Backlot 审核界面，但“世界上第一个”是作者自述，原文未给独立对比。它相对同类的差异在于是否真做 production workflow，而不是只做视频生成 API 封装。",
+    "verdict": "更像多模态 agent 系统样板，值得快速扫一遍。",
+    "why_now": "最近 release：原文未明确",
+    "key_points": [
+     "最强证据：给出多条完整成片与成本",
+     "没证明对所有风格都稳定",
+     "复现依赖多模型、多工具链"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "video generation",
+      "status": "unknown"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "vision-language-action"
+    ],
+    "mermaid": "graph LR\nA[Prompt or ref video] --> B[Plan]\nB --> C[Asset build]\nC --> D[Edit timeline]\nD --> E[Render]\nE --> F[Video]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:fission-ai/openspec",
+   "kind": "project",
+   "title": "Fission-AI/OpenSpec",
+   "url": "https://github.com/Fission-AI/OpenSpec",
+   "summary": "Spec-driven development (SDD) for AI coding assistants.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Fission-AI",
+   "hf_upvotes": 0,
+   "stars": 69237,
+   "stars_today": 298,
+   "forks": 4746,
+   "language": "TypeScript",
+   "code_url": "https://github.com/Fission-AI/OpenSpec",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "spec",
+    "coding-assistant",
+    "mcp"
+   ],
+   "core_score": 5.0,
+   "wide_score": 7.0,
+   "score_reason": "面向编码助手的规范化开发，工程迁移性强。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 spec 驱动 AI 编码，生成可审的 proposal 到 archive 闭环",
+    "why": "做 agentic coding/RAG 工具链时很对口",
+    "architecture": "它解决的是“让 AI 先改代码，还是先把需求说清”这个老问题：直接让模型写代码，容易在 brownfield 仓库里把意图、范围和执行顺序都搞乱。OpenSpec把关键变化改成 artifact-guided workflow：先用 `openspec/changes/...` 固化 proposal、spec、design、tasks，再让 agent 按这些工件推进，等于把“需求漂移”和“边做边忘”挡在代码之外。`openspec status` 现在还会给出明确 `Next:` 命令，减少人和 agent 对流程记忆的依赖。v1.13.1 最直接的支持证据是安全加固：`config.yaml` 不能再注入指令，恶意文件不会卡死 `update/archive`，`.npmrc` 也不能劫持更新检查，说明它开始认真处理不可信仓库场景。新意主要在系统组织层，不是单个 coding skill。",
+    "verdict": "想理解 spec-driven coding，值得通读",
+    "why_now": "v1.13.1（2026-09-17）",
+    "key_points": [
+     "安全加固直接对准未审仓库",
+     "status 给出 Next 提升可恢复性",
+     "stores beta 说明多仓协作还在打磨"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA 输入需求\nB 生成 proposal spec design tasks\nC agent 按任务执行\nD archive 归档\nE 安全检查\nA --> B\nB --> C\nC --> D\nE --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.17488",
+   "kind": "paper",
+   "title": "LimiX-2: A Contextual Mechanism Network Towards General Structured-Data Intelligence",
+   "url": "https://arxiv.org/abs/2609.17488",
+   "summary": "We introduce LimiX-2, a new model in the LimiX family, developed through model and data scaling guided by our previously established scaling laws. LimiX-2 adopts the Contextual Mechanism Networks (CMNs) paradigm and is pretrained with Context-Conditional Masked Modeling (CCMM). CMNs shifts the organizing principle of in-context learning from target-centric prediction to mechanism-oriented joint modeling. Rather than centering the network on the p(y mid x, D_{context}) objective of conventional tabular PFNs, it is designed around learning p(x, y mid D_{context}), a context-dependent representation of the joint structure underlying data generation. Pretraining uses synthetic datasets generated by structural causal models (SCMs) spanning diverse graph structures, functional mechanisms, and observation processes. Evaluations on TabArena, TALENT, and BCCO show that LimiX-2 outperforms current dataset-specific models and tabular foundation models. Beyond predictive performance, the CMN paradigm also promotes causal awareness in LimiX-2: its feature attention encodes direct causal relationships, enabling accurate causal skeleton recovery.",
+   "source": "hf_papers",
+   "published": "2026-09-15",
+   "authors": [
+    "Xingxuan Zhang",
+    "Gang Ren",
+    "Hao Yuan",
+    "Hao Zou",
+    "Hongze Tan",
+    "Hui Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 165,
+   "stars": 4203,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/limix-ldm-ai/LimiX",
+   "pdf_url": "https://arxiv.org/pdf/2609.17488",
+   "categories": [],
+   "keywords": [
+    "tabular",
+    "pfm",
+    "context-learning",
+    "model"
+   ],
+   "core_score": 2.0,
+   "wide_score": 7.0,
+   "score_reason": "tabular上下文机制，虽热但与LLM/agent主线偏",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 CMN+CCMM 把表格学习从单目标预测改成联合结构建模",
+    "why": "适合看结构化数据 foundation model 怎么换范式",
+    "architecture": "它先打破一个反直觉点：表格里真正难的常不是单列预测，而是同一数据集里不同列、缺失值、因果关系要同时一致；只学 p(y|x, Dcontext) 会把“只会猜标签”学得很强，却难迁移到补全和结构推断。LimiX-2 的关键改动是 CMN：把上下文学习的目标从指定 target 转成变量间依赖的联合建模 p(x,y|Dcontext)，再用 CCMM 在多种可见性模式下做 target prediction + feature reconstruction，让“跨变量条件推断”成为主任务而不是副产品。最直接的证据是它在 TabArena、TALENT、BCCO 上统一超过 dataset-specific 模型和 tabular foundation models，同时还能做 causal skeleton recovery，说明 feature attention 不只是相关性。新意在组件层加系统训练目标层。",
+    "verdict": "值得精读范式切换，不只是刷榜",
+    "why_now": "",
+    "key_points": [
+     "联合建模替代单 target PFN 是核心",
+     "因果骨架恢复是额外能力，不是主优化目标",
+     "合成 SCM 训练，真实分布外泛化边界未明"
+    ],
+    "prereqs": [
+     {
+      "name": "prior-data fitted networks",
+      "status": "unlisted"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "causal awareness",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "PFN",
+     "TabFM"
+    ],
+    "mermaid": "graph TD\nA 多列表格\nB Context Conditional Masked Modeling\nC CMN 联合建模\nD 分类回归补全\nE 因果骨架恢复\nA --> B --> C\nC --> D\nC --> E",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:paddlepaddle/paddleocr",
+   "kind": "project",
+   "title": "PaddlePaddle/PaddleOCR",
+   "url": "https://github.com/PaddlePaddle/PaddleOCR",
+   "summary": "Turn any PDF or image document into structured data for your AI. A powerful, lightweight OCR toolkit that bridges the gap between images/PDFs and LLMs. Supports 100+ languages.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "PaddlePaddle",
+   "hf_upvotes": 0,
+   "stars": 89783,
+   "stars_today": 72,
+   "forks": 11365,
+   "language": "Python",
+   "code_url": "https://github.com/PaddlePaddle/PaddleOCR",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "ocr",
+    "multimodal",
+    "document",
+    "pipeline"
+   ],
+   "core_score": 4.0,
+   "wide_score": 7.0,
+   "score_reason": "强OCR能力，能为VLM/RAG提供结构化输入。",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 PP-OCRv6 和文档解析把图片 PDF 变成 LLM 友好的结构化数据",
+    "why": "做 RAG/文档 Agent 很实用，且近期更新密集",
+    "architecture": "它解决的是“文档不是纯文本，LLM 直接读 PDF 常被版面、表格、公式和多语种卡住”这个落地痛点。PaddleOCR 的承重组件是两条线：一条是 scene OCR，靠 PP-OCRv6 做检测+识别，另一条是 document parsing，靠 PaddleOCR-VL/PP-StructureV3 把页面转成 Markdown/JSON，并尽量保留坐标与结构。关键取舍是把轻量高吞吐和结构输出同时做进同一工具链，而不是只给文字框。v3.7.0 的最直接证据是 PP-OCRv6：34.5M 参数的 medium 版报告较 v5_server 提升 4.6% detection 和 5.1% recognition，还给出 50 语言统一、OpenVINO 5.2× CPU 加速和 A100 0.13s 的部署指标，说明它不是 demo 而是工程化版本。和纯 VLM 文档解析方案相比，它更偏可部署的 OCR 引擎。",
+    "verdict": "做文档 RAG 或 OCR 工程值得看",
+    "why_now": "v3.7.0（2026-06-11）",
+    "key_points": [
+     "34.5M 参数却报告超越多种主流 VLM",
+     "50 语言统一，减少模型切换",
+     "README 有 release 和部署信息，成熟度高"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "detection",
+      "status": "unknown"
+     },
+     {
+      "name": "document parsing",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "PaddleOCR-VL",
+     "PP-Structure"
+    ],
+    "mermaid": "graph TD\nA PDF或图片\nB 检测识别\nC 版面结构化\nD Markdown JSON\nE LLM 可读数据\nA --> B --> C --> D --> E",
+    "read_level": "L2"
+   }
+  }
+ ]
+}

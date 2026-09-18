@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-18",
+   "papers": 9,
+   "projects": 9,
+   "top": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression"
+  },
+  {
    "date": "2026-09-17",
    "papers": 10,
    "projects": 8,
