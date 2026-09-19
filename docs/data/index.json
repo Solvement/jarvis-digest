@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-19",
+   "papers": 8,
+   "projects": 10,
+   "top": "Don't Mask the Environment: Observation Supervision Changes How Agents Explore Under RL"
+  },
+  {
    "date": "2026-09-18",
    "papers": 9,
    "projects": 9,

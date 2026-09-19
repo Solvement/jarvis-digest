@@ -1,0 +1,1052 @@
+{
+ "date": "2026-09-19",
+ "stats": {
+  "collected": 445,
+  "filtered": 107,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 7 calls, 15067 in / 5957 out; gpt-5.4-mini: 6 calls, 49204 in / 8762 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.20715",
+   "kind": "paper",
+   "title": "Don't Mask the Environment: Observation Supervision Changes How Agents Explore Under RL",
+   "url": "https://arxiv.org/abs/2609.20715",
+   "summary": "Agent trajectories record what an agent does and what happens next. Yet standard supervised fine-tuning (SFT) applies loss only to agent-authored action tokens, using environment observations as context but not as prediction targets. We ask whether this convention provides the best initialization for subsequent reinforcement learning. We introduce ActObs, which also supervises the observation tokens already present in each trajectory. Although deployed agents never generate observations, learning to predict them encourages the policy to model action consequences without adding data, parameters, sequence tokens, or forward passes. The methods perform similarly after SFT but diverge after GRPO. On Qwen3-4B, GRPO from ActObs achieves higher pass@k at every evaluated sampling budget than its action-only counterpart on Terminal-Bench 2.0. On Qwen3-8B, it trades some pass@1 reliability for higher pass@k (+3.4 pp at pass@16) and solves more distinct tasks. The advantage extends to cross-domain code editing on aider-polyglot (+4.2 pp at pass@1 at 4B), whose tasks are unseen during SFT and RL. ActObs retains more entropy during RL while requiring less policy movement, leaving the final policy closer to its SFT initialization. Our analysis traces this difference to SFT: action and observation gradients rapidly become orthogonal, while action-only training leaves a large residual observation gradient and degrades environment prediction below the base model. Joint supervision prevents this one-sided specialization, preserving consequence prediction and preparing the policy for downstream exploration.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Juzheng Zhang",
+    "Disha Makhija",
+    "Manoj Ghuhan Arivazhagan",
+    "Vinayshekhar Bannihatti Kumar",
+    "Rashmi Gangadharaiah"
+   ],
+   "org": "",
+   "hf_upvotes": 16,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.20715",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rl",
+    "grpo"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "ActObs 改变智能体探索学习信号，和你方向强。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "ActObs 用观测也做 SFT，Qwen3-4B 经 GRPO 的 pass@1 提升 29%",
+    "why": "做 agent/RL 的人，能看懂初始化怎么影响探索",
+    "architecture": "反直觉点在于：agent 训练里，环境观测明明是轨迹里最能告诉你“动作后果”的部分，SFT 却只把它当上下文，等于把 transition signal 白白丢掉。作者把关键改动压缩成一个 label mask：ActionSFT 只监督动作 token，ActObs 还监督 observation token，让模型在预测环境反馈时被迫学到“上一动作会把世界推成什么样”，从而避免只会模仿动作、不懂后果的单边 специалization。最直接的证据是 Terminal-Bench 2.0 上，SFT 阶段两者几乎一样，但同样接上 GRPO 后，ActObs 在 Qwen3-4B 的所有 sampling budget 都更强，且在 aider-polyglot 这种没见过的跨域任务上也能涨。新意主要在组件层：不是换 RL 算法，而是改 SFT 的监督对象，改变后续探索的起点。",
+    "verdict": "值得精读：它解释了 SFT 初始化为何会影响后续探索",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 GRPO 后全 budget 的 pass@ 提升",
+     "没证明所有任务都受益；8B 有 pass@1 取舍",
+     "复现门槛低，基本是 mask 改动加同配方训练"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "SFT",
+      "status": "unknown"
+     },
+     {
+      "name": "pass@k",
+      "status": "unlisted"
+     },
+     {
+      "name": "entropy",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "GRPO",
+     "world model"
+    ],
+    "mermaid": "graph LR\nA[轨迹] --> B[动作 token]\nA --> C[观测 token]\nB --> D[ActionSFT]\nB --> E[ActObs]\nC --> E\nD --> F[只会模仿动作]\nE --> G[学后果]\nF --> H[RL 探索弱]\nG --> I[GRPO 更会搜]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.20511",
+   "kind": "paper",
+   "title": "When EOS Tokens Disagree: Understanding Length Inflation in On-Policy Distillation",
+   "url": "https://arxiv.org/abs/2609.20511",
+   "summary": "We study length inflation in on-policy distillation (OPD), where student responses can become excessively long and even exhaust the generation budget. We identify termination-token mismatch between base students and post-trained teachers as an important source of this behavior. Across Qwen3, Llama, and Gemma, the two models can place their stopping probability on different EOS tokens, even when their declared stopping sets are identical. This mismatch can suppress the student's preferred termination action without reliably transferring the teacher-preferred alternative. We show that aligning the decoding stopping set alone is insufficient, while treating functionally equivalent EOS tokens as a shared semantic stopping action substantially mitigates mismatch-induced length inflation across all three model families. To further understand how termination behavior evolves over training, we study OPD across different K2-Horizon training stages. This stage-wise analysis shows that termination preferences can shift substantially during training, while also revealing a distinct length inflation late in the OPD run that persists beyond termination alignment. Together, these results identify termination mismatch as an important, but not exhaustive, source of OPD length dynamics. We release an implementation incorporating the proposed termination-handling corrections.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Yuxiao Yang",
+    "Tianrun Yu",
+    "Shangzhe Li",
+    "Kaixiang Zhao",
+    "Xuchao Zhang",
+    "Chetan Bansal"
+   ],
+   "org": "",
+   "hf_upvotes": 72,
+   "stars": 6,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/UNCSciML/opd-eos",
+   "pdf_url": "https://arxiv.org/pdf/2609.20511",
+   "categories": [],
+   "keywords": [
+    "rlhf",
+    "distillation",
+    "decoding"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "on-policy distillation 长度偏差解析",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "OPD 里 EOS 不一致会致长度膨胀，语义合并后显著缓解",
+    "why": "做后训练/蒸馏的人，常见的“越训越长”有了可诊断原因",
+    "architecture": "反直觉点在于：学生明明已经学会答对，却在 OPD 里越学越不愿停，最后把生成预算吃光。作者发现，问题不只是“老师更强”，而是 student 和 teacher 把同一个“结束”语义落在不同 EOS token 上，导致学生原本的停止动作被持续压制，却又没能稳定学到老师偏好的替代 token。关键改动不是改 decoding set，而是把 functionally equivalent EOS 当成同一个 semantic stopping action 来对齐 distillation signal。最直接的证据是三家模型族上，单纯对齐解码接口不够，语义合并才系统性压住 inflation；另外 K2-Horizon 分阶段分析还显示，终止偏好会在训练中漂移，说明长度问题不只来自某一阶段。新意主要在实证层和机制诊断层：把“长了”拆成可解释的 termination mismatch。",
+    "verdict": "值得看机制诊断，尤其做 OPD 和解码的人",
+    "why_now": "",
+    "key_points": [
+     "最强证据是三家模型族都能复现并被纠正",
+     "没证明 late-stage inflation 全由 EOS 造成",
+     "实现依赖 token/decoding 细节，复现要对齐协议"
+    ],
+    "prereqs": [
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "EOS token",
+      "status": "unlisted"
+     },
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "decoding",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "on-policy distillation",
+     "reverse-KL distillation"
+    ],
+    "mermaid": "graph LR\nA[Student] --> B[采样 token]\nC[Teacher] --> D[打分]\nB --> E[EOS mismatch]\nD --> E\nE --> F[停止被压制]\nF --> G[长度膨胀]\nE --> H[语义合并 EOS]\nH --> I[缓解膨胀]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.18605",
+   "kind": "paper",
+   "title": "PACT: Can Enterprise AI Assistants Be Trusted Under Pressure?",
+   "url": "https://arxiv.org/abs/2609.18605",
+   "summary": "As corporate AI adoption continues to grow, enterprise-grade LLM agents are being deployed into sensitive contexts such as hiring, healthcare, and finance. In these contexts, compliance with rules specified in an agent's system context is a first-order legal concern. Currently, no evaluation framework systematically measures which LLM models tend to violate compliance rules, especially under pressure from a persistent user, a hurried manager, or circumstances where violation is convenient or attractive. We introduce PACT (Pressure-Applied Compliance Testing), a benchmark for rule-following under pressure in AI agents assisting employees in daily tasks across twelve regulated enterprise domains and forty-eight scenarios, each set in a realistic multi-turn conversation. Each benchmark item pairs a standing rule against a rule-violating shortcut, and applies a battery of pressures across different wordings and system-prompt modes. We construct PACT component by component under strict LLM-as-judge auditing to ensure samples are unambiguous, ungameable, and realistic enough to avoid eliciting evaluation-aware behavior. We use PACT to profile LLM compliance across six complementary metrics that create a holistic picture of an AI assistant's robustness under pressure and throughout multi-turn conversations, its transparency, and ability to correctly discern where a rule applies. We aggregate this profile into PACTScore, a reliability-weighted compliance rate over all items and modes. Our results across 22 common LLM models spanning multiple providers and sizes show substantial variability in compliance across models and metric dimensions. Even the strongest assistants mis-apply a rule on 6 to 10% of items, and ordinary user pressure raises the violation rate by 65% on average. PACT highlights compliance risks in LLM assistants, motivating guardrails and careful model selection.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Mika Okamoto",
+    "Ansel Kaplan Erol"
+   ],
+   "org": "",
+   "hf_upvotes": 14,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/trace-ai-labs/pact",
+   "pdf_url": "https://arxiv.org/pdf/2609.18605",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "safety",
+    "benchmark"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "压力下合规评测基准，强契合 agent 安全。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PACT 用 48 个多轮场景测企业助手抗压合规，最强模型仍有 6–10% 失误",
+    "why": "做 agent safety / 评测面试，这篇很像必备谈资",
+    "architecture": "反直觉点在于：企业助手不是“会不会说对规则”，而是“在省事、催促、管理层施压下还会不会守规则”。现有基准要么测任务完成、要么测单轮拒绝，都会错过“知道规则但选择违规”的行为 gap。PACT 的关键概念是把规则冲突嵌进真实多轮工作对话：一个站立规则、一个更方便但违规的 shortcut，再叠加 9 类压力，并用 6 个维度分别看基础合规、抗压、跨轮坚持、系统提示可控性、透明度和规则适用判断，避免单一分数掩盖失败模式。最直接的证据是 22 个模型上，最强也只到 94.4%，而普通用户压力平均让违规率上升 65%。新意主要在系统组织层：它不是新模型，而是一套面向企业代理的压力测试框架。",
+    "verdict": "值得通读：它把企业 agent 评测缺口说清楚了",
+    "why_now": "",
+    "key_points": [
+     "最强模型仍有 6–10% 失误，不能当作可直接上线",
+     "没证明真实企业分布，只覆盖 48 个人工场景",
+     "评测成本高，依赖 LLM-as-judge 和多轮对话设计"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "MASK"
+    ],
+    "mermaid": "graph LR\nA[规则] --> B[压力对话]\nC[省事 shortcut] --> B\nB --> D[多轮交互]\nD --> E[合规或违规]\nE --> F[六维指标]\nF --> G[PACTScore]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.19656",
+   "kind": "paper",
+   "title": "Self-Evolving Search Index",
+   "url": "https://arxiv.org/abs/2609.19656",
+   "summary": "Information retrieval is increasingly important as LLM agents tackle complex tasks involving diverse information needs. Because retrieval relies on an index that represents each document through index keys, retrieval quality depends heavily on how effectively these keys expose the knowledge contained in each document. However, effective index representations vary across retrieval environments, making it difficult for any fixed optimization strategy to perform consistently. Yet evolving an index to its retrieval environment remains largely human-driven, requiring humans to diagnose retrieval failures, refine the optimization strategy, and reprocess the index accordingly. We propose SELF-INDEX, a framework that enables an index to self-evolve without human intervention. Its Optimizer autonomously diagnoses retrieval shortfalls, selectively revises the responsible index keys, and validates each revision before updating the index. Beyond reacting to observed retrieval demands, SELF-INDEX proactively explores additional demands through a Query Simulator, allowing the index to evolve beyond the queries already available for optimization. Across diverse corpora and retrievers, SELF-INDEX consistently improves retrieval performance while outperforming existing index optimization methods. We further show that these benefits extend to downstream applications, improving the effectiveness and efficiency of search agents and helping agent memory systems retrieve useful past interactions.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Sangam Lee",
+    "Wonjae Lee",
+    "Sunghwan Kim",
+    "Deogyong Kim",
+    "Jaehoon Kim",
+    "Daye Nam"
+   ],
+   "org": "",
+   "hf_upvotes": 24,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.19656",
+   "categories": [],
+   "keywords": [
+    "reasoning",
+    "efficiency",
+    "hybrid"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "计算分配框架，适合面试讲方法",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "SELF-INDEX 让索引自我进化，作者报告跨语料/检索器平均最优",
+    "why": "你做 RAG/agent memory 会直接碰到",
+    "architecture": "反直觉点在于：同一批文档，检索好坏不只取决于 retriever，先取决于 index key 有没有把知识“暴露”出来；而不同语料和 retriever 对 key 的偏好还会变，靠一套固定 index optimization 很容易一处有效、别处失效。作者把问题改写成“索引自我进化”：Optimizer 先看检索结果诊断短板，再只改被判定有问题的那部分 keys，最后做 Self-Validation，避免把错误修正写回索引；Query Simulator 再补出真实查询里没覆盖的需求，阻止索引只对已见 query 过拟合。最直接的证据是跨自然语言、代码、数学、表格，以及 sparse/dense retriever，都拿到最高平均分，并且下游 search agents 的答对率更高、在线成本更低。新意主要在系统组织层：不是换一个更强的 key 生成器，而是把“诊断-修正-验证-探索”做成闭环。",
+    "verdict": "值得精读，适合理解 self-evolving retrieval",
+    "why_now": "",
+    "key_points": [
+     "跨语料/检索器平均最优，说明不是单点调参",
+     "只证明检索和下游收益，未说明极端分布会否失稳",
+     "复现难点在索引重写与查询模拟闭环"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Anthropic index optimization",
+     "Self-Consistency"
+    ],
+    "mermaid": "graph TD\nA[Corpus] --> B[Index keys]\nC[Query or simulated query] --> D[Retriever]\nB --> D\nD --> E[Diagnosis]\nE --> F[Revise keys]\nF --> G[Validate]\nG --> B\nC --> H[Query simulator]\nH --> E",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.19671",
+   "kind": "paper",
+   "title": "When2Think: Learning Difficulty-Aware Length Control for Efficient Hybrid Reasoning Models",
+   "url": "https://arxiv.org/abs/2609.19671",
+   "summary": "Large Reasoning Models (LRMs) achieve strong performance on complex tasks but exhibit systematic inefficiency: they often overthink easy problems and underthink hard ones. Existing approaches based on uniform length penalties or rigid routing incur an efficiency tax, trading reduced computation on easy instances for accuracy loss on hard instances. We formulate efficient reasoning as an instance-adaptive computation allocation problem and propose When2Think, a post-training framework for hybrid reasoning that dynamically allocates computation based on problem difficulty. Our method introduces Instance-level Difficulty-Aware Control (IDAC), a reward-shaping mechanism that leverages pre-computed reference statistics (accuracy and token usage) to regulate reasoning depth. Combined with verifier-based rewards and batch-wise standardized advantages, IDAC enables stable critic-free optimization without learned reward models or online reference-model queries. When2Think encourages direct answering on easy instances while preserving extended reasoning on hard instances, thereby learning when to use System 1 (NoThink) versus System 2 (Think). Experiments on mathematical benchmarks demonstrate improved accuracy-efficiency trade-offs: on AIME24, Pass@3 increases by 10.0% while token usage is reduced by 27.9% relative to the base model, and on AIME25, When2Think achieves 40.0% Pass@3, outperforming compression and routing-only baselines.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Jaejun Shim",
+    "HyunJin Kim",
+    "Young Jin Kim",
+    "JinYeong Bak"
+   ],
+   "org": "",
+   "hf_upvotes": 18,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.19671",
+   "categories": [],
+   "keywords": [
+    "reasoning",
+    "efficiency",
+    "hybrid"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "When2Think：按难度自适应算力",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "When2Think 用 IDAC 做难度感知控制，AIME24 提升 10.0% 且少 27.9% tokens",
+    "why": "适合看 reasoning 后训练和 test-time compute 面试题",
+    "architecture": "反直觉点是：统一压短 reasoning 并不会真省钱，容易题被过度思考、难题又被想太短，静态长度惩罚会把“省算力”变成对难题的准确率税。作者把目标改成“按实例分配算力”：IDAC 先用预计算的 accuracy 和 token statistics 形成难度相关的 reward shaping，让模型学会对容易题直接答、对难题切到 Think；再配合 verifier reward 和 batch 标准化优势，做出不用 learned reward model、也不查 reference model 的 stable critic-free optimization。最强证据是 AIME24 上 Pass@3 提升 10.0% 同时 token usage 降 27.9%，说明它不是单纯压缩，而是在难度维度上重分配计算。新意主要在组件层加系统组织层：把 System 1/2 选择做成 post-training policy，而不是外接一个硬路由。",
+    "verdict": "值得精读，核心是难度感知 reasoning 分配",
+    "why_now": "",
+    "key_points": [
+     "AIME24 提升 10.0% 且少 27.9% tokens",
+     "没证明通用到非数学任务；难度估计偏了会崩",
+     "无需 reward model，训练链条更轻"
+    ],
+    "prereqs": [
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "verifier",
+      "status": "unlisted"
+     },
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "AdaptThink",
+     "ThinkLess"
+    ],
+    "mermaid": "graph TD\nA[Problem] --> B[Difficulty signal]\nB --> C[IDAC reward shaping]\nC --> D[Think or NoThink policy]\nD --> E[Verifier reward]\nE --> F[Update model]\nF --> D",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.19499",
+   "kind": "paper",
+   "title": "Sample Count Is Not Enough: Candidate-Generation Strategy Shapes the Energy and Performance of LLM Test-Time Scaling",
+   "url": "https://arxiv.org/abs/2609.19499",
+   "summary": "Test-time scaling can improve large language model reasoning by generating and combining multiple candidate responses. In sampling-based methods, the inference budget is often described by the number of generated candidates, N. However, N tells us how many candidates are generated, not how they are executed. The same candidate budget can be produced in one batched generation call or split across several sequential calls with smaller batch sizes. We first study the effect of increasing N on reasoning accuracy using Phi-3-mini and Qwen2.5-1.5B on 500 GSM8K prompts. As expected, increasing N from 1 to 8 improves accuracy by 8.4 percentage points for Phi-3-mini and 18.4 points for Qwen2.5-1.5B. However, accuracy alone does not show the systems cost of using a larger candidate budget. We therefore fix N = 8 and compare four generation schedules: 1x8, 2x4, 4x2, and 8x1, where axb denotes a generation calls with b candidates per call. We measure latency, throughput, GPU-hours, and gross GPU-device energy while keeping the total candidate count fixed. On A100 GPUs, eight serial calls use 4.64-4.86x as much gross GPU-device energy and have 5.77-6.12x the P95 latency of one batched call with eight candidates. The same pattern appears across three independently scheduled A100 nodes per model and in short-output SciQ/V100 experiments. These results show that candidate count alone is not enough to describe the systems cost of multi-candidate test-time scaling. When candidates are independent and memory allows it, fewer generation calls with larger batch sizes are more efficient. Evaluations should therefore report not only candidate count and accuracy, but also generation schedule and GPU-level systems metrics.",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Mobina Kashaniyan",
+    "Ali Jannesari"
+   ],
+   "org": "",
+   "hf_upvotes": 16,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.19499",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "inference",
+    "test-time"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "候选生成预算建模，利于讲清推理扩展。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "固定候选数下，8 个串行调用比 1 次批量调用多耗 4.64–4.86x 能量",
+    "why": "做推理服务/评测时，这条很容易被忽略",
+    "architecture": "反直觉点是：大家常把 test-time scaling 只写成“生成 N 个候选”，但同样的 N，既可以一次 batched call 产出，也可以拆成多次 serial calls；这两种执行法在系统成本上完全不是一回事。作者把“候选数”拆成“calls per query × candidates per call”，然后固定 N=8 比较 1x8、2x4、4x2、8x1，直接测 latency、throughput、GPU-hours、energy。最强证据不是准确率，而是系统代价：在 A100 上，8 次串行调用的 gross GPU-device energy 是单次 8 候选批量调用的 4.64–4.86 倍，P95 latency 也高 5.77–6.12 倍。新意在实证层：它补的是 test-time scaling 的报告缺口，而不是新采样算法。",
+    "verdict": "看速览即可，偏系统测量而非新方法",
+    "why_now": "",
+    "key_points": [
+     "固定候选数下，调度方式决定能耗和延迟",
+     "只证明独立候选且显存允许时批量更优",
+     "复现门槛低，但需要真实 GPU 能耗计量"
+    ],
+    "prereqs": [
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     },
+     {
+      "name": "self-consistency",
+      "status": "unlisted"
+     },
+     {
+      "name": "vLLM",
+      "status": "unknown"
+     },
+     {
+      "name": "batching",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Self-Consistency",
+     "vLLM"
+    ],
+    "mermaid": "graph TD\nA[Prompt] --> B[Generate candidates]\nB --> C1[1x8]\nB --> C2[2x4]\nB --> C3[4x2]\nB --> C4[8x1]\nC1 --> D[Low energy]\nC4 --> E[High energy]\nD --> F[Same N]\nE --> F",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.20612",
+   "kind": "paper",
+   "title": "What Does Privileged Information Add to On-Policy Self-Distillation?",
+   "url": "https://arxiv.org/abs/2609.20612",
+   "summary": "On-policy self-distillation (OPSD) lets a language model learn from a frozen copy of itself that sees an answer or a worked solution. Giving the teacher this extra information seems to offer the student more to learn, but how much does it add beyond distillation itself? To isolate that contribution, we construct AMPLE-Math, a reusable suite of 5,319 mathematical problems with six reasoning views that share the same answer, and compare each view with matched reference-free distillation. With a thinking-enabled teacher supervising direct-response rollouts, reference-free distillation accounts for much of Qwen3-1.7B's improvement under thinking-enabled evaluation, both in domain and on external benchmarks. Evidence for an additional reference benefit is modest in Qwen, strongest for a polished solution, whereas complete traces add two percentage points in SmolLM3-3B at step 50. These benefits depend on the student being trained. At the same checkpoint, replacing short direct-response rollouts with long thinking-enabled rollouts turns gains into losses in both families while the problems, references, and evaluation stay fixed. Teacher profiles and matched loss interventions in Qwen further show that changing token-level supervision can leave student behavior largely unchanged. Together, these findings suggest that OPSD can improve access to existing reasoning capabilities through parameters shared by direct-response and thinking-enabled inference. The value of a privileged reference is what it adds to this cross-mode transfer, not how much of the solution it reveals.",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "XiuYu Zhang",
+    "Wei Chow",
+    "Junfeng Fang",
+    "Zhenkai Liang",
+    "Tat-Seng Chua"
+   ],
+   "org": "",
+   "hf_upvotes": 17,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/xiuyuz/opsd-reference-study",
+   "pdf_url": "https://arxiv.org/pdf/2609.20612",
+   "categories": [],
+   "keywords": [
+    "distillation",
+    "self-distillation",
+    "rlhf"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "OPSD中“特权信息”增益归因清晰",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 AMPLE-Math 分离“引用信息”与蒸馏本身，证明参考只带来小幅额外收益",
+    "why": "关乎 self-distillation 与 reasoning 训练归因，面试好讲",
+    "architecture": "这篇先拆一个悖论：看起来 teacher 多看到 worked solution，student 就该学得更多；但作者怀疑，很多提升其实只是 OPSD 这种 cross-mode distillation 自己带来的。关键改动是把“答案信息”固定住，只换 reasoning view：AMPLE-Math 给 5,319 道题配 6 种 answer-matched 表达，再用 reference-free control 对照。这样就能区分两类失败：一类是没蒸馏到位，另一类才是 privileged reference 真的补了信息。最直接的证据不是大涨幅，而是同一 checkpoint 下，把短 direct-response rollout 换成长 thinking-enabled rollout 会在两家模型里从收益变成损失，说明 transfer 很依赖 student 训练轨迹；而在 Qwen3-1.7B 上，去掉 reference 后仍然保留大部分收益，额外参考收益只在 polished solution 上较明显。新意主要在实证层：不是提出新算法，而是把 OPSD 的增益拆成“跨模式迁移”与“引用信息增量”两部分。",
+    "verdict": "适合精读：主要价值在归因方法，不在新算法",
+    "why_now": "",
+    "key_points": [
+     "参考外增益总体偏小，Qwen 里最明显的是 polished solution",
+     "同 checkpoint 改 rollout 会翻转收益，说明机制强依赖训练轨迹",
+     "AMPLE-Math 是 6 视图、5,319 题的控制实验套件"
+    ],
+    "prereqs": [
+     {
+      "name": "self-distillation",
+      "status": "unlisted"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     },
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "learning using privileged information",
+     "self-distillation"
+    ],
+    "mermaid": "graph LR\nA[problem] --> B[student rollout]\nB --> C[frozen teacher scores]\nC --> D[reference free control]\nC --> E[privileged view]\nD --> F[cross mode gain]\nE --> G[extra reference gain]\nF --> H[train trajectory matters]\nG --> H",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.19745",
+   "kind": "paper",
+   "title": "Region-Level Policy Optimization for Fine-grained MLLM Perception",
+   "url": "https://arxiv.org/abs/2609.19745",
+   "summary": "Fine-grained visual perception in MLLMs is commonly improved by raising the resolution, but the added visual tokens inflate vision-encoding and language-model prefilling costs. We show that the two operations underlying fine-grained perception, localizing the region of interest (RoI) and recognizing its content, have different resolution requirements. In a controlled diagnostic, localization tolerates roughly 3 to 4 times stronger token compression than recognition, which motivates localizing from a coarse view and concentrating resolution on the selected evidence. Decoding coordinates with the MLLM can be trained end-to-end from answers, but costs a full model pass per query and depends on grounding ability. A lightweight proposal network distilled from the model's attention is fast, but inherits the noise of its attention targets. The RoI from the proposal network reaches the answer through a discrete region choice, so its faithfulness to the answer cannot supervise the network. We therefore optimize the proposal network with region-level reinforcement learning, which we call Vision-RL2. It treats coherent regions as actions, and a frozen MLLM reader scores each one by how its removal changes the answer likelihood. Complementary subtractive and additive objectives suppress distracting proposals and recover missing evidence, updating only the predictor without region annotations, response sampling, or reasoning trajectories. The refined proposal further enables a sparse encoding that magnifies evidence and excludes background tokens. Across six fine-grained benchmarks and four MLLM backbones, Vision-RL2 improves accuracy over the base model at every token budget and surpasses its largest-budget accuracy with about 4 times fewer visual tokens. Code is available at https://github.com/YuHengsss/VisionRL2 .",
+   "source": "hf_papers",
+   "published": "2026-09-17",
+   "authors": [
+    "Yuheng Shi",
+    "Xiaohuan Pei",
+    "Minjing Dong",
+    "Chang Xu"
+   ],
+   "org": "",
+   "hf_upvotes": 16,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/YuHengsss/VisionRL2",
+   "pdf_url": "https://arxiv.org/pdf/2609.19745",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "rl",
+    "optimization"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "面向细粒度感知的区域级策略优化，和多模态训练相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 region-level RL 训练 RoI 提议器，以更少视觉 token 做细粒度 MLLM 感知",
+    "why": "对 VLM 省 token 和提效很直接，适合看系统设计",
+    "architecture": "它解决的是一个常见悖论：细粒度看图通常靠升分辨率，但真正需要高分辨率的往往只是局部证据，整图加 token 只会把 encoding 和 prefilling 成本一起抬高。作者把任务拆成两个不同的失败点：先定位 RoI，再识别内容，并指出定位对压缩更耐受，识别更脆。关键改动是把 proposal network 当作 policy，region 当作 action，用 frozen MLLM reader 看“删掉这个 region 后，gold answer likelihood 掉多少”来给信用分；subtractive objective 抑制误导区域，additive objective 拉回漏掉证据，整个更新只动提议器，不需要 region annotation、response sampling 或 reasoning trajectory。最强证据是六个细粒度 benchmark 和四个 backbone 上，它在所有 token budget 都优于 base model，并且用更少视觉 token 达到甚至超过大预算精度；而且只改 proposal network 就能压过全量 finetune 的方法。新意在组件层加系统组织层：把“先粗定位、再局部高分辨率”做成可训练的 region policy。",
+    "verdict": "值得精读：region-level credit assignment 这点很有方法论价值",
+    "why_now": "",
+    "key_points": [
+     "定位比识别更耐压缩，支持先粗后细的两阶段设计",
+     "用 answer-likelihood 变化给 region 直接 credit，而不是学 attention",
+     "只训 proposal network，却在多 backbones 多 benchmarks 上超越大预算"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "reinforcement learning",
+      "status": "unlisted"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "attention",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "SD-RPN",
+     "dynamic resolution encoders"
+    ],
+    "mermaid": "graph LR\nA[coarse image] --> B[proposal network]\nB --> C[region actions]\nC --> D[frozen reader scores]\nD --> E[subtractive reward]\nD --> F[additive reward]\nE --> G[better proposals]\nF --> G\nG --> H[sparse encoding]\nH --> I[answer]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:opendatalab/mineru",
+   "kind": "project",
+   "title": "opendatalab/MinerU",
+   "url": "https://github.com/opendatalab/MinerU",
+   "summary": "Transforms complex documents like PDFs and Office docs into LLM-ready markdown/JSON for your Agentic workflows.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "opendatalab",
+   "hf_upvotes": 0,
+   "stars": 80258,
+   "stars_today": 62,
+   "forks": 6696,
+   "language": "Python",
+   "code_url": "https://github.com/opendatalab/MinerU",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "document",
+    "data-prep",
+    "rag"
+   ],
+   "core_score": 9.0,
+   "wide_score": 9.0,
+   "score_reason": "文档预处理到agent可用格式，极高实用性",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "MinerU 4.0 把 PDF 和 Office 文档转成可引用 markdown JSON，最新 4.0.4 已发布",
+    "why": "RAG 和 agent 读文档会直接用到，工程实用性高",
+    "architecture": "它解决的是真实痛点：文档不是纯文本，PDF、扫描件、表格、公式和多页续读都需要稳定解析，而不是简单抽 OCR。MinerU 4.0 的承重组件是分层解析和文档库：Flash 负责快速预览和索引，Basic 做 OCR 和模型解析，Standard/Advanced 处理更复杂版式；文档库负责缓存、搜索、按 page/block 续读、稳定 citation locator。运行时上，它根据文件类型和质量需求路由到不同 tier，再把结构化结果输出成 markdown、HTML、LaTeX、DOCX、EPUB、PDF 等。成熟度信号比较强：GitHub stars 80k+，最近三天连续 release 到 4.0.4，README 明确写了支持格式、API、WebUI、CLI 和多引擎配置，且给出 agent workflow 的安装说明。相比通用 PDF parser 或单纯 OCR，它的差别不在“能不能读”，而在能否把文档变成可持续引用、可分页续读、可进入 agent workflow 的中间表示。",
+    "verdict": "值得装：成熟度和文档工作流适配都很强",
+    "why_now": "recent release: mineru-4.0.4-released（2026-09-19）",
+    "key_points": [
+     "80k+ stars，近期连续发版到 4.0.4",
+     "支持 stable locators、page/block 续读，适合 agent 读文档",
+     "4 tiers + 多后端，偏完整文档基础设施，不是单点 OCR"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "OCR",
+      "status": "unlisted"
+     },
+     {
+      "name": "vLLM",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "Unstructured",
+     "Docling"
+    ],
+    "mermaid": "graph LR\nA[PDF or Office] --> B[tier router]\nB --> C[Flash Basic Standard Advanced]\nC --> D[structured parse]\nD --> E[stable locators]\nE --> F[markdown JSON]\nF --> G[agent reading]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:cactus-compute/needle",
+   "kind": "project",
+   "title": "cactus-compute/needle",
+   "url": "https://github.com/cactus-compute/needle",
+   "summary": "Automation foundation model for tiny devices: 2-bit, 8-29 MB, tool calls, structured extraction and embeddings on phones, wearables, smart homes, robots, cars and microcontrollers.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "cactus-compute",
+   "hf_upvotes": 0,
+   "stars": 11529,
+   "stars_today": 207,
+   "forks": 733,
+   "language": "Python",
+   "code_url": "https://github.com/cactus-compute/needle",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "tinyml",
+    "agent",
+    "tool-calls"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "端侧自动化基础模型+结构化抽取",
+   "tier": "core",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Automation foundation model for tiny devices: 2-bit, 8-29 MB, tool calls, structured extraction and embeddings on phones, wearables, smart homes, robots, cars a",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:mem0ai/mem0",
+   "kind": "project",
+   "title": "mem0ai/mem0",
+   "url": "https://github.com/mem0ai/mem0",
+   "summary": "The Memory Layer for AI Agents - Drop-in memory infrastructure for AI agents and apps. Context that persists. Built for production.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "mem0ai",
+   "hf_upvotes": 0,
+   "stars": 65644,
+   "stars_today": 75,
+   "forks": 7707,
+   "language": "Python",
+   "code_url": "https://github.com/mem0ai/mem0",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "retrieval"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "生产级agent记忆层，适配RAG/工具调用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The Memory Layer for AI Agents - Drop-in memory infrastructure for AI agents and apps",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Context that persists",
+     "Built for production."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:jingyaogong/minimind",
+   "kind": "project",
+   "title": "jingyaogong/minimind",
+   "url": "https://github.com/jingyaogong/minimind",
+   "summary": "🧠 Train a 64M-parameter LLM from scratch in just 2h!",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "jingyaogong",
+   "hf_upvotes": 0,
+   "stars": 61695,
+   "stars_today": 6966,
+   "forks": 8030,
+   "language": "Python",
+   "code_url": "https://github.com/jingyaogong/minimind",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "sft",
+    "pretrain"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "声称2小时从零训64M，偏训练配方与复现价值高",
+   "tier": "core",
+   "ptype": "model",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "🧠 Train a 64M-parameter LLM from scratch in just 2h!",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:apache/maka",
+   "kind": "project",
+   "title": "apache/maka",
+   "url": "https://github.com/apache/maka",
+   "summary": "Apache Maka (Incubating) is a high-performance agent workspace that keeps a complete record of everything it did.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "apache",
+   "hf_upvotes": 0,
+   "stars": 5592,
+   "stars_today": 4259,
+   "forks": 517,
+   "language": "TypeScript",
+   "code_url": "https://github.com/apache/maka",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "workflow",
+    "logging"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "Agent工作台+完整过程记录，工程可借鉴",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "Apache Maka (Incubating) is a high-performance agent workspace that keeps a complete record of everything it did.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:tencent/browserskill",
+   "kind": "project",
+   "title": "Tencent/BrowserSkill",
+   "url": "https://github.com/Tencent/BrowserSkill",
+   "summary": "Let AI agents use your real, logged-in browser without interrupting your work. CLI + extension for browser automation across any shell-capable AI agent.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Tencent",
+   "hf_upvotes": 0,
+   "stars": 5697,
+   "stars_today": 744,
+   "forks": 399,
+   "language": "TypeScript",
+   "code_url": "https://github.com/Tencent/BrowserSkill",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "browser",
+    "tool-use"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "用于真实浏览器自动化的 agent skill。",
+   "tier": "core",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Let AI agents use your real, logged-in browser without interrupting your work",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "CLI + extension for browser automation across any shell-capable AI agent."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:docling-project/docling",
+   "kind": "project",
+   "title": "docling-project/docling",
+   "url": "https://github.com/docling-project/docling",
+   "summary": "Get your documents ready for gen AI",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "docling-project",
+   "hf_upvotes": 0,
+   "stars": 66916,
+   "stars_today": 94,
+   "forks": 4831,
+   "language": "Python",
+   "code_url": "https://github.com/docling-project/docling",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "document",
+    "extraction"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "文档到LLM可用格式，RAG/agent关键底座",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Get your documents ready for gen AI",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:rtk-ai/rtk",
+   "kind": "project",
+   "title": "rtk-ai/rtk",
+   "url": "https://github.com/rtk-ai/rtk",
+   "summary": "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands. Single Rust binary, zero dependencies",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "rtk-ai",
+   "hf_upvotes": 0,
+   "stars": 81009,
+   "stars_today": 1121,
+   "forks": 5135,
+   "language": "Rust",
+   "code_url": "https://github.com/rtk-ai/rtk",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "kv-cache",
+    "optimization"
+   ],
+   "core_score": 5.0,
+   "wide_score": 7.0,
+   "score_reason": "用CLI代理降token，推理加速思路可借鉴。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Single Rust binary, zero dependencies"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:microsoft/generative-ai-for-beginners",
+   "kind": "project",
+   "title": "microsoft/generative-ai-for-beginners",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners",
+   "summary": "21 Lessons, Get Started Building with Generative AI",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 120080,
+   "stars_today": 492,
+   "forks": 63219,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/microsoft/generative-ai-for-beginners",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "genai",
+    "tutorial",
+    "api"
+   ],
+   "core_score": 2.0,
+   "wide_score": 7.0,
+   "score_reason": "微软入门课，热度高但偏教学。",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "21 Lessons, Get Started Building with Generative AI",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:supermemoryai/supermemory",
+   "kind": "project",
+   "title": "supermemoryai/supermemory",
+   "url": "https://github.com/supermemoryai/supermemory",
+   "summary": "Memory and context engine + app that is extremely fast, scalable, and can be run fully locally. The Memory API for the AI era.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "supermemoryai",
+   "hf_upvotes": 0,
+   "stars": 30536,
+   "stars_today": 460,
+   "forks": 2665,
+   "language": "TypeScript",
+   "code_url": "https://github.com/supermemoryai/supermemory",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "memory",
+    "rag",
+    "agent"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "本地可运行的记忆/上下文引擎。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Memory and context engine + app that is extremely fast, scalable, and can be run fully locally",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "The Memory API for the AI era."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
