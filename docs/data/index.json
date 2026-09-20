@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-20",
+   "papers": 0,
+   "projects": 10,
+   "top": "Companion-Inc/feynman"
+  },
+  {
    "date": "2026-09-19",
    "papers": 8,
    "projects": 10,
