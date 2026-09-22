@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-22",
+   "papers": 9,
+   "projects": 9,
+   "top": "RRSI: Regularized Recursive Self-Improvement of Agent Harnesses"
+  },
+  {
    "date": "2026-09-21",
    "papers": 8,
    "projects": 10,

@@ -1,0 +1,1080 @@
+{
+ "date": "2026-09-22",
+ "stats": {
+  "collected": 678,
+  "filtered": 295,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 16 calls, 56276 in / 17468 out; gpt-5.4-mini: 6 calls, 45813 in / 9069 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.24972",
+   "kind": "paper",
+   "title": "RRSI: Regularized Recursive Self-Improvement of Agent Harnesses",
+   "url": "https://arxiv.org/abs/2609.24972",
+   "summary": "An LLM agent's capability is largely magnified by its harness, namely the prompts, control flow, tooling, memory, and context management surrounding the frozen backbone model. Recent methods increasingly automate this process by iteratively proposing and selecting component-wise edits of an agent harness, practically establishing a form of recursive self-improvement (RSI) at the agent-system level. However, such recursive evolution may overfit by memorizing the training tasks, showing large in-distribution gains that shrink or even vanish on out-of-distribution benchmarks. We introduce Regularized Recursive Self-Improvement of Agent Harnesses (RRSI), which incorporates the principles of regularizations into harness self-improvement by constraining the evolution candidate proposal and selection. The proposer operates with a temporally annealed budget, limiting how many edits a candidate can bundle, and it encourages unexplored trajectories based on evolution history. The selector is equipped with a critic and a pruner: the critic screens benchmark-specific proposals, while the pruner, removes changes that are too small, too expensive, or no longer useful. Together these constraints favor reusable agent mechanisms over benchmark-specific ones or even noises. Across eight benchmarks spanning coding, agentic workspace and engineering design tasks, RRSI gains up to 14.1 points on the split it evolves against and up to 4.7 points on the five out-of-distribution benchmarks, while producing a harness that runs on 30% fewer policy tokens than the unregularized evolution. Code is available at https://github.com/google-research/rrsi and project page is https://regularized-rsi.com/.",
+   "source": "hf_papers",
+   "published": "2026-09-21",
+   "authors": [
+    "Peng Xia",
+    "Rujun Han",
+    "Zifeng Wang",
+    "Yanfei Chen",
+    "Yufan Zhang",
+    "Yoonho Lee"
+   ],
+   "org": "",
+   "hf_upvotes": 149,
+   "stars": 54,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/google-research/rrsi",
+   "pdf_url": "https://arxiv.org/pdf/2609.24972",
+   "categories": [
+    "cs.LG",
+    "cs.AI",
+    "cs.CL"
+   ],
+   "keywords": [
+    "agent",
+    "evaluation",
+    "harness",
+    "self-improvement"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "agent harness 递归自改进与 OOD 风险，核心方向。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "RRSI用正则化RSI提效：8基准上分裂提升14.1分，OOD再涨4.7分",
+    "why": "适合看 agent harness 自改如何避免过拟合",
+    "architecture": "反直觉点在于：让 agent harness 自己迭代，分数常常只是在“记住这组题”，换到没见过的 benchmark 就掉回去，甚至低于原始 harness。现有 RSI 式 harness evolution 的问题不是不会改，而是反馈太少又太噪，搜索会把 benchmark-specific pattern、评测噪声和复杂度累积一起学进去。RRSI 的关键改变是把“会改”变成“只允许更可复用的改法”：proposer 用 temporally annealed budget 限制一次候选能打包的 edits 数，并沿 evolution history 逼它走没试过的轨迹；selector 再用 critic + pruner 挡掉明显是任务特化、收益太小、代价太高或已经没用的改动。最直接的证据是它在 8 个基准上同时报告了 evolve split 上最高 14.1 分提升、5 个 OOD benchmark 上最高 4.7 分提升，而且 policy tokens 还少了 30%。新意主要在系统组织层：不是换一个 harness 搜索器，而是给 RSI 加了“提案约束 + 选择约束”的正则化框架。",
+    "verdict": "值得精读，核心是把 agent 自改从刷分变成可迁移机制",
+    "why_now": "",
+    "key_points": [
+     "最强证据：8 基准上 OOD 也涨，非只刷内分",
+     "没证明：对更大任务分布/更强 verifier 的稳定性",
+     "复现要点：需要 harness evolution 全流程和 history"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "AutoGPT",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[Current harness] --> B[Propose edits]\nB --> C[Select candidate]\nC --> D[Run on evolve set]\nD --> E[Feedback]\nE --> B\nB --> F[Budget limits]\nB --> G[Explore new paths]\nC --> H[Critic filter]\nC --> I[Pruner filter]\nF --> J[Reusable edits]\nG --> J\nH --> J\nI --> J\nJ --> K[Better OOD harness]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.23986",
+   "kind": "paper",
+   "title": "Jev-Mem: System-One-Controlled Agentic Memory for Efficient AI Agents",
+   "url": "https://arxiv.org/abs/2609.23986",
+   "summary": "Agentic memory is becoming essential for long-horizon AI agents, yet many existing systems rely on autoregressive LLMs to control how memories are organized, retrieved, and used, placing expensive generation on the critical path of memory operations. We introduce \\method, a new agentic memory architecture inspired by System-One/System-Two cognition. System One captures fast, lightweight decision-making, whereas System Two performs slower, deliberative reasoning. Jev-Mem brings this division of labor to agentic memory through a dedicated System-One control plane, a structured multi-relational memory plane, and a System-Two reasoning plane. The System-One controller governs memory typing and relational organization during construction, and dynamically performs query routing, retrieval-budget allocation, graph traversal, candidate scoring, and adaptive stopping during retrieval. System Two is invoked only for complex reasoning and answer synthesis. This design improves both memory effectiveness and system efficiency: on LoCoMo Jev-Mem achieves an overall LLM-as-a-Judge score of 0.777, an 11.0\\% relative improvement over the strongest baseline, while reducing memory construction time to 158\\,s, a 6.6times speedup over the fastest competing memory system, and lowering average query latency to 0.93\\,s, a 36.7\\% reduction.",
+   "source": "hf_papers",
+   "published": "2026-09-21",
+   "authors": [
+    "Dongming Jiang",
+    "Yi Li",
+    "Bingzhe Li"
+   ],
+   "org": "",
+   "hf_upvotes": 11,
+   "stars": 25,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/libingzheren/Jev-Mem",
+   "pdf_url": "https://arxiv.org/pdf/2609.23986",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "long-context",
+    "inference"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "System-One 控制的高效 agent memory 关键",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Jev-Mem把记忆控制前移到System One：LoCoMo 0.777，构建快6.6倍",
+    "why": "适合看 agent memory 的运行时拆分",
+    "architecture": "问题很具体：长时 agent 的记忆操作最耗的往往不是存什么，而是每次都让 autoregressive LLM 去决定怎么分型、怎么连关系、查多少、何时停，等于把生成放到记忆系统的关键路径上。现有做法要么靠固定 heuristic，灵活性不够；要么让大模型一路参与，延迟和 token 开销都高。Jev-Mem 的关键改变是把记忆系统拆成“快控制层 + 慢推理层”：System One 负责高频、结构化决策，包括写入时的 memory typing、redundancy filtering 和多关系建图，读取时的 query routing、retrieval budget 分配、graph traversal、candidate scoring、adaptive stopping；System Two 只在复杂 reasoning 和最终答案合成时才出场。最直接的证据是 LoCoMo 上整体 LLM-as-a-Judge 0.777，同时 memory construction 158s、查询延迟 0.93s，说明不是单纯省算力而牺牲效果。新意主要在系统组织层，核心是把“记忆控制”做成独立控制平面，而不是把它塞进生成式推理循环。",
+    "verdict": "值得看系统设计，尤其是记忆模块怎么拆控",
+    "why_now": "",
+    "key_points": [
+     "最强证据：效果和效率同时提升，不是单纯加速",
+     "原文未明确：对弱 System One 质量下限的分析",
+     "复现难点：多关系记忆结构和路由/停止策略联动"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "RAG",
+     "graph RAG"
+    ],
+    "mermaid": "graph TD\nA[Query or update] --> B[System One control]\nB --> C[Typing and linking]\nB --> D[Route and budget]\nB --> E[Traverse and score]\nB --> F[Stop early]\nC --> G[Structured memory plane]\nD --> G\nE --> G\nF --> G\nG --> H[System Two reasoning]\nH --> I[Answer]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.22039",
+   "kind": "paper",
+   "title": "Gricea: An Open Science Platform for Conversational AI Research",
+   "url": "https://arxiv.org/abs/2609.22039",
+   "summary": "We need studies on conversational AI (CAI) at scale to understand human behavior and shape CAI design. However, fragmented reporting of systems and study configurations hinders replication, extension, and knowledge accumulation. We present Gricea, an open-science platform representing studies as configurable, deployable research artifacts that researchers can run, inspect, share, and reuse. Informed by a formative analysis of prior CAI research, Gricea couples study procedures, participant-facing systems, and conversational task behavior in. In a replication study using Gricea, we replicated configurations 93% of eligible CUI 2026 papers; while also flagging missing information in 96% of papers that hinder faithful replication --- further motivating Gricea's need. In a user study, researchers and practitioners from diverse backgrounds successfully constructed runnable studies addressing various open-ended research questions. Together, these findings demonstrate Gricea's support for constructing, reproducing, and extending CAI studies through shared research artifacts, enabling cumulative knowledge building through open science.",
+   "source": "hf_papers",
+   "published": "2026-09-18",
+   "authors": [
+    "Nikhil Sharma",
+    "Yunlin Gong",
+    "Xinyang Cheng",
+    "Ziang Xiao"
+   ],
+   "org": "",
+   "hf_upvotes": 8,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.22039",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "tool-use",
+    "memory",
+    "continual"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "程序化记忆+图形设计agent，长任务可复用",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Gricea把 CAI 实验做成可执行 artifact：93% 论文配置可复现",
+    "why": "适合想做 CAI 研究/评测的人看实验平台",
+    "architecture": "它解决的是 CAI 研究里一个很实际的悖论：大家在讨论同一类交互设计，但真正影响结果的往往是界面、参与者流程、agent 行为上下文、任务配置这些细节，而这些细节常写不全，后人只能重搭实验。现有方式的问题不是“没有论文”，而是研究配置分散在文本、代码、表单和临时脚本里，导致不可运行、不可修改、不可积累。Gricea 的关键改变是把研究本身定义成可执行 artifact：Study Flow 描述实验流程，Task Flow 描述单个任务里的界面与 agent 行为，二者连起来后，研究者看到的配置就是 runtime 真正执行的配置。这样一来，平台不是只存结果，而是把可检查、可部署、可复用的实验模板保存下来。最直接的证据是它用自身框架能复现 93% 的 eligible CUI 2026 配置，同时标出 96% 论文存在阻碍 faithful replication 的缺失信息。新意主要在系统组织层：把 CAI 实验的“配置”变成一等公民的研究对象。",
+    "verdict": "偏项目/平台，想做 CAI 实验平台值得看",
+    "why_now": "",
+    "key_points": [
+     "最强证据：93% 可复现，96% 论文信息缺失",
+     "没证明：平台外部生态能否形成持续复用",
+     "更像研究基础设施，不是单个任务 benchmark"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "OpenAI Evals",
+     "MosaicML Compose"
+    ],
+    "mermaid": "graph TD\nA[Study design] --> B[Study Flow]\nA --> C[Task Flow]\nB --> D[Executable artifact]\nC --> D\nD --> E[Run and inspect]\nE --> F[Share and reuse]\nF --> G[Extend study]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.24446",
+   "kind": "paper",
+   "title": "ActGov: Governing LLM Agent Actions via Policy-Constrained Validation",
+   "url": "https://arxiv.org/abs/2609.24446",
+   "summary": "Large language model (LLM) agents increasingly execute long-horizon workflows through external tools, allowing untrusted outputs to influence subsequent actions and exceed user authorization. Existing defenses isolate injected content or constrain execution with predefined plans and static policies, but these approaches are brittle under dynamic workflows and scale poorly across extensible tool ecosystems. In this work, we present ActGov, a runtime enforcement framework that validates each LLM-proposed tool action before it causes external effects. Built on a unified semantic model of authorization, actions, runtime context, and security constraints, the ActGov-Policy component iteratively constructs a policy set from tool specifications, benign tasks, and observed failure traces, with each update verified through SMT-based counterexample checking. At runtime, ActGov-Runtime abstracts each tool call into finite policy records and permits it only if it remains within the task-scoped authorization boundary and satisfies all applicable policies. This per-action enforcement preserves authorization throughout long-horizon, dynamically branching workflows. We evaluate ActGov on the AgentDojo and AgentDyn benchmarks across multiple models and attack configurations. It shows that ActGov consistently reduces the success rate of indirect prompt-injection attacks while preserving task utility, significantly outperforming existing defenses. These results demonstrate that ActGov can enforce fine-grained authorization over dynamic agent executions without relying on the underlying LLM to correctly identify malicious instructions.",
+   "source": "arxiv",
+   "published": "2026-09-21",
+   "authors": [
+    "Kaiyuan Zhang",
+    "Yuke Peng",
+    "Ke Jiang",
+    "Yinqian Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.24446",
+   "categories": [
+    "cs.CR",
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "tool-use",
+    "runtime-security"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "ActGov运行时策略约束验证，agent安全强相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Large language model (LLM) agents increasingly execute long-horizon workflows through external tools, allowing untrusted outputs to influence subsequent actions",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Existing defenses isolate injected content or constrain execution with predefined plans and static policies, but these a",
+     "In this work, we present ActGov, a runtime enforcement framework that validates each LLM-proposed tool action before it "
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.22966",
+   "kind": "paper",
+   "title": "Transferring the Intelligence of VLMs to Robotic Control",
+   "url": "https://arxiv.org/abs/2609.22966",
+   "summary": "Humans can seamlessly adapt to both physical and digital worlds, suggesting that while a digital-to-real gap exists in embodiment, environment and task, human intelligence itself may transfer across this gap. This naturally raises a fundamental question: can the intelligence of vision-language models (VLMs) similarly generalize from the digital world to the physical world for robotic control? We investigate this question through RoboDawn, a human-intuitive interface that exposes robotic control to an agentic VLM through a compact set of discrete translation, rotation, and gripper commands. Using this interface, the VLM controls a robot in a closed loop: it observes the current visual state, reasons about the next action, executes it, and adapts subsequent decisions to the resulting state. Furthermore, we introduce an in-context learning (ICL) scheme that uses a few demonstrations to ground the VLM in both interface usage and task-solving strategies. Experiments on RoboTwin 2.0 C2R and RoboDojo demonstrate that RoboDawn achieves strong performance without task-specific robot training. In the zero-shot setting, RoboDawn outperforms several strong policies trained on benchmarkspecific robot data, while a single in-context demonstration further yields substantial performance gains and establishes state-of-the-art (SOTA) results. On RoboTwin 2.0 C2R, the success rate increases from 53.2% zero-shot to 73.6% one-shot, exceeding the solid baseline π0.5 (46.0%). Similar gains are observed on RoboDojo, where success rate improves from 35.67% zero-shot to 47.17% one-shot. The same framework also transfers to real-world robots, performing block-in-basket and block stacking on Franka.",
+   "source": "hf_papers",
+   "published": "2026-09-19",
+   "authors": [
+    "Meng-Hao Guo",
+    "Zhe-Han Mo",
+    "Jia-Jun Wang",
+    "Yi Zhang",
+    "Kejin Wang",
+    "Yi-Xuan Deng"
+   ],
+   "org": "",
+   "hf_upvotes": 101,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.22966",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "robotics",
+    "control",
+    "embodied"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "VLM 到机器人闭环控制迁移，契合 VLA/具身。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Humans can seamlessly adapt to both physical and digital worlds, suggesting that while a digital-to-real gap exists in embodiment, environment and task, human i",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "This naturally raises a fundamental question: can the intelligence of vision-language models (VLMs) similarly generalize",
+     "Using this interface, the VLM controls a robot in a closed loop: it observes the current visual state, reasons about the"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.24220",
+   "kind": "paper",
+   "title": "Document Retrieval-Aware Chunking (D-RAC): Universal Retrieval-Aware Ingestion of Enterprise Documents via PDF Normalization and Multimodal Markdown Conversion",
+   "url": "https://arxiv.org/abs/2609.24220",
+   "summary": "Retrieval-Augmented Generation (RAG) systems over enterprise knowledge bases must ingest heterogeneous document formats -- PDFs, Word documents, presentations, and scans -- whose content is locked inside complex visual layouts, multi-column pages, and dense tables. Rule-based extraction and OCR destroy reading order, flatten tables, and lose heading hierarchy, while fully agentic chunking over extracted text incurs high token costs and hallucination risk. We present Document Retrieval-Aware Chunking (D-RAC), an extension of our Web Retrieval-Aware Chunking (W-RAC) framework to arbitrary document formats. D-RAC first normalizes any input document into PDF, exploiting the fact that virtually every format has a faithful, deterministic PDF rendering. A single multimodal LLM pass then converts rendered pages into retrieval-optimized Markdown -- rewriting tables as self-contained prose statements and preserving heading hierarchy -- after which chunking proceeds exactly as in W-RAC: deterministic parsing into ID-addressable units followed by lightweight LLM-based chunk planning over identifiers rather than text. Source text is never regenerated during chunking, preserving W-RAC's cost, determinism, and observability benefits while unlocking every renderable format as a first-class input. On the 236-document, 795-page PDF subset of the RAG-Multi-Corpus benchmark spanning five enterprise domains, D-RAC converts and chunks the entire corpus in 72 minutes with zero errors, producing 1,748 retrieval-ready chunks. Compared to agentic chunking with frontier LLMs, D-RAC reduces chunking-stage output tokens by 95.7%, cutting chunking cost by 77.8% (GPT-4.1 pricing) to 85.6% (Gemini 2.5 Pro pricing) and chunking time by 75%. D-RAC scales linearly to documents of 500+ pages.",
+   "source": "hf_papers",
+   "published": "2026-09-21",
+   "authors": [
+    "Uday Allu",
+    "Abhivanth Sivaprakash",
+    "Pratik Singh",
+    "Aman Manocha"
+   ],
+   "org": "",
+   "hf_upvotes": 48,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.24220",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "retrieval",
+    "chunking",
+    "document"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "RAG 文档归一化+检索感知分块，工程可迁移。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Retrieval-Augmented Generation (RAG) systems over enterprise knowledge bases must ingest heterogeneous document formats -- PDFs, Word documents, presentations, ",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Rule-based extraction and OCR destroy reading order, flatten tables, and lose heading hierarchy, while fully agentic chu",
+     "We present Document Retrieval-Aware Chunking (D-RAC), an extension of our Web Retrieval-Aware Chunking (W-RAC) framework"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.21346",
+   "kind": "paper",
+   "title": "IntBMoE: Integrating Block-Level Conditioning into Expert Composition for Full-Participation Mixture-of-Experts",
+   "url": "https://arxiv.org/abs/2609.21346",
+   "summary": "Mixture-of-Experts (MoE) scales capacity, but existing designs cannot set three quantities independently. For a single token, participation is how many experts contribute knowledge to its output, execution is how many are actually computed (compute cost), and materialization is how many expert-sized parameter sets must be built and stored (memory cost). Sparse routing keeps execution and materialization low, but shrinks participation: for each token, only a few experts contribute. Dense output-mixing restores full participation, but its execution grows with the number of experts. Parameter-merging keeps execution at one expert, but its materialization grows with the number of routing decisions. We propose IntBMoE, a block-conditioned MoE that decouples all three by pairing dense expert composition with sparse block execution. Its blocks come from a small learned codebook, one per entry. At each internal layer, a lightweight hypernetwork merges all expert bases in that layer's pool into one composed expert. Participation is full, because every composed expert draws on the entire pool. Execution stays sparse, because a router sends each token to only a few blocks. Materialization is bounded, because the codebook, not the input, fixes how many blocks exist. Dual-Path Residual Gating (DPRG) further couples two independently composed paths through multiplicative gating. Experiments on image classification show consistent gains over representative sparse and dense MoE baselines. Additional experiments on language modeling and sequential recommendation validate its generalization beyond vision. IntBMoE is fully deployed in AMap's generative recommendation system, serving hundreds of millions of users under a 60ms latency budget, with a 2.4% relative UVCTR gain in online A/B testing. Our code is available at https://github.com/AMAP-ML/DreamX-Rec/.",
+   "source": "hf_papers",
+   "published": "2026-09-18",
+   "authors": [
+    "Ran Cheng",
+    "Longfei Xu",
+    "Zheng Liu",
+    "Kaikui Liu",
+    "Xiangxiang Chu"
+   ],
+   "org": "",
+   "hf_upvotes": 37,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.21346",
+   "categories": [],
+   "keywords": [
+    "moe",
+    "training",
+    "sparsity",
+    "architecture"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "MoE专家合成的关键工程约束，方法可迁移",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "IntBMoE 用代码本块+超网络，把 MoE 的参与/计算/存储三者解耦，并在图像分类、LM 上都赢基线",
+    "why": "你做 MoE/训练系统面试，这篇是新型参数组织",
+    "architecture": "反直觉点在于：MoE 不是“专家越多越强”这么简单，而是 token 级别会被三个量绑死——参与度、执行量、参数实体数。现有 sparse routing 用少量专家省算力，却把没选中的专家直接踢出该 token 的学习；dense mixing 让所有专家都参与，但每个 token 都要算全量；parameter-merging 虽然单次只跑一个合成专家，但每个路由单元都可能要生成一份新权重，存储炸掉。作者的关键改法是把“构造专家变换”和“在 token 上执行”拆开：先用小 codebook 固定 block 数，再让共享 hypernetwork 在每一层把该层 expert base 合成为一个 block，token 只路由到少数 block。这样每个 block 都从全池取知识，所以参与是 full；真正算的 block 数仍然稀疏，所以 execution 低；block 数由 codebook 固定，所以 materialization 有上界。最直接的证据是 ImageNet-1K 上对 sparse 和 dense MoE 基线都稳定提升，且语言建模/序列推荐也能迁移；这支持的是“解耦三种成本”这个设计而不是单点调参。新意主要在组件层和系统组织层，不只是换路由器。",
+    "verdict": "值得看设计取舍，但速览足够判断方向",
+    "why_now": "",
+    "key_points": [
+     "最强证据：ImageNet-1K 稳定赢 sparse/dense 基线",
+     "没证明：代码本规模与层数放大后是否仍稳",
+     "复现难点：hypernetwork+双路由，训练细节可能敏感"
+    ],
+    "prereqs": [
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "sparse attention",
+      "status": "unknown"
+     },
+     {
+      "name": "hypernetwork",
+      "status": "unlisted"
+     },
+     {
+      "name": "routing",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Switch Transformer",
+     "GShard"
+    ],
+    "mermaid": "graph TD\nA[Token输入] --> B[代码本]\nB --> C[层内合成block]\nC --> D[稀疏路由]\nD --> E[少量block执行]\nE --> F[输出]\nB --> G[全池参与]\nC --> H[DPRG双路径]\nH --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.24997",
+   "kind": "paper",
+   "title": "VideoGen-Agent: Reinforcing Video Generation Agents",
+   "url": "https://arxiv.org/abs/2609.24997",
+   "summary": "Recent advances in video generative models have enabled high-fidelity, temporally coherent video generation. However, these models often struggle to satisfy prompts requiring specialized knowledge, specific identities, physical consistency, or ordered events. In this paper, we present VideoGen-Agent, a multimodal agent trained through multitask agentic reinforcement learning to use external tools for video generation. The agent coordinates augmentation, generation, and verification tools through multi-turn interactions, using the prompt and intermediate observations to guide its decisions. We train a shared policy on a category-balanced dataset spanning six tasks. Supervised fine-tuning on teacher-generated trajectories establishes tool-use behavior, which is then refined through reinforcement learning. A category-aware hybrid reward evaluates tool-call validity, task-appropriate tool use, and generated video quality. We further introduce VABench, a held-out benchmark of 600 prompts covering procedural knowledge, single- and multi-entity identity preservation, physical consistency, scene composition, and multi-shot temporal structure. On VABench, VideoGen-Agent improves over its base text-to-video generator by 19.1 points, from 56.5 to 75.6. Upgrading the generation tools further raises the score to 86.1 without additional agent training. Human raters prefer the upgraded configuration over the strongest standalone baseline in 84.3% of comparisons. These results support learning tool use across video-generation tasks and show that the trained agent can benefit from subsequent advances in generation tools.",
+   "source": "hf_papers",
+   "published": "2026-09-21",
+   "authors": [
+    "Binxu Li",
+    "Haoyi Duan",
+    "Yuhui Zhang",
+    "Yaohui Zhang",
+    "Zihao Lin",
+    "Kaituo Feng"
+   ],
+   "org": "",
+   "hf_upvotes": 32,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.24997",
+   "categories": [
+    "cs.CV"
+   ],
+   "keywords": [
+    "agent",
+    "video",
+    "rl",
+    "tool-use"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "视频生成智能体+外部工具+验证，agent 训练关键。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "VideoGen-Agent 用多任务 agentic RL 学会调用检索、生成和验证工具，把 VABench 提升 56.5→75.6",
+    "why": "你关心 agent 和视频生成，这篇把 tool-use 真做进视频模型",
+    "architecture": "反直觉点在于：视频生成的失败往往不是画面不清，而是“知道得不对”——新术语、指定身份、物理约束、动作顺序这些，单靠 pretrained video model 容易胡编。作者没有继续堆更大的生成器，而是把生成拆成多轮 agent 循环：先 reasoning，再在 augmentation、generation、verification 三类工具里选动作，观察工具输出后再决定下一步。检测条件很明确：如果缺少知识或参考，就检索文本/图像或做 simulation；如果要出视频，就调 T2V/I2V/action-to-video；如果要校验主体存在或空间结构，就用 object detection、depth estimation。SFT 用 teacher trajectories 先教会“何时用什么工具”，再用 multitask agentic RL 把策略往高质量工具链上推；hybrid reward 同时约束工具调用合法性、任务匹配和生成质量。最直接的证据是 VABench 600 条 held-out prompts 上从 56.5 到 75.6 的提升，而且换更强 generation tools 后还能到 86.1，说明收益来自“会用工具”的策略而不只是底座模型。新意主要在系统组织层：把 video generation 做成可学习的循环+中间件，而不是单次生成。",
+    "verdict": "值得精读，尤其是 agentic video 和工具学习",
+    "why_now": "",
+    "key_points": [
+     "最强证据：VABench 上 base 56.5→75.6",
+     "没证明：RL 是否依赖这套工具集与奖励设计",
+     "复现难点：多轮轨迹、任务均衡和 judge 设计都重"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "reinforcement learning",
+      "status": "unlisted"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[Prompt] --> B[Agent循环]\nB --> C[选工具]\nC --> D[检索或模拟]\nC --> E[生成视频]\nC --> F[验证反馈]\nF --> B\nB --> G[最终视频]\nH[SFT加RL] --> B",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:akitaonrails/ai-memory",
+   "kind": "project",
+   "title": "akitaonrails/ai-memory",
+   "url": "https://github.com/akitaonrails/ai-memory",
+   "summary": "Solution for long term memory for agent coding CLIs and to facilitate handoff between different agent vendors",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "akitaonrails",
+   "hf_upvotes": 0,
+   "stars": 8058,
+   "stars_today": 575,
+   "forks": 545,
+   "language": "Rust",
+   "code_url": "https://github.com/akitaonrails/ai-memory",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "handoff"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "面向 agent 的长程记忆与供应商交接",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "ai-memory 做跨 agent、跨机器的长期记忆，用 git-backed markdown wiki 统一 20+ harness",
+    "why": "你做 agent 系统，这个是记忆与交接层的实用标杆",
+    "architecture": "它解决的是真实断点：编码 agent 的上下文通常锁在单机、单产品里，Claude Code 换到 Codex 或换机器后，之前的架构、失败尝试和未完事项就丢了。它的承重组件不是“再做一个聊天记录”，而是把 memory 定义成三层：生命周期 hooks 静默采集；session end 把观察整理成 git-backed `.md` wiki；下一次启动时用 full-text、entities、links 和可选 vectors 做检索，再通过 handoff protocol 把 baton 明确交接给下一个 agent。关键取舍是 source of truth 选 markdown 而不是纯向量库：可 grep、可手改、可 rsync，索引只是派生物；同时默认零 LLM calls，capture/search/handoff 都能跑。成熟度信号很强：README 明确列出 20+ harness 支持，支持矩阵被 CI 约束，最近 release 到 v2.4.0 且连发，另有 checksums；这不是概念 demo。若你要的是“换模型/换客户端也不断任务”的能力，它比一般 agent memory 工具更强调协议化交接和可审计的存储层，而不只是记更多内容。",
+    "verdict": "项目成熟度高，值得看架构和协议设计",
+    "why_now": "最近 release：v2.4.0（2026-09-21），v2.3.2（2026-09-20），v2.3.1（2026-09-17）",
+    "key_points": [
+     "最强证据：20+ harness 支持且有 CI 维护",
+     "没证明：大规模语义检索是否比向量库更强",
+     "复现难点：hooks、权限、跨工具协议集成成本高"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "model context protocol",
+     "Retrieval-Augmented Generation"
+    ],
+    "mermaid": "graph TD\nA[Hooks采集] --> B[Markdown库]\nB --> C[派生索引]\nC --> D[检索]\nD --> E[handoff]\nE --> F[下一个agent]\nB --> G[git版本]\nG --> H[可恢复]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:magnitudedev/magnitude",
+   "kind": "project",
+   "title": "magnitudedev/magnitude",
+   "url": "https://github.com/magnitudedev/magnitude",
+   "summary": "Open source inference engine optimized for consumer hardware. Profiles your machine, recommends the best models for it, then downloads, tunes, and runs them. Works on Apple Silicon, NVIDIA, AMD, or nothing but a CPU.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "magnitudedev",
+   "hf_upvotes": 0,
+   "stars": 4832,
+   "stars_today": 3303,
+   "forks": 369,
+   "language": "TypeScript",
+   "code_url": "https://github.com/magnitudedev/magnitude",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "deployment",
+    "quant"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "面向端侧推理的模型选择与运行，实用性强",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "用机器画像和模型预估解决本地推理选型，作者称可在下载前估 tok/s",
+    "why": "做本地 LLM/Agent 部署时，先选对模型比装一个推理壳更关键",
+    "architecture": "反直觉点在于：本地推理的瓶颈常不是“能不能跑”，而是“下载后发现太慢或太吃内存”。传统 Ollama/LM Studio 让你先选模型再试，失败成本是反复下载和试错。Magnitude 的关键改变是先做 machine profiling，再对模型与 quant 预估 tok/s、速度、内存，再把模型下载、调参、运行串起来；speculative decoding、context size 这些调节点的目标是阻断“模型能启动但体验不可用”的失败。最直接的支撑是 README 的对比说明和作者报告的能力：在下载前估算每个模型的表现，并按 speed/accuracy/intelligence/memory 排名。新意主要在系统组织层，不是新推理算法。",
+    "verdict": "适合看速览；值不值得精读主要看本地部署/推理系统方向",
+    "why_now": "",
+    "key_points": [
+     "最强证据：下载前估 tok/s 并给出排序",
+     "没证明硬件覆盖外的泛化，性能依赖机型画像质量",
+     "复现门槛低，价值在客户端集成与模型库维护"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Ollama",
+     "LM Studio"
+    ],
+    "mermaid": "graph LR\nA[机器画像] --> B[预测 tok s]\nB --> C[模型排序]\nC --> D[下载模型]\nD --> E[硬件调参]\nE --> F[本地推理]\nF --> G[Agent 接入]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:vectorize-io/hindsight",
+   "kind": "project",
+   "title": "vectorize-io/hindsight",
+   "url": "https://github.com/vectorize-io/hindsight",
+   "summary": "Hindsight: Agent Memory That Learns",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "vectorize-io",
+   "hf_upvotes": 0,
+   "stars": 25223,
+   "stars_today": 1337,
+   "forks": 2099,
+   "language": "Python",
+   "code_url": "https://github.com/vectorize-io/hindsight",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "learning"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "Agent 记忆学习方法，热度与相关性高",
+   "tier": "core",
+   "ptype": "paper",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 retain recall reflect 做 agent memory，作者称 LongMemEval 达到 SOTA",
+    "why": "直接打你关心的 agent memory，且有 benchmark 和论文",
+    "architecture": "反直觉点在于：很多 agent memory 只是在“记聊天记录”，但真正让 agent 变聪明的是把经验抽成可复用知识。旧方案里，RAG 只能临时检索，knowledge graph 又容易变成静态事实库，二者都难让系统随交互持续学习。Hindsight 的关键概念是把 memory 拆成 retain / recall / reflect 三种操作：retain 负责写入原始观察，recall 负责按任务上下文找回，reflect 负责把多次经历压成 mental models / knowledge pages，阻断“只存不学”与“检索到也不会泛化”的失败。最直接的证据是它在 LongMemEval 上自报 SOTA，且文档给了 benchmark 页面和独立复现说明。新意在组件层加系统组织层：不是单一检索器，而是围绕学习循环设计 memory 操作。",
+    "verdict": "值得精读，尤其适合做 agent 记忆或长期交互系统",
+    "why_now": "",
+    "key_points": [
+     "最强证据：LongMemEval 自报 SOTA，且有独立复现说明",
+     "没证明通用到所有 agent 任务，长程记忆任务才是主战场",
+     "复现难度中等，依赖后端存储和多 LLM provider 适配"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "hallucination",
+      "status": "unknown"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RAG",
+     "Knowledge Graph"
+    ],
+    "mermaid": "graph LR\nA[观察] --> B[retain]\nB --> C[recall]\nC --> D[任务上下文]\nB --> E[reflect]\nE --> F[knowledge pages]\nF --> C\nC --> G[更好的行动]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:nasiko-labs/nasiko",
+   "kind": "project",
+   "title": "Nasiko-Labs/nasiko",
+   "url": "https://github.com/Nasiko-Labs/nasiko",
+   "summary": "Developer Control Plane for your AI Agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Nasiko-Labs",
+   "hf_upvotes": 0,
+   "stars": 7609,
+   "stars_today": 734,
+   "forks": 1636,
+   "language": "Rust",
+   "code_url": "https://github.com/Nasiko-Labs/nasiko",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "control-plane",
+    "orchestration"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "AI Agent 控制面，偏工程可用性",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用单控制平面管 A2A agents，作者称一键部署、路由和审计",
+    "why": "很贴 agent 系统面试：控制平面、路由、权限、观测一锅端",
+    "architecture": "问题不是再做一个 agent 框架，而是多个 agent 一多就会变成运维和安全问题：谁能调谁、谁持有密钥、一次调用怎么追踪、失控循环怎么停。Nasiko 的关键改变是把所有 A2A 流量收进单个 control-plane process，代理转发、ACL、rate limit、trace、flow guards 都在这一处生效；路由还用了 embedding shortlist + rerank + LLM final pick，把“选哪个 agent”从调用方里拿掉。最直接的证据是 README 里的架构图和功能表：所有 inter-agent call 都经过 server，且 release v1.0.0 已有 desktop app。新意主要在系统组织层和运行时机制层，不是新模型。",
+    "verdict": "看速览就够；除非你要做 agent 平台或 MCP/路由基础设施",
+    "why_now": "v1.0.0（2026-02-12）初始正式版，带 macOS desktop app",
+    "key_points": [
+     "最强证据：所有 A2A 调用都经 server，且有 flow guards",
+     "没证明在大规模异构 agent 集群下的极限吞吐",
+     "落地成本主要在控制面与代理协议适配"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MCP",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[客户端] --> B[控制平面]\nB --> C[路由选择]\nB --> D[代理转发]\nD --> E[ACL 和 tracing]\nB --> F[flow guards]\nB --> G[MCP 和 LLM Router]\nG --> H[Agent]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:agent-substrate/substrate",
+   "kind": "project",
+   "title": "agent-substrate/substrate",
+   "url": "https://github.com/agent-substrate/substrate",
+   "summary": "Agent Substrate: the core system",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "agent-substrate",
+   "hf_upvotes": 0,
+   "stars": 2880,
+   "stars_today": 301,
+   "forks": 379,
+   "language": "Go",
+   "code_url": "https://github.com/agent-substrate/substrate",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "orchestration",
+    "runtime"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "开源 agent 系统，适合做工程与面试案例",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Agent Substrate: the core system",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:code-yeongyu/lazycodex",
+   "kind": "project",
+   "title": "code-yeongyu/lazycodex",
+   "url": "https://github.com/code-yeongyu/lazycodex",
+   "summary": "The one and only agent harness for complex codebases. Project memory, planning, execution, and verified completion inside Codex.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "code-yeongyu",
+   "hf_upvotes": 0,
+   "stars": 3586,
+   "stars_today": 63,
+   "forks": 225,
+   "language": "TypeScript",
+   "code_url": "https://github.com/code-yeongyu/lazycodex",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "planning",
+    "codex"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "面向复杂代码库的 agent harness，工程可用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The one and only agent harness for complex codebases",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Project memory, planning, execution, and verified completion inside Codex."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:dream-num/univer",
+   "kind": "project",
+   "title": "dream-num/univer",
+   "url": "https://github.com/dream-num/univer",
+   "summary": "The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "dream-num",
+   "hf_upvotes": 0,
+   "stars": 15247,
+   "stars_today": 202,
+   "forks": 1363,
+   "language": "TypeScript",
+   "code_url": "https://github.com/dream-num/univer",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "tool-use",
+    "workspace"
+   ],
+   "core_score": 6.0,
+   "wide_score": 9.0,
+   "score_reason": "面向 AI agent 的 Office 级运行时，热度高",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:google/ax",
+   "kind": "project",
+   "title": "google/ax",
+   "url": "https://github.com/google/ax",
+   "summary": "Google's open agentic orchestration runtime",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "google",
+   "hf_upvotes": 0,
+   "stars": 7361,
+   "stars_today": 2324,
+   "forks": 345,
+   "language": "Go",
+   "code_url": "https://github.com/google/ax",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "orchestration",
+    "framework"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "Google agent 编排运行时，工程价值较高",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Google's open agentic orchestration runtime",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:browser-use/video-use",
+   "kind": "project",
+   "title": "browser-use/video-use",
+   "url": "https://github.com/browser-use/video-use",
+   "summary": "Edit videos with coding agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "browser-use",
+   "hf_upvotes": 0,
+   "stars": 25722,
+   "stars_today": 155,
+   "forks": 3111,
+   "language": "Python",
+   "code_url": "https://github.com/browser-use/video-use",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multimodal",
+    "video"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "用代码型 agent 做视频编辑，落地强",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Edit videos with coding agents",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.24662",
+   "kind": "paper",
+   "title": "DUMA-Bench: A Dual-Control Multi-Agent Benchmark for Evaluating LLM Agent Security",
+   "url": "https://arxiv.org/abs/2609.24662",
+   "summary": "LLM-based agents increasingly operate in environments where they interact with users, tools, and external systems. Yet most security evaluations assume passive users and static control, ignoring the interactive dynamics that shape real agent behavior. We introduce \\textbf{DUMA-Bench}, a benchmark and evaluation protocol for measuring agent security under \\emph{dual-control} interaction, where both the agent and the user can influence the shared environment state. DUMA-Bench extends $τ^2$-bench ~\\cite{barres2025tau} with adversarial environments covering eight vulnerability classes, including RAG poisoning, cross-agent manipulation, and unsafe output handling. We evaluate \\textbf{14 models from five model families} (OpenAI, Anthropic, DeepSeek, Qwen, and Z.ai) across eight domains and multiple user-behavior regimes. Across our experiments, introducing dual-control interaction increases the attack success rate from \\textbf{26.9\\%} to \\textbf{41.1\\%}. These results show that agent security is not solely a property of the model but emerges from the interaction between the model, the user, and the environment. DUMA-Bench provides a missing evaluation layer for studying security in realistic agent deployments.",
+   "source": "arxiv",
+   "published": "2026-09-21",
+   "authors": [
+    "Ivan Aleksandrov",
+    "German Kochnev",
+    "Sabrina Sadiekh",
+    "Yaroslav Rogoza"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.24662",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "security",
+    "benchmark"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "agent安全双控制基准，和评测/安全高度相关",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "LLM-based agents increasingly operate in environments where they interact with users, tools, and external systems",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Yet most security evaluations assume passive users and static control, ignoring the interactive dynamics that shape real",
+     "We introduce \\textbf{DUMA-Bench}, a benchmark and evaluation protocol for measuring agent security under \\emph{dual-cont"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
