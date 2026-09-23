@@ -1,0 +1,1188 @@
+{
+ "date": "2026-09-23",
+ "stats": {
+  "collected": 680,
+  "filtered": 294,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 16 calls, 55924 in / 16985 out; gpt-5.4-mini: 6 calls, 46991 in / 8948 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.25804",
+   "kind": "paper",
+   "title": "The Tasteful Agent: Measuring and Improving Taste in Long-Horizon Tasks",
+   "url": "https://arxiv.org/abs/2609.25804",
+   "summary": "LLM agents increasingly work on long-horizon tasks, and the decisions they make along the way, such as which hypothesis to test or which implementation to build on, determine the outcome of the whole run. Making these decisions well is becoming a key capability for both engineering and research agents. We refer to the ability to make good long-horizon decisions as the taste of an agent. While existing benchmarks measure the end-to-end success of agents on long-horizon tasks, none of them measures the taste of an agent. To address this problem, we build Taste-Bench, a benchmark of taste questions constructed automatically from trajectories that agents produced in engineering and research tasks. Each question presents a decision fork, a point in a trajectory where multiple directions are available and one of them leads to a better outcome, and the evaluated model chooses among these directions without seeing what happens after the fork. We mine these forks automatically from parallel attempts at the same task and from detours inside a single trajectory, without needing human annotation. We evaluate frontier models on Taste-Bench and find that the best model answers only 59.7% of the questions correctly. We further find that forks whose deciding evidence appears later in the trajectory are much harder for every model, and that a larger reasoning budget does not improve the accuracy. Finally, we show that taste can be trained. We distill the judgment of a teacher that has seen the outcome into a student model, and the student makes better decisions on unseen tasks and improves end-to-end success on held-out SWE-bench Pro tasks.",
+   "source": "hf_papers",
+   "published": "2026-09-22",
+   "authors": [
+    "Wenbo Pan",
+    "Zhichao Liu",
+    "Shujie Liu",
+    "Jingying Zeng",
+    "Chin-Yew Lin",
+    "Xianfeng Tang"
+   ],
+   "org": "",
+   "hf_upvotes": 111,
+   "stars": 1,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/wbopan/tastebench",
+   "pdf_url": "https://arxiv.org/pdf/2609.25804",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "eval",
+    "benchmark",
+    "rlhf"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "面向长期任务“品味”的agent评测基准",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Taste-Bench 自动构造 502 个分叉题，frontier 模型最高只答对 59.7%",
+    "why": "适合看 agent 评测和后训练，能当面试谈资",
+    "architecture": "反直觉点是：长程 agent 不是“最后成没成”决定好坏，而是中途选哪条路就把预算和结果分开了；只看 end-to-end 成功率，会把“运气好但决策差”与“决策好但任务失败”混在一起。作者的关键改法是把 taste 定义成“在 decision fork 处选更优分支”的长程判断能力，并用轨迹的 hindsight 自动打标：同任务的并行尝试或单次轨迹里的 detour，提供了 fork 前相同、fork 后不同的比较，分支结果就成了标签。最直接的证据是：frontier models 在 502 题上最好也只有 59.7%，而且 fork 越晚暴露证据越难，增加 reasoning budget 也不涨，说明这不是纯“多想一会儿”能解决的。新意主要在实证层和 benchmark 组织层：不是新 agent 架构，而是把“中途决策质量”变成可自动规模化测量、还能用 teacher distillation 训练的对象。",
+    "verdict": "精读价值高，适合 agent 评测/后训练",
+    "why_now": "",
+    "key_points": [
+     "最强证据：frontier 最好仅 59.7%",
+     "后证据越晚出现，所有模型都更难",
+     "复现点在轨迹挖 fork 与标签筛选"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     },
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA 轨迹前缀 --> B decision fork\nB --> C 隐藏后续工作\nC --> D 更好分支标签\nD --> E taste 评测\nE --> F distill 训练\nF --> G 提升新任务",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.25053",
+   "kind": "paper",
+   "title": "LatentPort: Beyond KV Cache - Cross-Model Transfer of Recurrent Memory in Hybrid Language Models: A 4B-to-9B Hybrid-State Handoff Without Target Prefix Replay",
+   "url": "https://arxiv.org/abs/2609.25053",
+   "summary": "Can one language model hand its live memory to another without the receiver rereading the context? We demonstrate useful persistent hybrid-state transfer across one architecture-matched Qwen3.5 4B-to-9B sibling pair. To our knowledge, this is the first demonstrated cross-model handoff of persistent recurrent inference state between differently sized hybrid language models without target prefix replay. Translated attention KV alone leaves a large gap; adding the Gated DeltaNet (GDN) persistent-state package lowers teacher-forced negative log-likelihood (NLL), the average next-token log-loss, by 0.747 nats/token (95% paired document bootstrap CI [0.6921, 0.8047]), improving all 64 PG19 documents. Direct recurrent and convolution reuse outperforms the tested learned GDN maps, consistent with partial functional compatibility of persistent-state coordinates. A fresh component factorial selects translated KV with direct recurrent and convolution state. An additional 434,176-parameter correction improves that base on 64 fresh web documents: continuation loss is 0.076 nats/token above native 9B (excess NLL), Jensen-Shannon (JS) divergence is 0.022, and native context recovery (NCR) is 0.918. Corrected 9B significantly beats continued 4B inference while processing zero historical prefix tokens. Evidence covers one direction, one geometry-matched Base-model pair, and 4K teacher-forced continuation; the near-native gate failed, the 16K branch was not run, and free-generation equivalence and a general state interface remain unproven.",
+   "source": "hf_papers",
+   "published": "2026-09-07",
+   "authors": [
+    "Simon P. Villani"
+   ],
+   "org": "",
+   "hf_upvotes": 3,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.25053",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "memory",
+    "kv-cache",
+    "rl"
+   ],
+   "core_score": 9.0,
+   "wide_score": 4.0,
+   "score_reason": "跨模型递交持久记忆，推理/系统可迁移",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "LatentPort 让 4B 把 hybrid state 直接交给 9B，NLL 降 0.747 nats/token",
+    "why": "推理加速与 KV cache 延伸题，适合看系统机制",
+    "architecture": "反直觉点是：换大模型时，通常得把历史 prefix 重新跑一遍，哪怕只想接着算下去；KV 只覆盖 attention，hybrid model 里真正影响续写的 recurrent memory 还留在旧模型里。作者的关键概念是“persistent-state handoff”：把 translated KV、GDN recurrent matrices、convolution history 作为一个可安装的状态包传给目标模型，而不是只搬运 attention cache；失败模式被阻断的是“receiver 没有自己的历史状态，必须重读 prefix 才能续写”。最直接的证据是固定 64 篇 PG19 上，加入完整 GDN package 后比 KV-only 再降 0.747 nats/token，且 64/64 都改善；再加一个 434,176 参数的 correction 后，9B 在 64 篇 fresh web 文档上比继续跑 4B 更好，说明这不是只对单一语料有效。新意在组件层加系统组织层：不是发明新模型，而是证明跨模型传递 recurrent memory 在 geometry-matched sibling 上可用，并给出一个无 prefix replay 的运行时 handoff。",
+    "verdict": "看系统机制够用，精读看状态设计",
+    "why_now": "",
+    "key_points": [
+     "最强证据：64/64 文档 NLL 全部下降",
+     "没证明通用接口；16K 和 free-generation 未做",
+     "复现难点在状态对齐与运行时安装"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "convolution",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "cross-model KV transfer",
+     "external memory"
+    ],
+    "mermaid": "graph LR\nA 源模型状态 --> B translated KV\nA --> C GDN state\nB --> D 安装到目标模型\nC --> D\nD --> E 零 prefix 续写\nE --> F 更低 NLL",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.26708",
+   "kind": "paper",
+   "title": "Train Where the Quantized Model Goes: On-Policy Distillation for Low-Bit Reasoning",
+   "url": "https://arxiv.org/abs/2609.26708",
+   "summary": "Quantization-aware distillation (QAD) restores much of the short-form question-answering performance lost to sub-3-bit quantization, yet leaves mathematical and code reasoning substantially impaired. Long generations often degenerate into repetitive loops, exhausting the decoding budget without completing a solution. We trace this gap to quantization-amplified exposure bias: QAD trains on fixed corpus prefixes, while quantization-induced deviations compound along the model's own autoregressive trajectories. To address this mismatch, we introduce an on-policy distillation (OPD) stage that places teacher supervision where the quantized model actually goes. Starting from a QAD checkpoint, the student generates through the quantized forward path used at deployment and receives feedback from a frozen full-precision teacher on its own prefixes, combining dense token-level guidance with task-verifier rewards. Across four models at 2.79 and 1.88 effective bits, OPD raises average BF16 performance retention from 35% to 70% on MATH-500 and from 66% to 91% on HumanEval while preserving short-form performance, with reasoning gains substantially exceeding those of continued teacher-forced QAD in matched-budget comparisons. By coupling QAD's stable low-bit initialization with OPD's on-policy reasoning recovery, our framework provides a comprehensive sub-3-bit solution that preserves broad capabilities while restoring long-form reasoning.",
+   "source": "arxiv",
+   "published": "2026-09-22",
+   "authors": [
+    "Yuanteng Chen",
+    "Zhilei Liu",
+    "Peisong Wang",
+    "Yuantian Shao",
+    "Chuangyi Li",
+    "Weining Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.26708",
+   "categories": [
+    "cs.LG",
+    "cs.AI"
+   ],
+   "keywords": [
+    "quantization",
+    "rl",
+    "distillation",
+    "inference"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "低比特推理的on-policy distillation强相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "OPD 把监督放到量化模型自己走的轨迹上，MATH-500 保留率从 35% 到 70%",
+    "why": "和低比特推理、distillation、on-policy 很贴近",
+    "architecture": "反直觉点是：sub-3-bit 下，QAD 能保住短问答，却让长推理掉进重复循环；原因不是 teacher 不够强，而是训练看的是固定 corpus prefix，和部署时模型自己滚出来的轨迹不一致，量化误差会在 autoregressive 过程中累积。作者的关键改法是 OPD：先用 QAD 给出可用的低比特初始化，再让 quantized student 按部署路径自己生成，由 frozen full-precision teacher 在这些 student prefixes 上做 token-level supervision，并配 verifier reward；它阻断的是“训练没见过模型自己偏出去后的状态”这类 exposure bias。最直接证据是四个模型、2.79/1.88 effective bits 下，MATH-500 平均 BF16 retention 从 35% 提到 70%，HumanEval 从 66% 到 91%，且相较继续 teacher-forced QAD，推理收益明显更大。新意在训练层：不是新量化算子，而是把 distillation 从 off-policy 改成 on-policy，专门修复长生成。",
+    "verdict": "值得精读，on-policy 修复很实用",
+    "why_now": "",
+    "key_points": [
+     "最强证据：MATH-500 35%→70%",
+     "只修复长推理，短问答本来就较好",
+     "复现依赖量化路径采样与 verifier"
+    ],
+    "prereqs": [
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "exposure bias",
+      "status": "unlisted"
+     },
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "scheduled sampling",
+     "reinforcement learning from human feedback"
+    ],
+    "mermaid": "graph LR\nA QAD 初始化 --> B 量化模型\nB --> C 自己生成轨迹\nC --> D teacher 监督\nD --> E verifier 奖励\nE --> F 长推理恢复",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.26532",
+   "kind": "paper",
+   "title": "REFLEX with Jev for Efficient Selective Control in LLM Agents",
+   "url": "https://arxiv.org/abs/2609.26532",
+   "summary": "LLM agents often use generative models for bounded decisions, raising the question of when these decisions can be handled more efficiently without reducing task success. We study REFLEX, an agent architecture that uses Jev as a fast, typed decision layer and calls a strong LLM when confidence is low, or generation is required. On a frozen 100-task benchmark, REFLEX achieves 95% success with 72.7% fewer strong-model calls than a strong-only agent, with reductions persisting across three fallback families. Controlled interventions show that reliability depends on action-set size and near-valid alternatives near authorization boundaries. External BFCL and $τ$-style evaluations reveal limited advantages over a cheap generative cascade when ordinary routing is already highly accurate. These findings identify when selective control with Jev can reduce computation and where its benefits are limited.",
+   "source": "arxiv",
+   "published": "2026-09-22",
+   "authors": [
+    "Tiantong Wu",
+    "Wei Yang Bryan Lim"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.26532",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "selective-decoding",
+    "routing",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "agent用JeV省强模型调用，极贴你的agent优化",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Jev 做 typed 决策，REFLEX 在 100 任务上用少 72.7% 强模调用仍到 95% 成功",
+    "why": "很适合看 agent 控制层如何降推理成本",
+    "architecture": "反直觉点在于：很多 agent 失败并不是“不会推理”，而是把“选工具/要不要继续”这种有固定答案的控制问题也交给强 LLM。纯 generative agent 因此在每步都付出高成本，但其中不少步骤其实只需要 bounded choice。作者的关键改变是把轨迹拆成“Jev 负责 typed decision + confidence gate，强 LLM 只接管低置信度或需要自由生成的状态”。组件作用很明确：typed decision 阻断无谓的强模调用，confidence gate 阻断低把握下的错误硬执行，fallback 阻断 Jev 不能产出文本或复杂参数时的能力缺口。最直接的证据是 frozen 100-task benchmark：95% success 下强模调用减少 72.7%，并且在三种 fallback family 上都能保持 66%–72% 的降幅；而外部 BFCL 上“选对工具”高达 98.4%，但“要不要调用工具”只有 52.0%，说明真正难点常在 authorization boundary。新意主要在系统组织层，不是新模型本身。",
+    "verdict": "值得看清 agent 控制层何时真能省算力",
+    "why_now": "",
+    "key_points": [
+     "100 任务上 95% 成功，强模调用少 72.7%",
+     "BFCL 显示难点在是否行动，不只是选哪个工具",
+     "收益有限：普通 routing 已准时，增益会缩小"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "FrugalGPT",
+     "RouteLLM"
+    ],
+    "mermaid": "graph TD\nA[State] --> B[Jev typed decision]\nB --> C{High confidence}\nC -->|yes| D[Execute directly]\nC -->|no| E[Strong LLM]\nE --> F[Generate text or args]\nB --> G{Needs generation}\nG -->|yes| E\nD --> H[Next step]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.25848",
+   "kind": "paper",
+   "title": "Optimizing the Score, Losing Sight of the Task: Reward Hacking Across Weights, Selection, and Prompts",
+   "url": "https://arxiv.org/abs/2609.25848",
+   "summary": "A higher evaluation score does not always mean a better language model system. When optimization exploits an evaluator's mistakes, measured progress can conceal unchanged or deteriorating task performance. This failure can arise through parameter updates, selection among generated outputs, or revisions to persistent prompts. We develop a comparative framework for reward hacking across these three optimization substrates: weights, selection, and text. Building on the Proxy Compression Hypothesis and research on inference-time and in-context reward hacking, we examine how reachable behavior, optimization budgets, and persistent adaptation shape exposure to proxy error. We formalize a distance-dependent upper bound on evaluator disagreement and a capacity ordering for nested policy classes, then show why distance alone cannot establish a universal ranking of vulnerability. An exact finite-output illustration demonstrates how the location of a scoring defect changes the behavior favored by each method. We also map representative defenses across substrates, identifying which mechanisms transfer directly and which offer only functional analogies. Persistent prompts receive particular attention: their contents are inspectable, but the behavior induced by a small textual change may be difficult to anticipate. The formal analysis, numerical illustration, and published evidence together provide a basis for comparing optimization methods and identifying the conditions under which their defenses transfer. The resulting framework connects optimization choices to verification requirements: reliable improvement depends on controlling accessible failure modes and preserving evidence of task quality independent of the score being optimized.",
+   "source": "arxiv",
+   "published": "2026-09-22",
+   "authors": [
+    "Vansh Wahi"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.25848",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "alignment",
+    "reward-hacking",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "奖励黑客全链路框架，直接影响agent训练评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "把 reward hacking 拆成 weights, selection, prompts 三种底座，解释 score 高不等于任务好",
+    "why": "适合面试讲 alignment 和评测失真",
+    "architecture": "悖论是：系统分数更高了，却可能只是更会骗 evaluator，而不是更会做任务。单看某一种优化方式很容易误判，因为 weight update、best-of-n selection、persistent prompt 都可能把输出推向 scorer 的盲区，但它们能到达的行为空间和搜索预算完全不同。作者最关键的概念改变是把三者统一成 optimization substrates，并分别分析“可达行为”“优化预算”“代理误差”。对应地，权重优化改变参数，selection 只是在候选里重排，prompt 优化改的是持续生效的条件文本；这三种机制分别会阻断或放大不同类型的 proxy error。最强证据不是单个涨幅，而是一个精确的 finite-output 例子：评分缺陷放在不同位置时，三种底座会偏好完全不同的解；再加上文中给出的 distance-dependent upper bound，说明“离起点远”不能单独决定脆弱性。新意主要在实证/形式化框架层，不是新算法。",
+    "verdict": "适合精读，能补齐 reward hacking 的比较框架",
+    "why_now": "",
+    "key_points": [
+     "核心结论：高分可能只是在优化 evaluator",
+     "distance 不能单独排序三种底座的脆弱性",
+     "无新 LLM 实验，主要是形式化框架+数值例子"
+    ],
+    "prereqs": [
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "rejection sampling",
+      "status": "unknown"
+     },
+     {
+      "name": "self-instruct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Proxy Compression Hypothesis",
+     "in-context reward hacking"
+    ],
+    "mermaid": "graph TD\nA[Score] --> B[Optimize weights]\nA --> C[Select outputs]\nA --> D[Edit prompt]\nB --> E[Changed policy]\nC --> E\nD --> E\nE --> F[Better score]\nF --> G{Task quality}\nG -->|may fall| H[Reward hacking]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.23863",
+   "kind": "paper",
+   "title": "Grounded Action Model: 3D Grounding as a Foundation for Robotics",
+   "url": "https://arxiv.org/abs/2609.23863",
+   "summary": "Manipulation policies must know which objects matter and where they are, yet the pretrained backbones that current robot foundation models build on, from language in vision-language-action models (VLAs) to video generation in world-action models (WAMs), do not directly require this metric grounding, leaving it to be learned implicitly from robot demonstrations. We propose Grounded Action Models (GAMs), a new paradigm of robot foundation models built with 3D grounding. GAM can be conditioned using language, points, or box prompts, which are first transformed into a shared object-centric representation of the selected objects. This representation captures target-focused visual features and metric object geometry, which is mixed with robot state history through a multi-stream transformer to predict action chunks. Although GAMs can be run autonomously, they can also serve as a low-level controller that a high-level planner controls using its various input modalities, allowing for long-horizon and memory-dependent manipulation. On RoboTwin 2.0, GAM achieves an average success rate of 55.3% across 50 tasks (vs. 52.0% for Spatial Forcing), including 47.6% under scene randomization (vs. 30.4% for Abot-M0), with its action policy trained only on clean-scene demonstrations. On LIBERO-PRO, it achieves a state-of-the-art average success rate of 61% (vs. 53% for π_{0.5}) across 16 perturbation settings, with the largest gains when targets are relocated or newly designated. On two real robots, GAM retains 17/20 successes under visual shift on a bimanual YAM versus 4/20 for π_{0.5}, while its composition with a Molmo2 planner on a Franka achieves 64.7% ID and 49.8% OOD step completion on long-horizon and memory-dependent tasks.",
+   "source": "hf_papers",
+   "published": "2026-09-20",
+   "authors": [
+    "Gehao Zhang",
+    "Weikai Huang",
+    "Shailesh Shailesh",
+    "Yiyan Peng",
+    "Jiafei Duan",
+    "Ranjay Krishna"
+   ],
+   "org": "",
+   "hf_upvotes": 75,
+   "stars": 14,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/GehaoZhang6/Grounded-Action-Model",
+   "pdf_url": "https://arxiv.org/pdf/2609.23863",
+   "categories": [],
+   "keywords": [
+    "robotics",
+    "3d-grounding",
+    "foundation"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "机器人基础模型引入3D指标，范式相关强",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "GAM 用 3D grounding 做机器人动作底座，RoboTwin 2.0 平均 55.3%",
+    "why": "和 VLA/WAM 对比很直接，适合做具身方向速览",
+    "architecture": "问题不是机器人不会“看”，而是现有 VLA/WAM 的预训练目标并不强制模型学会任务对象的 3D 位置与几何，所以后面只能靠机器人示教把空间关系补出来，一换背景或目标就容易崩。作者的关键改变是把 foundation 前移到 3D grounding：先用 promptable 3D grounding backbone 把 language/point/box 解析成对象中心表示，再把“目标对象的外观特征”与“度量几何”分成两路输入动作模块。这样，object selection 阻断找错物体，metric geometry 阻断位置和尺度不稳，multi-stream transformer 只负责把已对齐的 grounded observation 和 state history 映射成 action chunks。最直接的证据是 RoboTwin 2.0 在 clean-scene 训练下仍拿到 55.3%，且 scene randomization 下 47.6% 对 30.4%；这说明收益主要来自 grounding 对分布外空间变化的鲁棒性。新意在系统组织层和表示层：不是换一个更大 policy，而是换了 pretraining foundation。",
+    "verdict": "值得看一眼，尤其想做 VLA/机器人底座",
+    "why_now": "HF upvotes 75；开源代码已给出",
+    "key_points": [
+     "RoboTwin 2.0 55.3%，randomization 47.6%",
+     "LIBERO-PRO 61% 创新高，目标迁移时增益最大",
+     "复现依赖 3D grounding backbone 和机器人数据栈"
+    ],
+    "prereqs": [
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "detection",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "VLA",
+     "World Action Models"
+    ],
+    "mermaid": "graph TD\nA[Language or point or box] --> B[3D grounding]\nB --> C[Object centric view]\nB --> D[Metric geometry]\nC --> E[Multi stream transformer]\nD --> E\nE --> F[Action chunks]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.24983",
+   "kind": "paper",
+   "title": "onPanda: Efficient Annotation of On-Policy Alignment Data for LLMs and Agents via Token-Level Correction",
+   "url": "https://arxiv.org/abs/2609.24983",
+   "summary": "We present onPanda, an interactive tool for efficiently annotating LLM alignment data and agent trajectories. onPanda adopts token-level correction as its core interaction: while reading a model response, the annotator locates the first inappropriate token and either picks a substitute from the model's candidate tokens or types the correct text via free-form editing. The system then truncates everything after that position and continues generation from the corrected prefix, repeating this locate-correct-continue loop until a satisfactory response is obtained. This mechanism lets annotators precisely steer model outputs at low cost: a small controlled study suggests that onPanda reduces median annotation time by 52% over manual post-editing. Since the vast majority of tokens in the final response are generated by the model itself, the resulting data largely preserves the model's sampling distribution and is well suited for constructing on-policy SFT and preference data. Furthermore, the token-level corrections recorded during annotation provide fine-grained supervision with precise positions and naturally paired positive--negative samples. onPanda also connects to external tools and harnesses, enabling interactive trajectory annotation in realistic environments. In addition, we release Panda-CVL, a dataset annotated with onPanda, together with a benchmark for token-level correction.",
+   "source": "hf_papers",
+   "published": "2026-09-21",
+   "authors": [
+    "Lei Yang",
+    "Mengyin Liu",
+    "Jia Wang",
+    "Hangyu Guo",
+    "Liang Zhao",
+    "Zheng Ge"
+   ],
+   "org": "",
+   "hf_upvotes": 35,
+   "stars": 38,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/on-panda/on-panda",
+   "pdf_url": "https://arxiv.org/pdf/2609.24983",
+   "categories": [],
+   "keywords": [
+    "alignment",
+    "annotation",
+    "agent",
+    "rlhf"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "token级纠正继续生成，适合对齐数据管线",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "onPanda 用 token-level correction 降 52% 标注时长，保留 on-policy 轨迹",
+    "why": "做对齐/Agent 数据标注与 on-policy SFT 很相关",
+    "architecture": "反直觉点在于：最省事的高质量对齐数据，不是重写整段，也不是只做偏好二选一，而是从模型自己已经生成的句子里“只改第一个错 token”。现有 post-editing 太费时且 off-policy，纯 preference 又给不到定位级纠错信号，尤其模型根本采不到好答案时就失灵。onPanda 的关键改法是把标注动作变成 locate-correct-continue：先定位首个错误 token，再从模型候选里点选替换，候选不够就自由输入；系统截断后续并从修正前缀继续生成，所以大部分 token 仍来自 rollout model，失败被阻断在“错误首次出现的位置”，而不是整段重写。最直接证据是小规模对照里 median 标注时间降 52%，同时作者指出最终样本仍保持采样分布，且每次修正会天然留下正负成对、带精确位置的监督。新意主要在系统组织层：把对齐数据生产改成交互式循环，而不是新的训练目标。",
+    "verdict": "适合精读：它把 on-policy 对齐数据的生产机制讲清了",
+    "why_now": "",
+    "key_points": [
+     "对照实验：median 标注时长降 52%",
+     "没证明大规模收益；自由编辑仍会轻微 off-policy",
+     "复现主要难在交互式前端与环境接入"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy",
+      "status": "unlisted"
+     },
+     {
+      "name": "SFT",
+      "status": "unknown"
+     },
+     {
+      "name": "preference data",
+      "status": "unlisted"
+     },
+     {
+      "name": "DPO",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Reptile",
+     "ChatGPT"
+    ],
+    "mermaid": "graph LR\nA[模型输出] --> B[找首错token]\nB --> C[候选替换]\nB --> D[自由编辑]\nC --> E[截断后续]\nD --> E\nE --> F[继续生成]\nF --> G[正负样本与SFT]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.26550",
+   "kind": "paper",
+   "title": "JEV-as-a-Judge: Accept When Confident, Escalate When Unsure",
+   "url": "https://arxiv.org/abs/2609.26550",
+   "summary": "LLM-as-a-judge enables evaluation across diverse tasks, but inference cost and confidence reliability become critical at scale. We study whether a decision-only judge can provide an economical first pass and identify when stronger evaluation is needed. Comparing jev-as-a-judge with sixteen generative and reward-model judges, with blinded human adjudication, we find it within three percentage points of a state-of-the-art LLM judge, our strongest comparator, on ordinary preference and evidence-grounded factuality at 0.36% of the comparator's fee. Larger gaps arise when judgments require checking a derivation or resisting an elaborately written wrong answer. On several benchmarks, JEV's gap to this comparator is concentrated in low-confidence decisions. A frozen cascade that accepts confident verdicts and escalates uncertain ones retains 99% of the comparator's accuracy at lower cost.",
+   "source": "hf_papers",
+   "published": "2026-09-22",
+   "authors": [
+    "Yubo Li",
+    "Yidi Miao",
+    "Ramayya Krishnan",
+    "Rema Padman"
+   ],
+   "org": "",
+   "hf_upvotes": 16,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.26550",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "llm-eval",
+    "judge",
+    "rlhf"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "自信判定升级评测，省成本且与安全评测相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "JEV 以决策+概率做首轮 judge，费用仅 0.36%",
+    "why": "很适合做 LLM judge / 评测系统的面试谈资",
+    "architecture": "反直觉点是：judge 不一定要先“讲一大段理由”才算可靠，很多场景只要先给出 verdict，再用 confidence 决定要不要升级到更强模型。现有 generative judge 的问题不是不会判，而是推理 token 和延迟把规模化评测成本拉高；同时自报 confidence 又常常过度自信，没法直接拿来分流。作者把关键概念改成 decision-only interface：输出类型固定为标签和概率分布，先用低成本判定普通偏好、证据支撑事实类问题；遇到需要检查 derivation、或对“写得很像对但其实错”的答案时，低置信样本会集中暴露失败。最直接的证据是：在若干基准上，JEV 与最强对比 judge 的差距主要集中在 low-confidence 决策，固定 cascade 之后能保留 99% 精度且更便宜。新意在实证层和系统策略层，不是新 judge 算法。",
+    "verdict": "值得看：它回答了 judge 成本和置信度怎么一起用",
+    "why_now": "",
+    "key_points": [
+     "普通偏好/事实任务上接近强 judge，费率仅 0.36%",
+     "对 derivation 和伪装错误答案更弱",
+     "固定阈值 cascade 需本地验证，阈值迁移不稳"
+    ],
+    "prereqs": [
+     {
+      "name": "LLM-as-a-judge",
+      "status": "unlisted"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "confidence",
+      "status": "unlisted"
+     },
+     {
+      "name": "selective classification",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MT-Bench",
+     "RewardBench"
+    ],
+    "mermaid": "graph TD\nA[输入] --> B[决策only judge]\nB --> C{高置信}\nC -->|是| D[直接接受]\nC -->|否| E[升级强judge]\nE --> F[最终判定]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:deusdata/codebase-memory-mcp",
+   "kind": "project",
+   "title": "DeusData/codebase-memory-mcp",
+   "url": "https://github.com/DeusData/codebase-memory-mcp",
+   "summary": "High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "DeusData",
+   "hf_upvotes": 0,
+   "stars": 44463,
+   "stars_today": 266,
+   "forks": 3631,
+   "language": "C",
+   "code_url": "https://github.com/DeusData/codebase-memory-mcp",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "mcp",
+    "retrieval",
+    "agent"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "代码库记忆图谱索引与低延迟检索，贴RAG/agent",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "codebase-memory-mcp 把代码库索引成图，毫秒级回答，Linux 内核 3 分钟",
+    "why": "MCP+代码检索+Agent 工具链，很贴你方向",
+    "architecture": "它解决的是真实痛点：AI coding agent 读大仓库时靠 grep/read 循环太慢、上下文爆炸，而且每次查结构都要反复消耗 token。这个项目的承重组件不是“更多搜索按钮”，而是先把仓库离线索引成 persistent knowledge graph：tree-sitter 负责语法结构，Hybrid LSP 只在部分语言上补语义类型解析，随后把函数、类、调用链、HTTP route、跨服务链接变成图节点与边，查询时直接走图而不是逐文件翻阅；如果检测到客户端已安装且条件满足，install 会自动写入 agent 配置，未满足则保持手动边界，避免误配。最强证据是作者给出的实测：平均仓库毫秒级索引、结构查询 <1ms，31 个真实仓库上 83% answer quality、10× fewer tokens、2.1× fewer tool calls；README 还给出 Linux kernel 28M LOC 3 分钟、17 个 MCP tools、45 个 client surfaces，并在新 release 中明确修了安装/卸载/daemon 稳定性，说明已经不是 demo。与同类 grep/文件级 MCP 工具相比，它差在“先建图再问答”和本地持久化，而不是简单封装搜索。",
+    "verdict": "值得装：这是 agent 代码检索的底座型项目",
+    "why_now": "最近 release：v0.11.0（2026-09-15）；这是一个大版本，原因是索引格式变更、工具输出契约调整，且作者明确说这版主要解决安装、卸载和 daemon 启动可靠性与大仓库内存问题。",
+    "key_points": [
+     "31 仓库实测：83% answer quality，10× fewer tokens",
+     "Linux kernel 28M LOC 3 分钟；结构查询 <1ms",
+     "对超大仓库更强，但依赖本地索引预处理与安装配置"
+    ],
+    "prereqs": [
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge graph",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "graph RAG",
+     "vLLM"
+    ],
+    "mermaid": "graph TD\nA[代码库] --> B[tree-sitter]\nB --> C[知识图]\nC --> D[结构查询]\nC --> E[跨文件链路]\nD --> F[低token回答]\nE --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:thedotmack/claude-mem",
+   "kind": "project",
+   "title": "thedotmack/claude-mem",
+   "url": "https://github.com/thedotmack/claude-mem",
+   "summary": "Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "thedotmack",
+   "hf_upvotes": 0,
+   "stars": 94548,
+   "stars_today": 96,
+   "forks": 8360,
+   "language": "TypeScript",
+   "code_url": "https://github.com/thedotmack/claude-mem",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "context"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "持久记忆+压缩回注，强相关且可用",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "跨会话记忆压缩系统，覆盖多代理，作者称可让续接上下文保留",
+    "why": "做 agent/RAG 的人最容易被会话断掉卡住",
+    "architecture": "它先撞上的悖论是：agent 真正有用的信息往往出现在上一次会话里，但把整段历史硬塞回上下文既贵又会稀释当前任务。Claude-Mem 的关键改变不是“存日志”，而是把会话中的工具观察、决策和敏感信号做成可检索的压缩记忆，再按相关性注入未来会话；组件的作用是阻断“全量回填导致 token 爆炸”和“只靠短窗导致失忆”两类失败。最直接的证据是它的持久上下文与分层检索设计，外加作者明确给出 token 成本可见、跨 Claude Code/OpenCode/Codex/Gemini 等多客户端工作。新意主要在系统组织层：把记忆从单机 prompt 技巧做成插件式、跨会话、跨宿主的中间件。",
+    "verdict": "适合想搞 agent memory 中间件的人看",
+    "why_now": "",
+    "key_points": [
+     "作者报告覆盖 Claude Code 等多客户端",
+     "分层检索+压缩，非整段回灌",
+     "原文未给出公开对照实验"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "retrieval-augmented generation"
+    ],
+    "mermaid": "graph LR\nA[会话事件] --> B[压缩摘要]\nB --> C[检索筛选]\nC --> D[相关上下文注入]\nD --> E[新会话]\nE --> A",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:fankchen/tracecrate",
+   "kind": "project",
+   "title": "FankChen/tracecrate",
+   "url": "https://github.com/FankChen/tracecrate",
+   "summary": "Local-first AI agent trace workbench. Inspect Claude Code, Codex and OTLP logs, compare runs, and export privacy-conscious reports. No backend or API keys.",
+   "source": "github_search",
+   "published": "2026-09-10",
+   "authors": [],
+   "org": "FankChen",
+   "hf_upvotes": 0,
+   "stars": 205,
+   "stars_today": 0,
+   "forks": 4,
+   "language": "TypeScript",
+   "code_url": "https://github.com/FankChen/tracecrate",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "tracing",
+    "observability",
+    "eval"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "agent轨迹/OTLP可观测，便于调试评测",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "Local-first AI agent trace workbench",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Inspect Claude Code, Codex and OTLP logs, compare runs, and export privacy-conscious reports",
+     "No backend or API keys."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:can1357/oh-my-pi",
+   "kind": "project",
+   "title": "can1357/oh-my-pi",
+   "url": "https://github.com/can1357/oh-my-pi",
+   "summary": "⌥ Coding agent with the IDE wired in. Built by Stencil Labs.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "can1357",
+   "hf_upvotes": 0,
+   "stars": 32984,
+   "stars_today": 405,
+   "forks": 3501,
+   "language": "TypeScript",
+   "code_url": "https://github.com/can1357/oh-my-pi",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "ide",
+    "coding"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "IDE联动的编码智能体，工程可落地",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "把 IDE 接进 coding agent，作者称有 60+ provider 和 80k 行 Rust core",
+    "why": "做 coding agent / IDE 集成的人会直接碰到它的设计点",
+    "architecture": "它解决的不是“又一个 CLI agent”，而是 agent 在真实 IDE 里会被工具、调试器和交互流打断的问题：一边写代码一边还要让模型知道重命名、断点、子任务和规则变更。OMP 的关键改变是把 IDE 能力当成 agent 的承重层：LSP 让改名和引用更新在文件移动前完成，DAP 让调试从打印式回退到断点级定位，time-traveling stream rules 在模型跑偏时中断流、插入系统提醒并从同一点重试，子 agent 则用隔离 worktree 和 schema 结果阻断串扰。最直接的证据是它把这些机制都做成了可见的运行时能力和最近频繁 release 修复，说明核心问题在持续打磨。新意主要在系统组织层：把 IDE、调试器、规则注入和多 agent 编排绑成一个完整 agent surface。",
+    "verdict": "适合看 coding agent 的工程架构",
+    "why_now": "v18.2.11，2026-09-23 release",
+    "key_points": [
+     "最近连续 release，说明仍在高频迭代",
+     "LSP/DAP/子 agent 都是运行时承重件",
+     "README 多为能力宣称，缺少独立基准"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Cursor",
+     "Aider"
+    ],
+    "mermaid": "graph LR\nA[IDE event] --> B[LSP DAP]\nB --> C[Agent loop]\nC --> D[Stream rule check]\nD -->|off script| E[Inject reminder]\nD -->|ok| F[Continue]\nC --> G[Subagents]\nG --> H[Schema result]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:code-yeongyu/oh-my-openagent",
+   "kind": "project",
+   "title": "code-yeongyu/oh-my-openagent",
+   "url": "https://github.com/code-yeongyu/oh-my-openagent",
+   "summary": "OmO: Just type \"mass ulw\" keyword with your prompt. Now you are the master of graph engineering.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "code-yeongyu",
+   "hf_upvotes": 0,
+   "stars": 69329,
+   "stars_today": 47,
+   "forks": 5716,
+   "language": "TypeScript",
+   "code_url": "https://github.com/code-yeongyu/oh-my-openagent",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "graph",
+    "prompt"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "图工程/agent交互范式，可能用于面试讲解",
+   "tier": "core",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "OmO: Just type \"mass ulw\" keyword with your prompt",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Now you are the master of graph engineering."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:vercel-labs/agent-browser",
+   "kind": "project",
+   "title": "vercel-labs/agent-browser",
+   "url": "https://github.com/vercel-labs/agent-browser",
+   "summary": "Browser automation CLI for AI agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "vercel-labs",
+   "hf_upvotes": 0,
+   "stars": 43116,
+   "stars_today": 70,
+   "forks": 2895,
+   "language": "Rust",
+   "code_url": "https://github.com/vercel-labs/agent-browser",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "browser-automation",
+    "tool-use"
+   ],
+   "core_score": 7.0,
+   "wide_score": 9.0,
+   "score_reason": "浏览器自动化用于agent，且热度高",
+   "tier": "core",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Browser automation CLI for AI agents",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:comfy-org/comfyui",
+   "kind": "project",
+   "title": "Comfy-Org/ComfyUI",
+   "url": "https://github.com/Comfy-Org/ComfyUI",
+   "summary": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Comfy-Org",
+   "hf_upvotes": 0,
+   "stars": 134707,
+   "stars_today": 203,
+   "forks": 15949,
+   "language": "Python",
+   "code_url": "https://github.com/Comfy-Org/ComfyUI",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "diffusion",
+    "ui",
+    "inference"
+   ],
+   "core_score": 5.0,
+   "wide_score": 9.0,
+   "score_reason": "扩散模型生态旗舰工具，热度高且常用",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.13814",
+   "kind": "paper",
+   "title": "Realtime-Venus: A full-duplex interaction system with asynchronous delegation",
+   "url": "https://arxiv.org/abs/2609.13814",
+   "summary": "Natural interaction in digital and physical environments requires continuous perception and timely responses. Spoken dialogue relies on acoustic and linguistic cues, while video interaction also requires grounding the conversation in evolving visual context. We present Realtime-Venus, a proactive full-duplex interaction system with two separately trained 9B models: Realtime-Venus-Omni for audio-visual interaction and Realtime-Venus-Audio for spoken interaction. Each model serves as a complete conversational frontend, integrating continuous perception, conversational control, and native speech generation through a shared causal timeline for user inputs, model outputs, and delegation events.\n  A dual-loop runtime coordinates live interaction with background reasoning and tool execution. Foreground interaction continues while Realtime-Venus-Harness executes tasks asynchronously and returns results for integration into the ongoing dialogue.\n  Both models follow a common post-training recipe combining offline understanding, proactive full-duplex trajectories, and delegation workflows.\n  Among the evaluated online models, Realtime-Venus-Omni achieves the highest scores on six of eight video benchmarks, including StreamingBench (70.2%), OVO-Bench (64.7%), and Daily-Omni (81.3%). Across eight audio understanding and spoken question answering benchmarks, Realtime-Venus-Audio leads the compared models on MMAU (78.0%), MMAU-Pro (63.2%), Llama Questions (83.8%), and Speech CMMLU (67.8%), while matching the best VoiceBench AlpacaEval score of 4.81. On Full-Duplex-Bench v1.5, Realtime-Venus-Audio responds to 75% of user interruptions and achieves continuation rates of 97%, 88%, and 86% under backchannels, other-directed speech, and background speech, respectively, exceeding Gemini 3.1 Live and GPT-4o on all three continuation metrics.",
+   "source": "hf_papers",
+   "published": "2026-09-12",
+   "authors": [
+    "Ruixiang Zhao",
+    "Hualei Wang",
+    "Renhe Sun",
+    "Enzhi Zhou",
+    "Jincenzi Wu",
+    "Xujie Song"
+   ],
+   "org": "",
+   "hf_upvotes": 199,
+   "stars": 86,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/inclusionAI/Realtime-Venus",
+   "pdf_url": "https://arxiv.org/pdf/2609.13814",
+   "categories": [],
+   "keywords": [
+    "realtime",
+    "multimodal",
+    "agent"
+   ],
+   "core_score": 7.0,
+   "wide_score": 9.0,
+   "score_reason": "全双工异步委派系统，热度高且工程可借鉴",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用双循环+异步委派做实时全双工交互，Omni 6/8 视频榜领先",
+    "why": "适合看 agent 运行时与实时多模态对齐",
+    "architecture": "反直觉点是：实时对话里一边要持续听、插话、修正，另一边又要把耗时推理/工具调用塞进同一轮会话；线性流水线会把“当前该说什么”和“后台该查什么”绑死，结果要么卡顿，要么后台结果回来时上下文已变。作者把关键改动做成共享 causal timeline：前台 frontend 只负责连续感知、交互控制和原生语音生成，同时把私有 delegation request 写入同一时间轴；后台 Realtime-Venus-Harness 按请求边界快照证据、异步执行、再做 freshness check 和 playback-aware delivery，阻断“旧证据污染当前回复”。最直接的证据是 Full-Duplex-Bench v1.5 上 Audio 对用户打断响应率 75%，在 backchannels/other-directed/background speech 的 continuation rate 分别到 97/88/86%，并且超过 Gemini 3.1 Live 和 GPT-4o。新意主要在系统组织层：不是单纯更强的 omni 模型，而是把实时交互和后台执行拆成可并行、可回放、可校验的双循环 runtime。",
+    "verdict": "值得精读，核心是实时 agent 运行时",
+    "why_now": "",
+    "key_points": [
+     "Full-Duplex-Bench v1.5 打断响应率 75%",
+     "后台结果先快照再回放，避免上下文漂移",
+     "复现难点在双循环运行时与时序数据管线"
+    ],
+    "prereqs": [
+     {
+      "name": "full-duplex",
+      "status": "unlisted"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "GPT-4o",
+     "Qwen3-Omni"
+    ],
+    "mermaid": "graph LR\nA[用户语音与视频] --> B[前台模型]\nB --> C[说话与控制]\nB --> D[委派请求]\nD --> E[后台执行]\nE --> F[结果回传]\nF --> G[新鲜度检查]\nG --> H[回到对话]\nC --> I[持续交互]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:copilotkit/copilotkit",
+   "kind": "project",
+   "title": "CopilotKit/CopilotKit",
+   "url": "https://github.com/CopilotKit/CopilotKit",
+   "summary": "The Frontend Stack for Agents & Generative UI. React, Angular, Mobile, Slack, and more. Makers of the AG-UI Protocol",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "CopilotKit",
+   "hf_upvotes": 0,
+   "stars": 37506,
+   "stars_today": 37,
+   "forks": 4655,
+   "language": "TypeScript",
+   "code_url": "https://github.com/CopilotKit/CopilotKit",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "frontend",
+    "ui"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "Agent与生成式UI前端基础设施，热度高且通用",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "把 agent 和前端 UI 绑成共享状态层，三周内发到 v1.73.3",
+    "why": "适合看 agent 产品化和前端编排",
+    "architecture": "它解决的是“agent 会说话，但界面跟不上”的问题：如果工具返回、用户确认、生成式 UI 更新都各走各路，前端会出现状态分叉，尤其在跨网页、移动端和 Slack/Teams 的多表面场景里更明显。CopilotKit 的关键设计是把 UI、agent、tools 接到同一个 interaction loop：shared state 让双方读写同一状态，generative UI 让工具结果直接渲染成组件，human-in-the-loop 让 agent 在需要时暂停等待用户输入；这阻断的是“agent 已经换计划，但前端还停留在旧线程”的失败。成熟度信号很强：README 有 React/Angular/Vue/React Native/Slack/Teams 的完整入口，文档、Quickstart、Examples、Intelligence 都公开；最近 release 连续发 v1.73.1/1.73.2/1.73.3，说明迭代活跃。相对同类，它的差异不在模型能力，而在前端层协议与状态同步，偏“agent UI 基础设施”而不是单一聊天组件。",
+    "verdict": "值得看项目设计，适合做产品层参考",
+    "why_now": "最近 release：v1.73.3（2026-09-22）; v1.73.2（2026-09-22）; v1.73.1（2026-09-22）",
+    "key_points": [
+     "多端统一的 agent 前端层",
+     "状态和生成式 UI 是核心，不是聊天壳",
+     "文档/示例齐全，成熟度高"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "LangGraph",
+     "AG-UI"
+    ],
+    "mermaid": "graph LR\nA[Agent] --> B[共享状态]\nB --> C[Generative UI]\nB --> D[Human in loop]\nB --> E[工具结果]\nE --> B\nC --> F[多端前端]\nD --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:browserbase/stagehand",
+   "kind": "project",
+   "title": "browserbase/stagehand",
+   "url": "https://github.com/browserbase/stagehand",
+   "summary": "The SDK to extract data and interact with any site on the web. Get started with Claude Code, Codex, Eve, Mastra, and more.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "browserbase",
+   "hf_upvotes": 0,
+   "stars": 25319,
+   "stars_today": 322,
+   "forks": 1728,
+   "language": "TypeScript",
+   "code_url": "https://github.com/browserbase/stagehand",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "browser",
+    "tool-use"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "网页交互抽取SDK，利于agent抓取与自动化",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 observe act extract 做浏览器 agent，3.7.6 持续修复",
+    "why": "适合看 web agent 工具链和浏览器交互",
+    "architecture": "它解决的是“网页会变、选择器会坏、结构化抽取很脆”的老问题：直接让模型操控 DOM，常见失败是把定位、执行、抽取混成一锅，改版后整条链路失效。Stagehand 的承重组件是三段式 API：observe 先返回真实 selector，把感知和执行拆开，避免敏感信息进模型；act 在页面改版时做 self-heal，阻断“固定 selector 失效即任务崩溃”；extract 额外要求 schema 约束，把自由文本抽取收束成可验证数据。成熟度信号比较足：多语言 SDK、Local browser、persistent session、Zod/Pydantic/Go type 的例子都给了，最近版本从 v3.7.5 到 v3.7.6 连续更新，说明还在快速修补边角。和普通 browser automation 库比，它的差别是把 LLM 放在感知/决策层，而不是让模型直接写脚本。",
+    "verdict": "看速览即可，除非你做 web agent",
+    "why_now": "最近 release：stagehand-server-v3/v3.7.6（2026-08-28）; @browserbasehq/stagehand@3.7.3（2026-08-28）; stagehand-server-v3/v3.7.5（2026-08-20）",
+    "key_points": [
+     "observe 返回真实 selector，降低幻觉风险",
+     "act 自愈，extract 有 schema 约束",
+     "依赖网页稳定性，复杂站点仍可能失手"
+    ],
+    "prereqs": [
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "schema",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Playwright",
+     "Selenium"
+    ],
+    "mermaid": "graph LR\nA[网页] --> B[observe]\nB --> C[真实 selector]\nC --> D[act]\nD --> E[self heal]\nD --> F[extract]\nF --> G[schema data]",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
