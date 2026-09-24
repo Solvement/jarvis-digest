@@ -1,0 +1,1222 @@
+{
+ "date": "2026-09-24",
+ "stats": {
+  "collected": 676,
+  "filtered": 288,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 16 calls, 54927 in / 16658 out; gpt-5.4-mini: 6 calls, 47720 in / 8720 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.15987",
+   "kind": "paper",
+   "title": "Bellman Policy Optimization",
+   "url": "https://arxiv.org/abs/2609.15987",
+   "summary": "Reinforcement learning with verifiable rewards (RLVR) improves the reasoning capabilities of large language models (LLMs). We introduce Bellman Policy Optimization (BPO), a critic-free method derived from Policy Mirror Descent (PMD). For autoregressive generation with terminal rewards, BPO uses the Bellman equations to reformulate PMD as a trajectory-level objective. The reformulation avoids estimating state values at intermediate states. We prove that it has the same unique optimal solution as the original PMD objective. We derive the practical BPO loss by approximating this objective. Its mismatch-correction weight is a smoothed ratio of complementary token probabilities. Experiments on mathematical reasoning benchmarks demonstrate the effectiveness of BPO.",
+   "source": "hf_papers",
+   "published": "2026-09-14",
+   "authors": [
+    "Zhuoqing Song",
+    "Haotian Xu",
+    "Xikun Zhang",
+    "Lidong Bing"
+   ],
+   "org": "",
+   "hf_upvotes": 27,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.15987",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "llm",
+    "policy-optimization"
+   ],
+   "core_score": 10.0,
+   "wide_score": 7.0,
+   "score_reason": "面向终止奖励的BPO，强化学习后训练强相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "BPO 用 Bellman 重写 PMD，免 value model，AIME 平均提到作者报告峰值。",
+    "why": "RLVR 训练稳定性和 GRPO 替代路线，面试很常问。",
+    "architecture": "反直觉点是：做 RLVR 时，最麻烦的不只是 reward 稀疏，而是每个中间 token 的 value/advantage 还得估，训练一个 critic 又吃显存又容易在推理题上漂。现有 GRPO 虽然免 critic，但本质还是用组内归一化优势加 PPO 式比率，和 PMD 的最优更新并不完全同构。作者的关键改动是把 terminal reward 下的 Bellman equations 用来展开 PMD，把每步 advantage 变成相邻状态 value 差，沿整条 response telescoping 后只剩终值和起始值；这样组件层上直接阻断了“中间状态价值估计误差”这条失败路径。最直接的证据是 Figure 1：在同一条 Qwen3-30B-A3B-Base、DAPO-Math-17k、400 steps 的设置下，BPO 的均值曲线压过 GRPO-ClipHigher、GSPO、CISPO、DPPO，说明不是只改了稳定项，而是新的 trajectory-level 目标真在优化上更有效。新意主要在组件层与目标重写层，不是单纯换个 loss 超参。",
+    "verdict": "适合精读，重点看 PMD 到 trajectory loss 的推导。",
+    "why_now": "",
+    "key_points": [
+     "强证据：同设定下曲线优于四个 RLVR 基线",
+     "未证明对非 terminal reward 场景同样成立",
+     "实践版依赖平滑比率近似，复现细节偏多"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "PPO",
+      "status": "unknown"
+     },
+     {
+      "name": "Policy Mirror Descent",
+      "status": "unlisted"
+     },
+     {
+      "name": "Bellman equations",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "GRPO",
+     "PPO"
+    ],
+    "mermaid": "graph LR\nA[Rollout tokens] --> B[Bellman rewrite]\nB --> C[Trajectory objective]\nC --> D[No critic]\nD --> E[Smoothed mismatch weight]\nE --> F[Policy update]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.27334",
+   "kind": "paper",
+   "title": "Just-in-Time Memory: Learning to Curate Task-Adaptive Memory for LLM Agents",
+   "url": "https://arxiv.org/abs/2609.27334",
+   "summary": "Agentic memory systems reuse past experience to improve future performance, yet most existing designs curate memory at write time: once a task is completed, its trajectory is distilled into a fixed artifact, such as a reflection, workflow, skill, or reasoning strategy, that is later retrieved by similarity. This forces the system to decide what is worth remembering before the future query is known, irreversibly discarding information and producing a query-independent summary that must serve many possible downstream tasks. Learning such a write-time curator is also difficult because the value of a storage decision may only become apparent when a relevant query arrives, potentially many tasks later, creating a long-horizon credit-assignment problem. We instead retain raw trajectories and defer curation until read time, when the current task is known. Given the retrieved traces and the new task, a memory curator synthesizes a compact, task-adaptive payload tailored to the immediate need. Because this payload is consumed on the same task, the curator can be trained directly from immediate task success, avoiding delayed utility signals and the need to artificially group related tasks. Across ALFWorld, WebShop, and τ^2-bench, our Just-in-Time Memory (JitMem) consistently outperforms no-memory agents as well as heuristic and learned write-time memory methods, improving over the strongest baseline by 16.2, 16.3, and 3.9 absolute success-rate points, respectively. Notably, even an untrained curator is already competitive with or surpasses these baselines, showing that task-adaptive read-time curation itself is a major source of the gain; training the curator further compounds the improvement.",
+   "source": "hf_papers",
+   "published": "2026-09-23",
+   "authors": [
+    "Yefan Zhou",
+    "Yang Li",
+    "Zeyu Leo Liu",
+    "Semih Yavuz",
+    "Shafiq Joty"
+   ],
+   "org": "",
+   "hf_upvotes": 31,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.27334",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "rlhf",
+    "curation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "JIT 记忆整理，和 agent 研究高度相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "JitMem 把记忆整理挪到 read time，ALFWorld 提升 16.2 点。",
+    "why": "Agent memory 设计题，和 memory / RAG / credit assignment 很相关。",
+    "architecture": "问题不是“要不要记”，而是“何时把经历压成可复用记忆”。传统写时记忆在任务结束时就把轨迹压成 reflection、workflow 或 skill，等于提前猜未来查询会需要什么；一旦摘要丢掉细节，后面相关任务再来就救不回，而且同一条轨迹对不同任务可能要提炼出完全不同的 lesson。作者的关键改动是把 raw trajectories 先完整存起来，等当前任务到了再 read time curation：检索到的 traces 和当前 task 一起喂给 curator，输出一个 task-adaptive payload。这个组件阻断的是“写时就做不可逆压缩”和“一个摘要服务所有未来查询”这两类失败。最直接证据是同一训练/推理框架下，JitMem 在 ALFWorld、WebShop、τ^2-bench 都超过最强 baseline，且即使 untrained curator 也已经很强，说明收益主要来自 read-time curation 本身，不只是 RL 训练。新意在系统组织层：把记忆存储、整理、使用的时序重排了。",
+    "verdict": "值得看，核心是记忆时序重排而非新模型。",
+    "why_now": "",
+    "key_points": [
+     "强证据：untrained curator 也能超过多种写时方法",
+     "作者报告最高提升 16.2、16.3、3.9 点",
+     "训练信号依赖 same-task success，任务泛化边界要看检索质量"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "retrieval-augmented generation"
+    ],
+    "mermaid": "graph LR\nA[Raw trajectories] --> B[Retriever]\nB --> C[Task aware curator]\nC --> D[Payload]\nD --> E[Executor]\nE --> F[Immediate reward]\nF --> C",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.27656",
+   "kind": "paper",
+   "title": "InternW0: A Foundational Physical World Model for Efficient Real-World Interactions",
+   "url": "https://arxiv.org/abs/2609.27656",
+   "summary": "Physical intelligence requires more than predicting how the world may evolve: predictions must remain actionable as the world continues to change. We introduce InternW0, the first instantiation of the InternW physical world model series from Shanghai AI Laboratory, built around omnimodal interfaces, asynchronous multi-frequency processing, and local physical modeling under partial observations and external influences. InternW0 jointly learns future visual dynamics and continuous robot control through an asymmetric video--action architecture with flow matching. A high-capacity video expert provides longer-horizon predictive context, while a lightweight action expert operates at a faster timescale. Instead of regenerating the future for every action update, InternW0 reuses layerwise K/V and adapts it to newly observed states through observation-conditioned context routing. Domain-specific interfaces and soft prompts support heterogeneous embodiments, while contact-aware post-training incorporates force and tactile signals for contact-rich manipulation. We train InternW0 on approximately 7,200 hours of heterogeneous robot and egocentric data, including EgoLab, a 275-hour real-laboratory egocentric dataset. Evaluation spans simulation benchmarks and real-world scientific tasks, including a 15-stage metal--organic framework synthesis workflow and 5-stage contact- and force-aware dexterous manipulation for general-purpose quantitative pipetting. These results advance scalable, asynchronous, and science-native physical world models for universal and efficient real-world interactions.",
+   "source": "hf_papers",
+   "published": "2026-09-23",
+   "authors": [
+    "Jisong Cai",
+    "Yao Mu",
+    "Ganlin Yang",
+    "Zhe Cao",
+    "Zhangzheng Tu",
+    "Xing Gao"
+   ],
+   "org": "",
+   "hf_upvotes": 4,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.27656",
+   "categories": [
+    "cs.RO",
+    "cs.AI"
+   ],
+   "keywords": [
+    "embodied",
+    "world-model",
+    "robotics",
+    "video-action"
+   ],
+   "core_score": 9.0,
+   "wide_score": 4.0,
+   "score_reason": "物理世界模型+可行动预测，面向真实交互。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "InternW0 用异步视频-动作 world model 做实物交互，训练约 7200 小时数据。",
+    "why": "你做 VLA/机器人/世界模型，这篇是系统级架构思路。",
+    "architecture": "反直觉点是：真实物理交互里，光会预测未来画面还不够，因为动作更新更快，等你每次都重生一遍未来再决定下一步，控制就慢半拍了。现有统一 world model 往往把视频预测和动作生成绑在同一频率上，既贵又跟不上接触、力反馈这类快信号。作者的关键改动是 asymmetric video-action architecture：高容量 video expert 负责长时域预测，轻量 action expert 负责快频控制；中间靠 layerwise K/V 复用和 observation-conditioned context routing，把“重新算未来”改成“用新观测修正已有上下文”，从而阻断了高频控制被低频预测拖慢的失败路径。最直接的证据是他们把这一套放到模拟和真实科学任务里，包含 15 步 MOF 合成和 5 步力觉灵巧操作；这类任务最能检验“预测要能来得及影响执行”，而不是只会离线预测。新意主要在系统组织层和运行时机制，不是单纯加更多模态。",
+    "verdict": "适合速览后再决定精读，重点看异步控制机制。",
+    "why_now": "",
+    "key_points": [
+     "强证据：面向真实科学流程和接触操作，不只模拟榜单",
+     "作者报告约 7200 小时数据训练",
+     "原文未明确公开完整代码与权重，复现门槛偏高"
+    ],
+    "prereqs": [
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "flow matching",
+      "status": "unknown"
+     },
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "RT-2",
+     "VLA"
+    ],
+    "mermaid": "graph LR\nA[Visual context] --> B[Video expert]\nB --> C[K V reuse]\nD[New observation] --> E[Context routing]\nE --> C\nC --> F[Action expert]\nF --> G[Robot action]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.27308",
+   "kind": "paper",
+   "title": "EmbodiedSWE: Coding Agents for Long Horizon Dexterous Robotics",
+   "url": "https://arxiv.org/abs/2609.27308",
+   "summary": "We study coding agents for long-horizon, dexterous robotics and ask whether their solutions can provide scalable supervision for learning general robot policies. To test this, we develop EMBODIEDSWE-BENCH, a simulation benchmark for coding agents spanning contact-rich manipulation, deformable objects, and long-horizon tasks requiring up to half an hour of continuous interaction. We find that frontier coding agents can solve complex long-horizon tasks and transfer prior solutions across both tasks and embodiments. We also design supporting tools that help agents more effectively solve these tasks. However, the resulting solutions require substantial iterative interaction and are typically specialized to individual task instances. We therefore introduce EMBODIEDSWE-GEN, which expands a single solution from coding agent into large diverse trajectories for training a VLA. VLA performance improves with more generated demonstrations, and agent-aided diversification improves generalization to held-out task variations. We also show that a VLA finetuned solely on coding-agent-generated simulation demonstrations completes a long-horizon task on real robot. Together, our framework uses coding agents to solve complex robotics tasks and turn verified solutions into scalable supervision for robot policies.",
+   "source": "hf_papers",
+   "published": "2026-09-23",
+   "authors": [
+    "Haoxiang You",
+    "Zeyu Shen",
+    "Yilang Liu",
+    "Zhicheng Zheng",
+    "Lihan Zha",
+    "Kashu Yamazaki"
+   ],
+   "org": "",
+   "hf_upvotes": 2,
+   "stars": 36,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/EmbodiedSWE/EmbodiedSWE",
+   "pdf_url": "https://arxiv.org/pdf/2609.27308",
+   "categories": [],
+   "keywords": [
+    "embodied",
+    "coding-agent",
+    "robotics",
+    "benchmark"
+   ],
+   "core_score": 9.0,
+   "wide_score": 4.0,
+   "score_reason": "长时域具身编码智能体+新bench，和你方向高度一致。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "We study coding agents for long-horizon, dexterous robotics and ask whether their solutions can provide scalable supervision for learning general robot policies",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "To test this, we develop EMBODIEDSWE-BENCH, a simulation benchmark for coding agents spanning contact-rich manipulation,",
+     "We find that frontier coding agents can solve complex long-horizon tasks and transfer prior solutions across both tasks "
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.27588",
+   "kind": "paper",
+   "title": "The Capability Manifold and ML Scaling Laws",
+   "url": "https://arxiv.org/abs/2609.27588",
+   "summary": "Existing machine learning (ML) scaling laws relate predictive loss to compute, model parameters, and data. However, as models are increasingly deployed through agentic harnesses, loss alone is insufficient to characterize downstream performance: models with similar loss can exhibit different capabilities in reasoning, retrieval, planning, and adaptation. Yet, no unified framework connects such capabilities to the coupled resources available across the ML lifecycle. We bridge this gap by introducing a capability manifold, a multidimensional framework mapping downstream capabilities to pre-training, post-training, and test-time resources through bounded scaling functions. Analytical Jacobians quantify capability sensitivity to resource changes and interactions. As an initial application, we embed Kaplan- and Chinchilla-type scaling laws and test-time compute within the framework, demonstrating how existing scaling relationships can be unified as trajectories on a common capability manifold.",
+   "source": "arxiv",
+   "published": "2026-09-23",
+   "authors": [
+    "Syed Ali Raza Zaidi",
+    "Maryam Hafeez"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.27588",
+   "categories": [
+    "cs.LG",
+    "cs.AI"
+   ],
+   "keywords": [
+    "scaling-laws",
+    "capability",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "能力流形与缩放定律，极利于面试/研究框架构建。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Existing machine learning (ML) scaling laws relate predictive loss to compute, model parameters, and data",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "However, as models are increasingly deployed through agentic harnesses, loss alone is insufficient to characterize downs",
+     "Yet, no unified framework connects such capabilities to the coupled resources available across the ML lifecycle"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.28416",
+   "kind": "paper",
+   "title": "Agent-Editing World Model: Rethinking World Modeling for LLM Agents",
+   "url": "https://arxiv.org/abs/2609.28416",
+   "summary": "Recent advances in large language models (LLMs) have enabled agents to tackle long-horizon tasks across diverse environments. To further improve agent performance, existing language world models typically predict environment observations, yet reconstructing high-entropy, execution-dependent tool responses offers limited value when real feedback is available. Meanwhile, agents suffer from \\emph{task-state contamination}, where unsupported assumptions and outdated plans persist in history and distort subsequent decisions. We propose the \\textbf{Agent-Editing World Model (AEWM)}, which models how reasoning and actions shape future task progress rather than simulating tool responses. AEWM combines \\textbf{Action Judge} to distinguish \\textsc{Critical}, \\textsc{Exploratory}, and \\textsc{Noisy} decisions with \\textbf{State Revision} to edit noisy reasoning--action continuations from the same observed history. \\textbf{EditAct} integrates these capabilities with real execution, directly changing the state underlying subsequent decisions rather than merely providing critiques. We train AEWM across Search, Terminal, and Software Engineering through mid-training and supervised fine-tuning. AEWM achieves 70.5\\% macro-F1 on our Action Judge benchmark, exceeding the strongest frontier baseline by 10.6 points. Across six benchmarks and three agent backbones, EditAct improves average scores by 3.2--6.7 points over the strongest baseline. Furthermore, rejection sampling fine-tuning on verified EditAct trajectories, termed \\textbf{AEWM-RFT}, improves over Self-RFT by 2.2--2.6 points across three domains without online AEWM guidance.",
+   "source": "arxiv",
+   "published": "2026-09-23",
+   "authors": [
+    "Shuang Sun",
+    "Guoxin Chen",
+    "Fanzhe Meng",
+    "Jia Deng",
+    "Huatong Song",
+    "Jinhao Jiang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.28416",
+   "categories": [
+    "cs.CL",
+    "cs.AI",
+    "cs.LG"
+   ],
+   "keywords": [
+    "agent",
+    "world-model",
+    "planning"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "面向工具反馈的世界模型，agent机制核心",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Recent advances in large language models (LLMs) have enabled agents to tackle long-horizon tasks across diverse environments",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "To further improve agent performance, existing language world models typically predict environment observations, yet rec",
+     "Meanwhile, agents suffer from \\emph{task-state contamination}, where unsupported assumptions and outdated plans persist "
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.28385",
+   "kind": "paper",
+   "title": "When and Where to Trust the Teacher: Unifying On-Policy Distillation and GRPO through Entropy-Calibrated Credit Assignment",
+   "url": "https://arxiv.org/abs/2609.28385",
+   "summary": "Reinforcement learning with verifiable rewards (RLVR) supervises mathematical reasoning through final-answer correctness, but provides little guidance on individual tokens. On-policy distillation (OPD) supplies dense feedback on student-generated responses, yet teacher preference need not reflect correctness. Recent hybrids combine OPD and verifier-derived advantages or reweight task credit using teacher ratios. However, teacher guidance enters after verifier-based group normalization, and token reweighting need not preserve the total task credit assigned to each response. We introduce Unified Entropy-Calibrated Credit Redistribution for GRPO (UECR-GRPO), which integrates verifier and teacher signals within a single GRPO-style update at both the response and token levels. \\emph{Path-Utility Unification} (PUU) combines verifier reward and a teacher-to-anchor path log-ratio in a single KL-regularized objective. Its on-policy implementation uses a length-normalized teacher score and combines both rewards before group normalization and PPO clipping, allowing teacher evidence to influence the response ranking. \\emph{Entropy-Calibrated Redistribution} (ECR) then uses the signed teacher--old-policy token gap to redistribute the verifier-derived component. Full-vocabulary teacher entropy attenuates uncertain guidance, while a response-wise zero-sum projection preserves the total task credit and its token-wise sign before clipping. Across five mathematical reasoning benchmarks, UECR-GRPO achieves average \\(\\mathrm{Avg@12}\\) accuracies of 17.21\\% and 65.09\\% with Qwen3-1.7B and Qwen3-4B students, respectively, exceeding the strongest baseline at each scale by 0.89 and 0.56 percentage points.",
+   "source": "arxiv",
+   "published": "2026-09-23",
+   "authors": [
+    "Jie Zhang",
+    "Jingxiao Yang",
+    "Zhehao Huang",
+    "Yuhang Liu",
+    "Xiaolin Huang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.28385",
+   "categories": [
+    "cs.LG",
+    "cs.AI"
+   ],
+   "keywords": [
+    "rl",
+    "on-policy-distillation",
+    "grpo"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "统一OPD与GRPO的熵校准归因，后训练关键",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "UECR-GRPO 用 1 个 GRPO 更新统一本体与教师信号，Qwen3-4B 提升 0.56 点",
+    "why": "你做 RLVR/后训练时会遇到它",
+    "architecture": "反直觉点在于：verifier 只知道“对不对”，teacher 只知道“像不像好轨迹”，两者各自都能把组内相对排序搞歪：前者让整条回答共享同一 advantage，后者又可能偏向错误但流畅的路径。作者把关键改变放在“credit 怎么分”而不是“再加一个 loss”：PUU 先把 verifier reward 和 teacher-to-anchor 的 path log-ratio 放进同一个 KL 目标里，阻断 teacher 只能在 group-normalization 之后补丁式介入、因而无法影响 response ranking 的失败；ECR 再用 teacher-old-policy 的 signed gap 做 token 级重分配，并用 teacher entropy 抑制不确定指导，阻断 token 重加权后总 credit 漂移、把失败响应里的局部好 token 误抬成正样本的失败。最直接的证据是五个数学推理基准上的平均提升：Qwen3-1.7B / 4B 分别比最强 baseline 高 0.89 / 0.56 个百分点，而且他们专门报告 teacher 能区分大量 verifier-degenerate 组、但与 correctness 有 39.1–50.8% 冲突，说明“只信 teacher”确实不行。新意主要在组件层，把 response-level 选择和 token-level credit redistribution 放进一个统一更新里。",
+    "verdict": "适合想讲清 GRPO 变体设计的人精读",
+    "why_now": "",
+    "key_points": [
+     "最强证据是五基准平均涨幅，不是单点 SOTA",
+     "没证明 teacher 何时会系统性误导",
+     "实现要同时管 response 排序与 token 归因"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "KL regularization",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "GRPO",
+     "PPO"
+    ],
+    "mermaid": "graph TD\nA[Verifier reward] --> C[PUU]\nB[Teacher path score] --> C\nC --> D[Group ranking]\nD --> E[GRPO update]\nB --> F[ECR]\nF --> G[Token credit]\nG --> H[Clipped token loss]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.27571",
+   "kind": "paper",
+   "title": "FDE-Bench: Evaluating LLM Agents for Deployment Environment Configuration",
+   "url": "https://arxiv.org/abs/2609.27571",
+   "summary": "Deployment requires an agent to turn application code into a running system whose services connect, become ready, and remain observable. FDE-Bench evaluates this capability with 136 deployment-configuration tasks spanning Docker images, multi-service Compose stacks, and Kubernetes, in greenfield and diagnose-and-repair modes. Agents submit declarative artifacts that are collected, rebuilt, and redeployed in a pristine environment. Four gated binary check layers measure build, readiness, behavior, and conformance to the deployment specification, using programmatic checks without an LLM judge. A four-arm release gate requires a resolving reference solution and rejects tasks solved by do-nothing, specification-transcription, or generic-stub submissions. The released check annotations expose the link between 2,145 checks and their specifications, including seven documented gaps. Three additional adversarial strategies test shortcuts in the grading signals; none resolves any of the 135 tasks they cover, while a vacuous health probe passes readiness and exposes the need for downstream checks. On the 136-task evaluation grid, seven language models from four providers use the same four-tool scaffold and resolve 52.9-75.0 percent of tasks. The three zero-intelligence floors resolve none and reach a mean Deployment Score of at most 0.44. Readiness is the largest failure stage, accounting for 110 of 313 unresolved episodes. Mean resolution rate is 30.7 percentage points higher on the repair task group than on the disjoint greenfield group, with a positive gap for every model; ten tasks resist all seven. In a 25-task case study, one practicing engineer directing Claude-Sonnet-5 resolves 92 percent against 72 percent for the autonomous baseline. FDE-Bench links deployment success and failure to artifacts that can be inspected and replayed.",
+   "source": "arxiv",
+   "published": "2026-09-23",
+   "authors": [
+    "Weihang Ding",
+    "Junfei Zhan",
+    "Yueting Li",
+    "Qirong Guo"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.27571",
+   "categories": [
+    "cs.SE",
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "evaluation",
+    "deployment"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "LLM agent评测基准，部署任务高度贴合",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "FDE-Bench 用 136 任务评测部署配置 agent，最高解 75.0%",
+    "why": "很适合做 agent 评测/DevOps 面试谈资",
+    "architecture": "它解决的是一个常被高估的场景：代码能跑测试，不等于能在 Docker、Compose、Kubernetes 里真正起服务、连依赖、过健康检查、还符合部署规范。作者的关键改法不是再做一套“生成配置”的榜单，而是把评测对象锁定为 deployment artifact 本身：agent 提交 declarative 配置，系统在干净环境里重建、重部署，再用四层 gated binary checks 依次卡 build、readiness、behavior、spec conformance，阻断“只写个能过语法的 manifest”或“靠健康探针钻空子”的失败。最直接的证据是他们专门放了 three zero-intelligence floors 和三种 adversarial shortcut，全部解决不了任务；同时 7 个模型共用同一 four-tool scaffold，在 136 题上做到 52.9–75.0% resolved rate，且 readiness 是最大失败阶段，说明瓶颈确实在运行时而不只是文本生成。新意在系统组织层：把 replay grading、四层闸门、release gate 和污染控制组合成一个可复查的部署评测协议。",
+    "verdict": "想评估 deployment agent，值得通读",
+    "why_now": "原文未明确",
+    "key_points": [
+     "四层闸门把 build 到 conformance 分开卡住",
+     "最强证据是 zero-intelligence floors 全失败",
+     "难点在运行时与评测协议，不是写配置文本"
+    ],
+    "prereqs": [
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "Docker",
+      "status": "unlisted"
+     },
+     {
+      "name": "Kubernetes",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "OSWorld"
+    ],
+    "mermaid": "graph TD\nA[Agent config] --> B[Replay in sandbox]\nB --> C[Build check]\nC --> D[Readiness check]\nD --> E[Behavior check]\nE --> F[Spec conformance]\nF --> G[Resolved or fail]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:tencentarc/worldcrafter",
+   "kind": "project",
+   "title": "TencentARC/WorldCrafter",
+   "url": "https://github.com/TencentARC/WorldCrafter",
+   "summary": "[Arxiv 2026] WorldCrafter: Consistent Video World Model with Implicit 3D-aware Memory",
+   "source": "github_search",
+   "published": "2026-09-14",
+   "authors": [],
+   "org": "TencentARC",
+   "hf_upvotes": 0,
+   "stars": 344,
+   "stars_today": 0,
+   "forks": 4,
+   "language": "Python",
+   "code_url": "https://github.com/TencentARC/WorldCrafter",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "world-model",
+    "video",
+    "3d-aware",
+    "arxiv"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "一致视频世界模型，贴合世界模型方向",
+   "tier": "core",
+   "ptype": "paper",
+   "board": "",
+   "digest": {
+    "one_liner": "WorldCrafter 用隐式 3D memory 做可控视频世界模型，含 Base 和 Fast",
+    "why": "你做 VLM/视频生成/世界模型会很对口",
+    "architecture": "它解决的是视频世界模型里最烦的悖论：单帧看起来对，换个视角或拉长时间就开始漂、抖、忘细节。WorldCrafter 的硬核点是把“记忆”做成 camera-queryable 的 implicit 3D-aware memory：不是把历史帧简单堆起来，而是让记忆能按相机位置被查询，从而把跨视角的一致性和长程连续性绑定到同一套状态里，阻断“局部纹理对了但几何关系丢了”的崩坏。仓库里最能说明成熟度的是它不只给 Base，还给了 distill 出来的 Fast，且 README 明确提供 uv/conda、权重下载、i2v/t2v 推理命令和 interactive demo；不过 demo 仍写着“currently being debugged”，说明可用但还没到完全打磨好的产品级。相较于纯视频生成项目，它的差异维度在 3D-aware memory 和 camera control，不只是更会补帧。",
+    "verdict": "对世界模型路线感兴趣，值得上手看",
+    "why_now": "仓库新增/公开于 2026 年 9 月，当前 stars 344，README 已放出 Base/Fast 权重与推理脚本",
+    "key_points": [
+     "Fast 是蒸馏版，主打更快推理",
+     "demo 还在调试，成熟度不是完全成品",
+     "核心卖点是相机可查询的 3D-aware memory"
+    ],
+    "prereqs": [
+     {
+      "name": "video generation",
+      "status": "unknown"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     },
+     {
+      "name": "3D",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Helios",
+     "LagerNVS"
+    ],
+    "mermaid": "graph TD\nA[Image or text prompt] --> B[Camera query]\nB --> C[3D aware memory]\nC --> D[Consistent scene state]\nD --> E[Video frames]\nE --> F[Long horizon and view change]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:tencentarc/gae-geometricautoencoder",
+   "kind": "project",
+   "title": "TencentARC/GAE-GeometricAutoEncoder",
+   "url": "https://github.com/TencentARC/GAE-GeometricAutoEncoder",
+   "summary": "[arxiv'26] GAE: Learning a Geometry-Native Latent Space for 3D-Consistent World Generation",
+   "source": "github_search",
+   "published": "2026-09-16",
+   "authors": [],
+   "org": "TencentARC",
+   "hf_upvotes": 0,
+   "stars": 287,
+   "stars_today": 0,
+   "forks": 8,
+   "language": "Python",
+   "code_url": "https://github.com/TencentARC/GAE-GeometricAutoEncoder",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "3d-consistency",
+    "autoencoder",
+    "world-generation",
+    "vae"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "几何原生潜空间，利于3D一致生成",
+   "tier": "core",
+   "ptype": "paper",
+   "board": "",
+   "digest": {
+    "one_liner": "GAE用共享latent解码RGB+几何，作者报告可做3D一致世界生成",
+    "why": "适合看多模态生成和3D一致性怎么做",
+    "architecture": "它瞄准的悖论是：生成视频/新视角时，RGB看着对了，几何却一漂就崩；把几何放在 latent 外面补救，通常只会让两套表征互相打架。GAE 的关键改动是把 3D inductive bias 放进生成状态本身：先用冻结的 Depth Anything 3 提取多层几何特征，再压成 per-view latent，随后同一个 latent 同时解码出 RGB 和 depth/rays/pointmap，避免“图像一套表示、几何另一套表示”导致的错配。最直接的证据是它在 codec bottleneck 上同时加了 `L_tok` 和 `L_struct`：前者把 posterior token 对齐到 C-RADIOv2.5-B，保证可生成；后者在 raw posterior mean 上匹配 DINOv2-L 的 patch 相似度，专门补回 token-only 对齐会抹掉的跨视图空间结构。新意主要在组件层和系统组织层：冻结几何头、双解码头、再把 clean reference latents 和 Plücker rays 作为条件输入，形成一个统一的生成状态。",
+    "verdict": "值得看其 latent 里塞几何的设计，不必先精读",
+    "why_now": "",
+    "key_points": [
+     "几何头冻结，迫使 latent 保持可读性",
+     "L_struct 直接约束 raw posterior mean",
+     "复现要同时跑 codec、flow 和几何评估"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Depth Anything",
+     "REPA"
+    ],
+    "mermaid": "graph TD\nA[Images] --> B[Frozen DA3]\nB --> C[Geometry features]\nC --> D[GAE codec]\nD --> E[Shared latent]\nE --> F[RGB head]\nE --> G[Geometry head]\nE --> H[Flow model]\nH --> I[Video or novel view]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:leejet/stable-diffusion.cpp",
+   "kind": "project",
+   "title": "leejet/stable-diffusion.cpp",
+   "url": "https://github.com/leejet/stable-diffusion.cpp",
+   "summary": "Diffusion model(SD,Flux,Wan,Qwen Image,Z-Image,...) inference in pure C/C++",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "leejet",
+   "hf_upvotes": 0,
+   "stars": 7212,
+   "stars_today": 69,
+   "forks": 811,
+   "language": "C++",
+   "code_url": "https://github.com/leejet/stable-diffusion.cpp",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "diffusion",
+    "inference",
+    "cpp"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "扩散推理加速/实现，工程可复现",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "stable-diffusion.cpp用纯C/C++跑主流扩散模型，近期加Qwen-Image-2.1",
+    "why": "适合看推理加速和跨平台部署",
+    "architecture": "它解决的是“模型能跑，但只能在 Python 生态和高配 GPU 上跑”的部署痛点。核心做法不是再包一层接口，而是用 ggml 风格的纯 C/C++ 推理内核，把 diffusion 的采样、VAE、LoRA、量化、不同 backend 统一进同一个可执行体里，目标是低依赖、跨平台、可控内存。关键设计取舍是把能力下沉到运行时：支持 CPU/CUDA/Vulkan/Metal/OpenCL/SYCL，多种 sampler、Flash Attention、VAE tiling、GGUF/ckpt/safetensors 转换，阻断的是“模型格式杂、平台杂、显存不够就跑不动”的失败模式。最强证据不是宣称，而是它已经在 README 列出多个近期大模型的 Day-0/Day-1 支持，并给出 release 节奏；这说明项目成熟度高、跟进速度快。它在系统组织层的新意大于算法新意。",
+    "verdict": "看它怎么把扩散推理工程化，值得关注",
+    "why_now": "最近 release：master-908-88411ef（2026-09-23）; master-907-500ef5f（2026-09-23）; master-906-2a4ebba（2026-09-23）",
+    "key_points": [
+     "近期持续跟进新模型支持",
+     "README 有 backend、量化和 build 文档",
+     "不证明训练，只证明推理栈成熟"
+    ],
+    "prereqs": [
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "flash attention",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "llama.cpp",
+     "stable-diffusion-webui"
+    ],
+    "mermaid": "graph TD\nA[Model weights] --> B[GGML runtime]\nB --> C[Sampler]\nC --> D[VAE and decode]\nB --> E[Backend selection]\nE --> F[CPU GPU Metal Vulkan]\nD --> G[Image or video]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:nokia-applied-research/anyjev",
+   "kind": "project",
+   "title": "nokia-applied-research/AnyJev",
+   "url": "https://github.com/nokia-applied-research/AnyJev",
+   "summary": "Turn any LLM into a Jev-style decision model: typed decisions, real probabilities, no training. (continue updating)",
+   "source": "github_search",
+   "published": "2026-09-21",
+   "authors": [],
+   "org": "nokia-applied-research",
+   "hf_upvotes": 0,
+   "stars": 495,
+   "stars_today": 0,
+   "forks": 73,
+   "language": "Python",
+   "code_url": "https://github.com/nokia-applied-research/AnyJev",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "decision-model",
+    "calibration"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "无训练把LLM变决策模型，方法有研究性",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "",
+   "digest": {
+    "one_liner": "AnyJev把任意LLM变成可校准决策器，L0把可自动决策率提到52.0%",
+    "why": "适合面试讲决策校准和agent路由",
+    "architecture": "它解决的不是“让模型更会答”，而是“让模型的置信度真的能拿来做决策”。原始 logits 最大的问题是选项一换顺序就翻答案，且 0.9 的分数不对应可行动的风险。AnyJev 的关键改动是把回答改成 typed decision：先用 `Question` 定义 choice/score/noul，再用分层读出把“答案”和“校准”拆开。L0 用 cyclic-shift permutation marginalization 抵消位置偏置，再做 label-free prior correction，阻断的是“选项顺序导致的假偏好”；L1 在 L0 上做 temperature scaling 解决概率偏热/偏冷；L2 则在约 2/3 深度的 hidden state 上，用少量标签拟合 closed-form head，阻断的是“概率可用但成本过高”。最直接的证据是 BANKING77 上，作者报告 auto-decidable at ≤5% error 从 raw logits 的 7.7% 提到 L1 的 52.0%，说明改进主要发生在可部署性而不是只涨 accuracy。新意在系统组织层：同一模型、同一 prompt，按 L0/L1/L2 分级服务。",
+    "verdict": "很适合读决策校准这条线，值得通读",
+    "why_now": "最近 release：v0.0.2（2026-09-21）",
+    "key_points": [
+     "L0 零标签就能降 option reversal",
+     "L2 只需100-300标签且闭式求解",
+     "只证明校准与路由，不改模型能力"
+    ],
+    "prereqs": [
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "temperature scaling",
+      "status": "unlisted"
+     },
+     {
+      "name": "next-token prediction",
+      "status": "unknown"
+     },
+     {
+      "name": "calibration",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Jevons paradox",
+     "temperature scaling"
+    ],
+    "mermaid": "graph TD\nA[Typed question] --> B[Raw logits]\nB --> C[L0 rotation marginalization]\nC --> D[L1 temperature scaling]\nD --> E[L2 closed form head]\nE --> F[Calibrated decision]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:ekzhang/openjev-sglang",
+   "kind": "project",
+   "title": "ekzhang/openjev-sglang",
+   "url": "https://github.com/ekzhang/openjev-sglang",
+   "summary": "Jev-compatible API endpoint based on open models (prefill-only)",
+   "source": "github_search",
+   "published": "2026-09-17",
+   "authors": [],
+   "org": "ekzhang",
+   "hf_upvotes": 0,
+   "stars": 320,
+   "stars_today": 0,
+   "forks": 39,
+   "language": "Python",
+   "code_url": "https://github.com/ekzhang/openjev-sglang",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "structured-generation",
+    "api"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "提供Jev兼容结构化生成端点，利于部署",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "用 SGLang 做 Jev API，单 token 读出实现 N+1 次评分",
+    "why": "适合看 agent/RAG 的结构化输出与推理服务",
+    "architecture": "它解决的是“同一个对话上下文里要连续回答多种 typed question，却不能让模型真的长篇生成”的悖论。传统做法要么把每个问题单独跑一遍，要么让模型生成可解析文本，都会把 prefix 计算、缓存和解析成本放大。作者把关键概念改成“prefill-only + first-token readout”：先把共同 chat prefix 只渲染/分词一次，再用 radix cache 暖一次前缀；每个问题只送 `prefix + suffix + assistant header + Answer:`，`max_new_tokens=1`，再读取 label 的 logprob 做 Noul/Choice/Score。这样阻断的是长续写、重复前缀和 prompt 解析失败三种失效。最直接的证据是 smoke test 覆盖三类答案、64 选项和 65 选项拒绝，并报告 startup wait、latency 与 cache 命中；这支持它不是“能跑 demo”，而是围绕 SGLang cache 和 API 容错做过系统组织。新东西主要在系统组织层，不是模型层。",
+    "verdict": "值得看部署与缓存设计，不必深挖模型本身",
+    "why_now": "",
+    "key_points": [
+     "最强证据：N+1 一 token 调用支撑多题评分",
+     "没证明大并发下的极限吞吐",
+     "复现依赖 SGLang 细节与 Modal 部署"
+    ],
+    "prereqs": [
+     {
+      "name": "SGLang",
+      "status": "unlisted"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "logprob",
+      "status": "unlisted"
+     },
+     {
+      "name": "FastAPI",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SGLang",
+     "vLLM"
+    ],
+    "mermaid": "graph LR\nA[Structured questions] --> B[Render chat prefix]\nB --> C[Warm radix cache]\nC --> D[Per question one token]\nD --> E[Read label logprobs]\nE --> F[Noul Choice Score]\nF --> G[Typed decisions]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:heman10x-ngu/openjev-verdict-2.0",
+   "kind": "project",
+   "title": "Heman10x-NGU/openJev-verdict-2.0",
+   "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
+   "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
+   "source": "github_search",
+   "published": "2026-09-19",
+   "authors": [],
+   "org": "Heman10x-NGU",
+   "hf_upvotes": 0,
+   "stars": 285,
+   "stars_today": 0,
+   "forks": 43,
+   "language": "Python",
+   "code_url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "decision-engine",
+    "calibration",
+    "nonautoregressive"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "决策引擎+校准，方法细节较硬",
+   "tier": "core",
+   "ptype": "model",
+   "board": "",
+   "digest": {
+    "one_liner": "用 149.6M 模型做非自回归决策，77.1% 准确率",
+    "why": "适合看校准头、typed decision 和推理时取舍",
+    "architecture": "它解决的是“分类系统既要准，又要给出可用置信度，还不能被解析型生成拖慢”的冲突。常见做法把所有任务都塞进同一分布头，结果概率要么贴近人工软标注但校准差，要么为了命中率变尖锐却失真。作者的关键改变是把输出拆成双通道：distribution head 负责贴近候选分布，confidence head 负责预测 correctness 的校准概率；再配合 NLI 式模板把候选从裸名词改成 hypothesis sentence，避免 backbone 和输入形式错配。最直接的证据是 2,000 held-out 任务上，149.6M 模型以 77.10% accuracy、0.0636 Brier、0.0144 ECE 超过 421M 的 Laya，且 20–25 ms/decision，说明收益来自机制而不只是参数。它的新意主要在系统组织层和实证层：模型结构不大，但推理接口与校准拆分很明确。",
+    "verdict": "值得精读校准拆分与推理接口设计",
+    "why_now": "",
+    "key_points": [
+     "最强证据：小模型在准确率和 Brier 上同时赢大模型",
+     "没证明跨任务泛化到非 typed schema",
+     "复现要同时对齐校准、模板和阈值"
+    ],
+    "prereqs": [
+     {
+      "name": "calibration",
+      "status": "unlisted"
+     },
+     {
+      "name": "NLI",
+      "status": "unlisted"
+     },
+     {
+      "name": "Brier score",
+      "status": "unlisted"
+     },
+     {
+      "name": "ECE",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "GLiClass",
+     "ModernBERT"
+    ],
+    "mermaid": "graph LR\nA[Typed input] --> B[Hypothesis template]\nB --> C[Shared encoder]\nC --> D[Distribution head]\nC --> E[Confidence head]\nD --> F[Option probabilities]\nE --> G[Calibrated confidence]\nF --> H[Decision]\nG --> H",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:anthropics/skills",
+   "kind": "project",
+   "title": "anthropics/skills",
+   "url": "https://github.com/anthropics/skills",
+   "summary": "Public repository for Agent Skills",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "anthropics",
+   "hf_upvotes": 0,
+   "stars": 177964,
+   "stars_today": 158,
+   "forks": 21082,
+   "language": "Python",
+   "code_url": "https://github.com/anthropics/skills",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "skills",
+    "anthropic"
+   ],
+   "core_score": 5.0,
+   "wide_score": 9.0,
+   "score_reason": "权威agent技能仓库，热度高",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 Skills 动态加载任务包，Anthropic 开源示例超 17 万星",
+    "why": "适合看 agent 工程化：记忆、工具和任务分层",
+    "architecture": "它解决的是“agent 能做很多事，但每次都把全部能力塞进上下文会又慢又乱”的问题。传统 prompt 或单一 toolset 很难把任务边界、文件资源和操作规范隔离开。这里的关键概念是 skill：一个技能包把 instructions、scripts、resources 打成可动态加载的目录，模型只在需要时装载；这样阻断的是上下文膨胀、任务互相污染和操作步骤不稳定。仓库里把 document、pdf、pptx、xlsx 等生产技能和示例技能拆开，README 还明确给出 Claude Code、Claude.ai、API 的接入方式，说明它不是只讲概念。最直接的成熟度信号是官方仓库、清晰的 spec/template 目录和多入口文档，但 README 也明确说示例行为可能与 Claude 线上实现不同，所以它证明的是标准化思路，不是实现完全一致。它的新意主要在系统组织层：把 agent 能力做成可装配单元。",
+    "verdict": "看技能封装范式即可，适合做 agent 工程参考",
+    "why_now": "原文未明确",
+    "key_points": [
+     "最强证据：官方 repo + spec + template 三件套",
+     "没证明线上 Claude 行为与示例完全一致",
+     "复现门槛低，但能力上限取决于技能设计"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "MCP",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[Task] --> B[Load skill]\nB --> C[Instructions]\nB --> D[Scripts]\nB --> E[Resources]\nC --> F[Run agent]\nD --> F\nE --> F\nF --> G[Task output]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:obra/superpowers",
+   "kind": "project",
+   "title": "obra/superpowers",
+   "url": "https://github.com/obra/superpowers",
+   "summary": "An agentic skills framework & software development methodology that works.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "obra",
+   "hf_upvotes": 0,
+   "stars": 291162,
+   "stars_today": 606,
+   "forks": 26049,
+   "language": "Shell",
+   "code_url": "https://github.com/obra/superpowers",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "framework",
+    "skills"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "agent技能框架，热度高且可落地",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用可组合 skills 把 coding agent 变成带审查的开发流程，v6.4.1 新增诊断与原生执行",
+    "why": "做 Agent/RAG 面试时能讲“循环+中间件”",
+    "architecture": "它解决的不是“让模型会写代码”，而是“模型一旦开始写就跳过需求、计划和测试，最后把错误一路放大”的悖论。Superpowers 的关键改法是把 coding agent 绑进一套自动触发的 skills：先逼它抽 spec，再分块复述让人确认，再产出可执行计划，最后进入 subagent-driven execution；这里每个组件都在阻断一种失败，像 spec 阻断目标漂移，chunked review 阻断人类看不完，plan 阻断无测试乱改，subagent 阻断单线程瞎冲。正文里最直接的支持是它把“诊断 session 出错原因”做成新 skill，并把 executing-plans 重构为 Native execution，说明作者不是只加提示词，而是在补运行时机制。新意主要在系统组织层：把开发方法论做成会自动触发、可诊断、可替换执行器的 agent 工作流。",
+    "verdict": "适合看它怎么把 agent 失控点逐个封住",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 v6.4.1 加了诊断 skill 和 Native execution",
+     "没看到完整测试/评测，效果更多靠流程设计",
+     "复现门槛低，核心是装到支持的 harness 里"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "MCP"
+    ],
+    "mermaid": "graph TD\nA 触发会话\nB 抽取 spec\nC 分块确认\nD 生成计划\nE 子代理执行\nF 诊断失败\nA --> B --> C --> D --> E\nE --> F --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:berriai/litellm",
+   "kind": "project",
+   "title": "BerriAI/litellm",
+   "url": "https://github.com/BerriAI/litellm",
+   "summary": "The fastest, litest AI Gateway. Rust core with Python SDK. Call 100+ LLM APIs in OpenAI (or native) format with cost tracking, guardrails, load balancing, and logging [Bedrock, Azure, OpenAI, Anthropic, OpenAI, VertexAI, vLLM, Nvidia NIM]",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "BerriAI",
+   "hf_upvotes": 0,
+   "stars": 59561,
+   "stars_today": 602,
+   "forks": 11750,
+   "language": "Python",
+   "code_url": "https://github.com/BerriAI/litellm",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm-gateway",
+    "inference",
+    "routing"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "LLM网关：路由/成本/guardrails，工程可用",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用统一 OpenAI 格式接 100+ LLM，做路由、限流和审计的 AI Gateway",
+    "why": "你做 RAG/Agent 工程时最常见的生产入口层",
+    "architecture": "它解决的典型痛点是：同一套应用要同时接 OpenAI、Anthropic、Gemini、Bedrock 等模型时，SDK、鉴权、错误格式和计费全都不一样，代码会被 provider 细节撕碎。LiteLLM 的关键概念是把“模型调用”抽成统一 gateway：客户端只说 OpenAI 兼容请求，后端再做 provider mapping、cost tracking、guardrails、load balancing 和 logging；这些组件分别阻断接口碎片化、预算失控、越权输出和流量打爆单点。正文里最强的证据是它明确给出 100+ providers、OpenAI 格式、8ms P95 latency at 1k RPS，以及 Docker 镜像用 cosign 签名，说明它不是 demo，而是能进生产的入口层。新意主要在系统组织层，少量实现在 runtime proxy 和 SDK 兼容层，而不是新模型。",
+    "verdict": "值得扫一遍，适合做生产入口层选型",
+    "why_now": "最近 release：v1.104.0-dev.1、v1.102.1、v1.101.2，且正文更新到 2026-09-24",
+    "key_points": [
+     "最强证据是 100+ provider 统一到 OpenAI 格式",
+     "功能多但核心是 gateway，不是模型方法",
+     "复现主要是配置与鉴权，工程整合成本高"
+    ],
+    "prereqs": [
+     {
+      "name": "OpenAI API",
+      "status": "unlisted"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "load balancing",
+      "status": "unlisted"
+     },
+     {
+      "name": "guardrails",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "OpenAI API",
+     "vLLM"
+    ],
+    "mermaid": "graph LR\nA App\nB OpenAI format\nC Gateway\nD Provider router\nE Guardrails\nF Logging\nA --> B --> C --> D\nC --> E --> F\nD --> G Models",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:openbmb/minicpm",
+   "kind": "project",
+   "title": "OpenBMB/MiniCPM",
+   "url": "https://github.com/OpenBMB/MiniCPM",
+   "summary": "MiniCPM5: SOTA on-device LLMs, small yet powerful.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "OpenBMB",
+   "hf_upvotes": 0,
+   "stars": 11252,
+   "stars_today": 1027,
+   "forks": 773,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/OpenBMB/MiniCPM",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "on-device",
+    "llm"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "小模型SOTA取向，适合迁移与对比",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "MiniCPM5-2B/1B 把 on-device 小模型做到开源 SOTA，兼顾推理与 agentic 工具使用",
+    "why": "和你关注的长上下文、工具调用、小模型后训练都强相关",
+    "architecture": "它解决的是“小模型一缩就掉推理、代码和工具用法”的老问题：在端侧算力和显存都紧的情况下，普通压缩路线往往把能力一起压没。MiniCPM5 的关键改法不是只堆参数，而是同一 checkpoint 里同时支持 `<think>` 的 hybrid reasoning，并配合 UltraData 系列数据、RL 和 OPD 训练；这里数据与训练分别阻断知识覆盖不足、对齐不稳和推理模式不可切换。正文里最直接的支持是作者报告 1B 和 2B 两个尺寸都做到开源 SOTA，且 2B 在 coding、math、long-context、tool use 和 agentic tasks 上更强，还开放了对应训练数据。新意主要在实证层，外加训练配方层：把端侧可部署性和 agent 能力一起做出来，而不是只报一个静态榜单。",
+    "verdict": "如果关心小模型后训练，这条值得精读",
+    "why_now": "最近 release：5.0（2026-05-26）和 2.4.2（2025-07-01）",
+    "key_points": [
+     "作者报告 1B/2B 都是开源 SOTA",
+     "最强卖点是 hybrid reasoning 加工具能力",
+     "原文未明确完整训练细节和可复现实验脚本"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MiniCPM4",
+     "Phi-3.5"
+    ],
+    "mermaid": "graph TD\nA 端侧输入\nB 预训练数据\nC RL 与 OPD\nD 思考模板\nE 工具与代码能力\nF 小模型输出\nA --> B --> C --> D --> E --> F",
+    "read_level": "L3"
+   }
+  }
+ ]
+}
