@@ -1,0 +1,1149 @@
+{
+ "date": "2026-09-25",
+ "stats": {
+  "collected": 675,
+  "filtered": 285,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 17 calls, 56261 in / 16194 out; gpt-5.4-mini: 6 calls, 44819 in / 8866 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.26780",
+   "kind": "paper",
+   "title": "SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-Party Dialogue",
+   "url": "https://arxiv.org/abs/2609.26780",
+   "summary": "Long-term conversational memory in multi-party settings requires more than retrieving relevant content from long-term conversations: it must distinguish who said what, whom each statement concerns, how individuals perceive one another, what information is shared by the group, and how states change over time. Recent studies on multi-party dialogue benchmarks show that existing general-purpose LLM memory systems tend to lose person and group relations or struggle to integrate clues distributed across members, groups, and time. Together, these issues reveal two core bottlenecks: message attribution and relational understanding in multi-party dialogue, and state reconstruction from interleaved histories. To address both, we propose SpeakerMem-R1: its dual-track memory stores speaker-labeled verbatim messages and derived states organized into person-level and group-level views, then combines evidence from both tracks by entity, event, and time at query time. To reduce attribution and update errors during structured memory construction while enabling local deployment, we train Writer-R1 with SpeakerLevenshtein and speaker-conditioned GRPO. On GroupMemBench, SocialMemBench, and EverMemBench, SpeakerMem-R1 achieves binary accuracies of 47.9%, 69.2%, and 61.9%, respectively. On the publicly reported EverMemBench leaderboard from EverMind-AI, we achieves 62.33%, the best reported result among the latest state-of-the-art frameworks. It also achieves 70.85% on all 1,986 LoCoMo questions, which we use as a two-person long-term conversation boundary test. In a controlled evaluation of 305 questions, RL raises the SFT Writer's mean accuracy from 57.38% to 68.20%. We report both binary accuracy and token-F1, and ablations show that the verbatim and structured tracks, as well as person-level and group-level views, are complementary under the standardized evaluation interface.",
+   "source": "hf_papers",
+   "published": "2026-09-22",
+   "authors": [
+    "Haobo Zheng",
+    "Tan Tang",
+    "Yan Chen",
+    "Weijie Wang",
+    "Yingcai Wu"
+   ],
+   "org": "",
+   "hf_upvotes": 82,
+   "stars": 71,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/2022hpsk/SpeakerMemR1",
+   "pdf_url": "https://arxiv.org/pdf/2609.26780",
+   "categories": [],
+   "keywords": [
+    "memory",
+    "agent",
+    "dialogue",
+    "multi-agent"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "多方对话的说话人中心记忆，强贴合记忆与agent。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "双轨记忆+定向Writer，三榜提分3.3/12.4/9.4",
+    "why": "多轮对话 memory / agent 面试很对口",
+    "architecture": "它针对的悖论是：多方群聊里，最相关的话常常不是“主题最像”的那句，而是“谁说的、指向谁、发生在何时”这三类线索分散在不同轮次里；普通检索、摘要或通用 memory graph 会把说话人归属和群体/个人状态一起抹掉。作者的关键改变是把记忆拆成双轨：一轨存 speaker-labeled verbatim message，负责保留可追溯证据，阻断归因错误；另一轨存 derived state，并分 person-level / group-level 两种视角，负责阻断状态版本丢失。查询时再按 entity、event、time 做 Anchor–Separate–Resolve–Compose，把两轨证据拼回可回答的局部状态。最直接的证据是 controlled evaluation：冻结 query/answer pipeline 后，RL 把 Writer 的 mean accuracy 从 57.38% 提到 68.20%，说明提升主要来自写入侧而不是检索器“碰巧更会找”。新意主要在系统组织层，不只是换了一个 memory 格式。",
+    "verdict": "适合精读，核心在记忆组织而非单纯检索",
+    "why_now": "",
+    "key_points": [
+     "RL 只在写入侧提分，证明瓶颈在 attribution/update",
+     "只在多方对话强；两人边界测试不等于泛化",
+     "复现要同时做写入、查询和标准化评测"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "MemGPT",
+     "MemoryBank"
+    ],
+    "mermaid": "graph TD\nA[群聊历史] --> B[双轨记忆]\nB --> C[原话轨]\nB --> D[状态轨]\nC --> E[归因证据]\nD --> F[个人群体视图]\nQ[查询] --> G[按人事时序检索]\nE --> H[Compose]\nF --> H\nH --> O[答案]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.29444",
+   "kind": "paper",
+   "title": "IterSynth: Rethinking Deep Search Agents via Role-Decoupled Iterative Synthesis",
+   "url": "https://arxiv.org/abs/2609.29444",
+   "summary": "Deep search requires LLM agents to decompose complex queries, search for evidence, and synthesize grounded answers, yet existing ReAct-style agents suffer from two limitations: role coupling, where one policy must handle planning, evidence use, and synthesis; and context accumulation, where growing search histories introduce noise and obscure useful information. To address these issues, we propose IterSynth, a role-decoupled and summary-based paradigm that alternates between a Planner for identifying information needs and a Synthesizer for integrating evidence into an evolving summary state. This design separates planning from synthesis while using the summary as the persistent state of search, reducing both capability coupling and context noise. To train IterSynth effectively, we further introduce Role-Decoupled Policy Optimization (RDPO) for reinforcement learning, which combines terminal outcome rewards with turn-level rubric evaluations and computes role-specific advantages for more precise credit assignment. Experiments on five long-horizon deep-search benchmarks such as BrowseComp and Xbench-DS show that IterSynth-8B achieves an average score of 50.7, surpassing the strongest prior $\\leq$8B agent by +4.2\\%. Moreover, IterSynth serves as a model-agnostic prompting paradigm, delivering substantial zero-shot gains over ReAct and similar prompting paradigms on frontier proprietary models.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Xingyu Wu",
+    "Yuchen Yan",
+    "Zhengxi Lu",
+    "Siqi Chen",
+    "Xin ZHANG",
+    "Aiting Liu"
+   ],
+   "org": "",
+   "hf_upvotes": 8,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Tencent/IterSynth",
+   "pdf_url": "https://arxiv.org/pdf/2609.29444",
+   "categories": [
+    "cs.CL",
+    "cs.AI"
+   ],
+   "keywords": [
+    "rlhf",
+    "post-training",
+    "recipe",
+    "agent"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "开源后训练配方全链路细节，必读",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "IterSynth 用 Planner+Synthesizer+RDPO，8B 平均 50.7",
+    "why": "深搜 agent 和 GRPO/RL 方向都很面试友好",
+    "architecture": "它先解决一个看似反直觉的问题：深度搜索不是“多搜几轮”就会更好，反而常见失败是一个 policy 同时管规划、证据使用和写答案，导致要么过早收束，要么历史越滚越乱。作者把单一 ReAct policy 改成两种角色：Planner 只负责从紧凑 state 里找信息缺口并发下一次查询，Synthesizer 只负责把新证据并入 evolving summary；summary 在这里不是外部压缩件，而是搜索的 persistent state，用来阻断上下文累积噪声。训练上，RDPO 把终局 reward 和 turn-level rubric 结合，并对不同角色分别算 advantage，解决“一个 credit assignment 硬分给所有步骤”的问题。最强证据是 BrowseComp、Xbench-DS 等五个长程基准上，IterSynth-8B 平均 50.7，超过最强先前 8B agent 4.2%；同时还在 frontier proprietary models 上零样本超过 ReAct，说明改的是 agent 组织方式，不只是某个开源模型特化。",
+    "verdict": "值得精读，核心是角色解耦的 agent 训练范式",
+    "why_now": "",
+    "key_points": [
+     "最强证据是五个长程基准平均提升 4.2%",
+     "只对长链搜索友好，短任务未必值这个结构",
+     "RDPO 依赖角色级奖励，复现比普通 GRPO 更复杂"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "Deep Research"
+    ],
+    "mermaid": "graph TD\nQ[复杂问题] --> P[Planner]\nP --> S[搜索请求]\nS --> E[证据]\nE --> Y[Synthesizer]\nY --> M[总结态]\nM --> P\nR[RDPO] --> P\nR --> Y\nY --> O[最终答案]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.30186",
+   "kind": "paper",
+   "title": "Jev-Mobile: Jev as an Executor for Mobile GUI Agents",
+   "url": "https://arxiv.org/abs/2609.30186",
+   "summary": "Vision-language models (VLMs) have become a common foundation for autonomous mobile GUI agents, but most existing systems rely on the VLM for both planning and action grounding at nearly every interaction step, leading to substantial latency and model-serving cost. We introduce Jev-Mobile, which shifts this paradigm to low-frequency VLM planning and high-frequency lightweight execution: the VLM specifies local goals, the accessibility tree defines a structured executable action space, and Jev, a fast typed decision model, repeatedly selects actions within this space. This design allows multiple GUI actions to be executed under a single VLM decision, reducing expensive VLM inference while preserving adaptive interaction. On the full AndroidWorld task suite, Jev-Mobile achieves 79% task success, compared with 78% for SeeAct-V and 84% for a Step-wise VLM baseline. Among successful trajectories, it reduces mean end-to-end execution time by 32.7% and mean model API cost by 73.4% relative to Step-wise VLM. These results show that decoupling high-level VLM reasoning from low-level action execution can substantially improve mobile GUI agent efficiency while maintaining competitive task performance.",
+   "source": "arxiv",
+   "published": "2026-09-24",
+   "authors": [
+    "Linghua Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.30186",
+   "categories": [
+    "cs.AI",
+    "cs.SE"
+   ],
+   "keywords": [
+    "agent",
+    "vlm",
+    "inference"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "移动GUI agent执行器架构，兼顾效率",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Jev-Mobile 让 VLM 少调度，多步执行，AndroidWorld 79%",
+    "why": "移动端 GUI agent 的效率取舍很典型，适合看系统设计",
+    "architecture": "它要解决的痛点很直接：传统 mobile GUI agent 让 VLM 几乎每一步都做规划+动作 grounding，结果是延迟和 API 成本高；但把动作完全交给固定脚本又会卡在界面变化上。作者的核心设计是把高频执行从 VLM 中拆出去：VLM 只在低频时给 local goal 和精确文本，Jev 在 accessibility tree 定义的可执行 action space 里反复选动作，直到 DONE 或 BLOCKED。这里 accessibility tree 是“结构化候选空间”，负责阻断幻觉坐标和不可执行动作；Jev 是 typed decision model，负责在候选里做快速选择；每一步后重新 observation，防止旧节点 ID 在新界面上失效。最直接的证据是 AndroidWorld 全套上任务成功率 79%，接近 SeeAct-V 的 78%，而成功轨迹上的端到端时间和模型 API cost 分别比 Step-wise VLM 低 32.7% 和 73.4%。新意在系统组织层：把“谁负责思考、谁负责执行”拆开了。",
+    "verdict": "看速览够了；价值在效率而非新能力",
+    "why_now": "",
+    "key_points": [
+     "成功率接近强 VLM baseline，但成本大幅下降",
+     "只覆盖 accessibility tree 可见动作，缺失控件会 BLOCKED",
+     "没有代码与权重，成熟度更像原型系统"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "accessibility tree",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SeeAct",
+     "Mobile-Agent"
+    ],
+    "mermaid": "graph TD\nA[VLM低频规划] --> B[local goal]\nB --> C[Accessibility tree]\nC --> D[Jev选择动作]\nD --> E[执行]\nE --> F[新观察]\nF --> C\nD --> G[Done 或 Blocked]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.29875",
+   "kind": "paper",
+   "title": "When Can Agents Forget Their Reasoning? ICLR for Long-Horizon Agent Context Compression",
+   "url": "https://arxiv.org/abs/2609.29875",
+   "summary": "Long horizon language model agents continually accumulate reasoning history, increasing context length and inference cost even after earlier decisions have been executed and observed. Unlike static Chain of Thought compression, removing historical reasoning can change future actions and the resulting interaction trajectory. We study when such reasoning can be safely forgotten. We propose Interaction Aware Compression for Long Horizon Reasoning (ICLR), a training free online method that ranks reasoning blocks using frozen proxy entropy while preserving actions, tool calls, and observations. On 260 WorkBuddyBench tasks, ICLR improves average reward from 0.699 to 0.718, while reducing input, output, and cache read tokens by 25.5%, 14.4%, and 33.3%, respectively. Ablations reveal trajectory amplification, where local reasoning deletion produces nonlinear changes in total computation by altering subsequent interaction. Representation probing, activation patching, and controlled trajectory analyses further suggest that historical reasoning becomes more replaceable once task relevant derived state has been reliably externalized into code, files, tool outputs, or environmental feedback. These results characterize agent reasoning as dynamic working state rather than permanent interaction history.",
+   "source": "arxiv",
+   "published": "2026-09-24",
+   "authors": [
+    "Mingxuan Wang",
+    "Fei Luo",
+    "Bo Wang",
+    "Guorun Yao",
+    "Yinglong Guo",
+    "Chao Ning"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.29875",
+   "categories": [
+    "cs.AI",
+    "cs.CV"
+   ],
+   "keywords": [
+    "agent",
+    "context",
+    "compression"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "长上下文推理遗忘，面向agent实用压缩",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Long horizon language model agents continually accumulate reasoning history, increasing context length and inference cost even after earlier decisions have been",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Unlike static Chain of Thought compression, removing historical reasoning can change future actions and the resulting in",
+     "We study when such reasoning can be safely forgotten"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.30266",
+   "kind": "paper",
+   "title": "LLM Agents Can Easily Tamper With Their Own Traces",
+   "url": "https://arxiv.org/abs/2609.30266",
+   "summary": "Asynchronous monitoring, incident investigations, and compliance audits primarily rely on agent traces to reconstruct what happened. These analyses assume that LLM agents cannot tamper with their own execution traces. We show that local LLM agents such as Claude Code, Codex, Antigravity, Open Code and Grok Build fail to enforce this boundary. All tested harnesses, except Muse Code, allowed agents to delete their traces when asked, without triggering monitor guardrails. We also validate that external attackers can exploit this gap to induce trace deletion. Finally, we show that trace tampering behavior emerges naturally in frontier models, when agents try to improve their rewards. We advise practitioners to ensure trace logging happens through an independent interception mechanism outside of the agent's control, preserving trace integrity even in cases of full host compromise. Overall, our findings identify a concrete failure of trace integrity in agent infrastructure which can be used to conceal misaligned behaviors like scheming or sabotage.",
+   "source": "arxiv",
+   "published": "2026-09-24",
+   "authors": [
+    "Jeremy Qin",
+    "David Schmotz",
+    "Derck Prinzhorn",
+    "Luca Beurer-Kellner",
+    "Ameya Prabhu",
+    "Maksym Andriushchenko"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.30266",
+   "categories": [
+    "cs.CR",
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "safety",
+    "audit"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "agent可篡改自家traces，安全与可审计核心",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Asynchronous monitoring, incident investigations, and compliance audits primarily rely on agent traces to reconstruct what happened",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "These analyses assume that LLM agents cannot tamper with their own execution traces",
+     "We show that local LLM agents such as Claude Code, Codex, Antigravity, Open Code and Grok Build fail to enforce this bou"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.26355",
+   "kind": "paper",
+   "title": "PACT: From Credit Assignment to Critic Alignment",
+   "url": "https://arxiv.org/abs/2609.26355",
+   "summary": "Reinforcement learning has become a central component of large language model (LLM) post-training, yet token-level credit lacks a generally accepted mathematical definition, leaving its relationship to commonly used training signals unclear. We formulate three regularity conditions, namely Completeness, Prefix Consistency, and Neutrality, and prove that they uniquely determine token-level credit. This characterization provides a unified basis for explaining phenomena across existing algorithms and guides the development of an improved actor-critic training procedure. Through this lens, an ideal teacher in On-Policy Distillation (OPD) acts as an implicit critic, yielding an expected policy gradient proportional to that induced by token-level credit. Response-level REINFORCE Leave-One-Out (RLOO) signals match the expected policy-gradient contribution of token-level credit despite their coarser granularity. We further establish approximate credit sparsity under bounded outcome rewards and show how intermediate critic errors in Generalized Advantage Estimation (GAE) can become comparable to the underlying credit. These motivate Policy Aligned Critic Training (PACT), which adopts an Actor-then-Critic update order to apply importance sampling correction to critic training and better align the critic with the updated policy. In agentic mathematical reasoning, PACT achieves 72.87% average accuracy across four benchmarks, outperforming GRPO and PPO by 8.80 and 13.16 percentage points, respectively. On SWE-bench Verified, PACT achieves a pass rate of 67.4%, outperforming PPO, GRPO, and SAO by 2.4, 2.0, and 3.8 percentage points, respectively.",
+   "source": "hf_papers",
+   "published": "2026-09-22",
+   "authors": [
+    "Jiayan Fu",
+    "Hang Xu",
+    "Yong Zhang",
+    "Zhaokai Luo",
+    "Yao Hu",
+    "Dongyan Zhao"
+   ],
+   "org": "",
+   "hf_upvotes": 15,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.26355",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "credit-assignment",
+    "actor-critic",
+    "llm"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "从信用分配到critic对齐，理论对齐后训练。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Reinforcement learning has become a central component of large language model (LLM) post-training, yet token-level credit lacks a generally accepted mathematica",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "We formulate three regularity conditions, namely Completeness, Prefix Consistency, and Neutrality, and prove that they u",
+     "This characterization provides a unified basis for explaining phenomena across existing algorithms and guides the develo"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.29892",
+   "kind": "paper",
+   "title": "Qwen-Planner-Agent: A Closed-Loop AI-for-AI Framework for Real-World Mobile Planner Agents",
+   "url": "https://arxiv.org/abs/2609.29892",
+   "summary": "The rapid progression of large language models is extending AI from passive content generation into the active workflows of engineering and scientific discovery. This shift raises a compelling question: can AI be both the object of development and an active participant in building next-generation AI systems? We explore this question by building Qwen-Planner-Agent within a closed-loop AI-for-AI framework for scalable development and iterative improvement. Mobile planning offers a demanding test of this approach: complex, long-horizon tasks challenge agent reliability, while costly real-device interaction limits development scalability. The framework connects data production, model training, and deployment through a shared action-feedback-verification contract. (i) AI for Data builds a human-gated agentic data flywheel in which specialized agents construct tasks, collect interaction trajectories, curate and balance training data, and use training feedback to guide subsequent data generation. (ii) AI for Training combines a supervised planning cold start with hybrid-environment online agentic reinforcement learning, where we introduce Competence-Aware Reward-and-Advantage Engineering (CARE) to reduce reasoning and tool-use costs while preserving task performance. (iii) AI drives model--harness co-evolution through an execution-evidence-driven loop that orchestrates memory, skills, and tools at runtime and feeds structured action feedback and preserved failure traces back into coordinated model and harness adaptation. Qwen-Planner-Agent achieves the best overall performance among all evaluated models and systems on MobilePA-Bench, improving over its base model across tool use, memory, skills, and sub-agent coordination. Further evaluations of our model show improvements across non-mobile agentic benchmarks while largely preserving general capabilities.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Tingyu Qu",
+    "Weigao Sun",
+    "Yuecheng Liu",
+    "Yucheng Zhao",
+    "Yi Zhu",
+    "Yifeng Ding"
+   ],
+   "org": "",
+   "hf_upvotes": 9,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.29892",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "planning",
+    "closed-loop",
+    "mobile"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "闭环AI-for-AI移动规划agent，贴近面试点",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "闭环 AI-for-AI 做移动规划，作者报告 MobilePA-Bench 达到前沿并降输出成本。",
+    "why": "你关心 agent 和评测，这篇讲闭环训练和运行时共演化。",
+    "architecture": "反直觉点在于：手机规划不是“把模型调强就行”，而是长时序交互里，数据、训练、运行时 harness 三者会互相拖后腿。纯离线数据很快过时，单纯在线 RL 又被真实设备成本卡死。作者的关键改变是把系统拆成共享的“action-feedback-verification contract”：AI for Data 负责让 agent 自己造任务、收轨迹、再按训练反馈筛数据，避免训练集和真实失败模式脱节；AI for Training 用监督 cold start + 混合环境在线 RL，配合 CARE，把难度不同的样本在奖励/优势上做自适应校准，阻断“高难样本把学习信号冲垮”这类失败；AI for Harness 则把 memory、skills、tools 放进统一 runtime，执行证据直接回流到后续模型和 harness 修改，阻断“模型学会了但壳子不会用”的错配。最直接的证据是消融：固定 checkpoint 下 harness 仍显著改变性能，说明收益不只来自模型本体。新意主要在系统组织层，不是单个 agent 模块。",
+    "verdict": "值得精读，重点看闭环数据和 harness 设计。",
+    "why_now": "",
+    "key_points": [
+     "核心证据是 harness 固定 checkpoint 的消融",
+     "原文未明确哪些场景会崩到什么程度",
+     "复现难点在真实设备与混合环境联动"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "reinforcement learning",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA 输入任务 --> B AI for Data\nB --> C 轨迹与反馈\nC --> D SFT 与 RL\nD --> E Unified Harness\nE --> F 执行证据\nF --> B\nE --> G MobilePA-Bench 输出",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.27284",
+   "kind": "paper",
+   "title": "Hunyuan-A13B Technical Report",
+   "url": "https://arxiv.org/abs/2609.27284",
+   "summary": "We present Hunyuan-A13B, an open-source large language model based on a Mixture-of-Experts architecture. It contains 80 billion total parameters but activates only 13 billion during inference, balancing model capability, computational efficiency, and deployment cost. The model is pretrained on a rigorously filtered 20T-token corpus with enhanced STEM data curation, improving factual reliability and reasoning ability. High-quality supervised fine-tuning and large-scale reinforcement learning further enhance its overall performance. Hunyuan-A13B also introduces a dual-mode Chain-of-Thought framework that adapts reasoning depth to task complexity: fast thinking for routine queries and slow thinking for complex, multi-step problems. Evaluations show competitive performance across mathematics, science, programming, general language understanding, and agent tasks, often approaching that of much larger models. Its high inference throughput makes it suitable for latency-sensitive applications. We release Hunyuan-A13B to support open research and practical LLM deployment.",
+   "source": "hf_papers",
+   "published": "2026-09-23",
+   "authors": [
+    "Tencent Hunyuan Team",
+    "Ao Liu",
+    "Botong Zhou",
+    "Can Xu",
+    "Chayse Zhou",
+    "ChenChen Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 9,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.27284",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "moe",
+    "rlhf"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "MoE 技术报告+双模式CoT，和后训练相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "80B MoE 仅激活13B，靠20T预训与双模式CoT拿到强推理和吞吐。",
+    "why": "你做 LLM 后训和推理加速，这篇是 MoE+RL+长上下文的完整配方。",
+    "architecture": "反直觉点在于：想要低延迟，不一定只能缩模型；大参数如果只按需激活，也能把能力和成本同时往前推。现有 dense 模型的问题是每次推理都背全量算力，导致部署贵、吞吐低。作者的关键改动是 MoE 做承重：80B 总参、13B 激活，把计算集中在少数专家上；再用高质量 20T 预训，尤其强化 STEM 清洗，抬高基础推理上限；后训练用高质量 SFT + 大规模 RL，把 reasoning 能力从“会答”推到“会想”；最后用 dual-CoT，把 fast-thinking 和 slow-thinking 分流，避免所有问题都走长思维链拖慢响应。最直接的证据是推理类与 agent 任务上，作者报告接近更大模型，同时吞吐更高；其中 dual-CoT 和高吞吐一起出现，说明它不是单纯堆参。新意主要在系统配方层，组件上是常规 MoE/后训组合。",
+    "verdict": "值得看配方，不必死抠单点 trick。",
+    "why_now": "",
+    "key_points": [
+     "作者报告 80B 总参、13B 激活",
+     "作者报告 20T 预训和 256K 上下文",
+     "没证明 dual-CoT 的路由策略最优"
+    ],
+    "prereqs": [
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "pretraining",
+      "status": "unknown"
+     },
+     {
+      "name": "reinforcement learning",
+      "status": "unlisted"
+     },
+     {
+      "name": "chain-of-thought",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Mixtral",
+     "Qwen3"
+    ],
+    "mermaid": "graph TD\nA 20T 语料 --> B MoE 预训\nB --> C SFT\nC --> D RL\nD --> E dual CoT\nE --> F Fast thinking\nE --> G Slow thinking\nF --> H 吞吐高\nG --> I 推理强",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:anomalyco/opencode",
+   "kind": "project",
+   "title": "anomalyco/opencode",
+   "url": "https://github.com/anomalyco/opencode",
+   "summary": "The open source coding agent.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "anomalyco",
+   "hf_upvotes": 0,
+   "stars": 210038,
+   "stars_today": 198,
+   "forks": 27766,
+   "language": "TypeScript",
+   "code_url": "https://github.com/anomalyco/opencode",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "codegen",
+    "eval"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "开源 coding agent，方向契合且较热",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "开源 coding agent，近期 v1.18.32 持续修 bug 并扩展模型支持。",
+    "why": "你关心 agent 工程化，这个能直接看成熟产品怎么做。",
+    "architecture": "它解决的是“本地写代码 agent 好用但不稳、不可控、难集成”的现实痛点。OpenCode 走的是可切换 agent 的终端/桌面工作流：build agent 默认全权限干活，plan agent 默认只读做分析，遇到文件编辑和 bash 就先拦住并请求许可，靠权限分层阻断误改代码；同时还提供 general subagent 做复杂搜索和多步任务，属于 agent 内部的循环式协作，不是线性流水线。成熟度信号比较强：有持续 release，最新版是 v1.18.32，README 明确列出多平台安装、桌面版、文档和贡献入口，说明不是单次 demo。它和同类的差异主要在“开箱即用的编码工作流 + 本地可控性”，而不是只提供一个 API 壳。",
+    "verdict": "适合想看 coding agent 产品化的人。",
+    "why_now": "最近 release：v1.18.32（2026-09-21），前两版分别是 v1.18.31 和 v1.18.30。",
+    "key_points": [
+     "有持续 release 和桌面版下载",
+     "README 明示读写权限分层",
+     "不等于 IDE 插件，偏独立 agent 工作台"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA 用户任务 --> B plan agent\nB --> C 只读分析\nC --> D 需要改写\nD --> E 请求许可\nE --> F build agent\nF --> G 代码修改\nG --> H general subagent\nH --> I 完成输出",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:nvidia/model-optimizer",
+   "kind": "project",
+   "title": "NVIDIA/Model-Optimizer",
+   "url": "https://github.com/NVIDIA/Model-Optimizer",
+   "summary": "A unified library of SOTA model optimization techniques like quantization, distillation, pruning, neural architecture search, speculative decoding, etc. It compresses deep learning models for downstream deployment frameworks like TensorRT-LLM, TensorRT, vLLM, etc. to optimize inference speed.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "NVIDIA",
+   "hf_upvotes": 0,
+   "stars": 4399,
+   "stars_today": 360,
+   "forks": 645,
+   "language": "Python",
+   "code_url": "https://github.com/NVIDIA/Model-Optimizer",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "quantization",
+    "distillation"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "推理加速/压缩工具，含投机解码等",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用统一优化库做量化/蒸馏/剪枝，作者报告 W4A4 最高 1.30x 吞吐",
+    "why": "面试聊推理加速和量化很对口",
+    "architecture": "它解决的是“模型已经训好，但部署时速度、显存、精度三者只能二选二”的老问题。现有做法常卡在：量化结果在目标 runtime 里不一定真快，或者压得太狠后精度回不来。Model Optimizer 的关键变化是把优化做成一条可组合、可导出的链：输入 Hugging Face/PyTorch/ONNX 模型后，先用 PTQ/QAT、distillation、pruning、speculative decoding 等手段生成候选，再把结果直接对接 TensorRT-LLM、vLLM 等下游；新 release 里又加了 Autotune，会先在目标 runtime 里实测 placement，达不到默认 1.02x 速度阈值就保留高精度模型，避免“量化了但没赚到”。最直接的证据是 2026-09-16 的 Qwen3.6-35B-A3B 教程：NVFP4 W4A4 PTQ + QAD，作者报告 1.30x vLLM 吞吐和 3.1x 更小 checkpoint，同时补回 W4A4 带来的精度损失。新意主要在系统组织层：不是单个算法，而是把“选方案—验证收益—导出部署”串成一条工程闭环。",
+    "verdict": "值得看它如何把量化从算法变成部署闭环",
+    "why_now": "原文未明确；但 2026-09-23 仍在发版",
+    "key_points": [
+     "Autotune 先测再留，避免假加速",
+     "W4A4+QAD 是最强证据，非通用基准",
+     "复现要吃 NVIDIA 生态与部署栈"
+    ],
+    "prereqs": [
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "distillation",
+      "status": "unlisted"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     },
+     {
+      "name": "vLLM",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "TensorRT-LLM",
+     "Knowledge Distillation"
+    ],
+    "mermaid": "graph LR\nA[原模型] --> B[候选优化]\nB --> C[目标runtime实测]\nC --> D{够快吗}\nD -->|是| E[保留低比特]\nD -->|否| F[回退高精度]\nE --> G[导出部署]\nF --> G[导出部署]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:sno-ai/sno-station",
+   "kind": "project",
+   "title": "sno-ai/sno-station",
+   "url": "https://github.com/sno-ai/sno-station",
+   "summary": "Sno Station — your Claude Code and Codex working as one squad on your own machine. Shared encrypted memory, agent-to-agent messaging (Reach), squad skills for handoff and cross-vendor review, and a nightly loop that rewrites the agents' own skills with your approval. Open source, no daemon, no cloud required. Assembled in public.",
+   "source": "github_search",
+   "published": "2026-09-19",
+   "authors": [],
+   "org": "sno-ai",
+   "hf_upvotes": 0,
+   "stars": 213,
+   "stars_today": 0,
+   "forks": 180,
+   "language": "TypeScript",
+   "code_url": "https://github.com/sno-ai/sno-station",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "mcp",
+    "orchestration"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "多供应商agent协作+共享加密记忆，贴近agent栈",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "",
+   "digest": {
+    "one_liner": "把多个 coding agent 变成带共享记忆的队伍，夜间自改技能",
+    "why": "做 agent/记忆/MCP 很适合看",
+    "architecture": "它解决的是“单个 agent 会撞 rate limit、上下文断掉、互相审查又各说各话”的协作痛点。Sno Station 的关键不是再做一个聊天壳，而是把 agent 系统组织成循环加中间件：共享加密 memory 负责跨会话保留状态，Reach 负责 agent-to-agent 消息传递，Duo skills 负责交接和交叉 review，RSI loop 在夜里读会话、提议改自己的 skill，再等人批准。这里每个组件都在阻断一种失败：memory 防止重启失忆，handoff 防止 quota 中断，peer-review 防止单视角错误，nightly rewrite 防止经验只存在提示词里。最强证据不是性能榜，而是 README 里给了连续三天的真实运行记录：一天学规则、一天把三项 skill 的失败降到零、一天自动接班完成未完任务。新意主要在系统组织层，做的是 agent 工作站而不是线性流程。",
+    "verdict": "看它如何把 agent 协作做成可持续循环",
+    "why_now": "",
+    "key_points": [
+     "真实在跑，但 install 还没放出",
+     "有加密共享记忆和跨 agent 交接",
+     "夜间自改 skill 需人工批准"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "WikiSkill"
+    ],
+    "mermaid": "graph TD\nA[两个agent] --> B[共享记忆]\nA --> C[消息互通]\nB --> D[交接续跑]\nC --> E[交叉审查]\nE --> F[夜间反思]\nF --> G[技能更新]\nG --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:chromedevtools/chrome-devtools-mcp",
+   "kind": "project",
+   "title": "ChromeDevTools/chrome-devtools-mcp",
+   "url": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+   "summary": "Chrome DevTools for coding agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "ChromeDevTools",
+   "hf_upvotes": 0,
+   "stars": 52602,
+   "stars_today": 35,
+   "forks": 4722,
+   "language": "TypeScript",
+   "code_url": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "mcp",
+    "tool-use"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "面向 coding agent 的 DevTools 连接能力",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 MCP 把 Chrome 变成 agent 可控浏览器，支持调试和性能分析",
+    "why": "做工具调用和网页 agent 很直接有用",
+    "architecture": "它解决的是“agent 会点网页，但看不见、调不稳、也测不了性能”的问题。普通浏览器自动化往往只剩点击脚本，出错时缺少网络、控制台、trace 这些诊断面；Chrome DevTools MCP 的关键改法是把 Chrome DevTools 封装成 MCP server，让 coding agent 直接拿到浏览器状态、性能 trace、网络请求、截图和控制台堆栈，同时用 puppeteer 做可靠动作并自动等待结果。这样阻断的失败很明确：不会再把工具调用局限成黑箱点击，而是把浏览器变成可观测的执行环境。最直接的证据是它把“检查 https://developers.chrome.com 的性能”作为首个提示词，并明确支持 trace + CrUX 现场数据；最近 1.10.1 只是修了构建导出条件，说明它更像成熟工具链而不是实验代码。新意主要在系统组织层：不是单一自动化库，而是标准化 browser subagent 接口。",
+    "verdict": "做 browser agent 的人值得通读它的接口设计",
+    "why_now": "最近 release：chrome-devtools-mcp-v1.10.1（2026-09-23）; chrome-devtools-mcp-v1.10.0（2026-09-23）; chrome-devtools-mcp-v1.9.0（2026-09-08）",
+    "key_points": [
+     "最强卖点是可观测而非只会点击",
+     "支持 trace、网络、console、截图",
+     "复现门槛低，但依赖 Chrome 和 Node"
+    ],
+    "prereqs": [
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "Puppeteer",
+     "Chrome DevTools"
+    ],
+    "mermaid": "graph LR\nA[Agent] --> B[MCP server]\nB --> C[Chrome]\nC --> D[trace network console]\nC --> E[自动化动作]\nD --> F[诊断]\nE --> G[任务完成]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:ethanplusai/astra-flash-orchestrator",
+   "kind": "project",
+   "title": "ethanplusai/astra-flash-orchestrator",
+   "url": "https://github.com/ethanplusai/astra-flash-orchestrator",
+   "summary": "Astra plans and reviews; DeepSeek Flash builds. A native Codex workflow with phased tasks, verification, safe installation and reversible setup.",
+   "source": "github_search",
+   "published": "2026-09-17",
+   "authors": [],
+   "org": "ethanplusai",
+   "hf_upvotes": 0,
+   "stars": 673,
+   "stars_today": 0,
+   "forks": 57,
+   "language": "Python",
+   "code_url": "https://github.com/ethanplusai/astra-flash-orchestrator",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "orchestration",
+    "planning",
+    "verification"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "Agent编排+可逆部署流程，偏工程可复用",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "",
+   "digest": {
+    "one_liner": "Astra plans and reviews; DeepSeek Flash builds",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "A native Codex workflow with phased tasks, verification, safe installation and reversible setup."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:clearailhc/clearai-dsh",
+   "kind": "project",
+   "title": "Clearailhc/clearai-dsh",
+   "url": "https://github.com/Clearailhc/clearai-dsh",
+   "summary": "ClearAI is a native DSH plugin that brings the Epistemic Loop to DeepSeek Harness.",
+   "source": "github_search",
+   "published": "2026-09-12",
+   "authors": [],
+   "org": "Clearailhc",
+   "hf_upvotes": 0,
+   "stars": 526,
+   "stars_today": 0,
+   "forks": 18,
+   "language": "JavaScript",
+   "code_url": "https://github.com/Clearailhc/clearai-dsh",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "eval",
+    "dsh",
+    "plugin"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "面向DeepSeek Harness的DSH插件，实测友好",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "ClearAI is a native DSH plugin that brings the Epistemic Loop to DeepSeek Harness.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:librechat-ai/librechat",
+   "kind": "project",
+   "title": "LibreChat-AI/LibreChat",
+   "url": "https://github.com/LibreChat-AI/LibreChat",
+   "summary": "Enhanced ChatGPT Clone: Features Agents, MCP, Skills, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter, langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Presets, open-source for self-hosting. Active",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "LibreChat-AI",
+   "hf_upvotes": 0,
+   "stars": 44944,
+   "stars_today": 743,
+   "forks": 9207,
+   "language": "TypeScript",
+   "code_url": "https://github.com/LibreChat-AI/LibreChat",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "mcp",
+    "rag"
+   ],
+   "core_score": 5.0,
+   "wide_score": 8.0,
+   "score_reason": "自托管聊天/Agent/MCP 集成，热度高可用。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "Enhanced ChatGPT Clone: Features Agents, MCP, Skills, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, G",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Active"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:debpalash/voicestudio",
+   "kind": "project",
+   "title": "debpalash/VoiceStudio",
+   "url": "https://github.com/debpalash/VoiceStudio",
+   "summary": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "debpalash",
+   "hf_upvotes": 0,
+   "stars": 35444,
+   "stars_today": 23857,
+   "forks": 4168,
+   "language": "Python",
+   "code_url": "https://github.com/debpalash/VoiceStudio",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "voice",
+    "diffusion",
+    "cloning"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "本地语音克隆/配音开源，对多模态有用。",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "本地 ElevenLabs 替代品，支持 646 语言克隆/配音/转写，v0.5.6 加 MCP 和电话接入",
+    "why": "适合看 agent 工具接入和语音工作流整合",
+    "architecture": "它解决的不是“能不能说话”，而是“本地语音工作流能否被模型和外部工具连续调用”。旧方案常卡在两头：一边是克隆、配音、转写分散在不同工具里，另一边是桌面应用很难稳定给 Claude Code、Cursor、OpenAI Agents SDK 这类 agent 暴露可调用接口。作者的关键改动是把 VoiceStudio 做成“桌面应用 + 本地 API + MCP”的中间件：音频生成留在本机，工具侧通过可复制的配置接入，MCP 在 Docker 里还补了此前会失败的 HTTP 405 路径。最直接的证据是这版新增了 Twilio 来电用已保存音色应答、把外部 agent 连接说明做成可复制安装，并强调 smoke-test 和安装脚本。新意主要在系统组织层，不是单个模型结构。",
+    "verdict": "想看 agent 语音工具编排的话，值得速览",
+    "why_now": "v0.5.6（2026-09-23）加入电话和 agent 接入，且连续多天发版。",
+    "key_points": [
+     "最强证据是 MCP/agent/Docker 可接通",
+     "没证明跨硬件稳定性上限",
+     "复现门槛低，装桌面端即可看交互"
+    ],
+    "prereqs": [
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "voice cloning",
+      "status": "unlisted"
+     },
+     {
+      "name": "local API",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ElevenLabs",
+     "OpenAI Agents SDK"
+    ],
+    "mermaid": "graph LR\nA[文本或来电] --> B[本地应用]\nB --> C[语音克隆或设计]\nC --> D[生成音频]\nB --> E[MCP和本地API]\nE --> F[Claude Cursor Codex]\nD --> G[配音 转写 有声书]\nF --> H[自动化工作流]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:google-research/timesfm",
+   "kind": "project",
+   "title": "google-research/timesfm",
+   "url": "https://github.com/google-research/timesfm",
+   "summary": "TimesFM (Time Series Foundation Model) is a pretrained time-series foundation model developed by Google Research for time-series forecasting.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "google-research",
+   "hf_upvotes": 0,
+   "stars": 33695,
+   "stars_today": 5545,
+   "forks": 3248,
+   "language": "Python",
+   "code_url": "https://github.com/google-research/timesfm",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "time-series",
+    "forecasting",
+    "foundation"
+   ],
+   "core_score": 2.0,
+   "wide_score": 7.0,
+   "score_reason": "时间序列Foundation Model；与核心方向偏离。",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "TimesFM 3.0 用预训练时序 foundation model 做多变量预测，作者报 TIME 等三榜第一",
+    "why": "对时间序列基础模型和 LoRA 微调都很对口",
+    "architecture": "它要解决的是一个反直觉场景：同一套预测器既要吃单变量序列，也要直接处理多变量和动态 covariates，还不能为每个任务单独调参。旧做法通常靠任务特定特征工程或单独训练每类数据，遇到 covariate 变化就失效。作者的关键改变是把时序问题翻译成 decoder-only foundation model 的统一生成任务，再在输入侧纳入过去和未来 covariates、在输出侧保留 point forecast 和 quantile forecast；这样模型阻断的是“换数据形态就要重训”的失败模式。最直接的支持是 3.0 版本在 fev-bench、TIME、GIFT-Eval 上都报第一，并且 2.5 后还补了 16k context、量化头、LoRA 微调示例和 unit tests。新意主要在系统组织层：统一建模接口 + 能力扩展，而不是单一层模块。",
+    "verdict": "如果你关心 foundation model 怎么迁移到时序，值得精读",
+    "why_now": "3.0 于 2026-08-28 发布新权重，且补了微调例子和测试。",
+    "key_points": [
+     "作者报告多变量、covariate、零样本都提升",
+     "没证明生产场景下长跨度外推一定稳",
+     "复现中等，需理解时序输入与评测协议"
+    ],
+    "prereqs": [
+     {
+      "name": "pretraining",
+      "status": "unknown"
+     },
+     {
+      "name": "decoder-only",
+      "status": "unlisted"
+     },
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "PatchTST",
+     "Informer"
+    ],
+    "mermaid": "graph TD\nA[时序输入] --> B[decoder only backbone]\nB --> C[加入 covariates]\nC --> D[预测头]\nD --> E[point forecast]\nD --> F[quantile forecast]\nE --> G[多变量与单变量]\nF --> G",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:hkuds/cli-anything",
+   "kind": "project",
+   "title": "HKUDS/CLI-Anything",
+   "url": "https://github.com/HKUDS/CLI-Anything",
+   "summary": "\"CLI-Anything: Making ALL Software Agent-Native\" -- CLI-Hub: https://clianything.cc/",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "HKUDS",
+   "hf_upvotes": 0,
+   "stars": 50523,
+   "stars_today": 340,
+   "forks": 4626,
+   "language": "Python",
+   "code_url": "https://github.com/HKUDS/CLI-Anything",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "cli",
+    "tooling"
+   ],
+   "core_score": 4.0,
+   "wide_score": 7.0,
+   "score_reason": "Agent-native CLI枢纽，热度高",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "CLI-Anything 把上百个软件做成 agent 可调用 CLI，v0.4.0 加 CLI-Matrix 批量安装",
+    "why": "很适合看 agent 工具协议和软件接入设计",
+    "architecture": "它解决的是“agent 会用软件，但软件并不为 agent 设计”的落差。旧路径通常是手写脚本或一个个 API 封装，既难覆盖长尾软件，也难做能力发现和批量装配。作者的关键概念是把软件能力抽象成可发现、可预检、可安装的 CLI 矩阵：discover 负责找能力，preflight 负责在安装前检查依赖和覆盖，install 负责按 recipe 一次性装配整个工作流，skills 则把交互流程固化成 agent 可执行的提示与脚本。最直接的证据是 v0.4.0 新增 CLI-Matrix、统一 install/preflight/discover analytics，并扩了 30 个 CLIs；同时仓库里有 smoke、E2E、root skill validation 这类成熟度信号。新意主要在系统组织层和工程成熟度，不在单个 CLI 本身。",
+    "verdict": "看它如何把 agent 工具生态做成可装配系统，值得通读",
+    "why_now": "v0.4.0 于 2026-06-25 发布，伴随 CLI-Matrix 和 30 个新 CLI。",
+    "key_points": [
+     "最强证据是 matrix install 和 preflight 机制",
+     "没证明所有 CLI 都能无人工干预跑通",
+     "复现成本中等，依赖所选软件和系统环境"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MCP",
+     "ReAct"
+    ],
+    "mermaid": "graph TD\nA[任务] --> B[discover]\nB --> C[preflight]\nC --> D[install recipe]\nD --> E[skills]\nE --> F[agent uses CLI]\nC --> G[fail fast]\nF --> H[workflow done]",
+    "read_level": "L2"
+   }
+  }
+ ]
+}

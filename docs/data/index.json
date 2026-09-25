@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-25",
+   "papers": 8,
+   "projects": 10,
+   "top": "SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-Party Dialogue"
+  },
+  {
    "date": "2026-09-24",
    "papers": 8,
    "projects": 10,
