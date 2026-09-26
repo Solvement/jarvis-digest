@@ -1,0 +1,1133 @@
+{
+ "date": "2026-09-26",
+ "stats": {
+  "collected": 450,
+  "filtered": 121,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 7 calls, 16353 in / 6464 out; gpt-5.4-mini: 6 calls, 46191 in / 8535 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.29421",
+   "kind": "paper",
+   "title": "Rufus-Air: An Open LLM Post-Training Recipe",
+   "url": "https://arxiv.org/abs/2609.29421",
+   "summary": "Rufus-Air is an open and reproducible post-training recipe on GLM-4.5-Air-Base (106B-A12B), organized as a serial pipeline of eight stages: SFT, Reasoning RL, Coding RL, Instruction-Following RL, General Agent, Coding Agent, Search Agent, and RLHF. We document the data, reward design, infrastructure, stage order, and stagewise results needed to reproduce the recipe. Stages progress from basic to advanced capabilities and from hard, verifiable rewards to softer judge-based signals. Training builds on open-source components and public data, much of it used as released, without new human annotation or an in-house distillation teacher. Our main findings are that (i) diverse, high-quality SFT establishes a strong capability floor; (ii) difficulty filtering keeps RL prompts within a productive learning range; (iii) reward reliability provides a practical principle for ordering stages; and (iv) infrastructure and engineering choices are part of the recipe, not just an implementation detail. Rufus-Air improves over the official GLM-4.5-Air post-trained release and is competitive with similarly sized open models.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Chia-Yuan Chang",
+    "Renyuan Cheng",
+    "Rui Feng",
+    "Xiaotian Han",
+    "Yuan He",
+    "Hongye Jin"
+   ],
+   "org": "",
+   "hf_upvotes": 12,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.29421",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "rlhf",
+    "post-training"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "开源后训练配方，stage与reward细",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "八阶段后训练配方，复现出可竞争的开源 106B/12B 模型",
+    "why": "做后训练/RLHF/Agent 面试很对口",
+    "architecture": "它抓的是一个反直觉问题：很多团队能训出强模型，却复现不了“为什么这个后训练顺序有效”。现有报告常只给最终分数，缺少数据、reward、基础设施和 stage order，导致同一 base checkpoint 换团队就失效。作者的关键改法不是再造新算法，而是把 post-training 当成串行 recipe：SFT 先立 capability floor；随后把 RL prompt 通过 difficulty filtering 限在“可学区间”；再按 reward reliability 排序，把最不容易被 hack 的 verifiable reward 放前面、把更容易被奖励投机的 judge/RLHF 放后面；同时把 token-in/token-out rollouts、chat template 一致性、sandbox 和 large-batch RL 视为 recipe 的组成部分，而不是工程细节。最直接的证据是 stagewise 结果：每一阶段都相对“起始 checkpoint”评估，且作者报告 Rufus-Air 在公开基线 GLM-4.5-Air 上逐项更好，尤其说明 reward 可靠性和 stage order 不是口号。新意主要在系统组织层和实证层，不是新 RL 算法。",
+    "verdict": "值得精读，重点看 stage order 和 reward 设计",
+    "why_now": "",
+    "key_points": [
+     "最强证据是逐阶段对起始点评估，而非只看终点",
+     "没证明通用最优配方，更多是这条 recipe 在 GLM-4.5-Air 上成立",
+     "复现门槛高：要同时复刻数据、reward、infra 和 stage 顺序"
+    ],
+    "prereqs": [
+     {
+      "name": "SFT",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Tülu 3",
+     "RLHF"
+    ],
+    "mermaid": "graph LR\nA[Base checkpoint] --> B[SFT]\nB --> C[Reasoning RL]\nC --> D[Coding RL]\nD --> E[IF RL]\nE --> F[Agent stages]\nF --> G[RLHF]\nH[Difficulty filter] --> C\nH --> D\nH --> E\nH --> F\nG --> I[Final model]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.29964",
+   "kind": "paper",
+   "title": "World Action Agent: Harnessing VLMs for Robot Manipulation via World Action Rehearsal",
+   "url": "https://arxiv.org/abs/2609.29964",
+   "summary": "General-purpose vision-language models (VLMs) bring broad knowledge and spatial reasoning to robot manipulation, yet existing systems either use them indirectly, to predict constraints or write programs, or give them a view of the scene rather than a world in which to act. We present World Action Agent (WAA), a multi-agent harness through which VLMs pilot robots with basic tools, making every decision within a visual action workspace. The workspace has three properties. Contact views, selected automatically from the scene geometry, present the scene around the current interaction. Action rehearsal turns each action into an editable proposal that the agent, alone or through an Imagination Agent, previews and revises against planning feedback before execution. In-view correction closes the loop between observation, rehearsal, and low-level execution, letting the agent remove residual offsets in the view where it observes them. Through the same workspace, WAA acquires embodied procedural knowledge in two ways: it evolves multimodal skills from expert videos and human teaching under evidence-based review and consults them through a Skill Agent, and its interaction traces train smaller VLMs to pilot the same harness. On LIBERO-Pro, WAA with skills evolved only from LIBERO-90 reaches a state-of-the-art 75.6% average success, outperforming end-to-end VLAs, code-as-policy agents, and a visual-harness baseline with the same backbone; the same skills remain effective on robosuite without further learning. Fine-tuning Qwen3.5-9B on harness traces raises its out-of-domain success from 1.7% to 43.3%.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Yehang Zhang",
+    "Haojian Huang",
+    "Yifan Chang",
+    "Jianchong Su",
+    "Bohan Zhou",
+    "Yingjie Xu"
+   ],
+   "org": "",
+   "hf_upvotes": 5,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.29964",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "robotics",
+    "agent"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "VLM驱动机器人world-action，多智能体范式",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "WAA 让 VLM 在同一视觉工作区里试动作、改动作，LIBERO-Pro 达到 75.6%",
+    "why": "对 VLM+robotics/agent 很有借鉴价值",
+    "architecture": "它解决的悖论是：VLM 很会看图和推理，但机器人操控里真正失败的点恰好发生在“看见偏差后已经来不及改”。现有做法要么让模型只给约束/程序，要么只给它一个看场景的窗口，结果观测、动作、纠偏分属不同空间，偏移一旦被执行就难回头。WAA 的核心变化是把“视觉工作区”变成执行层：contact view 把观察中心移到抓手-物体-目标附近，action rehearsal 让动作先变成可编辑提案并接收 planning feedback，再由 in-view correction 在同一视图里修正低层执行偏差。这样每一步的失败都被拦在“先预演、再执行、在原视图纠偏”这条闭环里。最直接的证据是 LIBERO-Pro：只用 LIBERO-90 演化出的 skills 就到 75.6%，且同一 skills 可迁移到 robosuite；再看 9B Qwen3.5 在 harness traces 上从 1.7% 到 43.3%，说明 harness 本身能产出可蒸馏轨迹。新意在系统组织层：不是换 backbone，而是重写机器人决策的运行时。",
+    "verdict": "值得精读，核心是 visual workspace 的机制",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 LIBERO-Pro 75.6% 和跨 robosuite 迁移",
+     "没证明对所有机器人形态都稳，动作空间差异仍可能卡住",
+     "复现难点在视觉对齐、动作预演和低层控制闭环"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Code as Policies",
+     "VLA"
+    ],
+    "mermaid": "graph LR\nA[Scene] --> B[Contact view]\nB --> C[Rehearse action]\nC --> D[Plan feedback]\nD --> E[Revise proposal]\nE --> F[Execute]\nF --> G[In view correction]\nG --> B",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.28654",
+   "kind": "paper",
+   "title": "Training Object Permanence in World Models",
+   "url": "https://arxiv.org/abs/2609.28654",
+   "summary": "Object permanence and solidity are hallmarks of human cognitive priors. Recent studies show that video generation models, a paradigmatic class of current world models, have begun to show emerged reasoning abilities, making them ideal candidates for building human-like physical intelligence. Do video models have emerged object permanence in them? If not, could we train them with a core-cognition inspired dataset? We introduce WROP (World Reasoning with Object Permanence), a data infrastructure of 150 hand-designed cognitive science inspired tasks, divided into six cognitive categories. We build Blender generators that randomize speed, lighting, camera angle, and other nuisance parameters while preserving each task's cognitive structure, yielding 10,000+ samples per task. We release a 1.5M-sample training corpus and a 300-question exam. On this exam we evaluate 14 video models: 3 reference-to-video, 7 edit, and 4 continuation, among which PWM-WROP, our 16B world model. In a blind pairwise Elo study, PWM-WROP ranks first among continuation models and third overall, behind only a statistical tie between two reference-to-video models. We release the data, exam, model answers, scores, weights, and PWM, our native-PyTorch training stack on AWS Trainium2.",
+   "source": "hf_papers",
+   "published": "2026-09-23",
+   "authors": [
+    "Haotian Zhang",
+    "Fengyuan Yu",
+    "Dezhi Luo",
+    "Haoran Sun",
+    "Zehong Zhao",
+    "Qingying Gao"
+   ],
+   "org": "",
+   "hf_upvotes": 194,
+   "stars": 27,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/hokindeng/object-permanence",
+   "pdf_url": "https://arxiv.org/pdf/2609.28654",
+   "categories": [],
+   "keywords": [
+    "world-models",
+    "video",
+    "cognition"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "视频世界模型+认知任务数据基础",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 150 个认知任务训练世界模型，让继续生成模型学会物体永久性",
+    "why": "适合看视频生成/世界模型的训练配方",
+    "architecture": "它抓住的是一个常见错觉：视频模型看起来会“理解物理”，但一到遮挡就把物体抹掉、穿墙或瞬移。既有评测多是泛化感受，不够精确地把 object permanence 和 solidity 拆成可训练、可比较的任务。作者的关键改变是把核心认知原则做成数据结构：150 个 Blender generators 保持任务的 cognitive structure 不变，只随机速度、光照、视角等 nuisance；再切成 1.5M 训练样本和 300 题考试，把“会不会守恒”变成可监督、可盲测的目标。最直接的证据是 blind pairwise Elo：PWM-WROP 在 continuation models 里排第一，整体第三，且在 native 320×192 分辨率下成立，说明不是靠高分辨率投机。新意主要在实证层兼训练数据层，不是新的 diffusion 或 transformer 架构。",
+    "verdict": "值得看数据设计，精读可学任务构造",
+    "why_now": "",
+    "key_points": [
+     "最强证据是盲测 Elo，而不是单个自动指标",
+     "没证明模型真的学到完整物理，只覆盖 OP 和 OS",
+     "复现成本高：要搭 Blender 生成器和大规模标注流程"
+    ],
+    "prereqs": [
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "video generation",
+      "status": "unknown"
+     },
+     {
+      "name": "world model",
+      "status": "unlisted"
+     },
+     {
+      "name": "convolution",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Sora",
+     "VideoPoet"
+    ],
+    "mermaid": "graph LR\nA[Core cognition tasks] --> B[Blender generators]\nB --> C[1.5M corpus]\nC --> D[Post train model]\nD --> E[Blind exam]\nE --> F[Elo ranking]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.23407",
+   "kind": "paper",
+   "title": "OmniEcho: Spatial Audio Understanding for Embodied Agents",
+   "url": "https://arxiv.org/abs/2609.23407",
+   "summary": "Humans can effortlessly localize the direction of a sound source and integrate it with visual cues for reasoning, yet this remains challenging for embodied agents. In particular, it is still unclear how to effectively evaluate and model spatial audio understanding in embodied settings. To address this gap, we introduce OmniEchoBench, a unified benchmark for spatial audio-visual perception and audio-vision-language navigation. OmniEchoBench comprises six tasks over 197 real-world spatial audio-visual scenes, 2,972 question-answer pairs, and 900 navigation samples with first-order ambisonics (FOA) audio collected from 30 real-world environments. To enable scalable training supervision, we develop a controllable rendering pipeline for spatial audio. It preserves geometric consistency among sound sources, visual observations, and agent trajectories. Building on this, we propose OmniEcho, a spatially aware omni-modal model. It introduces an FOA spatial encoder alongside a pretrained semantic audio pathway. Extensive experiments show that OmniEcho achieves state-of-the-art performance on spatial audio-visual perception. For our sound-guided navigation, OmniEcho reaches a performance level close to that of traditional vision-language navigation. These results demonstrate that spatial audio can serve as a valuable signal for embodied scene reasoning and navigation, while also highlighting fine-grained spatial localization and distance estimation as important open challenges.",
+   "source": "hf_papers",
+   "published": "2026-09-20",
+   "authors": [
+    "Ruixun Liu",
+    "Yuxuan Wang",
+    "Jiacheng Xie",
+    "Yuhuan You",
+    "Donghua Cai",
+    "Junming Lin"
+   ],
+   "org": "",
+   "hf_upvotes": 20,
+   "stars": 12,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/PKU-VaLuE-Lab/OmniEcho",
+   "pdf_url": "https://arxiv.org/pdf/2609.23407",
+   "categories": [],
+   "keywords": [
+    "multimodal",
+    "audio",
+    "embodied"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "空间音频理解+具身基准，和VLM/代理相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "OmniEchoBench+OmniEcho：197场景、2972 QA、900导航样本，补上空间音频评测并把SVLN做近VLN",
+    "why": "做多模态/具身和导航面试很对口",
+    "architecture": "现有omni model会听“是什么”，却常听不出“从哪来”，所以在被遮挡、出视野或需要转头找目标时，语义音频不够用。作者的关键改变是把空间音频单独建成一条路径：FOA spatial encoder 负责保留方向与距离线索，pretrained semantic audio pathway 继续管声音语义，避免把空间信息挤丢；同时用可控 spatial audio rendering 生成与视觉观察、轨迹几何一致的监督，阻断真实数据太贵、仿真又不对齐的失败。最直接的证据是 OmniEcho 在 OmniEchoBench 的空间音频-视觉 perception 上拿到 SOTA，且 sound-guided navigation 接近传统 VLN；这说明不是只会答题，而是空间音频真能进入 embodied reasoning。新意主要在系统组织层：把“空间音频理解”拆成 benchmark、可控数据管线和模型接口三件事，而不是只改一个 encoder。",
+    "verdict": "适合精读，尤其看数据构建和FOA编码怎么接入现有omni模型",
+    "why_now": "",
+    "key_points": [
+     "最强证据：SV perception SOTA，导航接近VLN",
+     "未证明跨更多真实房间/麦克风仍稳",
+     "复现难点在FOA渲染与轨迹对齐"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "FOA",
+      "status": "unlisted"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Room-to-Room",
+     "Vision-Language Navigation"
+    ],
+    "mermaid": "graph LR\nA[FOA audio] --> B[FOA encoder]\nC[semantic audio] --> D[semantic path]\nE[visual obs] --> F[fuse]\nB --> F\nD --> F\nF --> G[spatial QA]\nF --> H[navigation]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.30233",
+   "kind": "paper",
+   "title": "Coding Agents for Generalized Task and Motion Planning Problems",
+   "url": "https://arxiv.org/abs/2609.30233",
+   "summary": "Task and motion planning (TAMP) problems remain difficult even with full observability and object-centric states because discrete decisions are tightly coupled to geometric, kinematic, and dynamic constraints. Generalized TAMP addresses this difficulty by exploiting regularities across problem instances to reduce planning effort on new instances. However, existing methods require substantial TAMP-specific engineering. We investigate whether coding agents can automate this process by synthesizing programs that generalize across instances. Given a task description and simulator access, each agent chooses how to interact with the environment while developing a program within a fixed synthesis budget. The program is then frozen and evaluated on unseen instances. We evaluate Claude Code (Opus 5) and Codex (GPT-5.6 Sol and GPT-6 Astra) on 28 simulated environments from KinDER and PDDLStream, with object counts beyond those evaluated in the original benchmark. Across all program synthesis methods, we evaluate 980 generated programs on 100 held-out instances each, 98,000 evaluation episodes in total. Overall, we find that coding agents are surprisingly effective at generalized TAMP: all three agent configurations outperform hand-engineered planners, one-shot generation, and an LLM-based generalized planning baseline in mean success (56% to 95% versus 47% for the planners, on the 16 environments where a planner is available). As object counts grow, the agents' programs maintain higher success than the planner, using an order of magnitude less computation per instance on average. Logs show agents using interaction to calibrate physical models, test edge cases, and refine strategies. We release all code, including the full prompts given to the agents. These findings suggest that coding agents are a strong baseline for generalized TAMP.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Matteo Merler",
+    "Bowen Li",
+    "Josh Roy",
+    "Yichao Liang",
+    "Qianwei Wang",
+    "Yixuan Huang"
+   ],
+   "org": "",
+   "hf_upvotes": 8,
+   "stars": 12,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/tomsilver/robocode",
+   "pdf_url": "https://arxiv.org/pdf/2609.30233",
+   "categories": [],
+   "keywords": [
+    "agents",
+    "program-synthesis",
+    "tamp"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "coding agents做任务/运动规划泛化",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 coding agents 解 generalized TAMP：28环境、98k episodes，成功率 56%到95%",
+    "why": "很适合看 agent 如何做物理规划与程序合成",
+    "architecture": "TAMP 的悖论是：状态都看得到，问题还是很难，因为离散决策一碰到几何、动力学约束就会炸，传统方法只能靠大量手工 predicates、samplers、operators。作者的改变不是再做一个更聪明的 planner，而是让 coding agent 在固定 synthesis budget 内自己写程序：它能先跑实验、探 simulator、校准物理模型，再把发现固化成冻结的程序，阻断“单次生成不懂边界条件”和“测试时还依赖LLM推理”的失败。最直接的证据是 28 个环境、980 个程序、98,000 次评测后，三种 coding agent 都超过手工 planner 和 LLMGenPlan；而且对象数变多时，程序还能用更少计算保持成功率。新意主要在实证层：它证明 coding agent 可以成为 generalized TAMP 的强 baseline，而不是只在代码题上强。",
+    "verdict": "值得通读，重点看交互式程序合成如何替代TAMP工程",
+    "why_now": "",
+    "key_points": [
+     "最强证据：56%到95%胜过手工planner",
+     "未解决动态三维里扫动/倾倒类任务",
+     "复现成本高，需 simulator 与大规模程序评测"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "program-synthesis",
+      "status": "unlisted"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "KinDER",
+     "PDDLStream"
+    ],
+    "mermaid": "graph LR\nA[task and simulator] --> B[coding agent]\nB --> C[probe env]\nC --> D[write program]\nD --> E[freeze]\nE --> F[test on unseen]\nC --> G[calibrate physics]\nG --> D",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.29845",
+   "kind": "paper",
+   "title": "Your Transformer Can Hold Two Thoughts at Once: Evidence of Linear Superposition in LLMs",
+   "url": "https://arxiv.org/abs/2609.29845",
+   "summary": "While Large Language Models (LLMs) rely on highly non-linear components, in this work we demonstrate that they exhibit fundamental linearity: when inputs from distinct text streams are linearly combined, the model outputs a superposition of the individual next-token distributions. We term this the Superposition Linearity Hypothesis. We provide evidence that superposition is an intrinsic property of the Transformer architecture rather than an emergent consequence of training; in fact, we observe that it tends to diminish as pretraining progresses. However, we demonstrate that linearity can be substantially restored through lightweight fine-tuning, significantly reducing the divergence between the predicted next-token distribution and the average of the individual next-token distributions. Finally, we introduce a guided decoding procedure that disentangles superposed outputs, enabling the simultaneous generation of two coherent continuations from a single forward pass.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Pavel Tikhonov",
+    "Anton Korznikov",
+    "Matvey Mikhalchuk",
+    "Nikita Dragunov",
+    "Temurbek Rahmatullaev",
+    "Polina Druzhinina"
+   ],
+   "org": "",
+   "hf_upvotes": 63,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.29845",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "analysis",
+    "linear-probe"
+   ],
+   "core_score": 6.0,
+   "wide_score": 4.0,
+   "score_reason": "Transformer线性叠加性质，偏表征分析",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "发现LLM有输入叠加线性：混合两段文本，top-10里还能保住两条各自续写",
+    "why": "适合做Transformer机理和推理解读面试谈资",
+    "architecture": "反直觉点在于：Transformer 明明靠非线性 self-attention 和 MLP 工作，却在把两个文本流的 embedding 逐 token 平均后，仍能把两条原始续写的 next-token 概率“叠”在一起。作者的核心概念是 superposition linearity：把混合输入看成两条独立路径的线性叠加，而不是把它当成语义互相污染的单一路径；这说明模型里有一部分输入输出映射天然接近线性。为了验证这不是训练“学出来”的巧合，他们沿 pretraining 轨迹追踪，发现这种线性在初始化最强，训练反而会削弱；再用轻量 fine-tuning 把它拉回来，并做 guided decoding，把混合输出拆回两条连续文本。最强证据是 rank 分布：混合后真 token 仍大量落在 top-10/top-50，且这一点在多个模型家族和语料上都成立。新意在组件层加实证层：既提出了可测的线性假说，也给了拆解混合输出的 decoding 机制。",
+    "verdict": "建议精读，适合补Transformer可解释性和混合解码思路",
+    "why_now": "",
+    "key_points": [
+     "最强证据：混合后真token常进top-10",
+     "未证明长上下文、复杂语义下同样成立",
+     "复现要会做embedding混合与rank分析"
+    ],
+    "prereqs": [
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "positional encoding",
+      "status": "unknown"
+     },
+     {
+      "name": "next-token prediction",
+      "status": "unknown"
+     },
+     {
+      "name": "pretraining",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Transformer",
+     "Residual Stream"
+    ],
+    "mermaid": "graph LR\nA[text stream 1] --> C[mix embeddings]\nB[text stream 2] --> C\nC --> D[Transformer]\nD --> E[mixed logits]\nE --> F[disentangle]\nF --> G[cont 1]\nF --> H[cont 2]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.30221",
+   "kind": "paper",
+   "title": "WanPE: Towards Cinematic Prompt Enhancement for Modern Text-to-Video Generation",
+   "url": "https://arxiv.org/abs/2609.30221",
+   "summary": "Video generation begins in text space by authoring a cinematic screenplay, then materializes into pixels. As contemporary video generators scale to 30 seconds and faithfully follow complex conditions, the textual prompt largely directs the production, planning how actions, camera trajectories, lighting, and sound unfold across multi-shot sequences. In this paper, we present WanPE, a 397B-parameter prompt enhancement model trained on 1.05M real-world videos to master director-level cinematic planning. WanPE formulates shot-level cinematic plans via video-grounded reverse construction and employs Semantic-Consistency GRPO (SC-GRPO) to faithfully preserve user requirements across shots and over time. To benchmark this capability, we curate WanPEval, a human-annotated testbed covering durations from 5 to 30 seconds across varying intent granularities, supported by approximately 11K blind pairwise assessments. When powering Wan3.0's video generator, WanPE-397B boosts human preference over raw user prompts by 10.66-18.84 points at 5-15 seconds and by a dramatic 50.86 points in the 30-second arena. Ablation studies show that reverse construction demonstrates clear superiority over forward rewriting, while SC-GRPO robustly preserves semantic fidelity across model scales. Ultimately, WanPE leads all evaluated commercial offerings at 5-15 seconds and remains competitive with Seedance 2.5 at 30 seconds.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Yubo Zhu",
+    "Yawen Shao",
+    "Ziyun Dai",
+    "Zixun Fang",
+    "Kai Zhu",
+    "Siyang Sun"
+   ],
+   "org": "",
+   "hf_upvotes": 32,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.30221",
+   "categories": [],
+   "keywords": [
+    "diffusion",
+    "text-to-video",
+    "rl"
+   ],
+   "core_score": 6.0,
+   "wide_score": 4.0,
+   "score_reason": "视频生成prompt增强+GRPO思路",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "WanPE 用 397B 逆向构造电影式提示，30 秒视频偏好+50.86",
+    "why": "做 T2V/视频 agent 提示工程的人值得看",
+    "architecture": "问题不是“把 prompt 写长”，而是 30 秒、多镜头视频里，用户要求要跨 shots 持续成立；普通 forward rewriting 只是在语言上扩写，训练分布却偏向 synthetic rewrite，和下游视频模型学到的 video-grounded captions 不对齐。WanPE 的关键改变是把 prompt enhancement 改成 cinematic planning：先从真实视频做 video-grounded reverse construction，学到“结果视频里本来就存在的分镜结构”，再用 SC-GRPO 在 9 维奖励里压制 omission、wrong binding、temporal inconsistency，让 subject、action、camera、audio 在整段计划里不丢失、不串位。最直接的证据是 ablation：reverse construction 明显优于 forward rewriting，且 SC-GRPO 在不同模型规模上都稳健提升 semantic consistency；这说明改动不是单纯扩词，而是把监督分布和一致性约束一起换掉。新意主要在系统组织层：把 text prompt 当作视频的“蓝图”来组织，而不是描述性补写。",
+    "verdict": "适合看机制，判断提示增强新范式",
+    "why_now": "",
+    "key_points": [
+     "最强证据：reverse > forward rewriting",
+     "没证明通用规划，主要限 T2V",
+     "397B/11K 人评，复现门槛高"
+    ],
+    "prereqs": [
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "video generation",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "InstructGPT",
+     "GRPO"
+    ],
+    "mermaid": "graph LR\nA[User prompt] --> B[Reverse from video]\nB --> C[Cinematic plan]\nC --> D[SC GRPO]\nD --> E[Consistent shots]\nE --> F[Video generator]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.29647",
+   "kind": "paper",
+   "title": "AgentKernel: The Trust-Native Agentic Operating System",
+   "url": "https://arxiv.org/abs/2609.29647",
+   "summary": "Modern AI agents routinely cross trust boundaries: they ingest untrusted content, combine it with privileged instructions, persist intermediate beliefs in long-term memory, and invoke privileged tools. This creates an attack surface in which malicious payloads can enter through model inputs and cause harmful tool actions. Yet current governance stacks remain application-level middleware that share a process trust boundary with the agents they monitor. We argue that agents need an operating-system substrate providing mandatory, non-bypassable services for identity, input mediation, memory governance, and execution control.\n  We introduce AgentKernel, a trust-native agent operating system built around the premise that security must be a first-class design constraint. AgentKernel wraps the agent lifecycle in a mandatory enforcement boundary organized into four pillars: Identity, Perception, Cognition, and Execution. Each pillar adapts classical OS security principles to failures at the semantic plane, including delegation abuse, prompt injection, memory poisoning, and tool misuse.\n  AgentKernel treats structural security as a capability multiplier. Kernel-managed identity supports trustworthy cross-organization collaboration; graduated perception replaces brittle single-point filters; information-flow-controlled memory improves retrieval fidelity while limiting poisoning; and semantic-to-kernel enforcement permits broader tool privileges behind a non-bypassable boundary. We position AgentKernel as the missing OS layer beneath orchestration frameworks, agent runtimes, governance platforms, and execution sandboxes, and use systematic comparison and security analysis to show how a single integrated architecture can enforce security across the full agent lifecycle.",
+   "source": "hf_papers",
+   "published": "2026-08-29",
+   "authors": [
+    "Zhenhua Zou",
+    "Sheng Guo",
+    "Qiuyang Zhan",
+    "Lepeng Zhao",
+    "Shuo Li",
+    "Zhuotao Liu"
+   ],
+   "org": "",
+   "hf_upvotes": 6,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.29647",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "security",
+    "os"
+   ],
+   "core_score": 6.0,
+   "wide_score": 4.0,
+   "score_reason": "agent治理/隔离的OS级安全视角",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "AgentKernel 用四层内核把 agent 越权、注入、污染都变成强制拦截",
+    "why": "做 agent/RAG 安全或多工具系统面试很对口",
+    "architecture": "反直觉点在于：agent 越强，风险不是只来自某个 bad prompt，而是它会把不可信网页、长期记忆、工具权限串成一条链；把过滤器做成 middleware 仍不够，因为它和 agent 同处一个 process trust boundary，能被绕过。AgentKernel 的关键概念是把安全下沉成 OS 式 mandatory enforcement：Identity 管可信委托，Perception 管输入进入上下文前的分级 mediation，Cognition 用 information-flow 约束 memory，Execution 把工具调用落到 non-bypassable 的 kernel boundary 上，阻断 prompt injection、memory poisoning 和 tool misuse 的跨层传播。原文最直接支持的是它对现有 harness 的系统比较：作者指出治理平台、runtime、sandbox 都只覆盖片段，而 kernel 能统一每次信任穿越；但摘要里没给出完整实证数字，性能代价与真实部署条件原文未明确。新意主要在系统组织层，不是单个检测器。",
+    "verdict": "值得看架构思想，尤其是 agent 安全边界",
+    "why_now": "",
+    "key_points": [
+     "强项是把 trust boundary 统一到内核",
+     "原文未明确性能开销与攻击成功率",
+     "更像安全架构提案，复现难度高"
+    ],
+    "prereqs": [
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "LangGraph",
+     "OpenAI Agents"
+    ],
+    "mermaid": "graph LR\nA[Untrusted input] --> B[Perception]\nB --> C[Memory]\nC --> D[Cognition]\nD --> E[Execution]\nE --> F[Tool action]\nB -. block .-> X[Injection]\nC -. block .-> Y[Poisoning]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:tencent/weknora",
+   "kind": "project",
+   "title": "Tencent/WeKnora",
+   "url": "https://github.com/Tencent/WeKnora",
+   "summary": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Tencent",
+   "hf_upvotes": 0,
+   "stars": 30299,
+   "stars_today": 3189,
+   "forks": 4064,
+   "language": "Go",
+   "code_url": "https://github.com/Tencent/WeKnora",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "agent",
+    "knowledge-base"
+   ],
+   "core_score": 9.0,
+   "wide_score": 8.0,
+   "score_reason": "RAG+自主推理+自维护Wiki，贴合核心方向",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "WeKnora 把企业文档做成 RAG+agent+wiki，近 3 万星且周更",
+    "why": "想看可落地知识库/agent 平台，可以直接抄架构",
+    "architecture": "它解决的是企业里“文档散、检索弱、知识会过期”的真实痛点：同一份知识既要能查、能多步推理、还能被持续维护。WeKnora 的承重组件是同一知识库上跑三种模式：RAG 负责查，agent 负责多步任务，wiki 负责组织沉淀；再往下是会话持久化沙箱里的 skills、BrowserSkill 访问用户自己的 Chrome/Edge、外部 MCP、长短期 memory、可编辑/回滚的 chunks、以及多工作区 RBAC 和审计日志。检测到的成熟度信号比较强：README 有明确 quick start、Docker Compose/K8s/Lite 单文件/桌面版部署路径，最近 release 到 v0.8.2，且 release notes 里还能看到修复 agent、sandbox、audit log、i18n 等问题，说明不是只会演示的 demo。和同类相比，它的差异不在“有没有 RAG”，而在同一套知识底座上同时支持检索、自治任务和持续维护，并且把权限、追踪、外部工具接得更完整。",
+    "verdict": "适合当知识库/agent 平台样板看",
+    "why_now": "最近 release：v0.8.2（2026-09-24）",
+    "key_points": [
+     "最强证据：近 3 万星且持续发版",
+     "有 Docker/K8s/Lite/桌面多部署形态",
+     "更偏平台整合，不是单点算法突破"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "LangChain",
+     "LlamaIndex"
+    ],
+    "mermaid": "graph LR\nA[Docs] --> B[Ingest]\nB --> C[RAG]\nB --> D[Agent]\nB --> E[Wiki]\nD --> F[Sandbox]\nD --> G[MCP]\nC --> H[Search answer]\nD --> I[Task result]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:rohitg00/agentmemory",
+   "kind": "project",
+   "title": "rohitg00/agentmemory",
+   "url": "https://github.com/rohitg00/agentmemory",
+   "summary": "#1 Persistent memory for AI coding agents based on real-world benchmarks",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "rohitg00",
+   "hf_upvotes": 0,
+   "stars": 28884,
+   "stars_today": 41,
+   "forks": 2511,
+   "language": "TypeScript",
+   "code_url": "https://github.com/rohitg00/agentmemory",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "evaluation"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "面向AI coding agents的持久记忆，有复现价值",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "#1 Persistent memory for AI coding agents based on real-world benchmarks",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:aipoch/open-science",
+   "kind": "project",
+   "title": "aipoch/open-science",
+   "url": "https://github.com/aipoch/open-science",
+   "summary": "The open-source AI research workbench for scientific research and agent workflows. Local-first, model-agnostic desktop app with extensible skills, MCP tools and connectors, Python/R execution and traceable artifacts for reproducible research on macOS, Windows and Linux.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "aipoch",
+   "hf_upvotes": 0,
+   "stars": 4942,
+   "stars_today": 2076,
+   "forks": 450,
+   "language": "TypeScript",
+   "code_url": "https://github.com/aipoch/open-science",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "mcp",
+    "workflow"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "本地优先科研工作台+agent工作流，偏工程可用",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "The open-source AI research workbench for scientific research and agent workflows",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Local-first, model-agnostic desktop app with extensible skills, MCP tools and connectors, Python/R execution and traceab"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:zeronsh/zeron",
+   "kind": "project",
+   "title": "zeronsh/zeron",
+   "url": "https://github.com/zeronsh/zeron",
+   "summary": "A native control plane for Claude Code, Codex, Cursor, Devin and other coding agents.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "zeronsh",
+   "hf_upvotes": 0,
+   "stars": 2240,
+   "stars_today": 596,
+   "forks": 217,
+   "language": "Rust",
+   "code_url": "https://github.com/zeronsh/zeron",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "control-plane",
+    "coding"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "代理控制平面，适合搭建与评测。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "A native control plane for Claude Code, Codex, Cursor, Devin and other coding agents.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:lyogavin/airllm",
+   "kind": "project",
+   "title": "lyogavin/airllm",
+   "url": "https://github.com/lyogavin/airllm",
+   "summary": "AirLLM 70B inference with single 4GB GPU",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "lyogavin",
+   "hf_upvotes": 0,
+   "stars": 34997,
+   "stars_today": 178,
+   "forks": 3680,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/lyogavin/airllm",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "llm",
+    "quant"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "单卡超低显存推理，工程可复现价值高",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "单卡4GB跑70B；2026又把125B训练压到6GB",
+    "why": "直指推理加速与显存优化，面试很能聊",
+    "architecture": "反直觉点是：大模型显存瓶颈不只在参数量，很多时候是“整模常驻 + KV cache”把单卡卡死。AirLLM的关键改变不是再做一种量化，而是把模型拆成按层流式加载：冻结权重留在磁盘，运行时只把当前层搬进内存，做完立刻释放；训练时则让adapter常驻GPU、冻结权重按层流式读入。这样阻断的是“全模型驻留”导致的OOM，而不是单纯压缩精度。最直接的证据是作者报告 Kimi K3 2.8T 只用 3.72GB、DeepSeek-V3 671B 约 12GB，且最新训练里 Qwen3.8-Flash-Next 125B 可在 6GB 内跑通。新在系统组织层：不是模型结构改造，而是权重调度与磁盘/内存/GPU之间的执行组织。",
+    "verdict": "适合看它怎么做分层流式，不必深挖数值细节",
+    "why_now": "",
+    "key_points": [
+     "最强证据是超大模型单卡可跑的实测显存",
+     "没证明通用吞吐优势，磁盘/I O 可能成瓶颈",
+     "复现依赖特定 transformers 版本和模型远程代码"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     },
+     {
+      "name": "flash attention",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "vLLM",
+     "ZeRO"
+    ],
+    "mermaid": "graph LR\nA[模型权重] --> B[按层流式读取]\nC[当前层] --> D[GPU计算]\nB --> D\nD --> E[释放当前层]\nF[Adapter] --> G[常驻GPU]\nE --> H[低显存推理训练]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:ruc-datalab/evoontology",
+   "kind": "project",
+   "title": "ruc-datalab/EvoOntology",
+   "url": "https://github.com/ruc-datalab/EvoOntology",
+   "summary": "EvoOntology: A Self-Evolving Ontology Layer for Data Agents ⚙️ EvoOntology插件为Claude Code/Codex 建立&进化本体层",
+   "source": "github_search",
+   "published": "2026-09-15",
+   "authors": [],
+   "org": "ruc-datalab",
+   "hf_upvotes": 0,
+   "stars": 420,
+   "stars_today": 0,
+   "forks": 32,
+   "language": "Python",
+   "code_url": "https://github.com/ruc-datalab/EvoOntology",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "ontology",
+    "mcp"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "给数据/agent进化本体层，适合方法讨论",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "",
+   "digest": {
+    "one_liner": "用MCP把数据语义层做成可进化本体",
+    "why": "Agent+RAG+MCP 结合很对口，适合看架构",
+    "architecture": "问题不是“能不能调用工具”，而是数据 agent 面对表、文件、数据库时，每一步都要重新猜字段语义、映射关系和约束，导致反复探索、语义错配。EvoOntology的关键概念是把 ontology 当成可训练的 agent state：先用 workload 和原始数据构建一个带版本的语义层，再在真实交互轨迹里诊断失败，把更新限制在 Content、Schema、Tool 三层的局部补丁，并且只有候选版在同数据、同预算下优于 Parent 才发布。最直接的证据是它把 `browse_semantics`/`resolve_semantics` 通过 MCP 暴露给 Claude Code/Codex，并声称自进化后在四个 backbone 子集上继续提升。新在系统组织层：不是静态 ontology，而是带评估门控的闭环语义中间件。",
+    "verdict": "如果你关心 data agent 中间件，这条值得精读",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 on-policy 式轨迹驱动的局部进化",
+     "原文未明确大规模公开基准和绝对数值",
+     "复现要接入 MCP 与数据回放，工程链路较长"
+    ],
+    "prereqs": [
+     {
+      "name": "MCP",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph TD\nA[原始数据] --> B[构建本体]\nB --> C[Agent按需查询]\nC --> D[记录轨迹]\nD --> E[诊断失败]\nE --> F[局部更新]\nF --> G[候选评估]\nG --> H[发布或回滚]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:openclaw/openclaw",
+   "kind": "project",
+   "title": "openclaw/openclaw",
+   "url": "https://github.com/openclaw/openclaw",
+   "summary": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "openclaw",
+   "hf_upvotes": 0,
+   "stars": 390572,
+   "stars_today": 134,
+   "forks": 82156,
+   "language": "TypeScript",
+   "code_url": "https://github.com/openclaw/openclaw",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "os",
+    "autonomy"
+   ],
+   "core_score": 6.0,
+   "wide_score": 9.0,
+   "score_reason": "强势开源“可做事”的OS智能体，热度高",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "390k星开源代理OS，跨聊天和设备做事",
+    "why": "agent 系统成熟度和安全边界，面试常问",
+    "architecture": "它解决的是“助手不在一个入口里、也不该把所有权限交给模型”的现实痛点：消息、设备、工具、状态分散在不同平台，线性 workflow 很难长期维护。OpenClaw的核心是把 Gateway 作为本地控制平面，把外部消息通道、工具、插件和设备节点挂到同一套会话/事件系统上；模型和 agent harness 只是可替换插件，状态、memory、credentials 留在本机。真正的设计取舍在安全：把 inbound message 当不可信输入，工具默认跑在 host 上，但允许你再配置 sandboxing；这说明它不是简单聊天壳，而是“可信控制面 + 不可信执行”的 agent OS。最直接的成熟度信号是 178 个 direct commits、2614 PR、351 contributors，以及连续高频 release。新在系统组织层：把跨通道 agent 做成可部署的本地平台，而不是单点应用。",
+    "verdict": "看成熟度和架构边界就够，适合速览",
+    "why_now": "最近 release：v2026.9.6（2026-09-23）; v2026.7.35（2026-09-21）; v2026.9.5（2026-09-19）",
+    "key_points": [
+     "最强证据是高频 release 和大体量协作记录",
+     "README 明确强调安全边界，但默认工具仍在 host 侧",
+     "同类差异在于多通道+本地控制面，不是单一聊天客户端"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph TD\nA[聊天输入] --> B[Gateway]\nB --> C[会话和状态]\nB --> D[工具和插件]\nB --> E[设备节点]\nD --> F[不可信执行]\nF --> G[结果回传]\nC --> G",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:tensorflow/tensorflow",
+   "kind": "project",
+   "title": "tensorflow/tensorflow",
+   "url": "https://github.com/tensorflow/tensorflow",
+   "summary": "An Open Source Machine Learning Framework for Everyone",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "tensorflow",
+   "hf_upvotes": 0,
+   "stars": 200404,
+   "stars_today": 31,
+   "forks": 77568,
+   "language": "C++",
+   "code_url": "https://github.com/tensorflow/tensorflow",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "training",
+    "framework",
+    "distributed"
+   ],
+   "core_score": 5.0,
+   "wide_score": 7.0,
+   "score_reason": "训练/系统基础设施，质量高但非核心前沿",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "An Open Source Machine Learning Framework for Everyone",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:bendlang/bend",
+   "kind": "project",
+   "title": "bendlang/bend",
+   "url": "https://github.com/bendlang/bend",
+   "summary": "Bend 2: a fast language that blocks AI mistakes via proof. Install: curl -fsSL https://bend-lang.com/install.sh | sh",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "bendlang",
+   "hf_upvotes": 0,
+   "stars": 22931,
+   "stars_today": 1530,
+   "forks": 697,
+   "language": "TypeScript",
+   "code_url": "https://github.com/bendlang/bend",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "proof",
+    "safety",
+    "language"
+   ],
+   "core_score": 5.0,
+   "wide_score": 6.0,
+   "score_reason": "形式化/证明以防AI错误，方向相关。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "Bend 2: a fast language that blocks AI mistakes via proof",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Install: curl -fsSL https://bend-lang.com/install.sh | sh"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:fareedkhan-dev/train-llm-from-scratch",
+   "kind": "project",
+   "title": "FareedKhan-dev/train-llm-from-scratch",
+   "url": "https://github.com/FareedKhan-dev/train-llm-from-scratch",
+   "summary": "A straightforward method for training your LLM, from downloading data to generating text.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "FareedKhan-dev",
+   "hf_upvotes": 0,
+   "stars": 11204,
+   "stars_today": 1376,
+   "forks": 1561,
+   "language": "Python",
+   "code_url": "https://github.com/FareedKhan-dev/train-llm-from-scratch",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "training",
+    "from-scratch"
+   ],
+   "core_score": 2.0,
+   "wide_score": 6.0,
+   "score_reason": "训练LLM教程类，信息量有限但可参考。",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "A straightforward method for training your LLM, from downloading data to generating text.",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
