@@ -1,0 +1,536 @@
+{
+ "date": "2026-09-27",
+ "stats": {
+  "collected": 390,
+  "filtered": 83,
+  "selected": 10,
+  "llm": "LLM usage — gpt-5.4-nano: 5 calls, 10019 in / 4421 out; gpt-5.4-mini: 4 calls, 26429 in / 4744 out"
+ },
+ "items": [
+  {
+   "id": "repo:pytorch/pytorch",
+   "kind": "project",
+   "title": "pytorch/pytorch",
+   "url": "https://github.com/pytorch/pytorch",
+   "summary": "Tensors and Dynamic neural networks in Python with strong GPU acceleration",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "pytorch",
+   "hf_upvotes": 0,
+   "stars": 103415,
+   "stars_today": 56,
+   "forks": 30728,
+   "language": "Python",
+   "code_url": "https://github.com/pytorch/pytorch",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "training",
+    "distributed",
+    "framework"
+   ],
+   "core_score": 10.0,
+   "wide_score": 10.0,
+   "score_reason": "深度学习核心框架，必读必用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "把 Python 动态网络变成 GPU 原生框架，作者强调 tape autograd 与高灵活性",
+    "why": "LLM/训练岗位绕不开的底座，面试常问系统取舍",
+    "architecture": "PyTorch 的反直觉点是：想做复杂研究时，静态图往往先卡在“改一下结构就得重建整网”，而不是算力不够。它的关键改变是把执行保持在 Python 里，用 tape-based autograd 记录前向，再反向回放；`torch.nn` 负责把模块组织成可微程序，`torch.jit` 负责在需要时把 Python 代码收进可序列化、可优化的子集，`torch.multiprocessing` 则通过 tensor 共享阻断数据加载和 Hogwild 训练里的进程拷贝开销。最直接的证据不是某个榜单，而是 README 明确把它定位为“research platform”，同时 release highlights 继续把 kernel fusion、dynamic control flow、CUDA graph capture 往前推，说明它在保留动态图的同时持续补系统性能。新意主要在系统组织层：不是发明新算子，而是把研究代码、自动求导、编译与并行运行拼成一个能持续演进的底座。",
+    "verdict": "值得通读，尤其看它怎么平衡灵活性和性能",
+    "why_now": "",
+    "key_points": [
+     "README 直接点明动态图+GPU 原生定位",
+     "release 继续补编译和融合，说明底座仍在演进",
+     "没证明训练更快于所有框架，优势依赖具体算子与后端"
+    ],
+    "prereqs": [
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "autograd",
+      "status": "unlisted"
+     },
+     {
+      "name": "CUDA",
+      "status": "unlisted"
+     },
+     {
+      "name": "data parallel",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "TensorFlow",
+     "Chainer"
+    ],
+    "mermaid": "graph LR\nA[Python code] --> B[tape autograd]\nB --> C[reverse pass]\nC --> D[gradients]\nA --> E[torch.jit]\nE --> F[optimized model]\nA --> G[tensor GPU]\nG --> H[fast ops]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:mvschwarz/openrig",
+   "kind": "project",
+   "title": "mvschwarz/openrig",
+   "url": "https://github.com/mvschwarz/openrig",
+   "summary": "Multi-agent harness that runs Claude Code and Codex together as one system",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "mvschwarz",
+   "hf_upvotes": 0,
+   "stars": 844,
+   "stars_today": 114,
+   "forks": 92,
+   "language": "TypeScript",
+   "code_url": "https://github.com/mvschwarz/openrig",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multi-agent",
+    "evaluation"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "多智能体 harness，能用于 agent 试验",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 YAML 把 Claude Code 和 Codex 组进一套多智能体 rig，v0.5.17 修了 Bun 安装",
+    "why": "Agent 编排和评测方向很对口，能看系统机制",
+    "architecture": "OpenRig 解决的是：多个 coding agent 各跑各的终端，结果就是上下文散、权限乱、交接靠人肉。它的关键做法不是再做一个 agent，而是做一个“rig”把 harness 统一起来：YAML 定义团队，daemon 维护状态和队列，tmux/cmux 提供可恢复的会话容器，seat 负责把 owner、checker 这种角色固定下来；当需要启动或接手任务时，系统先检查认证、trust、hook 配置，再把任务投递到对应 seat，避免单个终端会话失联后上下文丢失。最直接的成熟度信号是它有连续三天的 release，v0.5.17 还专门修了 Bun 的安装依赖问题，README 也给出 `rig setup --dry-run`、`rig ps`、`rig queue list` 这类可操作命令，说明不是概念稿。新在系统组织层：把多 agent 协作做成 persistent team，而不是脚本串联。",
+    "verdict": "值得看项目结构，适合关注 agent 编排的人",
+    "why_now": "作者报告最近 release：v0.5.17（2026-09-27），连续高频发版",
+    "key_points": [
+     "最强证据是 release 连续更新和可执行安装流程",
+     "没证明多 agent 协作一定更强，效果依赖任务分解和权限配置",
+     "复现门槛中等，需要 tmux、Node、Codex 认证"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[YAML team] --> B[daemon state]\nB --> C[seat roles]\nC --> D[tmux sessions]\nD --> E[task queue]\nE --> F[owner worker]\nE --> G[checker worker]\nG --> H[review result]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:stablyai/orca",
+   "kind": "project",
+   "title": "stablyai/orca",
+   "url": "https://github.com/stablyai/orca",
+   "summary": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "stablyai",
+   "hf_upvotes": 0,
+   "stars": 79452,
+   "stars_today": 6503,
+   "forks": 5201,
+   "language": "TypeScript",
+   "code_url": "https://github.com/stablyai/orca",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multi-agent",
+    "orchestration"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "面向并行agent编排的ADE，热度高且实用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "把多个 CLI agent 放进同一 IDE，支持并行 worktree 与手机监控，最近发到 v1.4.215",
+    "why": "Agent 产品化和多工作流编排很适合面试谈系统设计",
+    "architecture": "Orca 解决的是真实痛点：多个 agent 同时改代码时，最先坏掉的不是模型，而是文件冲突、上下文切换和人工盯盘。它的核心组织方式是“每个 agent 一个 isolated worktree”，再用统一界面把终端、PR、issue、mobile notification 和 review 串起来；检测到任务完成、diff 可审、profile 冲突这类状态变化时，系统会主动提醒或让用户在 JSON/SQLite 之间选一个，而不是甩出命令行让人自己恢复。最直接的成熟度信号是它有桌面、移动端、CLI 三端，支持任意 CLI agent，且 release 极密集，最近版本还在修 profile 冲突这种真实故障路径。新在系统组织层：把 agent 协作、审阅、远程接管做成一个持续运行的工作台，而不是单次自动化脚本。",
+    "verdict": "适合看它如何把 agent 工作流产品化",
+    "why_now": "作者报告最近 release：v1.4.215（2026-09-27），前两天也连续发版",
+    "key_points": [
+     "最强证据是多端形态和高频 release",
+     "没证明对复杂编码任务的成功率一定优于人工",
+     "复现难度较高，偏产品体验而非算法实现"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph LR\nA[Prompt] --> B[Parallel worktrees]\nB --> C[Agent A]\nB --> D[Agent B]\nC --> E[Diff review]\nD --> E\nE --> F[Merge winner]\nF --> G[Notify mobile]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:paperclipai/paperclip",
+   "kind": "project",
+   "title": "paperclipai/paperclip",
+   "url": "https://github.com/paperclipai/paperclip",
+   "summary": "The open-source app everyone uses to manage agents at work",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "paperclipai",
+   "hf_upvotes": 0,
+   "stars": 89393,
+   "stars_today": 2527,
+   "forks": 15617,
+   "language": "TypeScript",
+   "code_url": "https://github.com/paperclipai/paperclip",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "workflow",
+    "mcp"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "高热度 agent 管理工具，贴近工程落地",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "The open-source app everyone uses to manage agents at work",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:makazhanalpamys/soup",
+   "kind": "project",
+   "title": "MakazhanAlpamys/Soup",
+   "url": "https://github.com/MakazhanAlpamys/Soup",
+   "summary": "Fine-tune LLMs from one YAML. Layer streaming trains an 8B model on a 4 GB laptop GPU.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "MakazhanAlpamys",
+   "hf_upvotes": 0,
+   "stars": 7394,
+   "stars_today": 4232,
+   "forks": 1179,
+   "language": "Python",
+   "code_url": "https://github.com/MakazhanAlpamys/Soup",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "finetune",
+    "rl"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "本地可训练微调框架，有可迁移价值",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "Fine-tune LLMs from one YAML",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Layer streaming trains an 8B model on a 4 GB laptop GPU."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:mobile-next/mobile-mcp",
+   "kind": "project",
+   "title": "mobile-next/mobile-mcp",
+   "url": "https://github.com/mobile-next/mobile-mcp",
+   "summary": "Model Context Protocol Server for Mobile Automation and Scraping (iOS, Android, Emulators, Simulators and Real Devices)",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "mobile-next",
+   "hf_upvotes": 0,
+   "stars": 7837,
+   "stars_today": 573,
+   "forks": 667,
+   "language": "TypeScript",
+   "code_url": "https://github.com/mobile-next/mobile-mcp",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "mcp",
+    "agent",
+    "automation"
+   ],
+   "core_score": 6.0,
+   "wide_score": 6.0,
+   "score_reason": "MCP 服务器，适合 agent 工具调用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Model Context Protocol Server for Mobile Automation and Scraping (iOS, Android, Emulators, Simulators and Real Devices)",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:heygen-com/hyperframes",
+   "kind": "project",
+   "title": "heygen-com/hyperframes",
+   "url": "https://github.com/heygen-com/hyperframes",
+   "summary": "Write HTML. Render video. Built for agents.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "heygen-com",
+   "hf_upvotes": 0,
+   "stars": 53604,
+   "stars_today": 306,
+   "forks": 4887,
+   "language": "TypeScript",
+   "code_url": "https://github.com/heygen-com/hyperframes",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "video",
+    "inference"
+   ],
+   "core_score": 3.0,
+   "wide_score": 7.0,
+   "score_reason": "面向 agent 的视频编排，但偏应用",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Write HTML",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Render video",
+     "Built for agents."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:lordog/dive-into-llms",
+   "kind": "project",
+   "title": "Lordog/dive-into-llms",
+   "url": "https://github.com/Lordog/dive-into-llms",
+   "summary": "《动手学大模型Dive into LLMs》系列编程实践教程",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Lordog",
+   "hf_upvotes": 0,
+   "stars": 55343,
+   "stars_today": 5194,
+   "forks": 6603,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/Lordog/dive-into-llms",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "llm",
+    "notebook"
+   ],
+   "core_score": 4.0,
+   "wide_score": 6.0,
+   "score_reason": "入门实践教程，适合理解但非前沿",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "《动手学大模型Dive into LLMs》系列编程实践教程",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:vercel-labs/json-render",
+   "kind": "project",
+   "title": "vercel-labs/json-render",
+   "url": "https://github.com/vercel-labs/json-render",
+   "summary": "The Generative UI framework",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "vercel-labs",
+   "hf_upvotes": 0,
+   "stars": 18334,
+   "stars_today": 1561,
+   "forks": 971,
+   "language": "TypeScript",
+   "code_url": "https://github.com/vercel-labs/json-render",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "ui",
+    "rendering",
+    "genui"
+   ],
+   "core_score": 3.0,
+   "wide_score": 6.0,
+   "score_reason": "生成式UI渲染框架，虽热但与核心方向距离较远",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "The Generative UI framework",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:microsoft/ml-for-beginners",
+   "kind": "project",
+   "title": "microsoft/ML-For-Beginners",
+   "url": "https://github.com/microsoft/ML-For-Beginners",
+   "summary": "12 weeks, 26 lessons, 52 quizzes, classic Machine Learning for all",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 91050,
+   "stars_today": 322,
+   "forks": 22474,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/microsoft/ML-For-Beginners",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "ml",
+    "intro",
+    "education"
+   ],
+   "core_score": 2.0,
+   "wide_score": 6.0,
+   "score_reason": "入门ML教程，研二价值偏低",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "12周26课教经典机器学习，配52个测验和多语言翻译",
+    "why": "适合补 ML 基础，面试前快速补课",
+    "architecture": "它解决的不是“学不会模型”，而是初学者常见的断裂：看完概念仍不会把数据清洗、特征、训练、评估串起来。现有零散教程要么只讲 API，要么只讲理论，学完很难形成可执行流程。这个仓库的关键改法是把课程组织成固定学习闭环：每课前测验→讲解→动手项目→后测验，让“输入数据到可验证结果”的路径始终闭合；多语言翻译和可本地克隆则把地区和下载成本这类失败点直接切掉。最直接的证据是作者报告 12 weeks、26 lessons、52 quizzes，并且每课都带 solution 和 assignment，说明它不是只放幻灯片，而是按练习驱动设计。新意主要在系统组织层，不在算法层：核心价值是把经典 ML 教成可持续自学的课程系统。",
+    "verdict": "看速览即可；适合补基础，不必精读",
+    "why_now": "原文未明确",
+    "key_points": [
+     "作者报告 12 weeks、26 lessons、52 quizzes",
+     "多语言翻译和 sparse checkout 降低入门门槛",
+     "没证明高阶建模能力，偏基础教学"
+    ],
+    "prereqs": [
+     {
+      "name": "scikit-learn",
+      "status": "unlisted"
+     },
+     {
+      "name": "train test split",
+      "status": "unlisted"
+     },
+     {
+      "name": "model evaluation",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+     "fast.ai"
+    ],
+    "mermaid": "graph TD\nA[Data] --> B[Lesson]\nB --> C[Quiz]\nC --> D[Project]\nD --> E[Solution]\nE --> F[Next lesson]",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
