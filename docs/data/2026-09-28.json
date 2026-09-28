@@ -1,0 +1,1202 @@
+{
+ "date": "2026-09-28",
+ "stats": {
+  "collected": 426,
+  "filtered": 117,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 6 calls, 17095 in / 6349 out; gpt-5.4-mini: 6 calls, 44495 in / 8728 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.26333",
+   "kind": "paper",
+   "title": "Disaggregated Quantization: Specializing LLM Prefill and Decode",
+   "url": "https://arxiv.org/abs/2609.26333",
+   "summary": "Prefill and decode reward different approaches to quantization: low-precision arithmetic accelerates prompt processing, while compact weights reduce memory traffic during generation. We propose \"disaggregated quantization\" (DQ), which specializes computation formats, weights and storage placement to both of these phases. On Qwen 3 and Gemma 3, removing activation quantization specifically on decode improves accuracy on decode-heavy tasks without increasing inference cost. Training separate compute-native prefill weights accelerates prompt processing relative to weight-only inference while matching or exceeding its accuracy at 2-3-bit decode on both decode-heavy and prefill-heavy tasks. With released Qwen3.8-27B GGUF decoders, training an NVFP4 prefiller improves 1-bit accuracy by 32.5 points on MMLU-Pro and 35.3 on MMMU-Pro without modifying the decode checkpoint. To accommodate the additional checkpoint on a single device, offloaded disaggregated prefill (ODP) streams its weights from SSD, amortizing loading over prompt length. On the same 27B model, ODP delivers a 1.78x time-to-first-token speedup over the weight-only baseline at 8K prompt length in llama.cpp. We evaluate accuracy under disaggregated serving in vLLM and further validate shared-weight format disaggregation through post-training quantization on models up to 2.8T parameters.",
+   "source": "hf_papers",
+   "published": "2026-09-22",
+   "authors": [
+    "Andrei Panferov",
+    "Maximilian Kleinegger",
+    "Sweta Priyadarshi",
+    "Tijmen Blankevoort",
+    "Dan Alistarh"
+   ],
+   "org": "",
+   "hf_upvotes": 41,
+   "stars": 6,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/IST-DASLab/disaggregated-quantization",
+   "pdf_url": "https://arxiv.org/pdf/2609.26333",
+   "categories": [],
+   "keywords": [
+    "quantization",
+    "inference",
+    "llm"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "分解prefill/decode量化，强工程可迁移",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "DQ把 prefill 和 decode 分开量化；8K 下 ODP 让 TTFT 快 1.78x",
+    "why": "做推理/量化方向面试很对口",
+    "architecture": "反直觉点是：同一个 decoder-only LLM，prefill 和 decode 其实不是同一种负载。prefill 更像算力受限，decode 更像带宽受限；如果硬套同一套量化，常见结果是要么损精度，要么浪费推理成本。作者的核心改动是把“量化”从一个全局选择拆成按阶段专门化：prefill 可用 compute-native 的低精度 GEMM 与独立权重，decode 则保留更适合生成的权重/激活表示，甚至只换 prefill checkpoint 不动 decode checkpoint。这样阻断的是“同一表示同时满足两阶段”的失败。最直接的证据是：对 Qwen3.8-27B，NVFP4 prefiller 在不改 decode checkpoint 的情况下，把 1-bit 准确率在 MMLU-Pro 提升 32.5 点、MMMU-Pro 提升 35.3 点；ODP 在 8K prompt 下把 TTFT 提升 1.78x。新意主要在系统组织层：不是单点量化技巧，而是把权重、格式、存储位置按 prefill/decode 解耦。",
+    "verdict": "值得精读，推理系统和量化都很有料",
+    "why_now": "",
+    "key_points": [
+     "最强证据：1-bit 准确率大幅回升",
+     "没证明通用最优；长上下文更占优",
+     "复现要碰推理框架和权重格式"
+    ],
+    "prereqs": [
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "vLLM",
+      "status": "unknown"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "SmoothQuant",
+     "AWQ"
+    ],
+    "mermaid": "graph LR\nA[Prompt] --> B[Prefill]\nB --> C[Low bit compute]\nB --> D[Prefiller weights]\nC --> E[KV cache]\nD --> E\nE --> F[Decode]\nF --> G[Low bit decode weights]\nG --> H[Answer]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.31590",
+   "kind": "paper",
+   "title": "AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLMs",
+   "url": "https://arxiv.org/abs/2609.31590",
+   "summary": "Existing multi-agent benchmarks primarily test in competitive settings, short-horizon interactions under 20 steps, or simply aggregate individual performance, failing to isolate and highlight genuine collaboration capabilities of LLM-based agents. We introduce AgentWorld, a benchmark of 100 human-annotated tasks (with 100 augmented variants) for evaluating long-horizon, multi-agent collaboration. Tasks span 50+ interaction rounds across a rich MMORPG sandbox and require 3-20 agents with asymmetric roles and abilities to coordinate through communication, joint planning, and resource sharing under a blackbox setting where each agent acts independently without access to others' internal states. To quantify collaboration effectiveness in addition to conventional binary task success, we propose Causal Collaboration Effectiveness (CCE), a graph-based metric that traces causal dependencies between agent actions and measures what fraction of a team's effort actually contributed to the outcome. Experiments with Gemini 3 Flash, Claude Haiku 4.5, GPT-5 Mini, and DeepSeek R1-70B show that even the best model achieves only 52.0% task success, with systematic failure modes including communication breakdowns, role confusion, and inability to maintain shared plans across rounds. AgentWorld is fully open-source.",
+   "source": "hf_papers",
+   "published": "2026-09-25",
+   "authors": [
+    "Raphael Shu",
+    "Yusen Zhang",
+    "Young Min Cho",
+    "Jin Mo Yang",
+    "Yuan Yuan",
+    "Wenliang Zheng"
+   ],
+   "org": "",
+   "hf_upvotes": 6,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.31590",
+   "categories": [],
+   "keywords": [
+    "benchmark",
+    "multi-agent",
+    "collaboration"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "长时多智能体协作基准，和Agent评测强",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "AgentWorld用 50+ 轮 MMORPG 协作任务测多智能体；最好模型也只 52% 成功",
+    "why": "做 agent 评测和多智能体很相关",
+    "architecture": "反直觉点是：很多 multi-agent benchmark 看起来在测“协作”，实际只是在测短回合对抗、单体能力加总，或者被低层操作控制拖累。作者把问题改成黑箱长协作：3–20 个 agent 在 25–55 轮里靠聊天、分工、资源共享完成任务，且用高层 API 把导航、采集、合成这类细控制从评分里剥离。关键概念改变是把“能不能完成任务”之外，再加一个 CCE，去追踪动作之间的因果依赖，判断团队里多少努力真的进了结果；这阻断了“一个人做很多动作但不贡献协作”的假阳性。最强证据是四个前沿模型里最好也只有 52.0% success，CCE 只有 0.320，且失败模式集中在 communication breakdown、role confusion、shared plan 维持不住。新意在实证层和评测组织层：不是新算法，而是把 long-horizon collaboration 这件事首次测得更像协作本身。",
+    "verdict": "值得看，做 agent benchmark 很有参考价值",
+    "why_now": "原文未明确",
+    "key_points": [
+     "最强证据：best model 仅 52% 成功",
+     "CCE 只量到 0.320，暴露假协作",
+     "复现难点是环境和人标任务"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MultiAgentBench",
+     "Collab-Overcooked"
+    ],
+    "mermaid": "graph TD\nA[Agents] --> B[Blackbox chat]\nB --> C[Shared plan]\nB --> D[Resource sharing]\nC --> E[Task outcome]\nD --> E\nE --> F[CCE graph]\nF --> G[Collab score]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.29050",
+   "kind": "paper",
+   "title": "SLCA-GRPO: Resolving Cross-Segment Credit Misattribution in Tool-Calling RL",
+   "url": "https://arxiv.org/abs/2609.29050",
+   "summary": "Tool-calling agents produce heterogeneous outputs, interleaving structured tool invocations with user-facing natural language summaries. This output heterogeneity presents a structural failure mode in standard on-policy Reinforcement Learning (RL): algorithms like GRPO indiscriminately broadcast a homogeneous trajectory-level scalar advantage to all tokens. Consequently, gradient noise from summary generation leaks into tool-decision tokens, causing cross-segment credit misattribution and brittle optimization. In this work, we propose SLCA-GRPO, a framework incorporating Segment-Locked Credit Assignment (SLCA). To enable scalable exploration without costly real APIs and stable training, we first construct the Schema-Guided LLM Simulator (SGLS) as foundational training infrastructure. Building on this, SLCA decouples advantage estimation at the structural segment level within a single group of rollouts, without requiring additional rollouts from intermediate states. Supported by Hierarchical Rewards (HierR), SLCA routes execution advantages to tool tokens and preference advantages to summary tokens, eliminating advantage contamination (the dominant cross-segment credit misattribution channel) within each policy update. On a 7B backbone, SLCA-GRPO accelerates convergence and outperforms standard GRPO, ToolPO, and RLTR by +2.53 pp on in-domain evaluation, +1.36 pp on the Berkeley Function-Calling Leaderboard (BFCL), and +9.15 pp on τ^2-Bench under the same training budgets, achieving higher accuracy with reduced tool redundancy and costs.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Yan Zhan",
+    "Shaobo Liu",
+    "Qiunan Liu",
+    "Yuanjun Shi",
+    "Siqi Xu",
+    "WeiYi Hou"
+   ],
+   "org": "",
+   "hf_upvotes": 5,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/SLCA-GRPO/SLCA-GRPO",
+   "pdf_url": "https://arxiv.org/pdf/2609.29050",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "grpo",
+    "tool-calling"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "工具调用RL：段内归因修正，工程价值高",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "SLCA-GRPO把 tool 和 summary 分开分配 credit；7B 上 BFCL 提升 1.36pp",
+    "why": "工具调用 RL 和 GRPO 面试点很新",
+    "architecture": "反直觉点是：tool-calling 轨迹里，工具调用和自然语言总结是两种不同段落，但标准 GRPO 会把同一个 trajectory advantage 广播给所有 token。结果是 summary 的好坏会污染 tool token 的更新，出现“工具做对了但总结错了被罚、工具做错了但总结对了被奖”的 credit misattribution。作者的关键改变是 SLCA：先按结构把 rollout 切成 execution 段和 articulation 段，再把各自的 advantage 只路由给对应 token，直接切断 summary→tool 的 advantage 传播；SGLS 负责生成 schema 约束的模拟轨迹，HierR 给两段提供不同粒度的 reward。最直接的证据是对比 GRPO、ToolPO、RLTR，7B backbone 在 in-domain、BFCL、τ²-Bench 都更高，其中 BFCL 提升 1.36pp，且作者做了梯度诊断显示不稳定主要来自 advantage contamination。新意在算法结构层：不是改 PPO 外壳，而是改同一条 rollout 内的 credit 归因方式。",
+    "verdict": "值得精读，适合补 tool-RL 机制理解",
+    "why_now": "",
+    "key_points": [
+     "最强证据：同预算下多基准都涨",
+     "没解决时间维 credit 问题本身",
+     "需要 schema simulator，搭建成本高"
+    ],
+    "prereqs": [
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "tool-calling",
+      "status": "unlisted"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "GRPO",
+     "ToolPO"
+    ],
+    "mermaid": "graph TD\nA[Rollout] --> B[Tool segment]\nA --> C[Summary segment]\nB --> D[Tool advantage]\nC --> E[Summary advantage]\nD --> F[Tool tokens]\nE --> G[Summary tokens]\nF --> H[Update]\nG --> H",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.04355",
+   "kind": "paper",
+   "title": "VLA-Precision: Asymmetric Co-Bootstrapping for Efficient Real-World Online RL of Vision-Language-Action Models",
+   "url": "https://arxiv.org/abs/2609.04355",
+   "summary": "Pretrained vision-language-action (VLA) models enable broad manipulation but remain unreliable in tasks demanding precision and repeatability. Applying real-world online reinforcement learning (RL) to VLA post-training enables autonomous trial-and-error improvement beyond demonstrations alone, but exposes two bottlenecks: 1) unreliable value signals can induce policy drift; 2) large-VLA overhead constrains throughput and sample efficiency. To address these challenges, we present VLA-Precision, an efficient real-world online RL framework featuring the Asymmetric Co-Bootstrapping (ACoB) algorithm and the ACoB-Stream architecture. Specifically, ACoB establishes asymmetric co-bootstrapping across timescales: early intervention-guided behavioral learning rapidly improves policy performance while enhancing online experience quality. As autonomous experience accumulates, global return propagation and local preference ranking progressively calibrate value estimates, yielding relative action advantages for reference-regularized policy improvement while suppressing drift. To enable ACoB on large VLAs, we develop ACoB-Stream, a closed-loop experience--policy architecture that establishes invariant-state decoupling and on-demand streaming as design principles, delivering up to 10.9times improvements in throughput and computational efficiency. Extensive evaluations on nine high-precision chemistry tasks across four categories and four robot embodiments show that VLA-Precision achieves 98.3\\% mean success rate in 45.8 min/task, with 27.6 s episodes running at 1.2times and 1.8times the speeds of VLA and RL baselines. Resources are available at https://vla-precision.github.io.",
+   "source": "hf_papers",
+   "published": "2026-09-18",
+   "authors": [
+    "Chenyu Su",
+    "Zhaolong Shen",
+    "Yuan Qian",
+    "Chen Qian",
+    "Rui Zhang",
+    "Feng Yan"
+   ],
+   "org": "",
+   "hf_upvotes": 2,
+   "stars": 81,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/scy-v/VLA-Precision",
+   "pdf_url": "https://arxiv.org/pdf/2609.04355",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "vla",
+    "online-rl"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "VLA在线RL+ACoB，强相关且代码有",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "ACoB+ACoB-Stream把VLA在线RL提到98.3%成功率，吞吐最高10.9×",
+    "why": "适合看VLA后训练和机器人在线RL怎么做稳定",
+    "architecture": "反直觉点在于：VLA 已经会做任务，但一上真实机器人做 online RL，越学越容易漂，原因不是只缺奖励，而是 value 估计不稳且大模型回放/同步太慢。作者把关键改动拆成两层：ACoB 不是直接追最优 policy，而是先用 intervention-guided behavioral learning 快速修正行为、顺带把在线经验质量抬高；随后再用 global return propagation 和 local preference ranking 去校准 value，把“相对动作优势”喂给 reference-regularized policy improvement，从机制上阻断 value error 传染成 policy drift。最直接的证据是九个高精度化学操作任务、四种机器人上的总结果：98.3% mean success rate，且 27.6s episode 的速度达到 VLA 和 RL baseline 的 1.2×、1.8×。新意不在单个 trick，而在算法层 + 系统层一起设计：把在线 RL 的稳定性和大 VLA 的吞吐一起解决。",
+    "verdict": "值得精读：算法和系统两条瓶颈同时被处理",
+    "why_now": "",
+    "key_points": [
+     "最强证据：9 任务 4 机器人，98.3% 成功率",
+     "没证明通用操控；偏高精度化学",
+     "复现难点在真实机器人在线闭环"
+    ],
+    "prereqs": [
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "online RL",
+      "status": "unlisted"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "policy drift",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "DPO"
+    ],
+    "mermaid": "graph LR\nA[Intervention actions] --> B[Rapid behavior learning]\nB --> C[Better online data]\nC --> D[Value calibration]\nD --> E[Relative action advantage]\nE --> F[Policy improvement]\nF --> G[Less drift]\nH[ACoB Stream] --> I[Decoupled state]\nI --> J[On demand streaming]\nJ --> K[Higher throughput]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.31093",
+   "kind": "paper",
+   "title": "Block Sparse Attention with Log-Linear Complexity",
+   "url": "https://arxiv.org/abs/2609.31093",
+   "summary": "Scaling language models to long contexts is limited by the quadratic cost of self-attention. Block sparse attention offers an efficient alternative, but selecting the retained blocks remains a bottleneck. Conventional block selection requires scoring all query-block pairs and therefore remains quadratic in sequence length. To address this issue, we propose PISA, a block-sparse attention mechanism that employs a pyramid Top-K selection strategy. The main idea is to gradually narrow down the candidates across different levels, making it more efficient to find the most relevant keys. Specifically, we construct a coarse-to-fine hierarchy of keys and perform selection from the coarsest level. At each level, LogSumExp scoring is applied to a bounded candidate set to select candidates for the next finer level, continuing until the finest level is reached. Through pooling, we construct O(log N) levels of keys, yielding an overall complexity of O(Nlog N), where N denotes the sequence length. We develop hardware-aware Triton kernels for both training and inference, fusing hierarchical routing and LogSumExp scoring without materializing the query-key score matrix. We further evaluate our method on language modeling tasks. Compared with the baseline, our method achieves comparable performance on benchmarks such as commonsense reasoning while delivering better results on retrieval tasks.",
+   "source": "hf_papers",
+   "published": "2026-09-25",
+   "authors": [
+    "Bohao Tang",
+    "Zhen Qin",
+    "Yuqi Pan",
+    "Zheng Li",
+    "Pengfei Liu"
+   ],
+   "org": "",
+   "hf_upvotes": 19,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.31093",
+   "categories": [],
+   "keywords": [
+    "attention",
+    "long-context",
+    "sparse-attention"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "块稀疏+高效选择，长上下文相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PISA用O(log N)层级Top-K做块稀疏注意力，复杂度降到O(Nlog N)",
+    "why": "长上下文和稀疏注意力面试都常问",
+    "architecture": "反直觉点是：块稀疏 attention 本来想省算力，但“先给每个 query 给所有 block 打分再选 Top-K”又把复杂度拉回 O(N²)。作者的关键改变是把选块过程也做成 coarse-to-fine：先在更粗粒度的 key 层里筛，再逐层细化，每层只对受限候选做 LogSumExp scoring，所以阻断的失败是“选择代价本身吃掉稀疏收益”。最直接的支持来自语言建模和 retrieval 任务：在保持 commonsense reasoning 等 benchmark 接近 baseline 的同时，retrieval 表现更好，说明层级筛选没有把长程匹配能力彻底破坏。新意主要是组件层：不是换一种 attention 目标，而是重做 block selection 的计算图和 Triton kernel。",
+    "verdict": "值得看机制，但更偏长上下文系统优化",
+    "why_now": "",
+    "key_points": [
+     "最强证据：保持通用 LM 表现，检索更好",
+     "没证明可无损替代 dense attention",
+     "复现依赖硬件友好的 Triton 实现"
+    ],
+    "prereqs": [
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "sparse attention",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "Triton",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Longformer",
+     "BigBird"
+    ],
+    "mermaid": "graph TD\nA[Query] --> B[Coarse keys]\nB --> C[Top K prune]\nC --> D[Finer keys]\nD --> E[Top K prune]\nE --> F[Final blocks]\nF --> G[Attention output]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.18703",
+   "kind": "paper",
+   "title": "RayOrch: Programming and Executing Lineage-Controlled Multi-Grain Dataflows for Foundation-Model Data Preparation",
+   "url": "https://arxiv.org/abs/2609.18703",
+   "summary": "Preparing high quality training data for foundation models requires scalable pipelines that transform heterogeneous documents and videos into structured records. Such pipelines expand each parent item into an ordered and input dependent sequence of children, whose counts may be long tailed. GPUs should batch children across parents while preserving parent relationships, child order, completion status, and result routing. Existing systems either hide parallelism behind coarse grained jobs or expose flat records that force applications to manage lineage and regrouping. We present RayOrch, a programming model and distributed execution engine that preserves parent child relations throughout execution. Programs declare ordered variable cardinality expansions and matching gathers. The compiler validates each pair, while the runtime records child membership, immediate parents, immutable ordinals, and terminal states. Per Call FIFO Ready Queues batch ready children across parents. Gathers reconstruct results from declared membership and ordinals rather than batch boundaries or completion order. Parents can advance as soon as all required children become terminal. Typed parent scoped failures suppress undispatched siblings of the failed parent while allowing unrelated parents to continue. On NVIDIA H20 GPUs, RayOrch achieves 15.14 times speedup when scaling MinerU from 4 to 64 GPUs and 7.82 times speedup when scaling a video pipeline from 8 to 64 GPUs. It reduces end to end time by 13.1 percent versus Ray Data and 29.0 percent versus Daft on MinerU, and by 16.0 percent versus Ray Data on Docling. Code available at https://github.com/OpenDCAI/RayOrch .",
+   "source": "hf_papers",
+   "published": "2026-09-16",
+   "authors": [
+    "Xiaochen Ma",
+    "Zimo Meng",
+    "Junzhu Liang",
+    "Youhe Jiang",
+    "Yue Cheng",
+    "Hao Liang"
+   ],
+   "org": "",
+   "hf_upvotes": 43,
+   "stars": 16,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/OpenDCAI/RayOrch",
+   "pdf_url": "https://arxiv.org/pdf/2609.18703",
+   "categories": [],
+   "keywords": [
+    "data-pipeline",
+    "distributed",
+    "foundation-model"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "数据准备系统：lineage受控执行",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "RayOrch给数据流水线保留父子线索，MinerU 扩到64卡提速15.14×",
+    "why": "很适合看 foundation-model 数据管线的系统设计",
+    "architecture": "反直觉点在于：数据准备里真正想并行的是 page、clip、frame 这些子项，但一旦把它们摊平成 flat records，系统就不知道每个结果该回哪个父项、什么时候能提前结束、失败该隔离到哪一层，最后又得补 group-by 和 reorder barrier。作者的关键改变是把“父子关系”提升成 runtime-owned structural lineage：每个 expansion 都记录 concrete child set、immediate parent、immutable ordinal 和 terminal state，调度时仍可跨父项混 batch，但 gather 直接按声明的 membership 和 ordinal 还原，阻断“物理 batch 破坏逻辑结构”的失败。最直接的证据是 MinerU 和视频 pipeline 的扩展结果：4→64 GPU 时分别有 15.14× 和 7.82× processing-time speedup，且 failure injection 里能抑制 6,241 个 sibling 计算进入 UDF。新意在系统组织层，不是单个算子。",
+    "verdict": "值得精读：是数据管线里少见的结构化运行时",
+    "why_now": "",
+    "key_points": [
+     "最强证据：64 GPU 扩展和故障注入都过",
+     "没证明适合所有 DAG；限定 finite acyclic trees",
+     "复现需要改程序模型和运行时"
+    ],
+    "prereqs": [
+     {
+      "name": "distributed systems",
+      "status": "unlisted"
+     },
+     {
+      "name": "data pipeline",
+      "status": "unlisted"
+     },
+     {
+      "name": "Ray",
+      "status": "unlisted"
+     },
+     {
+      "name": "lineage",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Ray Data",
+     "Dask"
+    ],
+    "mermaid": "graph TD\nA[Parent item] --> B[Ordered expansion]\nB --> C[Ready queues]\nC --> D[Cross parent batching]\nD --> E[Runtime lineage]\nE --> F[Ordered gather]\nF --> G[Parent result]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.29167",
+   "kind": "paper",
+   "title": "IndicBankBench: Evaluating Safety and Reliability of Language Model Assistants in Indian Retail Banking",
+   "url": "https://arxiv.org/abs/2609.29167",
+   "summary": "Banking assistants must use account-specific information to answer requests and, in many cases, take actions through tools. Evaluating only the final response misses important errors. An assistant may ask for information it already has, rely on stale context, select the wrong account, or write an invalid value after stating the correct one. We introduce IndicBankBench, a 799-case benchmark for Indian retail banking spanning five operational domains, a capability/refusal domain, and twenty primary axes. Cases are evaluated at four stages: safety, action and tool use, response adequacy, and advisory quality. Tool use and most safety checks are deterministic. A narrow resolver handles only ambiguous confirmation-before-write cases, while a separate LLM judge evaluates semantic response adequacy. We run every case three times and report strict pass^3, which requires success on all trials. Across the eleven evaluated models, strict reliability ranges from 43.7% to 58.2%, whereas at-least-once success ranges from 60% to 74%. This gap shows that at-least-once success can overstate dependable banking behavior. The case-level diagnostics also distinguish systems that ask unnecessary questions from those that act but fail to reconcile customer context or fully resolve the request. We release the cases, mock environment, and evaluation harness.",
+   "source": "hf_papers",
+   "published": "2026-09-24",
+   "authors": [
+    "Suvradip Paul",
+    "Chandra Bhushan",
+    "Harsh Sharma",
+    "Nitin Kukreja",
+    "Yatharth Dedhia",
+    "Keyur Doshi"
+   ],
+   "org": "",
+   "hf_upvotes": 3,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/npci/IndicBankBench",
+   "pdf_url": "https://arxiv.org/pdf/2609.29167",
+   "categories": [],
+   "keywords": [
+    "safety",
+    "tool-use",
+    "benchmark"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "带工具链分阶段评测，贴近LLM评测实战",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用四阶段判定抓出银行助理的 43.7%–58.2% 可靠性",
+    "why": "做 agent 评测/金融工具调用很对口",
+    "architecture": "反直觉点在于：银行助手“答对一次”不等于能可靠办成事。它可能先给出正确余额，却在写入时选错账户，或因为上下文没理清而反复追问；只看最终回复或一次成功率，会把“偶尔碰对”和“稳定完成”混在一起。作者的关键改变是把一次银行交互拆成 safety、action and tool use、response adequacy、advisory quality 四道闸，并把大多数安全和工具检查做成 deterministic，只在“确认后写入”这类歧义处用窄 resolver，语义答复才交给 LLM judge。这样每个失败都会被定位到具体阶段，阻断“总分高但过程错”的掩盖效应。最直接的证据是三次重复评测：strict pass^3 只有 43.7%–58.2%，而 at-least-once success 有 60%–74%，证明一次跑通不能代表可靠性。新意主要在实证层：不是发明新模型，而是把评测协议改成可诊断、可复现的银行交互基准。",
+    "verdict": "看速览就能判断，适合做评测题材参考",
+    "why_now": "",
+    "key_points": [
+     "strict pass^3 远低于 at-least-once",
+     "能区分问错问题和写错动作",
+     "复现依赖 mock 环境和判定器"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     },
+     {
+      "name": "LLM-as-judge",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "BFCL",
+     "AgentBench"
+    ],
+    "mermaid": "graph TD\nA[银行多轮请求] --> B[安全检查]\nB -->|拒绝| X[失败定位]\nB --> C[工具与动作]\nC -->|写入或查询| D[语义答复]\nD --> E[建议质量]\nE --> O[最终通过]\nC -->|错账号或无效值| X",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.30837",
+   "kind": "paper",
+   "title": "MOPD-Router: Rethinking Teacher Routing in Multi-Teacher On-Policy Distillation",
+   "url": "https://arxiv.org/abs/2609.30837",
+   "summary": "Multi-teacher on-policy distillation (MOPD) integrates specialized capabilities into a single student, but existing practice typically hard-routes each prompt to a domain-matched teacher for the entire rollout. This dependence on prompt-level domain labels restricts using unlabeled training mixtures and leaves complementary signals from other teachers unused. We introduce MOPD-Router, a framework that routes supervision over the full teacher pool at each token, without domain labels or training a separate routing model. Its plug-in interface supports different metrics for selecting and weighting teacher-specific OPD signals. Within this interface, we propose ExpertAlign, which scores each teacher by whether its correction to the student at the current token expresses the specialization that teacher acquired during post-training, and compare it against two reference metrics built on teacher confidence (Entropy) and teacher-student discrepancy (Novelty). Experiments on unlabeled and domain-labeled training mixtures under strong-to-weak and same-size distillation scenarios show that ExpertAlign achieves the strongest overall performance in all four settings. On unlabeled data, it improves the overall score by 5.88 (+12.3%) points over Mean aggregation; on domain-labeled data, it outperforms standard MOPD by 3.95 (+7.8%) points without using available domain labels. These results demonstrate token-level routing can exploit cross-domain complementary supervision, and reduce exclusive reliance on prompt-level domain assignment. Code is available at: https://github.com/TURLEing/MOPD-Router.",
+   "source": "hf_papers",
+   "published": "2026-09-25",
+   "authors": [
+    "Tianze Xu",
+    "Yanzhao Zheng",
+    "Zhentao Zhang",
+    "Yuanqiang Yu",
+    "Chao Ma",
+    "Jihuai Zhu"
+   ],
+   "org": "",
+   "hf_upvotes": 2,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/TURLEing/MOPD-Router",
+   "pdf_url": "https://arxiv.org/pdf/2609.30837",
+   "categories": [],
+   "keywords": [
+    "distillation",
+    "on-policy",
+    "routing"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "多教师on-policy路由，贴近后训练",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 token 级路由把多教师 OPD 提升 5.88 分",
+    "why": "和 RLHF 后训练、蒸馏、路由设计直接相关",
+    "architecture": "现有 MOPD 的悖论是：你有多个专长教师，却把一个 prompt 整段硬分给单一 domain teacher，结果既依赖标签，又浪费其他教师在局部 token 上的互补信号。作者的关键改变是把路由粒度从 prompt 提到 token：student 按当前 rollout 逐 token 向全教师池取监督，不再训练单独 routing model，也不要求 domain labels。MOPD-Router 本身只是一个插槽式框架，核心在“每个 token 用什么 metric 选教师并加权”；其中 ExpertAlign 不看教师置信度或师生差异本身，而看“这个教师此刻给出的修正，是否还体现了它后训练里学到的专长方向”，从而阻断把泛化噪声当成有效监督。最强证据是无标签混合数据上较 Mean aggregation 提升 5.88 分、在有标签数据上还比标准 MOPD 高 3.95 分且不使用标签。新意主要在组件层和系统组织层：把 teacher assignment 从静态域分配改成 token 级动态组织。",
+    "verdict": "值得精读，核心是路由粒度和打分准则",
+    "why_now": "",
+    "key_points": [
+     "无标签混合数据也能做多教师蒸馏",
+     "ExpertAlign 四种设置都最好",
+     "没证明通用到所有 OPD 配方"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "scaling laws",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "On-Policy Distillation",
+     "Multi-Teacher Distillation"
+    ],
+    "mermaid": "graph TD\nA[Student rollout] --> B[Per token]\nB --> C[Full teacher pool]\nC --> D[Metric scores]\nD --> E[Weighted OPD signal]\nE --> F[Update student]\nD --> G[ExpertAlign]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:microsoft/skillopt",
+   "kind": "project",
+   "title": "microsoft/SkillOpt",
+   "url": "https://github.com/microsoft/SkillOpt",
+   "summary": "SkillOpt is a text-space optimizer that trains reusable natural-language skills for frozen LLM agents through trajectory-driven edits, validation-gated updates, and deployable best_skill.md artifacts.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 17795,
+   "stars_today": 111,
+   "forks": 1667,
+   "language": "Python",
+   "code_url": "https://github.com/microsoft/SkillOpt",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rlhf",
+    "agent",
+    "optimization"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "技能训练/编辑方法，和agent后训练高度相关。",
+   "tier": "core",
+   "ptype": "paper",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用文本技能优化器让冻结 agent 仅靠 skill.md 提升 23.5 分",
+    "why": "Agent 工程和可复用技能沉淀很实用",
+    "architecture": "它解决的是一个很现实的痛点：agent 的能力通常散落在提示词、手工规则和一次性脚本里，难以像模型权重那样做稳定训练，也很难把“改进”沉淀成可部署资产。SkillOpt 的承重设计是把 skill document 当成可训练状态：先用一个 optimizer model 读轨迹和打分，再对单个 markdown skill 做 bounded add/delete/replace edits；只有当 held-out validation 真的变好时，候选编辑才被接受，配合 rejected-edit buffer、textual learning-rate budget 和 epoch 级慢/元更新，避免越改越坏。v0.2.0 又把 SkillOpt-Sleep 做成夜间离线循环，能从真实会话里 harvest→mine→replay→consolidate，并通过同一个验证门控。成熟度信号很强：有 PyPI、release、文档、WebUI、七个 target models 和三种 harness；README 声称的“零推理时额外模型调用”与公开流程一致。相对同类，它的差别不在 prompt 生成，而在把技能当作可优化工件并提供可部署 artifact。",
+    "verdict": "值得上手看文档，适合做 agent 记忆/技能层方案",
+    "why_now": "v0.2.0 2026-07-02；后续 2026-07-24 又进入官方报道",
+    "key_points": [
+     "v0.2.0 上线 SkillOpt-Sleep",
+     "52 个 model-benchmark-harness 单元最好或并列最好",
+     "只改 skill 文档，不改权重"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "SWE-bench"
+    ],
+    "mermaid": "graph TD\nA[Agent trajectories] --> B[Optimizer model]\nB --> C[Edit skill md]\nC --> D[Held out validation]\nD -->|pass| E[Best skill md]\nD -->|fail| F[Reject buffer]\nE --> G[Frozen agent uses skill]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:topoteretes/cognee",
+   "kind": "project",
+   "title": "topoteretes/cognee",
+   "url": "https://github.com/topoteretes/cognee",
+   "summary": "Cognee is the open-source AI memory platform for agents. Give your AI agents persistent long-term memory with small models for free",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "topoteretes",
+   "hf_upvotes": 0,
+   "stars": 31140,
+   "stars_today": 103,
+   "forks": 3117,
+   "language": "Python",
+   "code_url": "https://github.com/topoteretes/cognee",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "rag"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "agent持久记忆平台，RAG/记忆相关。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Cognee is the open-source AI memory platform for agents",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Give your AI agents persistent long-term memory with small models for free"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:alibaba/open-code-review",
+   "kind": "project",
+   "title": "alibaba/open-code-review",
+   "url": "https://github.com/alibaba/open-code-review",
+   "summary": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "alibaba",
+   "hf_upvotes": 0,
+   "stars": 42259,
+   "stars_today": 20657,
+   "forks": 3033,
+   "language": "Go",
+   "code_url": "https://github.com/alibaba/open-code-review",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "code-review",
+    "llm",
+    "security"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "LLM agent+确定性流水线，适合评测与安全讨论。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "Secure, fast, efficient, battle-tested at Alibaba's scale",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-l"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:trailofbits/coop",
+   "kind": "project",
+   "title": "trailofbits/coop",
+   "url": "https://github.com/trailofbits/coop",
+   "summary": "Isolated VM environment for running Claude Code and Codex",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "trailofbits",
+   "hf_upvotes": 0,
+   "stars": 714,
+   "stars_today": 448,
+   "forks": 36,
+   "language": "Rust",
+   "code_url": "https://github.com/trailofbits/coop",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "sandbox",
+    "agent",
+    "security"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "Agent运行隔离环境，安全基础设施价值高",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "Isolated VM environment for running Claude Code and Codex",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:hokindeng/object-permanence",
+   "kind": "project",
+   "title": "hokindeng/object-permanence",
+   "url": "https://github.com/hokindeng/object-permanence",
+   "summary": "Training Object Permanence in World Models — the codebase",
+   "source": "github_search",
+   "published": "2026-09-16",
+   "authors": [],
+   "org": "hokindeng",
+   "hf_upvotes": 0,
+   "stars": 293,
+   "stars_today": 0,
+   "forks": 8,
+   "language": "Python",
+   "code_url": "https://github.com/hokindeng/object-permanence",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "world-model",
+    "video-generation",
+    "robotics"
+   ],
+   "core_score": 7.0,
+   "wide_score": 4.0,
+   "score_reason": "世界模型具身关键点：object permanence",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "用 Blender 生成 1.5M V2V 样本，训练世界模型的 object permanence",
+    "why": "适合看世界模型/视频生成怎么做数据与训练闭环",
+    "architecture": "原文把问题落在一个反直觉场景：物体被遮挡后，模型常把它“忘掉”，续写视频时直接消失或位置乱跳。现有做法难点不在单帧识别，而在把遮挡前后的状态连续地写进 world model。作者的关键改变是把任务做成 video-to-video 的 continuation：输入是遮挡前视频，输出是遮挡后视频，监督不是只看视觉相似，而是用 trajectory.npz 提供每个 body 的时序真值，阻断“看见才存在”的失败模式。最直接的证据是它同时给出 1.5M 训练集、benchmark 和 model，说明这不是单点 demo，而是完整可复现实验闭环。新意主要在系统组织层：150 个 Blender task generators + 训练栈 + benchmark 绑定成一套可批量造题、训模、评测的基础设施。",
+    "verdict": "值得看数据工厂怎么定义世界模型任务",
+    "why_now": "",
+    "key_points": [
+     "最强证据：1.5M 数据+benchmark+model 闭环",
+     "原文未给出指标，效果需看论文",
+     "复现门槛高：Blender 生成链+Trainium2 训练栈"
+    ],
+    "prereqs": [
+     {
+      "name": "world model",
+      "status": "unlisted"
+     },
+     {
+      "name": "video generation",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "NeRF",
+     "video generation"
+    ],
+    "mermaid": "graph LR\nA[遮挡前视频] --> B[续写任务]\nB --> C[轨迹监督]\nC --> D[物体持续性]\nD --> E[world model]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:rlaope/oh-my-hermes",
+   "kind": "project",
+   "title": "rlaope/oh-my-hermes",
+   "url": "https://github.com/rlaope/oh-my-hermes",
+   "summary": "All in one plugin for Hermes Agent ⚚ the coding intelligence, a long-term memory system and model optimized workflow packages",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "rlaope",
+   "hf_upvotes": 0,
+   "stars": 3007,
+   "stars_today": 1837,
+   "forks": 235,
+   "language": "Python",
+   "code_url": "https://github.com/rlaope/oh-my-hermes",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "workflow"
+   ],
+   "core_score": 6.0,
+   "wide_score": 6.0,
+   "score_reason": "Hermes插件+长记忆/工作流，可能可迁移。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "用 OMH 给 Hermes 加操作层，2.0.5 合并 142 个 PR",
+    "why": "适合看 agent 工作流、记忆层和模型路由怎么工程化",
+    "architecture": "它解决的不是“再造一个 agent”，而是 Hermes 已经能做事后，怎么避免请求一进来就直接乱跑。OMH 的核心是一个 operating layer：先把请求分到类别，再给出工作流和 evidence gate，最后调用 Hermes-native skills，阻断“同一请求走同一条线性流程”导致的误路由、证据缺失和模型不匹配。README 里最强的成熟度信号是 v2.0.5 stable、142 PR 合并、明确说明 2.0.4 因 GitHub 发布体积限制没发出去，2.0.5 承接了那批工作，说明它不是单次打包而是持续维护的发布链。与同类只做 prompt wrapper 的项目比，它的差异维度是：把分类、路由、记忆、证据边界做成可管理层，而不是只堆技能列表。",
+    "verdict": "值得看 agent 操作层怎么把流程管起来",
+    "why_now": "v2.0.5，2026-09-22",
+    "key_points": [
+     "最强证据：v2.0.5 stable，142 PR 合并",
+     "2.0.4 未发布，说明 release 链真实可追踪",
+     "偏 Hermes 生态，迁移到别的 agent 需改接入层"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "model context protocol"
+    ],
+    "mermaid": "graph TD\nA[请求] --> B[分类路由]\nB --> C[证据门控]\nC --> D[Hermes skills]\nD --> E[结果与记录]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:k2-fsa/omnivoice",
+   "kind": "project",
+   "title": "k2-fsa/OmniVoice",
+   "url": "https://github.com/k2-fsa/OmniVoice",
+   "summary": "High-Quality Voice Cloning TTS for 600+ Languages",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "k2-fsa",
+   "hf_upvotes": 0,
+   "stars": 14018,
+   "stars_today": 4543,
+   "forks": 2105,
+   "language": "Python",
+   "code_url": "https://github.com/k2-fsa/OmniVoice",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "tts",
+    "voice-cloning",
+    "multilingual"
+   ],
+   "core_score": 5.0,
+   "wide_score": 8.0,
+   "score_reason": "高质量多语TTS/语音克隆，价值较高但非核心LLM。",
+   "tier": "wide",
+   "ptype": "model",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "用 diffusion LM 式架构做 600+ 语言零样本 TTS，RTF 低至 0.025",
+    "why": "适合看多语种 TTS、voice cloning 和推理加速",
+    "architecture": "它解决的是多语种零样本 TTS 的典型悖论：语言覆盖越广，模型越容易变慢、变糊，voice cloning 也越不稳。作者的关键设计是用 diffusion language model-style architecture 把生成和控制整合起来，再把 reference audio、ASR 转写、speaker attributes 作为条件输入，阻断“先识别再拼接”那类容易丢音色和音素一致性的失败路径。README 给出的最直接证据是 600+ languages、voice cloning、voice design 和 RTF 0.025；同时 0.2.1 里修了 `flex_attention` 的 autocast，明确说明训练时曾遇到 silent fp32 attention 导致约 4x slowdown，这比单纯宣传快更能看出工程成熟度。新意主要在系统组织层和实证层：把多语种覆盖、可控语音、速度和训练修 bug 放到同一套实现里。",
+    "verdict": "值得看 diffusion 式 TTS 怎么兼顾覆盖与速度",
+    "why_now": "最近 release 0.2.1，2026-07-16",
+    "key_points": [
+     "最强证据：600+ 语言，RTF 0.025",
+     "0.2.1 修复 fp32 attention 慢 4x 的训练问题",
+     "代码偏完整，复现仍受模型权重和设备影响"
+    ],
+    "prereqs": [
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     },
+     {
+      "name": "ASR",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "VALL-E",
+     "diffusion model"
+    ],
+    "mermaid": "graph LR\nA[参考音频] --> B[ASR转写]\nA --> C[音色条件]\nD[目标文本] --> E[条件生成]\nB --> E\nC --> E\nE --> F[语音输出]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:hydra-db/hydradb",
+   "kind": "project",
+   "title": "hydra-db/hydradb",
+   "url": "https://github.com/hydra-db/hydradb",
+   "summary": "HydraDB - fast graph database on object storage",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "hydra-db",
+   "hf_upvotes": 0,
+   "stars": 12271,
+   "stars_today": 1665,
+   "forks": 5388,
+   "language": "Rust",
+   "code_url": "https://github.com/hydra-db/hydradb",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "database",
+    "graph"
+   ],
+   "core_score": 3.0,
+   "wide_score": 7.0,
+   "score_reason": "图数据库/存储基础设施，间接支持agent。",
+   "tier": "wide",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 S3+Rust 做图数据库，分离存储与计算",
+    "why": "对 RAG/图检索和系统面试都很有参考价值",
+    "architecture": "它解决的是“图库越大，单机内存和重建索引越撑不住，但读写还要强一致”的悖论。传统图数据库把数据、索引和计算绑死在本地盘上，扩容通常意味着搬图、重建和停机窗口。HydraDB 的关键变化是把 object store 变成唯一持久层：graph-node 只负责 canonical mutations 和查询，graph-indexer 异步构建不可变 CSC 索引，读请求始终在一个 pinned SlateDB snapshot 上执行；索引落后时，再把可见 WAL overlay 到 base 上，避免“索引没跟上就读错”。最直接的证据是它把查询正确性建立在快照和 WAL 叠加上，而不是依赖索引实时完成；再加上 CAS lease 和 writer epoch，说明它重点防的是 stale writer 和并发写冲突。新意主要在系统组织层，不是单个算法：把图数据库拆成可替换的计算节点、背景索引器和对象存储真源。",
+    "verdict": "适合看系统设计，不适合只想用图查询的人",
+    "why_now": "",
+    "key_points": [
+     "最强证据：snapshot + WAL overlay 保证一致读",
+     "没证明：大规模并发/热点图下的真实吞吐上限",
+     "复现不低：要 S3、GraphBLAS、SlateDB 和 Rust 环境"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Neo4j",
+     "Apache HBase"
+    ],
+    "mermaid": "graph TD\nA[S3 object store] --> B[graph-node]\nA --> C[graph-indexer]\nC --> D[immutable CSC]\nB --> E[pinned snapshot]\nE --> F[WAL overlay]\nD --> F\nF --> G[consistent query]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.31394",
+   "kind": "paper",
+   "title": "InternW0-Δ: A World Action Model Bridging Predictive Dynamics and Actions with 20K+ Hours of Open Data",
+   "url": "https://arxiv.org/abs/2609.31394",
+   "summary": "World Action Models (WAMs) jointly model visual dynamics and action generation for generalist robot manipulation. A central challenge is to integrate priors from large-scale pretrained models---including visual dynamics, scene semantics, geometry, and motion---into a unified framework for robot action generation. We introduce InternW0-Δ, a unified WAM pretrained on a heterogeneous corpus that outperforms prior methods across simulation benchmarks and real-robot platforms.\n  InternW0-Δ combines pretrained visual dynamics, scene-level semantics, 4D geometric and motion priors, and action generation within a Mixture-of-Transformers (MoT) framework. A pretrained video expert and an action expert interact under semantic guidance from a frozen VLM, while a pretrained 4D foundation model injects geometric and motion priors through training-only distillation. We further introduce Causal Imprint, which learns future-relevant scene changes from training-only future supervision and provides predictive representations directly to the action expert without future-video rollout at inference.\n  For large-scale joint training, we construct a heterogeneous corpus of robot demonstrations, UMI data, egocentric human demonstrations, and Ego2Robot data, curated and aligned under a common state-action representation. The resulting corpus contains over 20K hours of processed training data, to our knowledge the largest open-source corpus of its kind. We pretrain InternW0-Δ on this corpus and demonstrate strong performance across simulation benchmarks and real-robot platforms. We will open source the training code, model weights, infrastructure, data-processing pipeline, and processed data where licenses permit. Project page: https://internrobotics.github.io/InternW0-Delta/",
+   "source": "hf_papers",
+   "published": "2026-09-25",
+   "authors": [
+    "Xingyu Miao",
+    "Zizun Li",
+    "Baole Fang",
+    "Kaiwen Song",
+    "Tenghui Wang",
+    "Hanxue Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 17,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.31394",
+   "categories": [],
+   "keywords": [
+    "world-action-model",
+    "robotics",
+    "multimodal"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "机器人WAM，MoT框架与数据规模突出",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 20K+ 小时开放数据训 WAM，提动作可控表征",
+    "why": "适合看机器人后训练和多模态表征怎么接到控制",
+    "architecture": "它要解决的反直觉点是：视频世界模型能预测未来，不代表能更会控机器人。原先方法常把“看懂会发生什么”和“决定现在怎么动”混在一起，结果要么推理时滚未来视频太慢，要么学到的动态表征对动作没用。InternW0-Δ 的关键改动是把预测和控制改成有方向的信息流：video expert 负责视觉动态，action expert 负责动作，二者在 MoT 里交互；Causal Imprint 只在训练时用未来监督，学“哪些未来变化对动作有用”，推理时不再 rollout future video；4D teacher 的蒸馏则把几何和运动先验注入 video expert，减少纯视频表征的漂移。最直接的证据是它在分布偏移的 LIBERO-Plus 92.8% 和 RoboTwin 2.0 Clean2Random 71.9% 上领先，说明“动作相关的预测表征”确实比单纯预测更稳。新意在组件层和实证层都很明显。",
+    "verdict": "想看 world model 到 control 的关键桥接，这篇值得精读",
+    "why_now": "",
+    "key_points": [
+     "最强证据：分布偏移下成功率最高",
+     "没证明：训练-only 未来监督的单独贡献幅度",
+     "复现难：20K+ 小时数据与双阶段后训练"
+    ],
+    "prereqs": [
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "RT-2",
+     "V-JEPA"
+    ],
+    "mermaid": "graph TD\nA[video expert] --> C[MoT]\nB[action expert] --> C\nD[frozen VLM] --> C\nE[Causal Imprint] --> B\nF[4D teacher] --> A\nC --> G[action]\nE --> H[future useful changes]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:krillinai/opencreator",
+   "kind": "project",
+   "title": "krillinai/OpenCreator",
+   "url": "https://github.com/krillinai/OpenCreator",
+   "summary": "Formerly KrillinAI. Open-source AI workspace for creators, powered by Codex. Create videos, images, voice, avatars, video translation, and edits with Agents in one place.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "krillinai",
+   "hf_upvotes": 0,
+   "stars": 12483,
+   "stars_today": 551,
+   "forks": 1281,
+   "language": "TypeScript",
+   "code_url": "https://github.com/krillinai/OpenCreator",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "multimodal",
+    "agent",
+    "workspace"
+   ],
+   "core_score": 4.0,
+   "wide_score": 6.0,
+   "score_reason": "集成式AI创作工作台，偏工程但较热",
+   "tier": "wide",
+   "ptype": "tool",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 Codex CLI 组一个本地创作工作台，v3.2.3",
+    "why": "适合看 agent 工作台怎么把创作与开发流程串起来",
+    "architecture": "它解决的是“同一套内容创作和 agent 任务，往往散在多个工具里，状态、文件、审批和后台 run 彼此断开”的痛点。OpenCreator 的承重组件不是自己重写 agent loop，而是直接复用 Codex CLI 作为执行引擎，再包一层本地 Runtime、Web/desktop 工作台和项目级状态机；检测到本地已有 ChatGPT sign-in 或 API key 就复用，否则走向导配置。它的核心机制是双模式共享状态：视觉工作区和 Agent conversation 共享同一项目、Run、memory、attachments、approvals，后台任务可以继续跑。成熟度信号比较强：有桌面版、release v3.2.3、明确的最近更新说明和多语言文档；但 README 里强调的“共享状态机、skills、MCP、memory”更像产品编排层，是否稳定还要看实际插件生态和工作流覆盖。和一般套壳客户端的差别在于它把运行时和创作工具做成同一状态面，而不是单纯聊天入口。",
+    "verdict": "如果你关心 agent 工作台产品形态，这个值得看",
+    "why_now": "最近 release：v3.2.3（2026-09-24）",
+    "key_points": [
+     "最强证据：v3.2.3 近期持续迭代",
+     "没证明：外部模型与技能生态的稳定性",
+     "复现门槛低：桌面版与 Docker/本地运行都给了"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Codex",
+     "OpenHands"
+    ],
+    "mermaid": "graph TD\nA[Codex CLI] --> B[local runtime]\nB --> C[workspace]\nB --> D[agent conversation]\nC --> E[shared state]\nD --> E\nE --> F[runs approvals memory]",
+    "read_level": "L2"
+   }
+  }
+ ]
+}

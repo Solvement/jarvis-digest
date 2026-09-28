@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-28",
+   "papers": 9,
+   "projects": 9,
+   "top": "Disaggregated Quantization: Specializing LLM Prefill and Decode"
+  },
+  {
    "date": "2026-09-27",
    "papers": 0,
    "projects": 10,
