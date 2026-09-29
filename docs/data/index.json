@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-29",
+   "papers": 12,
+   "projects": 6,
+   "top": "Groupwise Agentic Grading and Advantage Redistribution for Code Agent RL"
+  },
+  {
    "date": "2026-09-28",
    "papers": 9,
    "projects": 9,

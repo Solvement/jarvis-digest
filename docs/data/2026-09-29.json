@@ -1,0 +1,1193 @@
+{
+ "date": "2026-09-29",
+ "stats": {
+  "collected": 751,
+  "filtered": 364,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 20 calls, 71394 in / 20745 out; gpt-5.4-mini: 6 calls, 48764 in / 8596 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.32577",
+   "kind": "paper",
+   "title": "Groupwise Agentic Grading and Advantage Redistribution for Code Agent RL",
+   "url": "https://arxiv.org/abs/2609.32577",
+   "summary": "Reinforcement learning (RL) for code agents often uses executable tests to provide binary rewards. With these rewards, Group Relative Policy Optimization (GRPO) assigns identical advantages to test-passing trajectories within each rollout group, overlooking differences in implementation quality and adherence to task requirements. This leaves the policy without a learning signal that favors clean, targeted implementations over those containing unnecessary or out-of-scope changes. We introduce GAGAR, a framework for quality-aware credit redistribution in code agent RL. Built on dynamic sampling that retains groups containing both passing and failing trajectories, GAGAR places all trajectories from each group in a shared workspace, where an SFT-trained agentic grader jointly inspects them and ranks the test-passing candidates. Based on this ranking, we downweight lower-ranked trajectories and proportionally rescale the advantages of all test-passing trajectories to restore their original sum. This sum-preserving redistribution retains the relative weights established by quality-based downweighting while shifting credit toward higher-quality implementations. We evaluate GAGAR at industrial scale using pre-RL SFT checkpoints of MiMo-V2.6-Flash (310B total parameters) and MiMo-V2.6-Pro (1.02T total parameters). Controlled code-only Flash experiments show improved code agent performance, reduced trajectory-length growth, and more stable training. We further apply GAGAR in large-scale mixed-task RL with both Flash and Pro. Our results support combining test-based verification with groupwise agentic grading to improve the quality and stability of code agent RL.",
+   "source": "hf_papers",
+   "published": "2026-09-26",
+   "authors": [
+    "Jinhao Dong",
+    "Liang Zhao",
+    "Zihao Yue",
+    "Wenhan Ma",
+    "Linghao Zhang",
+    "Lei Li"
+   ],
+   "org": "",
+   "hf_upvotes": 69,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.32577",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "grpo",
+    "code-agent"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "代码agent RL的质控打分与优势再分配，重点相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Reinforcement learning (RL) for code agents often uses executable tests to provide binary rewards",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "With these rewards, Group Relative Policy Optimization (GRPO) assigns identical advantages to test-passing trajectories ",
+     "This leaves the policy without a learning signal that favors clean, targeted implementations over those containing unnec"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.32400",
+   "kind": "paper",
+   "title": "SkillDRE: Dual-Stage Red-Team Evolution of Agent Skills via Pre-Execution and Runtime Feedback",
+   "url": "https://arxiv.org/abs/2609.32400",
+   "summary": "Agent skills package instructions, executable code, and task-specific resources into reusable artifacts that agents can improve using execution feedback. The same mechanism also enables attackers to evolve malicious skills, making them more effective and less detectable. However, a candidate skill may pass pre-execution scanning yet fail to realize its target under runtime defenses, while a revision that repairs execution may introduce new scanner findings. We introduce SkillDRE, a fully automated framework for evolving complete malicious skill packages through a dual-stage feedback loop. Given a benign task and its associated skills, SkillDRE autonomously constructs and validates a task-conditioned malicious objective and a verifiable judge rule. It then holds both fixed while evolving the skill implementation, with preservation of legitimate task capability. SkillDRE combines scanner-guided evolution with runtime-guided refinement informed by execution outcomes observed under runtime defense. Each runtime-guided revision returns to the pre-execution stage for rescanning and further optimization before re-execution, forming a cross-stage closed loop. Evaluated on SkillsBench across four victim models, SkillDRE achieves an average attack success rate of 45.28%, exceeding the strongest baseline by 40.3%, while its final submitted skills receive no SkillScan findings and largely preserve benign-task performance. These results show that two-stage defense feedback can serve as a useful learning signal for adaptive red teaming and that evaluating either defense stage in isolation can miss the resulting attack capability. Codes is available at https://github.com/whfeLingYu/SkillDRE",
+   "source": "hf_papers",
+   "published": "2026-09-26",
+   "authors": [
+    "Pengyu Zhu",
+    "Jingyi Yang",
+    "Yi Liu",
+    "Li Sun",
+    "Sen Su"
+   ],
+   "org": "",
+   "hf_upvotes": 2,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.32400",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "security",
+    "redteam"
+   ],
+   "core_score": 9.0,
+   "wide_score": 4.0,
+   "score_reason": "agent技能演化框架，含对抗与评测细节。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Agent skills package instructions, executable code, and task-specific resources into reusable artifacts that agents can improve using execution feedback",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "The same mechanism also enables attackers to evolve malicious skills, making them more effective and less detectable",
+     "However, a candidate skill may pass pre-execution scanning yet fail to realize its target under runtime defenses, while "
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.35596",
+   "kind": "paper",
+   "title": "SEABench: Benchmarking Endogenous Misalignment In Self-Evolving Agents",
+   "url": "https://arxiv.org/abs/2609.35596",
+   "summary": "Self-evolving LLM agents have gained prominence for their ability to improve after deployment by modifying their harness, including their controller instructions, memory management protocols, and reusable tools and skills, in response to user and environment feedback. However, locally useful updates may persist into later tasks where they produce unsafe behavior, even without direct adversarial influence. To study this risk, we introduce SEABench, a benchmark for studying endogenous misalignment arising from agent self-evolution, with 48 longitudinal task sequences that span multiple evolution surfaces, task domains, and harm types in a rich personal-assistant environment. To account for the stochasticity inherent in agentic operations, we provide an adaptive trajectory discovery pipeline that probes for failures while preserving original task intent and supports causal attribution through paired non-evolving agents and attribution scores. Our evaluation across multiple recent LLMs, evolution surfaces, and harm types reveals that self-evolution indeed increases task completion rates but often at the cost of safety failures that are absent for paired non-evolving baseline agents. We also show that qualitatively different safety behaviors emerge across evolution surfaces and harm types. Further, we show that this divergence in safety behavior is reflected in agents' chain-of-thought reasoning, which yields an effective monitoring strategy that can mitigate unsafe behavior with a low false positive rate.",
+   "source": "arxiv",
+   "published": "2026-09-28",
+   "authors": [
+    "Saswat Das",
+    "Parvati Viswanathan",
+    "Daniel Donnelly",
+    "Chang Huang",
+    "Sahar Abdelnabi",
+    "Ferdinando Fioretto"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.35596",
+   "categories": [
+    "cs.CR",
+    "cs.AI",
+    "cs.CL"
+   ],
+   "keywords": [
+    "agent",
+    "safety",
+    "evaluation",
+    "rlhf"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "自演化agent失配基准，贴近agent安全评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Self-evolving LLM agents have gained prominence for their ability to improve after deployment by modifying their harness, including their controller instruction",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "However, locally useful updates may persist into later tasks where they produce unsafe behavior, even without direct adv",
+     "To study this risk, we introduce SEABench, a benchmark for studying endogenous misalignment arising from agent self-evol"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.35576",
+   "kind": "paper",
+   "title": "Share-Borne AI Virus: Memory-Hopping Attacks Across LLM Agents",
+   "url": "https://arxiv.org/abs/2609.35576",
+   "summary": "Large language models are increasingly deployed as stateful assistants that retain information across interactions and use tools to read, modify, and create persistent artifacts. As these artifacts are shared between users, they form an indirect communication channel between otherwise independent assistants. We study a failure mode in which this channel enables self-propagating attacks. We introduce artifact-mediated propagation, where adversarial content introduced through an artifact (e.g. a report), is stored in an assistant's persistent memory, reproduced in a subsequently created artifact, and acquired by another assistant that later reads it. We evaluate this process in temporal human-agent universes that model artifact exchange between independently operated assistants over time, measuring whether an attack survives successive hand-offs, how many hops it reaches, and how broadly it spreads. We find that attacks can propagate across multiple independent assistants and persist over extended interaction sequences. In larger simulated environments, even GPT-5.6 Luna exhibits substantial spread, reaching 60-80% of agents with propagation chains extending to eight hops. These results show that persistent artifacts can act as durable carriers of adversarial state, allowing attacks to outlive individual interactions and spread across isolated assistants.",
+   "source": "arxiv",
+   "published": "2026-09-28",
+   "authors": [
+    "Sidharth Pulipaka",
+    "Ansh Sharma",
+    "Stanislau Hlebik",
+    "Leonidas Raghav",
+    "Vyas Raina",
+    "Ivaxi Sheth"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/psidharth567/Share-Borne-Virus",
+   "pdf_url": "https://arxiv.org/pdf/2609.35576",
+   "categories": [
+    "cs.AI",
+    "cs.CL",
+    "cs.CR",
+    "cs.LG"
+   ],
+   "keywords": [
+    "security",
+    "agent",
+    "memory",
+    "llm"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "跨agent记忆/工件传播攻击，安全面试友好",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Large language models are increasingly deployed as stateful assistants that retain information across interactions and use tools to read, modify, and create per",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "As these artifacts are shared between users, they form an indirect communication channel between otherwise independent a",
+     "We study a failure mode in which this channel enables self-propagating attacks"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.35426",
+   "kind": "paper",
+   "title": "Frontier Learning: Training LLM Reasoners at the Edge of Capability",
+   "url": "https://arxiv.org/abs/2609.35426",
+   "summary": "Reinforcement Learning-based post-training of Large Language Models (LLM) has been successfully applied to improve their reasoning capabilities. Existing pipelines primarily finetune LLMs on a fixed pool of problems specified prior to training using the GRPO loss. This is fundamentally limiting, as learning signal arises only when policy rollouts mix successes and failures, causing the useful portion of any fixed pool to quickly become stale as the model improves. To address this, we propose frontier learning, an open-ended post-training approach in which procedural generators are used online to continually produce informative training problems. It treats the generator's task-specific parameters as a search space and uses a regret signal to prioritize and explore frontier difficulty levels in order to focus training at the edge of the model's evolving reasoning capabilities. Across several reasoning tasks and model families, our approach consistently achieves higher relative gains over fixed-pool baselines, demonstrating that effective post-training requires not only selecting useful problems, but continually generating them at the edge of capability.",
+   "source": "arxiv",
+   "published": "2026-09-28",
+   "authors": [
+    "Robin Faro",
+    "Shyam Sundhar Ramesh",
+    "Ilija Bogunovic",
+    "Aurelien Lucchi"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.35426",
+   "categories": [
+    "cs.LG",
+    "cs.AI",
+    "cs.CL"
+   ],
+   "keywords": [
+    "rlhf",
+    "reasoning",
+    "frontier-learning",
+    "post-training"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "开放式生成题目做推理后训练，很对口",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Reinforcement Learning-based post-training of Large Language Models (LLM) has been successfully applied to improve their reasoning capabilities",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Existing pipelines primarily finetune LLMs on a fixed pool of problems specified prior to training using the GRPO loss",
+     "This is fundamentally limiting, as learning signal arises only when policy rollouts mix successes and failures, causing "
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.35532",
+   "kind": "paper",
+   "title": "ARISE: Adapting to Evolving Capability Gaps in Agentic Reinforcement Learning",
+   "url": "https://arxiv.org/abs/2609.35532",
+   "summary": "As a long-horizon agent improves through experience, previously observed weaknesses may recede while new limitations emerge, continually changing what it still needs to learn. Yet the learning process often remains tied to a static view of these needs: fixed behavioral criteria and training priorities can become misaligned with evolving agent capabilities, while sparse task-level feedback makes such misalignment more difficult to detect. Even when capability gaps are identified, rollouts from the current policy may repeatedly reproduce the same failures rather than explore better alternatives. To address this, we introduce Adaptive Rubric-Skill Co-Evolution (ARISE), a reinforcement learning framework that uses rollout evidence to continually adapt evaluation criteria, exploration guidance, and training priorities. Rubrics evolve to reward partial behavioral progress, while their paired skills are refined and selectively activated to guide exploration toward unresolved weaknesses. Alongside this co-evolution, capability-based adaptive sampling prioritizes tasks that target behaviors needing further improvement. Experiments on two challenging long-horizon agent benchmarks, SkillsBench and Terminal-Bench, demonstrate that ARISE successfully enhances both overall task performance and training efficiency. The project page is at https://foundation-model-research.github.io/ARISE .",
+   "source": "arxiv",
+   "published": "2026-09-28",
+   "authors": [
+    "Kun Feng",
+    "Yuchen Fang",
+    "Yiyang Tan",
+    "Shuqi Gu",
+    "Yongxiang Zhao",
+    "Yu Liu"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.35532",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "agent",
+    "rl",
+    "evaluation"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "面向随能力演进的agent RL训练与评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "As a long-horizon agent improves through experience, previously observed weaknesses may recede while new limitations emerge, continually changing what it still ",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Yet the learning process often remains tied to a static view of these needs: fixed behavioral criteria and training prio",
+     "Even when capability gaps are identified, rollouts from the current policy may repeatedly reproduce the same failures ra"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.35515",
+   "kind": "paper",
+   "title": "MechBench: Can AI Scientific Agents Discover Mechanisms Beyond Phenomenal Laws?",
+   "url": "https://arxiv.org/abs/2609.35515",
+   "summary": "Scientific discovery requires not only recovering mathematical laws that describe observable behavior, but also identifying the mechanisms that generate them. Existing benchmarks for symbolic regression and scientific agents primarily evaluate phenomenal-law recovery, leaving mechanism discovery largely untested. We introduce MechBench, a benchmark that explicitly separates these two capabilities. Each task is defined by a mechanistic model, a structured set of scientifically meaningful relations whose joint consequences entail an observable phenomenal law, while agents receive only observational data and scientific context. We evaluate mechanism recovery through mechanism probes, which query internal scientific consequences that cannot be inferred from the phenomenal law alone. To reduce reliance on memorized textbook mechanisms, we construct unfamiliar variants through controlled, scientifically interpretable mutations of canonical mechanisms, and screen for mechanistic indistinguishability to exclude ambiguous instances admitting comparable competing mechanisms. Experiments across representative scientific agents reveal a substantial phenomenal--mechanism recovery gap: for Codex with GPT-5.6-sol, phenomenal-law accuracy reaches 35.00% on the Core-set while mechanism accuracy is only 13.75%, with mechanism recovery failing in 64.29% of cases where the phenomenal law is correctly recovered. The gap widens as mechanisms become increasingly mutated, and even providing the correct phenomenal law leaves mechanism recovery below 50%. These results reveal a substantial generalization gap in mechanistic reasoning and establish mechanism discovery as a distinct challenge beyond recovering observable scientific laws.",
+   "source": "arxiv",
+   "published": "2026-09-28",
+   "authors": [
+    "Zihan Yu",
+    "Jiadong Zhang",
+    "Jialin Cheng",
+    "Jingtao Ding",
+    "Yong Li"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.35515",
+   "categories": [
+    "cs.AI",
+    "cs.LG",
+    "cs.SC"
+   ],
+   "keywords": [
+    "agent",
+    "scientific-discovery",
+    "benchmark"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "机制发现基准，贴合科学智能体。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "MechBench把“能拟合规律”与“能还原机制”拆开测，Codex 机制准确率仅13.75%",
+    "why": "适合看科学Agent评测缺口与机制推理边界",
+    "architecture": "反直觉点在于：很多 scientific agent 能把观测拟合成对的方程，却说不出系统内部到底靠什么关系在工作。旧 benchmark 只看 phenomenal-law recovery，等于把“会背答案”当成“懂机制”。作者的关键改动是把任务定义成 mechanistic model，并用 mechanism probes 去问那些只能由机制推出、但不能从观测律直接反推的内部后果；再用受控 mutation 造出不熟悉但科学可解释的机制变体，避免模型靠背诵 textbook 结构蒙对。最直接的证据是 Codex with GPT-5.6-sol：Core-set 上 phenomenal-law accuracy 到 35.00%，mechanism accuracy 只有 13.75%，而且在已恢复规律的案例里仍有 64.29% 机制失败。新意主要在实证层，但也顺带提出了组件层的新评测接口。",
+    "verdict": "值得精读：它重新定义了 scientific agent 的评测目标",
+    "why_now": "",
+    "key_points": [
+     "规律对了不代表机制对了",
+     "mutation 越强，机制掉得越快",
+     "correct law 也救不回机制推理"
+    ],
+    "prereqs": [
+     {
+      "name": "symbolic regression",
+      "status": "unlisted"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "scientific agents",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "symbolic regression",
+     "LLM-SR"
+    ],
+    "mermaid": "graph LR\nA[观测数据] --> B[拟合 phenomenal law]\nA --> C[mechanistic model]\nC --> D[mechanism probes]\nB --> D\nD --> E[机制准确率]\nB --> F[规律准确率]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.35347",
+   "kind": "paper",
+   "title": "Beyond Teacher Assignment: Domain-Normalized Multi-Teacher On-Policy Distillation",
+   "url": "https://arxiv.org/abs/2609.35347",
+   "summary": "Reinforcement learning can turn one language model into several specialists, each excellent at a single skill such as mathematics, coding or following instructions, but users need one model with all of these skills. Multi-teacher on-policy distillation (MOPD) merges them by letting the specialists teach one student: the student answers each prompt, and the specialist for that prompt's domain gives feedback on every token. This routing decides which specialist teaches, but not how strongly its feedback moves the shared student. In Qwen3.5 models at three sizes, we find that MOPD's student does not beat one taught by the best single specialist and gains little of the mathematics specialist's advantage. The feedback is unbalanced: instruction-following feedback is several times more spread out than mathematics feedback and dominates the student's updates. We propose Domain-Normalized MOPD (DN-MOPD), which keeps the routing and rescales each domain's feedback by its measured spread. On six public benchmarks, DN-MOPD improves the average score over MOPD at every size, across three random seeds and under two answer-length limits, and recovers most of the lost mathematics gain. Controls with fixed domain weights show that the gain comes mainly from turning down instruction-following feedback rather than turning up mathematics alone, and that fixed weights close to those DN-MOPD measures perform comparably. Combining specialists therefore requires deciding not only which one teaches, but also how strongly its feedback counts.",
+   "source": "hf_papers",
+   "published": "2026-09-28",
+   "authors": [
+    "Xin Li",
+    "Hao Jiang",
+    "Xin Gao",
+    "Annan Wang",
+    "Yuchen Xie",
+    "Jinghao Guo"
+   ],
+   "org": "",
+   "hf_upvotes": 138,
+   "stars": 10,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/LiXin97/DN-MOPD",
+   "pdf_url": "https://arxiv.org/pdf/2609.35347",
+   "categories": [],
+   "keywords": [
+    "distillation",
+    "on-policy",
+    "multi-teacher"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "领域归一化多教师on-policy蒸馏，与你方法高度贴合",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "DN-MOPD给多教师蒸馏加了按域归一化，Qwen3.5 六任务均值比 MOPD 提升1.17-3.08",
+    "why": "适合看 on-policy distillation 和多技能融合的训练细节",
+    "architecture": "反直觉点在于：多教师 MOPD 已经把“该谁教”解决了，但学生还是学不出最强数学老师的收益，甚至被 instruction-following 的梯度淹没。作者发现问题不在路由，而在反馈尺度：不同 domain 的 teacher-student log-ratio spread 差很多，instruction-following 的信号更分散，更新时几乎主导了共享参数。DN-MOPD 的核心改动很朴素：保留 label routing，但按每个 batch 内各域反馈的 spread 做有界、保号的重标定，把各 teacher 的优势拉到同一尺度，再走原来的 clipped OPD 更新。最直接证据是三种 Qwen3.5 尺寸、三个 seed、两个长度预算下，DN-MOPD 都稳定优于 MOPD，并且把数学专家丢失的大部分收益追回来；控制实验还显示，收益主要来自压低 instruction-following，而不是单纯抬高数学。新意在系统组织层：不是换 loss，而是把多教师信号的标定规则补上了。",
+    "verdict": "值得精读：多教师蒸馏里“谁教”之外的关键变量被补齐了",
+    "why_now": "",
+    "key_points": [
+     "路由对了，尺度仍会毁掉训练",
+     "收益主要来自压低 IF 反馈",
+     "无需新 teacher 或 learned router"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "policy gradient",
+      "status": "unlisted"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MOPD",
+     "Uni-OPD"
+    ],
+    "mermaid": "graph LR\nA[label routing] --> B[选 teacher]\nB --> C[teacher log-ratio]\nC --> D[按域归一化]\nD --> E[clipped OPD update]\nE --> F[shared student]\nA --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:bytedance/deer-flow",
+   "kind": "project",
+   "title": "bytedance/deer-flow",
+   "url": "https://github.com/bytedance/deer-flow",
+   "summary": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "bytedance",
+   "hf_upvotes": 0,
+   "stars": 83225,
+   "stars_today": 79,
+   "forks": 11547,
+   "language": "Python",
+   "code_url": "https://github.com/bytedance/deer-flow",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "superagent",
+    "memory",
+    "tool-use"
+   ],
+   "core_score": 10.0,
+   "wide_score": 9.0,
+   "score_reason": "长程 SuperAgent 框架，方法细节强",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "DeerFlow是字节系开源 super-agent harness，2.1.0 加了可验证执行与持久化 delegation",
+    "why": "适合看 agent 编排、记忆和沙箱的成熟开源实现",
+    "architecture": "它解决的是长任务 agent 不是“会不会调用工具”，而是“跑几分钟到几小时后还能不能控住、复现和继续”。核心骨架是 super-agent harness：lead agent 组织 sub-agents，memory 负责跨轮保留上下文，sandbox 约束文件与代码执行，message gateway 负责外部通道，skills 让能力可插拔。2.1.0 的关键取舍是把 trust 和 operability 放到台面上：可验证执行、durable batch delegation、pluggable memory backends、更多 sandbox provider、out-of-tree extension、认证授权、workspace/branching/referenced conversations，说明它已经从“能跑 demo”往“能管理工作流”走。成熟度信号很强：stars 83k+，2026-09-24 release，2.1.0 有 772 merged PRs，README 明确写出 Docker/本地开发、MCP、LangSmith/Langfuse tracing 和安全注意事项。和一般 agent 框架相比，它差在长任务治理能力，而不只是 tool-use API。",
+    "verdict": "值得看：这是少数把 agent 可靠性做成系统能力的开源项目",
+    "why_now": "最近 release：v2.1.0（2026-09-24），v2.0.0（2026-06-25）",
+    "key_points": [
+     "2.1.0 强调 verifiable execution 和 delegation",
+     "83k+ stars，2.1.0 有 772 PR",
+     "更像可运营 harness，不是轻量 agent demo"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "AutoGen",
+     "LangGraph"
+    ],
+    "mermaid": "graph LR\nA[lead agent] --> B[sub agents]\nA --> C[memory]\nA --> D[sandbox]\nA --> E[tools]\nB --> F[long task]\nC --> F\nD --> F\nE --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:openhands/openhands",
+   "kind": "project",
+   "title": "OpenHands/OpenHands",
+   "url": "https://github.com/OpenHands/OpenHands",
+   "summary": "🙌 OpenHands: AI-Driven Development",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "OpenHands",
+   "hf_upvotes": 0,
+   "stars": 89531,
+   "stars_today": 4214,
+   "forks": 11811,
+   "language": "TypeScript",
+   "code_url": "https://github.com/OpenHands/OpenHands",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "coding",
+    "orchestration"
+   ],
+   "core_score": 9.0,
+   "wide_score": 9.0,
+   "score_reason": "顶流代码智能体，工程可复现，面试高频",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "OpenHands 用可切换后端的 Agent Canvas 管理编码代理，支持本地/云端与自动化流程",
+    "why": "贴近 LLM Agent 编排与工程落地，面试常问",
+    "architecture": "它解决的反直觉点是：编码 agent 真正难的不是“会不会写代码”，而是“同一个任务要在本地、容器、公司内网、云端之间切换，还要保持会话与自动化不中断”。线性工具链做不到，因为 backend、权限和长期运行状态一变，整个流程就断。OpenHands 的关键概念是把前端对话面板和后端 agent server 解耦：Canvas 负责入口与会话控制，agent backend 负责执行，二者可在 local、Docker、VM、cloud 间切换；再往上叠 automation，把 Slack、GitHub、Linear 这类事件变成触发条件，让 agent 进入“循环 + 中间件”的工作方式，而不是一次性脚本。最直接的证据是它明确支持同一前端切换多种 backend，并能在 schedule/webhook 下跑预置自动化。新意主要在系统组织层，不是单个模型或算法层。",
+    "verdict": "适合看系统组织思路，精读价值高",
+    "why_now": "v1.24.0（2026-09-25）刚发，且连续高频更新",
+    "key_points": [
+     "多后端切换不丢会话，支持本地到云端",
+     "自动化把 GitHub/Slack 事件接入代理循环",
+     "原文未给出完整测试覆盖，复现偏工程重"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-bench",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[事件或对话] --> B[Canvas]\nB --> C[选后端]\nC --> D[Agent执行]\nD --> E[工具和自动化]\nE --> F[结果回写]\nF --> B",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:sgl-project/sglang",
+   "kind": "project",
+   "title": "sgl-project/sglang",
+   "url": "https://github.com/sgl-project/sglang",
+   "summary": "SGLang is a high-performance serving framework for large language models and multimodal models.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "sgl-project",
+   "hf_upvotes": 0,
+   "stars": 36597,
+   "stars_today": 4058,
+   "forks": 9208,
+   "language": "Python",
+   "code_url": "https://github.com/sgl-project/sglang",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "inference",
+    "serving",
+    "multimodal"
+   ],
+   "core_score": 8.0,
+   "wide_score": 8.0,
+   "score_reason": "高性能LLM/VLM推理Serving框架，工程价值高",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "SGLang 用高性能 serving 引擎支撑 LLM 与多模态推理，并持续加速新模型",
+    "why": "训练后推理栈与系统面试高频，能讲清 KV cache 和 serving 组织",
+    "architecture": "它面对的悖论是：模型越大、上下文越长、任务越多模态，推理不只慢，还会被 prefill、decode、batching、缓存复用彼此牵制；单纯堆 GPU 只能缓解一时。SGLang 的关键改变是把 serving 视为运行时调度问题：围绕 KV cache、batch scheduler、load balancer、structured output 和模型特化优化，把“请求如何进入、如何合批、何时复用缓存、何时走特化路径”当成核心。这样能阻断吞吐被小请求和异构负载拖垮。最直接的支持来自它的 release 说明：v0.4 强调 zero-overhead batch scheduler、cache-aware load balancer 和 faster structured outputs；后续又持续给 DeepSeek、Kimi、TPU、diffusion 等新模型 day-0 支持。新意主要在系统组织层，兼有较强实证层积累。",
+    "verdict": "推理系统方向值得精读，尤其看调度与缓存",
+    "why_now": "v0.5.20（2026-09-18）刚发，且有 2026 年多次大事件",
+    "key_points": [
+     "release 持续补新模型与新硬件，工程活跃度高",
+     "最强证据是大规模部署与吞吐博客，不是单点 benchmark",
+     "细节多且强依赖部署环境，复现门槛高"
+    ],
+    "prereqs": [
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     },
+     {
+      "name": "flash attention",
+      "status": "unknown"
+     },
+     {
+      "name": "quantization",
+      "status": "unknown"
+     },
+     {
+      "name": "speculative decoding",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "vLLM",
+     "TensorRT-LLM"
+    ],
+    "mermaid": "graph LR\nA[请求] --> B[Batch scheduler]\nB --> C[Cache aware routing]\nC --> D[Model runtime]\nD --> E[生成输出]\nE --> F[高吞吐低延迟]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:vectifyai/pageindex",
+   "kind": "project",
+   "title": "VectifyAI/PageIndex",
+   "url": "https://github.com/VectifyAI/PageIndex",
+   "summary": "📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "VectifyAI",
+   "hf_upvotes": 0,
+   "stars": 37207,
+   "stars_today": 822,
+   "forks": 3254,
+   "language": "Python",
+   "code_url": "https://github.com/VectifyAI/PageIndex",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "rag",
+    "reasoning",
+    "retrieval",
+    "benchmark"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "向量less/推理式 RAG，方向强且有工程",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "PageIndex 用树索引替代向量库做 RAG，单页约 $0.001 建索引",
+    "why": "RAG 与长文档检索很对口，且很适合面试讲“相似性不等于相关性”",
+    "architecture": "它抓住的悖论是：长文档里最相关的信息，往往不是语义最像 query 的段落；向量检索会把“相似”误当“相关”，在金融、法务、技术手册里尤其容易错。PageIndex 的关键概念改动是把 vector index 换成 hierarchical tree index，让 LLM 不是做最近邻搜索，而是沿树做 reasoning：先由布局/书签生成树，再用模型只写节点摘要，检索时根据上下文逐层展开。这样阻断的是“chunking 破坏结构”和“embedding 丢上下文”两类失败。最直接的证据是它在 FinanceBench 报告 98.7% accuracy，并明确给出本地模式下约 $0.001/页的建索引成本；同时它的 benchmark 说明同一套 local setup 用于 62 个问题、34 份 PDF。新意在组件层和实证层：换了索引结构，也给出了替代 vector RAG 的对比结果。",
+    "verdict": "RAG 方向值得读，核心是索引范式变化",
+    "why_now": "v0.2.20（2026-09-28）刚发，且 local mode / Flash engine 是近期更新点",
+    "key_points": [
+     "最强卖点是树索引+reasoning，不是向量召回",
+     "对专业长文档更有优势，但依赖文档结构质量",
+     "检索链路更复杂，复现和调参难于传统 RAG"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "reranker",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RAG",
+     "Graph RAG"
+    ],
+    "mermaid": "graph LR\nA[PDF] --> B[Tree index]\nB --> C[LLM reasoning]\nC --> D[Expand nodes]\nD --> E[Cited answer]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:nvidia/openshell",
+   "kind": "project",
+   "title": "NVIDIA/OpenShell",
+   "url": "https://github.com/NVIDIA/OpenShell",
+   "summary": "OpenShell is the safe, private runtime for autonomous AI agents.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "NVIDIA",
+   "hf_upvotes": 0,
+   "stars": 10435,
+   "stars_today": 978,
+   "forks": 1408,
+   "language": "Rust",
+   "code_url": "https://github.com/NVIDIA/OpenShell",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "runtime",
+    "safety",
+    "tool-use"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "面向安全自治 agent 运行时，工程可用",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用 policy sandbox 约束 agent 权限，避免越权读写和泄密",
+    "why": "做 agent/runtime 面试很对口，偏系统安全",
+    "architecture": "它解决的是“agent 必须拿文件、装包、调 API 才能干活，但一放权就可能把密钥、内网和主机一起带走”的悖论。OpenShell 的关键改法不是再加一个审批弹窗，而是把 agent 关进独立 sandbox：文件访问、system call、网络连接都在内核层拦；凭据不直接暴露给 agent，只在去已批准 endpoint 的请求里注入。另一层失败是“policy 改了之后，风险直到出事才知道”，它在生效前先做 formal verification，标出新增 host/API/credential 暴露，让高风险变更停在人审。最直接的证据是 README 明确给出 kernel enforcement + verified policy change 这两道门，并且 0.1.x 已有稳定 release cadence、扩展面和新 API，说明它不是 demo。新意主要在系统组织层：把 agent runtime、安全策略、gateway/sandbox/prover 串成可部署控制面，而不是单点过滤器。",
+    "verdict": "值得看，偏 agent 安全与 runtime 方向",
+    "why_now": "作者报告有 v0.1.1 / v0.1.2 的连续 release，且 0.1.x 明确升级指南",
+    "key_points": [
+     "内核级隔离 + 事前形式验证",
+     "只写了平台能力，原文未给攻击面评测",
+     "部署要吃 Linux/虚拟化/网关栈"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "tool-use",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Model Context Protocol",
+     "Sandboxing"
+    ],
+    "mermaid": "graph TD\nA[Agent 请求] --> B[Sandbox]\nB --> C[Kernel policy]\nB --> D[Network check]\nD --> E[Approved endpoint]\nB --> F[No raw secrets]\nG[Policy change] --> H[Formal verification]\nH --> I[Human review]\nI --> C",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:angel291592/intent-router",
+   "kind": "project",
+   "title": "angel291592/Intent-Router",
+   "url": "https://github.com/angel291592/Intent-Router",
+   "summary": "Intent compiler for AI agents — converges vague requests into typed IntentSpec contracts (probe, ask, or halt before routing), the input layer for routers and typed-decision models like Jev & Laya",
+   "source": "github_search",
+   "published": "2026-09-22",
+   "authors": [],
+   "org": "angel291592",
+   "hf_upvotes": 0,
+   "stars": 325,
+   "stars_today": 0,
+   "forks": 34,
+   "language": "Python",
+   "code_url": "https://github.com/angel291592/Intent-Router",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "routing",
+    "contracts"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "intent到typed契约的路由层，利于可控agent",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "用 IntentSpec 把模糊请求编译成可执行合同，先问 1 个关键问题",
+    "why": "适合看 agent 规划/路由/合同层设计",
+    "architecture": "它解决的不是“怎么让模型更会答”，而是“请求本身就不完整、矛盾，甚至建立在 repo 里已被推翻的前提上时，路由器该先做什么”。Intent-Router 的关键改变是把自然语言先编译成 typed IntentSpec：能查到的先 probe，查不到且会影响决策的才 ASK，若请求出现 ambiguity/conflict/premise 这三类 defect 就标记 issue 后再停；完成后还会拿交付结果逐条对照 spec，避免“答了但没按要求做”。最直接的证据是 v1.2.0 加了对 wrong request 的检查和“hand-off 后再校验交付物”，并且 README 里给了对比：裸跑会丢失缓存失败路径，带 skill 时能写出读缓存失败分支。新意主要在系统组织层和实证层：把“澄清—执行—验收”变成一个可持久化的 contract flow，而不是单次 prompt。",
+    "verdict": "值得精读，像 agent 路由的合同层原型",
+    "why_now": "作者报告 v1.0.0 到 v1.2.0 在 4 天内连续发布，属于近期快速迭代",
+    "key_points": [
+     "三类 defect：ambiguous / conflict / premise",
+     "只证明了若干 eval 案例，泛化边界原文未明确",
+     "依赖 repo/docs 可检索信号，冷启动会弱"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "Self-Refine"
+    ],
+    "mermaid": "graph TD\nA[User request] --> B[Probe]\nB --> C[Ask]\nB --> D[Compile spec]\nD --> E[Route work]\nE --> F[Check delivery]\nF --> G[Update spec]\nC --> D",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.32712",
+   "kind": "paper",
+   "title": "MassAlloc Attention: Let Attention Allocate Its Own Compute",
+   "url": "https://arxiv.org/abs/2609.32712",
+   "summary": "FullAttn often assigns negligible normalized mass to much of the causal score space, yet dense kernels execute the complete post-score path after forming each QK tile. We introduce MALA, a fused attention primitive that preserves score access to every legal causal interaction and uses normalized contribution to allocate post-score computation. Forward uses its evolving online-softmax normalizer, while backward reuses the finalized normalizer to derive nested retained support using only standard attention state. A common tolerance governs training and inference, allowing for adaptive retention of the work. MALA reduces low-contribution post-score computation. A matched-work study at 8K isolates the benefit of distribution-adaptive allocation: under exactly matched total post-score work, MALA approaches a per-instance reference-mass oracle, with mean omitted mass of 0.0188% versus 0.0182%. Across context lengths from 1K to 32K tokens, the same tolerance maintains low output and gradient errors relative to the reference. Across a broader controlled associative-recall comparison, MALA closely tracks FullAttn as context grows, reaching 89.67% accuracy at 8K compared with 89.97% for FullAttn. In an attention-operator benchmark at 128K tokens with tensor parallelism, MALA reduces forward and backward latency during training by 2.2x and 3.0x and decoding latency during inference by 1.6x relative to FullAttn. Across scaling-law training from 0.6B to 14B parameters, MALA closely tracks FullAttn in perplexity while reducing total training FLOPs. The resulting 14B models and 32B models from separate continued training achieve comparable knowledge, reasoning, and long-context retrieval scores to FullAttn. These results indicate that allocating post-score computation according to normalized attention contributions can retain the evaluated capabilities of FullAttn while reducing attention computation.",
+   "source": "hf_papers",
+   "published": "2026-09-26",
+   "authors": [
+    "Jingze Shi",
+    "Zhangyang Peng",
+    "Xianduo Li",
+    "Yanlin Qi",
+    "Xiaotian Lin",
+    "Haoxian Chen"
+   ],
+   "org": "",
+   "hf_upvotes": 64,
+   "stars": 763,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/HKUSTDial/flash-sparse-attention",
+   "pdf_url": "https://arxiv.org/pdf/2609.32712",
+   "categories": [],
+   "keywords": [
+    "attention",
+    "inference",
+    "efficiency"
+   ],
+   "core_score": 6.0,
+   "wide_score": 8.0,
+   "score_reason": "自分配注意力计算的MALA，系统加速价值高",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 MALA 让 attention 按贡献分配后处理算力，128K 推理提速 1.6x",
+    "why": "你做长上下文、推理加速或训练系统都能直接用",
+    "architecture": "它面对的反直觉点是：FullAttn 的 softmax mass 往往高度集中，但 dense kernel 还是把每个合法 causal tile 的后处理全做完了，于是大量低贡献 tile 白白吃掉算力。MALA 的关键改法不是改 QK 发现，而是保留完整的 QK score discovery，再用 normalized contribution 决定后处理要不要继续：forward 依赖 online-softmax normalizer 估计可省略的 mass，backward 复用 forward 保存的 finalized normalizer 来重建嵌套保留集合，二者共享一个 tolerance。最直接的证据是 matched-work study：在总后处理工作量严格相同下，MALA 的 mean omitted mass 0.0188% 接近 per-instance oracle 的 0.0182%，说明它学到的是“把算力花在更值钱的 tile 上”，不是单纯少算；随后 128K benchmark 又给出训练 forward/backward 2.2x/3.0x、推理 1.6x 的收益。新意主要在组件层：不是换一种稀疏 attention，而是在标准 attention state 上重写 post-score compute allocation。",
+    "verdict": "值得精读，适合看训练/推理系统取舍",
+    "why_now": "",
+    "key_points": [
+     "QK 仍全保留，省的是后处理",
+     "matched-work 下逼近 per-instance oracle",
+     "收益依赖 attention mass 分布，不是万能稀疏"
+    ],
+    "prereqs": [
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "online-softmax",
+      "status": "unlisted"
+     },
+     {
+      "name": "flash attention",
+      "status": "unknown"
+     },
+     {
+      "name": "sparse attention",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "FlashAttention",
+     "Sparse Attention"
+    ],
+    "mermaid": "graph TD\nA[QK tiles] --> B[Score discovery]\nB --> C[Normalized mass]\nC --> D{Above tolerance}\nD -->|yes| E[Post score work]\nD -->|no| F[Skip work]\nE --> G[Output and grads]\nF --> G",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.31620",
+   "kind": "paper",
+   "title": "FuseReg: Regularizing Layer Fusion Mitigates the Reconstruction-Generation Gap in Representation Autoencoders",
+   "url": "https://arxiv.org/abs/2609.31620",
+   "summary": "Representation autoencoders (RAEs) reuse features from a pretrained visual encoder as reconstruction and diffusion latents, integrating strong visual representations into image generation. However, RAEs still need to decide which encoder layers form the shared latent space for the generator and pixel decoder. This choice involves a trade-off. Shallower layers tend to preserve fine pixel details better, while deeper layers tend to yield better generation metrics. A fixed heuristic layer fusion therefore couples two stages that benefit from different information. We introduce FuseReg, which replaces heuristic feature selection with training over random subsets of encoder layers. We theoretically analyze the underlying mechanism: subset sampling explicitly penalizes sensitivity to cross-layer disagreement. On ImageNet-256 with DINOv3-L, a single FuseReg decoder reconstructs from full, sparse, and single-layer fusions without retraining, achieving higher PSNR than decoders specialized to fixed fusions. This flexibility also benefits generation: decoder replacement alone reduces unguided gFID by 27% with an unchanged RAEv2 DiT-XL generator. The same regularization principle extends to diffusion training, with joint regularization of both stages reducing unguided gFID by 29% on DiT-Base. These results show that training downstream models for layer-fusion robustness narrows the reconstruction-generation gap without modifying the pretrained encoder.",
+   "source": "hf_papers",
+   "published": "2026-09-25",
+   "authors": [
+    "Hongyang Du",
+    "Yunfei Xie",
+    "Junjie Ye",
+    "Jiawei Yang",
+    "Xiaoyan Cong",
+    "Haodong Zhang"
+   ],
+   "org": "",
+   "hf_upvotes": 118,
+   "stars": 14,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Hongyang-Du/FuseReg",
+   "pdf_url": "https://arxiv.org/pdf/2609.31620",
+   "categories": [],
+   "keywords": [
+    "representation-learning",
+    "diffusion",
+    "autoencoder"
+   ],
+   "core_score": 3.0,
+   "wide_score": 7.0,
+   "score_reason": "RAE+扩散融合正则，和系统/微调关联中等",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "FuseReg 用随机层子集训练，单解码器 PSNR 更高，unguided gFID 再降 27%",
+    "why": "懂 RAE / diffusion 结构取舍，面试很加分",
+    "architecture": "反直觉点在于：RAE 里“选哪几层做 latent”不是小技巧，而是把重建和生成绑死的接口。浅层更保细节，深层更利于 diffusion，但固定 heuristic 只能偏向一边，导致 decoder 只会某种融合、generator 也被同一融合限制。FuseReg 的关键改变是把“固定 fusion”改成“对随机层子集训练”：decoder 和 generator 在训练时看到不同层组合，逼它们学对跨层不一致不敏感的表示；作者的理论分析把这种随机子集等价成对跨层 disagreement 的显式惩罚。最直接的证据是 ImageNet-256 上，一个 FuseReg decoder 能同时重建 full / sparse / single-layer fusion，且无需重训就比专门适配固定 fusion 的 decoder 有更高 PSNR；在生成端，仅替换 decoder 就把 unguided gFID 降了 27%，说明瓶颈确实在 fusion 鲁棒性而不是 encoder 本身。新意主要在组件层和训练组织层，不改 pretrained encoder，只改 downstream 约束。",
+    "verdict": "值得精读，核心是把 fusion 设计成鲁棒接口",
+    "why_now": "",
+    "key_points": [
+     "单 decoder 泛化到多种 fusion，PSNR 反超专用 decoder",
+     "只换 decoder 就降 gFID 27%，证明接口是瓶颈",
+     "没证明对所有 encoder 都稳，代码复现依赖 RAE 管线"
+    ],
+    "prereqs": [
+     {
+      "name": "representation autoencoder",
+      "status": "unlisted"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "RAEv2",
+     "dropout"
+    ],
+    "mermaid": "graph LR\nE[Encoder layers] --> S[Random subsets]\nS --> D[Decoder training]\nS --> G[Generator training]\nD --> R[Robust reconstruction]\nG --> I[Better generation]\nS --> P[Penalty on disagreement]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.32704",
+   "kind": "paper",
+   "title": "CoWindow Attention: Full Causal Coverage Is a Collective Property",
+   "url": "https://arxiv.org/abs/2609.32704",
+   "summary": "FullAttn repeatedly exposes the complete causal history to every attention head, creating substantial redundant computation and memory traffic even with IO-efficient dense kernels. We introduce CoWA, a structured attention architecture that distributes access to the causal history across KV heads. All heads share near-diagonal and prefix-sink windows, while complementary long-range windows partition the remaining history. Their union provides full causal coverage although each head attends sparsely to distant tokens. This position-defined attention pattern requires no learned router or indexer, is used consistently during training and inference, and aligns with KV-head tensor parallelism. A window-matched ablation at 8K isolates the effect of complementary long-range allocation: CoWA with 100% collective coverage reaches 89.73% accuracy, compared with 89.97% for FullAttn, while duplicated long-range windows perform substantially worse. Across a broader controlled associative-recall comparison with matched token budgets, CoWA closely tracks FullAttn as the context grows, whereas other sparse patterns lose a substantial fraction of the associations. In an attention-operator benchmark at 128K tokens with tensor parallelism, CoWA reduces forward and backward latency during training by 7.4x and 8.6x and decoding latency during inference by 3.0x over FullAttn. Its per-rank peak operator memory matches FullAttn during training and is 7.6x lower during decoding. Across scaling-law training from 0.6B to 14B parameters, CoWA closely tracks FullAttn in perplexity while reducing total training FLOPs. The resulting 14B models and 32B models from separate continued training achieve comparable knowledge, reasoning, and long-context retrieval scores to FullAttn. These results show that full causal coverage can be a collective property of the head ensemble rather than a duplicated property of every head.",
+   "source": "hf_papers",
+   "published": "2026-09-26",
+   "authors": [
+    "Jingze Shi",
+    "Zhangyang Peng",
+    "Xianduo Li",
+    "Yanlin Qi",
+    "Xiaotian Lin",
+    "Haoxian Chen"
+   ],
+   "org": "",
+   "hf_upvotes": 59,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.32704",
+   "categories": [],
+   "keywords": [
+    "attention",
+    "inference",
+    "efficient",
+    "longcontext"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "结构化注意力降低冗余且全因果覆盖",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "CoWA 把全因果覆盖拆到各个 KV head，128K 推理更快且训练 FLOPs 降 28.5%",
+    "why": "长上下文系统和稀疏 attention 面试都能用",
+    "architecture": "问题不是“能不能看全历史”，而是“每个 head 都复制一遍全历史是否必要”。Full attention 让每个 head 重复看完整 causal prefix，长上下文时带来大量冗余算力和内存流量，FlashAttention 只能省 IO，没改这个结构性重复。CoWA 的关键改法是把“全覆盖”从单头属性改成集体属性：所有 KV heads 共享近邻窗口和 prefix-sink，剩下的远距离 token 被切成互补窗口分给不同 heads，任何一个 head 只看远处的一部分，但所有 head 的并集仍覆盖完整历史。这样既保留了直接访问每个 causal token 的能力，又避免每个 head 重复搬运整段远历史；因为窗口是位置定义的，训练、prefill、decode 用同一规则，不需要 router。最直接的证据是 8K 的 window-matched ablation：CoWA 只比 FullAttn 低 0.24 个点，但重复 long-range 窗口会明显更差，说明“互补分配”本身就是关键；128K benchmark 上训练和解码延迟分别降 7.4x / 3.0x。新意在系统组织层，属于 attention 结构重排而非新 kernel。",
+    "verdict": "值得通读，适合做长上下文和 attention 结构对比",
+    "why_now": "",
+    "key_points": [
+     "8K ablation 显示互补 long-range 比重复分配更重要",
+     "128K 下训练/解码延迟大幅下降，且无 router",
+     "没证明对所有任务都稳，收益依赖长上下文场景"
+    ],
+    "prereqs": [
+     {
+      "name": "self-attention",
+      "status": "unknown"
+     },
+     {
+      "name": "FlashAttention",
+      "status": "unknown"
+     },
+     {
+      "name": "sparse attention",
+      "status": "unknown"
+     },
+     {
+      "name": "tensor parallel",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "FlashAttention",
+     "Longformer"
+    ],
+    "mermaid": "graph TD\nX[Full history] --> N[Near window]\nX --> L[Long windows]\nL --> H1[Head 1]\nL --> H2[Head 2]\nL --> H3[Head 3]\nH1 --> C[Collective coverage]\nH2 --> C\nH3 --> C\nC --> O[Output]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.35748",
+   "kind": "paper",
+   "title": "Improving Test-Time Scaling with Adaptive Looped Transformers",
+   "url": "https://arxiv.org/abs/2609.35748",
+   "summary": "Looped transformers have demonstrated promising parameter efficiency by reusing layers for latent computation. Prior studies compare looped and non-looped models at matched parameters or per-token FLOPs. However, to the best of our knowledge, whether looping improves test-time scaling as outputs grow longer remains underexplored. Through post-training looped transformers, we study the accuracy-compute slope, measured as the accuracy gain per doubling of test-time decoding FLOPs. We find that existing looped transformers often yield steeper slopes than their non-looped baseline, yet underperform it at matched compute. While fixed-depth looping spends extra iterations on every token, our analysis shows that many tokens do not benefit from extra iterations. We therefore propose TaH2, which enables the model to focus extra iterations on the tokens that benefit from looping. It jointly post-trains the backbone and an iteration decider through lookahead depth supervision, which uses online labels indicating whether further iteration improves the prediction. TaH2 improves both the efficiency and attainable accuracy of test-time scaling. On challenging AIME benchmarks, TaH2 improves the accuracy-compute slope by 53% (2.74 vs. 1.79) over the non-looped baseline, exceeding the baseline's peak accuracy by about 3.4 points at matched test-time compute. As the maximum iteration depth increases, existing looped models largely plateau, while TaH2's gain over the non-looped baseline continues to grow from +2.8 points at depth 2 to +3.9 points at depth 8. Our code is available at https://github.com/thu-nics/TaH.",
+   "source": "hf_papers",
+   "published": "2026-09-28",
+   "authors": [
+    "Yichen You",
+    "Tianyu Fu",
+    "Aosong Feng",
+    "Xingtai Lv",
+    "Xuefei Ning",
+    "Ning Ding"
+   ],
+   "org": "",
+   "hf_upvotes": 45,
+   "stars": 89,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/thu-nics/TaH",
+   "pdf_url": "https://arxiv.org/pdf/2609.35748",
+   "categories": [
+    "cs.CL",
+    "cs.LG"
+   ],
+   "keywords": [
+    "transformer",
+    "test-time",
+    "scaling",
+    "looped"
+   ],
+   "core_score": 6.0,
+   "wide_score": 7.0,
+   "score_reason": "循环Transformer对解码更长时的收益分析",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "TaH2 让 looped Transformer 按 token 自适应迭代，AIME 斜率提 53%",
+    "why": "test-time compute 和 looped transformer 很对面试口味",
+    "architecture": "悖论是：looped Transformer 的迭代越多，理论上越能做 test-time scaling，但固定深度会把额外算力浪费在根本不需要再想的 token 上，所以“更深”常常只换来更贵而不是更准。TaH2 的关键改变是把“是否继续迭代”变成 token 级决策：backbone 和 iteration decider 联合 post-train，decider 由 lookahead depth supervision 监督，在线判断当前 token 再迭代一次是否真的降低 loss；只有值得的 token 才继续走循环，其他 token 提前停。这样 test-time compute 不再平均摊给所有 token，而是集中在难 token 上。最直接的证据是 AIME 上 accuracy–compute slope 提升 53%，并且在相同 test-time compute 下比 non-looped baseline 高约 3.4 分；随着最大迭代深度增加，TaH2 的优势继续扩大，而旧 looped 模型基本平台化，说明它解决的是“深度分配”而不是单纯加层。新意在训练组织层，核心是把循环深度从固定策略改成数据驱动的自适应退出。",
+    "verdict": "值得精读，核心机制适合讲 test-time scaling",
+    "why_now": "",
+    "key_points": [
+     "53% slope 提升，说明收益来自更好的 compute 分配",
+     "固定 loop 常把算力浪费在易 token 上",
+     "在线监督依赖当前 backbone，迁移到别的模型要重调"
+    ],
+    "prereqs": [
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     },
+     {
+      "name": "looped transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "loss spike",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Dehghani et al. 2019",
+     "Ouro"
+    ],
+    "mermaid": "graph TD\nI[Token input] --> B[Shared loop block]\nB --> D[Decider]\nD -->|continue| B\nD -->|stop| P[Per token prediction]\nB --> L[Lookahead supervision]\nL --> D\nP --> O[Output]",
+    "read_level": "L3"
+   }
+  }
+ ]
+}
