@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-09-30",
+   "papers": 11,
+   "projects": 7,
+   "top": "Raven: The Harness of Harnesses for Composable Agentic Intelligence"
+  },
+  {
    "date": "2026-09-29",
    "papers": 12,
    "projects": 6,
