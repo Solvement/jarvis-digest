@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-10-01",
+   "papers": 11,
+   "projects": 7,
+   "top": "UniEvo-VL: An On-policy Self-Distillation Training Recipe for Multimodal Model Self-improvement"
+  },
+  {
    "date": "2026-09-30",
    "papers": 11,
    "projects": 7,
