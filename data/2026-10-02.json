@@ -1,0 +1,1232 @@
+{
+ "date": "2026-10-02",
+ "stats": {
+  "collected": 787,
+  "filtered": 419,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 24 calls, 84729 in / 24335 out; gpt-5.4-mini: 6 calls, 51840 in / 8646 out"
+ },
+ "items": [
+  {
+   "id": "paper:2609.40111",
+   "kind": "paper",
+   "title": "Agent Error Dataset: Scaling 50,000 Error--Diagnosis Pairs for Failure Analysis and Error-Aware Post-Training",
+   "url": "https://arxiv.org/abs/2609.40111",
+   "summary": "An unsuccessful LLM agent rollout contains more information than its final reward: the observations available to the agent, the actions it chose, and the environment's responses. Reusing this experience for learning requires identifying a decision to revise and testing a concrete alternative. We introduce the Agent Error Dataset (AED), comprising 50,228 error-diagnosis pairs from 9,961 source tasks across 33 environments, 19 harness families, and 23 policy models in text-based agent systems. We retain source traces and execution metadata to support cross-setting failure analysis and re-diagnosis without repeating the original rollout. Our five-stage Agentic Error-to-Training (AET) pipeline collects natural failures, generates diagnoses and proposed corrections, and checks them against recorded evidence. Where replay is supported, we compare corrections with original-action retries from the same checkpoint under matched execution settings. We then construct separate training views for diagnosis and actor recovery. Across 3,062 matched replay pairs, first-proposal corrections raise verifier pass rates from 18.4% to 51.1%, a gain of 32.7 percentage points. Using a separately frozen diagnosis release, full-diagnosis fine-tuning on 1,656 source tasks raises Qwen3-8B's exact-step agreement with internal teacher labels from 47.2% to 63.6%, averaged over three seeds on a 943-case holdout. The strongest prompted reference in this comparison scores 54.7%, and mean agreement improves at each of four increasing training-set sizes. In a single-seed comparison of actor-training recipes, action-only repair training scores 6.67 percentage points higher on WebShop-lite than success-only training.",
+   "source": "hf_papers",
+   "published": "2026-09-30",
+   "authors": [
+    "Kunlun Zhu",
+    "Xuyan Ye",
+    "Yibo Li",
+    "Cheng Qian",
+    "Beibin Li",
+    "Heng Ji"
+   ],
+   "org": "",
+   "hf_upvotes": 46,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.40111",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "evaluation",
+    "post-training"
+   ],
+   "core_score": 10.0,
+   "wide_score": 6.0,
+   "score_reason": "误差数据+面向后训练的Agent失败分析",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "50,228 条失败-诊断对，把 agent 崩溃经验变成可训数据",
+    "why": "直接面向 agent 失败分析和后训练，面试很能讲",
+    "architecture": "这篇先解决一个反直觉点：失败 rollout 不是“无效样本”，而是同时包含 observation、action 和 environment response 的纠错证据；问题在于，只有最终 reward 不能告诉你该改哪一步、换什么动作。作者的关键改变是把失败拆成“诊断”和“修正”两种训练视图：AED 记录 50,228 条 error–diagnosis pair，并保留 trace 与 execution metadata，AET 再用这些证据校验 proposed correction，能 replay 时还拿同 checkpoint 的原动作重试作控制，避免把“看起来合理”误当成“确实更好”。最直接的证据是 3,062 对 matched replay 中，first-proposal corrections 的 verifier pass rate 从 18.4% 提到 51.1%。新意主要在系统组织层：不是再做一个失败分类器，而是把失败日志组织成可复诊断、可回放、可分别训练 diagnosis actor 的数据管线。",
+    "verdict": "值得精读，核心是“失败经验如何变训练数据”",
+    "why_now": "",
+    "key_points": [
+     "最强证据：3,062 对 replay，pass rate +32.7pp",
+     "没证明通用性：text-based agent 系统为主",
+     "复现难点：要有 harness replay 和元数据"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "post-training",
+      "status": "unlisted"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "rejection sampling",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "AgentTuning",
+     "AgenTracer"
+    ],
+    "mermaid": "graph LR\nA[failed rollout] --> B[diagnose error]\nB --> C[propose correction]\nC --> D[check against evidence]\nD --> E[replay or train]\nE --> F[diagnosis view]\nE --> G[actor recovery view]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.38445",
+   "kind": "paper",
+   "title": "AIM: Agentic Idea Management for Automated Research",
+   "url": "https://arxiv.org/abs/2609.38445",
+   "summary": "Frontier LLMs are increasingly used to automate scientific research through iterative search. We distinguish idea-driven search from solution-driven search and identify three core challenges: organizing evolving research ideas, selecting promising directions, and maintaining alignment between ideas and their implementations. To address these challenges, we introduce the Agentic Idea Manager (AIM), a fully autonomous framework for managing and exploring research directions in idea-driven automated research. Inspired by Bayesian optimization, AIM uses an Agentic Surrogate and an Agentic Acquisition mechanism to organize discovered ideas and guide their selection. A Solution Auditor maintains idea-solution integrity, while a Resource Planner adaptively allocates the remaining experimental budget across parallel search branches. Experiments on 10 AutoLab benchmark tasks show that AIM surpasses the strongest baseline by 1.6 percentage points on System Optimization tasks and 4.9 percentage points on long-horizon Model Development & CUDA tasks. Notably, AIM reaches the best baseline performance up to 3.1x faster in wall-clock time. We further provide a theoretical analysis of when searching over ideas becomes beneficial. Our analysis shows that explicit idea-level allocation makes semantic coverage directly controllable, and that broader coverage becomes increasingly valuable when competitive research directions are sparse among many plausible alternatives. Project Page: https://imhgchoi.github.io/agentic-idea-manager/",
+   "source": "hf_papers",
+   "published": "2026-09-29",
+   "authors": [
+    "Hyeong Kyu Choi",
+    "Bhavana Dalvi Mishra",
+    "Jiefeng Chen",
+    "Mihir Parmar",
+    "Rui Meng",
+    "Chun-Liang Li"
+   ],
+   "org": "",
+   "hf_upvotes": 49,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.38445",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rag",
+    "research"
+   ],
+   "core_score": 9.0,
+   "wide_score": 5.0,
+   "score_reason": "自动科研智能体思路清晰且贴近Agent/RAG",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "AIM 把科研代理从改代码，升级到管 ideas",
+    "why": "适合看自动科研 agent 的组织方式和搜索抽象",
+    "architecture": "这篇先抓住一个常见卡点：科研 agent 只盯着具体实现时，容易把“哪个想法更好”和“怎么把某个实现改好”混在一起，导致实验预算被局部工程细节吃掉。作者的关键改变是把搜索对象从 solution 提升到 idea：AIM 用 Agentic Surrogate 维护 idea cluster 和历史证据，阻断“候选太多但没有全局记忆”的问题；用 Agentic Acquisition 决定先探索哪类 idea，再把候选交给 solver 落地，阻断“只会优化当前实现、不会比较方向”的问题；Solution Auditor 负责检查 idea–solution integrity，阻断“想法和实现跑偏”；Resource Planner 在固定预算下调并行度，阻断“早期撒太广、后期收不回来”。最直接的证据是 10 个 AutoLab 任务上，AIM 比 strongest baseline 在 System Optimization 上 +1.6pp、在 long-horizon Model Development & CUDA 上 +4.9pp，且最快 3.1x 更快到达最佳基线水平。新意主要在系统组织层，外加一点实证层。",
+    "verdict": "值得看抽象层提升，适合自动科研方向",
+    "why_now": "",
+    "key_points": [
+     "最强证据：10 个 AutoLab 任务、最快 3.1x",
+     "没证明什么：依赖 AutoLab 和自动科研设定",
+     "复现难点：需要 idea-level 搜索与 auditor 配套"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     },
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ScientistOne",
+     "AI Scientist-v2"
+    ],
+    "mermaid": "graph LR\nA[ideas] --> B[surrogate clusters]\nB --> C[acquisition select]\nC --> D[solver implements]\nD --> E[auditor checks]\nE --> F[resource planner]\nF --> C",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.38024",
+   "kind": "paper",
+   "title": "Retrieval-Augmented Skill Optimization via Cross-Harness Adaptation",
+   "url": "https://arxiv.org/abs/2609.38024",
+   "summary": "An agent skill is a reusable, actionable natural-language artifact that guides an agent to perform a task effectively under a given harness. Recent studies have explored the optimization of agent skills, contributing to a growing collection of publicly available skills spanning diverse tasks, domains, and harnesses. Despite millions of publicly shared skills, existing skill optimization methods largely overlook this accumulated knowledge, instead relying solely on expensive agent rollouts to iteratively refine skills for a target task. To address this, we propose Retrieval-Augmented Skill Optimization (RASO), a framework that leverages an external skill corpus as prior knowledge throughout skill optimization. RASO retrieves relevant knowledge from existing skills and adapts it to the target task and harness via Cross-Harness Adaptation, accounting for mismatches in both domain and harness. RASO comprises two complementary stages: Retrieval-Augmented Skill Initialization (RASI) constructs a knowledge-grounded initial skill without requiring agent rollouts, while Retrieval-Augmented Skill Update (RASU) iteratively refines the skill by retrieving external knowledge guided by execution feedback. Across four agent benchmarks and two models, extensive experiments show that RASO consistently outperforms baselines without retrieval-augmented skill initialization and updating.",
+   "source": "hf_papers",
+   "published": "2026-09-29",
+   "authors": [
+    "Jaewon Chu",
+    "Ji Soo Lee",
+    "Jihwan Park",
+    "Dohwan Ko",
+    "Jeehye Na",
+    "Seunghun Lee"
+   ],
+   "org": "",
+   "hf_upvotes": 34,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.38024",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rlhf",
+    "rag"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "Agent skills 优化+检索先验，契合RAG/后训练。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "RASO 用检索到的技能库，少跑 rollout 也能更会做 agent skill",
+    "why": "和 RAG、技能优化、agent harness 直接相关，面试好讲",
+    "architecture": "它要解决的不是“有没有 skill”，而是“已有海量公开 skill，为什么还要从零试错”。现有 skill optimization 往往只靠目标任务上的 rollout 迭代，碰到 harness 变了就要重新学；作者的关键改变是把外部 skill corpus 当 prior，用 Retrieval-Augmented Skill Initialization 先从 task + harness 描述生成初始 skill，再用 Retrieval-Augmented Skill Update 在执行反馈下检索缺失知识继续修；Cross-Harness Adaptation 是核心阻断器，专门防止“检索到的内容来自别的任务/工具/单位，直接抄会失配”。最直接的证据是四个 agent benchmark、两个模型上，RASO 持续优于不带 retrieval 的初始化和更新；文中还特别指出 SpreadsheetBench 上检索到的 skill 里 92.9% 来自不同 harness，说明这个 adaptation 不是装饰，而是在处理真实分布偏移。新意主要在组件层加系统组织层：把 skill 优化从“只看本地 rollout”改成“检索 + harness 对齐 + 反馈更新”。",
+    "verdict": "值得看，适合做 agent skill/RAG 交叉方向",
+    "why_now": "",
+    "key_points": [
+     "最强证据：4 benchmark、2 model 上稳定赢",
+     "没证明什么：依赖高质量外部 skill corpus",
+     "复现难点：Cross-Harness Adaptation 要处理工具失配"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "TextGrad",
+     "GEPA"
+    ],
+    "mermaid": "graph LR\nA[task and harness] --> B[retrieve skills]\nB --> C[cross harness adapt]\nC --> D[rasi init skill]\nD --> E[run agent]\nE --> F[feedback]\nF --> G[rasu update]\nG --> B",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.40285",
+   "kind": "paper",
+   "title": "PivotOPD: Learning to Recover from Pivotal Mistakes in Multi-Turn Agents",
+   "url": "https://arxiv.org/abs/2609.40285",
+   "summary": "On-policy distillation (OPD) is a promising approach for training language agents, providing dense teacher supervision on student-generated trajectories. However, in multi-turn interaction, an incorrect action changes the states the student encounters later, so errors compound across turns. In preliminary experiments across three Qwen3 models (8B to 235B), we find that more than half of the failed rollouts contain a pivotal mistake, an action that moves the agent farther from completing the task, and this mistake typically occurs early. These pivotal mistakes often remain recoverable: guiding the model for only a few turns after the pivotal turn can restore task success. We therefore propose PivotOPD, an on-policy distillation framework that jointly trains the student to prevent pivotal mistakes and to recover from the states they create. At each pivotal mistake, a teacher model provides a gold action and then names a recovery action at each of the next few turns. Preventive distillation uses the gold action with reverse KL to steer the student away from the pivotal mistake, while recovery distillation uses the recovery actions with forward KL to transfer recovery behaviors that the student rarely samples. Against 13 baselines on ALFWorld, WebShop, and Search-based QA, PivotOPD achieves the strongest average performance for both Qwen3-1.7B and Qwen3-8B students, improving over the strongest baseline on ALFWorld by +5.5% with the 1.7B student. The gains also transfer to another model family on the software engineering domain, where PivotOPD raises the resolve rate of a Nemotron-3.5 student on SWE-Bench Verified by +3.2%. Project page: https://research.nvidia.com/labs/lpr/pivotopd/",
+   "source": "hf_papers",
+   "published": "2026-09-30",
+   "authors": [
+    "Yinghui He",
+    "Yapei Chang",
+    "Khushi Bhardwaj",
+    "Daniele Molinari",
+    "Tugrul Konuk",
+    "Jan Kautz"
+   ],
+   "org": "",
+   "hf_upvotes": 21,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.40285",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "opd",
+    "on-policy"
+   ],
+   "core_score": 9.0,
+   "wide_score": 5.0,
+   "score_reason": "多轮Agent从关键错误恢复，和OPD高度相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PivotOPD 用早期 pivotal mistake+恢复轨迹训练，Qwen3-1.7B 在 ALFWorld 最优基线再提 5.5%",
+    "why": "做 agent / on-policy distillation 面试很对口",
+    "architecture": "反直觉点是：多轮 agent 失败不一定是一路崩到底，很多 rollout 其实卡在很早一次关键错误后，后面还“有救”。传统 OPD 只在学生自己采样到的轨迹上给密集监督，但错误会把后续状态带偏，恢复样本又很少，所以它学会了少犯错，却没学会怎么从自己犯错后的状态里爬回来。PivotOPD 的关键改变是把“关键错在哪一 turn”与“错后怎么恢复”拆开：pivotal turn 用 teacher 给 gold action，配 reverse KL 拉学生远离那次错误；后面几步再用 recovery action，配 forward KL 把学生几乎采不到的恢复行为灌进去。最直接的证据是 ALFWorld 上的反事实回放：只修正 pivotal turn，成功率就大幅回升；再给后两步恢复动作也能继续恢复，说明问题主要在“错后没学过”而不是“任务不可救”。新意主要在组件层和训练信号层，不是新环境。",
+    "verdict": "值得精读，关键在多轮 agent 的信用分配",
+    "why_now": "",
+    "key_points": [
+     ">50% 失败轨迹含 recoverable pivotal mistake",
+     "标准 OPD 降总体失败，但 pivotal 失败几乎不修",
+     "teacher 选 pivotal 依赖 hindsight，复现门槛中等"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "on-policy distillation",
+     "PPO"
+    ],
+    "mermaid": "graph TD\nA[student rollout] --> B[teacher hindsight]\nB --> C[pivotal turn]\nC --> D[gold action]\nC --> E[recovery actions]\nD --> F[reverse KL]\nE --> G[forward KL]\nF --> H[avoid mistake]\nG --> I[recover state]\nH --> J[PPO update]\nI --> J",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2610.02206",
+   "kind": "paper",
+   "title": "KaliBench: A Fine-Grained Benchmark for Cybersecurity Tool Use on Kali Linux with Runtime-Free Verifiable Rewards",
+   "url": "https://arxiv.org/abs/2610.02206",
+   "summary": "LLMs are increasingly applied to cybersecurity workflows, where they are expected to translate analysts' intent into tool invocations. However, existing evaluations focus on knowledge-based assessments or end-to-end agentic tasks, and do not directly measure LLMs' ability to generate executable commands for real-world cybersecurity tools. This gap is critical because cybersecurity operations rely on strict command-line interfaces (CLIs), where minor syntax errors, incorrect flag--value bindings, or argument misordering can invalidate execution. We introduce KaliBench, a fine-grained benchmark and dataset for natural-language--to--CLI translation on Kali Linux, comprising 8,504 query--command pairs spanning 1,642 tools across 23 capability dimensions and 5 security phases. KaliBench is constructed via a manuscript-grounded pipeline with deterministic canonicalization and alias-aware evaluation, enabling precise and reproducible assessment of tool selection and argument construction. To ensure both semantic correctness and practical executability, we develop a multi-stage verification pipeline that combines LLM-based validation, sandboxed terminal execution, and human-in-the-loop refinement. Building on these fine-grained, deterministic signals, KaliBench further enables runtime-free verifiable rewards for training. Across three evaluation modes and 24 configurations of general-purpose and security-focused open-weight models, no open-weight model exceeds 42% exact-command accuracy in the unrestricted setting, highlighting the difficulty of accurate CLI-based cybersecurity tool use without explicit tool hints. We further show that supervised fine-tuning and reinforcement learning with verifiable rewards derived from KaliBench significantly improve an 8B model and achieve performance comparable to a 685B MoE model.",
+   "source": "hf_papers",
+   "published": "2026-10-01",
+   "authors": [
+    "Pengfei Li",
+    "Naufal Suryanto",
+    "Sicheng Zhang",
+    "Muzammal Naseer"
+   ],
+   "org": "",
+   "hf_upvotes": 4,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/RISys-Lab/KaliBench",
+   "pdf_url": "https://arxiv.org/pdf/2610.02206",
+   "categories": [
+    "cs.CL",
+    "cs.AI",
+    "cs.CR"
+   ],
+   "keywords": [
+    "agent",
+    "benchmark",
+    "tool-use"
+   ],
+   "core_score": 9.0,
+   "wide_score": 4.0,
+   "score_reason": "Kali 工具使用细粒度可执行评测",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "KaliBench 用 8,504 条 Kali 命令对，做无运行时可验证奖励的 NL-to-CLI 评测",
+    "why": "适合看工具调用和 verifiable reward 的人",
+    "architecture": "这篇解决的不是“模型会不会做安全题”，而是“能不能把分析师意图翻成一条可执行的 Kali 命令”。在 CLI 场景里，少一个 flag、参数顺序错了、alias 用错了，命令就失效；而现有安全 benchmark 不是考知识问答，就是考端到端 agent，没法把失败归因到 tool selection 还是 argument construction。KaliBench 的关键改变是把问题拆成 schema-free 的 NL-to-CLI，并且给出细粒度、可验证的监督：先做工具与参数级 canonicalization，再用 alias-aware scoring 精确判错；因为 CLI 结构本身确定，还能在不跑真实命令的情况下构造 verifiable rewards。最直接的证据是作者报告：24 组模型配置里，没有开源模型超过 42% exact-command accuracy，且作者明确指出瓶颈主要在 argument construction。新意在 benchmark 组织层和奖励信号层，不是单纯刷分。",
+    "verdict": "值得速览后看数据设计，训练价值大于榜单",
+    "why_now": "原文未明确",
+    "key_points": [
+     "8,504 条 query-command，覆盖 1,642 工具",
+     "可做 runtime-free verifiable rewards",
+     "作者报告开源模型 exact-command 最高仍低于 42%"
+    ],
+    "prereqs": [
+     {
+      "name": "tool use",
+      "status": "unknown"
+     },
+     {
+      "name": "alignment",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "BFCL",
+     "ToolSandbox"
+    ],
+    "mermaid": "graph TD\nA[nl intent] --> B[tool select]\nB --> C[arg build]\nC --> D[canonicalize]\nD --> E[alias aware score]\nE --> F[verifiable reward]\nF --> G[SFT or RLVR]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2610.02002",
+   "kind": "paper",
+   "title": "Mem++: Non-Destructive Memory for Long-Term Organizational LLM Agents",
+   "url": "https://arxiv.org/abs/2610.02002",
+   "summary": "Large Language Model (LLM) agents now take part in organizational work, where many authors record decisions across documents over months. Because a revised decision arrives as a new document rather than an edit, answering a question requires knowing which version held at a given time. However, most memory systems compress the record at write time. By distilling each document into facts, notes or graph edges, these methods fix what can be answered before any question is asked. To address this, we propose Mem++, a non-destructive memory framework shifting from write-time distillation to read-time selection. Mem++ stores every document whole with its date and author, and it calls no generative model at write time. At read time, it retrieves only documents dated up to the time a question asks about and fuses lexical and semantic rankings. Unlike systems that overwrite older versions, Mem++ keeps them and leaves the choice to the answering model. Evaluations on the organizational benchmark OrgMemBench demonstrate that Mem++ surpasses the strongest memory system baseline by 8.0 to 13.1 points across two answering models. With gpt-4.1-mini, it also achieves the best overall score, 2.6 points above RAG. In addition, Mem++ achieves the best average LLM-judge score on LoCoMo and ranks second on LongMemEval-S, behind only its entity-graph variant. Code for benchmark evaluation is available at https://github.com/AIDAChip-Inc/mem-plus-plus.",
+   "source": "arxiv",
+   "published": "2026-10-01",
+   "authors": [
+    "Ahmad Yehia",
+    "Aly O. Abdelkareem",
+    "Islam Ahmed",
+    "Hesham Omran",
+    "Khaled Alashmouny",
+    "Christian Claudel"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/AIDAChip-Inc/mem-plus-plus.",
+   "pdf_url": "https://arxiv.org/pdf/2610.02002",
+   "categories": [
+    "cs.CL",
+    "cs.AI"
+   ],
+   "keywords": [
+    "memory",
+    "agent",
+    "lifelong"
+   ],
+   "core_score": 9.0,
+   "wide_score": 4.0,
+   "score_reason": "非破坏式组织记忆，强贴合长记忆Agent",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "Mem++ 把文档整份保留、读时再选，OrgMemBench 上比最强记忆基线高 8.0 到 13.1 分",
+    "why": "做 RAG/记忆系统面试很容易问到",
+    "architecture": "反直觉点是：组织记忆里，最危险的不是“记不住”，而是“太早压缩后把版本关系压没了”。很多决策不是在原文里改一行，而是新发一份文档；如果 write-time 就把文档蒸成 facts 或 graph edges，后面问某个时间点到底哪个版本生效，系统已经没法回到原文核对。Mem++ 的关键改变是把选择权从 write-time 挪到 read-time：写入时不做生成式压缩，整份文档连日期和作者一起存；查询时先按时间截断，只取问题时点之前的文档，再把 lexical 和 semantic 排序融合，由回答模型自己决定版本。最直接的证据是 OrgMemBench：Mem++ 比最强 memory baseline 高 8.0 到 13.1 分，且在 LoCoMo 上 LLM-judge 也最好。新意主要在系统组织层：不是更聪明的摘要，而是拒绝过早丢源文档。",
+    "verdict": "值得看，核心是记忆系统的时序归因",
+    "why_now": "原文未明确",
+    "key_points": [
+     "write-time 不做压缩，原文整份保留",
+     "读时按时间过滤，再做 lexical+semantic 融合",
+     "OrgMemBench 上领先 8.0 到 13.1 分"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MemGPT",
+     "RAG"
+    ],
+    "mermaid": "graph TD\nA[documents] --> B[store whole]\nB --> C[keep date author]\nD[question time] --> E[time filter]\nC --> E\nE --> F[lexical rank]\nE --> G[semantic rank]\nF --> H[merge]\nG --> H\nH --> I[answering model]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2610.02204",
+   "kind": "paper",
+   "title": "Reconstruct, Practice, Go Real: Guided Self-Improvement for Embodied Agents",
+   "url": "https://arxiv.org/abs/2610.02204",
+   "summary": "Building reliable robot capabilities across diverse tasks requires substantial human effort to develop and maintain skills, design rewards, and integrate perception with control. We present Reconstruct, Practice, Go Real (RPG), a framework for autonomous improvement of robot execution systems without updating model weights. RPG identifies manipulation capabilities in an offline dataset and constructs related practice tasks in simulation. During practice, RPG uses execution feedback, privileged simulator state, and available dataset videos to diagnose failures. It develops new reusable symbolic skills, refines existing skills, and revises the system prompt based on these diagnoses. Cross-task evaluation tests individual candidate changes and merged revisions before they are retained for reuse. At test time, a multimodal LLM uses the resulting system prompt and skill library to coordinate perception and robot control. On held-out initializations of 22 manipulation tasks, RPG improves task success from 28.6% after the first practice round to 95.0% after 15 rounds, outperforming all evaluated baselines, including ASPIRE (75.5%) and CaP-Agent0 powered by GPT-6 Astra Pro (60.0%). After a common calibration and hardware-adaptation procedure, the frozen system succeeds in all 30 physical trials, with ten trials on each of three tasks. Project Website: https://rpg-robot.github.io/",
+   "source": "arxiv",
+   "published": "2026-10-01",
+   "authors": [
+    "Yen-Jen Wang",
+    "Haozhe Jiang",
+    "Shuying Deng",
+    "Haoru Xue",
+    "Weirui Ye",
+    "Rocky Duan"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2610.02204",
+   "categories": [
+    "cs.RO",
+    "cs.AI",
+    "eess.SY"
+   ],
+   "keywords": [
+    "embodied",
+    "robotics",
+    "rl"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "具身智能体的离线数据驱动自进化。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用仿真练习+技能库自改进，把22个任务成功率提到95.0%",
+    "why": "适合看 embodied agent 的循环式自改进机制",
+    "architecture": "反直觉点在于：机器人失败后，不一定该先改 weights；很多错误其实卡在“技能缺失、技能复用差、提示词不会调度”。现有方法要么只在单任务里闭环修正，要么把能力写死进模型，跨任务复用差。RPG 的关键改变是把改进对象从参数改成共享的执行系统：Reconstruct 从离线数据里找可复用的 manipulation capability，并生成仿真练习任务；Practice 用 Runtime Agent vs Privileged Agent 的执行差异、加上 dataset videos 做失败诊断，再把改动落到新 symbolic skill、已有 skill 修订和 system prompt 更新；Cross-task evaluation 先验收单个改动，再验收合并后的版本，阻断“修好了 A 却搞坏 B”的回归。最直接的证据是 held-out 22 个任务上，15 轮后 success 从 28.6% 到 95.0%，而 ablation 说明去掉 Privileged Agent / Video Analyzer / skill revision 都会掉。新意在系统组织层：它不是新 policy，而是让机器人执行系统具备可迭代维护的共享技能库。",
+    "verdict": "值得精读，核心是“无权重更新”的机器人自改进闭环",
+    "why_now": "",
+    "key_points": [
+     "22任务 28.6%→95.0%，15轮持续提升",
+     "30个真实试验全成功，但前有统一校准/硬件适配",
+     "原文未给代码；复现关键在仿真任务构造与诊断链路"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multimodal model",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Voyager",
+     "ASPIRE"
+    ],
+    "mermaid": "graph TD\nA[离线数据] --> B[Reconstruct]\nB --> C[仿真练习任务]\nC --> D[Runtime vs Privileged]\nD --> E[Video Analyzer]\nE --> F[新技能\n修订提示词]\nF --> G[跨任务验证]\nG --> H[保留共享库]\nH --> I[Go Real]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2610.02070",
+   "kind": "paper",
+   "title": "Causal Memory Policy: Making Memory Utility Identifiable by Intervening on Retrieval",
+   "url": "https://arxiv.org/abs/2610.02070",
+   "summary": "Memory-augmented large language models must decide which memories to retain, and recent systems do so by estimating each memory's effect on task performance. However, these estimates rely entirely on retrieved memories. When a memory is never retrieved, store-level interventions produce identical outcomes, leaving its utility unidentified. This is a retrieval-level positivity violation, invisible to diagnostics that examine only memory operations. We introduce Causal Memory Policy (CMP), a causal framework that restores identification by intervening on retrieval itself, reserving a fixed number of context slots for memories sampled with known propensities. CMP estimates memory utility by self-normalized inverse propensity weighting under a balanced assignment design. We prove the causal factorization of memory utility through retrieval, the unbiasedness and exact variance of the estimator, and the optimal decision rule under irreversible operations. Empirically, identification fails for 54% of required memories on LongMemEval and 67% on LoCoMo, and the failure persists in a deployed memory system. CMP improves discrimination between required and non-required memories from 0.54 to 0.66 AUC. Finally, we show that identified memory utility alone is insufficient for retention decisions: per-query utility reaches 0.78 AUC on the query for which it is estimated, yet no aggregation available to a retention policy predicts a memory's value on unseen queries. Code is available at: https://anonymous.4open.science/r/cmp-release-D0C3/.",
+   "source": "arxiv",
+   "published": "2026-10-01",
+   "authors": [
+    "Arman Behnam",
+    "Binghui Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 0,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2610.02070",
+   "categories": [
+    "cs.AI"
+   ],
+   "keywords": [
+    "memory",
+    "causal",
+    "retrieval",
+    "rlhf"
+   ],
+   "core_score": 9.0,
+   "wide_score": 5.0,
+   "score_reason": "因果记忆效用识别，直击agent/RAG关键痛点",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "把记忆筛选改成带随机曝光的因果估计，AUC到0.66",
+    "why": "适合看 RAG/long-context 的记忆管理因果坑",
+    "architecture": "反直觉点在于：记忆“没用”不等于它真的没用，很多记忆只是从没被检索出来。现有 memory utility 估计大多只看已检索到的上下文，所以一旦某条 memory 永远没进 context，store-level 干预怎么改都看不出差别，utility 就不可识别。CMP 的关键改变是把干预点从 memory store 前移到 retrieval：系统预留固定 context slots，用已知 propensity 采样记忆，借此恢复 positivity；再用 self-normalized inverse propensity weighting 估计“被检索到后”的条件效用。这个设计直接阻断了“未被检索→效用无法估”的失败链。最直接的证据是他们在 LongMemEval/LoCoMo 上量到大量 required memories 根本没被识别到，且在 deployed memory system 里也存在；引入 CMP 后 required / non-required discrimination 从 0.54 到 0.66 AUC。新意在实证层 + 因果形式化层：不是又一个 memory scorer，而是证明了识别失败来自 retrieval-level positivity violation。",
+    "verdict": "值得精读，因果识别问题会影响很多记忆系统",
+    "why_now": "",
+    "key_points": [
+     "54%/67% required memories 发生识别失败",
+     "CMP 把 discrimination 提到 0.66 AUC",
+     "它也证明：已识别的 utility 仍不足以做 retention"
+    ],
+    "prereqs": [
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "causal inference",
+      "status": "unlisted"
+     },
+     {
+      "name": "importance weighting",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "structural causal model",
+     "inverse propensity weighting"
+    ],
+    "mermaid": "graph TD\nA[Memory store] --> B[Retrieval]\nB --> C[Context]\nC --> D[Model output]\nA --> E[Store level score]\nB --> F[Known propensity sampling]\nF --> G[IPW estimate]\nG --> H[Utility decision]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "repo:friedrich-m/unimate",
+   "kind": "project",
+   "title": "Friedrich-M/UniMate",
+   "url": "https://github.com/Friedrich-M/UniMate",
+   "summary": "[SIGGRAPH Asia 2026] UniMate: One Unified Model to Animate Diverse Skeletons",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Friedrich-M",
+   "hf_upvotes": 0,
+   "stars": 1195,
+   "stars_today": 240,
+   "forks": 107,
+   "language": "Python",
+   "code_url": "https://github.com/Friedrich-M/UniMate",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "multimodal",
+    "video",
+    "3d"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "骨架动画统一模型，具身/多模态潜力强。",
+   "tier": "core",
+   "ptype": "model",
+   "board": "daily",
+   "digest": {
+    "one_liner": "统一 skeleton 动画模型，放出训练推理代码和预览 checkpoint",
+    "why": "适合看 3D/视频生成里“一个模型吃多种骨架”的工程实现",
+    "architecture": "原文未明确它要解决的具体线上痛点，但从 README 看，它面向的是不同 skeleton 之间的统一动画：同一套模型要同时适配 Truebones、Mixamo、Objaverse 和 UniML3D，多骨架场景下最容易崩的是 joint 数、拓扑和时序长度不一致。它的承重设计是把输入先 canonicalize 成 60-frame clip，再在 attention 上提供两种组织方式：graph_adaln 把空间和时间拆开做图距离/边类型/深度 bias，并用 adaLN 注入 caption；full_cross_attn 则把 joint×time token 展平后统一做 cross-attn。训练侧用 flow matching 预测线性插值速度，配 masked L2 + rotation/smoothness 辅助损失，并用 EMA 作为默认推理权重；数据侧有 balanced sampler、topology augmentation、padding mask，阻断不同骨架规模把训练分布拉偏。成熟度信号很强：训练与推理代码已放出，数据处理 pipeline 和 preview checkpoints 也已公开，README 还写了单机/多卡启动、resume、日志和可视化输出。想要“多骨架统一动画”，它相对单一数据集方法的差异主要在数据覆盖和两种 attention 取舍。",
+    "verdict": "值得上榜，成熟度高，适合关注 3D 生成/动画方向",
+    "why_now": "2026-09-06 已放出 training and inference code；2026-09-27 又补了 preview checkpoints",
+    "key_points": [
+     "代码、数据管线、checkpoint 都已公开",
+     "两条注意力路线可切换：graph_adaln vs full_cross_attn",
+     "README 很完整，但 OOD rig 处理仍标注 TODO"
+    ],
+    "prereqs": [
+     {
+      "name": "flow matching",
+      "status": "unknown"
+     },
+     {
+      "name": "latent diffusion",
+      "status": "unknown"
+     },
+     {
+      "name": "vision transformer",
+      "status": "unknown"
+     },
+     {
+      "name": "cross-attention",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "MotionGPT",
+     "MimicMotion"
+    ],
+    "mermaid": "graph TD\nA[Raw clips] --> B[Canonicalize]\nB --> C[60 frame tokens]\nC --> D[graph adaln]\nC --> E[full cross attn]\nD --> F[flow matching]\nE --> F\nF --> G[Animated skeleton]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:ruvnet/ruflo",
+   "kind": "project",
+   "title": "ruvnet/ruflo",
+   "url": "https://github.com/ruvnet/ruflo",
+   "summary": "🌊 The original agent harness. Deploy intelligent multi-player swarms, coordinate autonomous workflows, and build conversational AI systems. Features adaptive memory, self-learning intelligence, federation, vector RAG integration, and native Claude Code / Codex / Hermes and many more Integrated",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "ruvnet",
+   "hf_upvotes": 0,
+   "stars": 73725,
+   "stars_today": 101,
+   "forks": 8758,
+   "language": "TypeScript",
+   "code_url": "https://github.com/ruvnet/ruflo",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "orchestration",
+    "rag",
+    "memory"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "agent编排框架+内置RAG/记忆，工程可迁移强。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "🌊 The original agent harness",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Deploy intelligent multi-player swarms, coordinate autonomous workflows, and build conversational AI systems",
+     "Features adaptive memory, self-learning intelligence, federation, vector RAG integration, and native Claude Code / Codex"
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:panniantong/agent-reach",
+   "kind": "project",
+   "title": "Panniantong/Agent-Reach",
+   "url": "https://github.com/Panniantong/Agent-Reach",
+   "summary": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "Panniantong",
+   "hf_upvotes": 0,
+   "stars": 88447,
+   "stars_today": 683,
+   "forks": 7789,
+   "language": "Python",
+   "code_url": "https://github.com/Panniantong/Agent-Reach",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rag",
+    "web"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "互联网检索+多平台搜索，偏可用agent能力。",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Give your AI agent eyes to see the entire internet",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [
+     "Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+    ],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:colbymchenry/codegraph",
+   "kind": "project",
+   "title": "colbymchenry/codegraph",
+   "url": "https://github.com/colbymchenry/codegraph",
+   "summary": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "colbymchenry",
+   "hf_upvotes": 0,
+   "stars": 72912,
+   "stars_today": 163,
+   "forks": 4681,
+   "language": "C",
+   "code_url": "https://github.com/colbymchenry/codegraph",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rag",
+    "graph",
+    "tool"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "代码知识图谱+本地预索引，利于agent推理降token。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — f",
+    "why": "（dry-run：未调用 LLM，配置 OPENAI_API_KEY 后会生成中文速览）",
+    "architecture": "",
+    "verdict": "",
+    "why_now": "",
+    "key_points": [],
+    "prereqs": [],
+    "difficulty": 2,
+    "related": [],
+    "mermaid": "",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:falkordb/falkordb",
+   "kind": "project",
+   "title": "FalkorDB/FalkorDB",
+   "url": "https://github.com/FalkorDB/FalkorDB",
+   "summary": "A super fast Graph Database uses GraphBLAS under the hood for its sparse adjacency matrix graph representation. Our goal is to provide the best Knowledge Graph for LLM (GraphRAG).",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "FalkorDB",
+   "hf_upvotes": 0,
+   "stars": 6641,
+   "stars_today": 200,
+   "forks": 488,
+   "language": "Rust",
+   "code_url": "https://github.com/FalkorDB/FalkorDB",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "graphrag",
+    "kg",
+    "retrieval"
+   ],
+   "core_score": 7.0,
+   "wide_score": 5.0,
+   "score_reason": "GraphRAG 取向图数据库，价值较高。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "用稀疏矩阵+GraphBLAS做图数据库，主打 GraphRAG 低延迟查询",
+    "why": "GraphRAG/知识图谱底座，适合面试聊系统取舍",
+    "architecture": "它解决的是：图检索一慢，RAG 就被多跳遍历和子图扩展拖垮。FalkorDB 的关键改变不是“多一个图数据库”，而是把 Property Graph 的邻接关系落到 sparse adjacency matrix，再用 GraphBLAS 的线性代数算子执行查询；这样阻断了传统图存储里指针遍历和高分支带来的随机访问瓶颈。原文最直接的证据是作者明确声称它是首个可查询的 Property Graph sparse-matrix 数据库，并且 repo 给出 Docker 一键启动、OpenCypher 兼容和 Python client 示例，说明可用性不是概念图。新意主要在系统组织层：把图查询编译成矩阵运算，而不是在组件清单上堆功能。",
+    "verdict": "适合看架构思路；若做 GraphRAG 可精读",
+    "why_now": "原文未明确",
+    "key_points": [
+     "最强证据：OpenCypher + 可运行 demo",
+     "未证明在超大图/复杂查询下的极限",
+     "复现门槛低，docker 即可跑"
+    ],
+    "prereqs": [
+     {
+      "name": "graph RAG",
+      "status": "unknown"
+     },
+     {
+      "name": "sparse attention",
+      "status": "unknown"
+     },
+     {
+      "name": "linear algebra",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RedisGraph",
+     "GraphBLAS"
+    ],
+    "mermaid": "graph LR\nA[Query] --> B[OpenCypher]\nB --> C[Matrix plan]\nC --> D[GraphBLAS]\nD --> E[Result]\nF[Pointer traversal] --> G[Random access]\nG --> H[Slow]\nC --> I[Sparse adjacency]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:lockedinlabs-ai/agent-console",
+   "kind": "project",
+   "title": "LockedinLabs-AI/agent-console",
+   "url": "https://github.com/LockedinLabs-AI/agent-console",
+   "summary": "Local-first observability for AI coding agents. Every Claude Code and Codex session's tokens, cache, models and cost, on this machine and every machine you connect through a self-hosted team hub. Presenting mode, policy hooks, Apple-signed and notarized macOS builds, attested releases. MIT.",
+   "source": "github_search",
+   "published": "2026-09-20",
+   "authors": [],
+   "org": "LockedinLabs-AI",
+   "hf_upvotes": 0,
+   "stars": 789,
+   "stars_today": 0,
+   "forks": 140,
+   "language": "JavaScript",
+   "code_url": "https://github.com/LockedinLabs-AI/agent-console",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "observability",
+    "agent",
+    "finops"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "本地first的agent观测+成本/模型记录",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "本地汇总 Claude Code/Codex 代理成本、token 和缓存，v0.4.1 加了 SBOM",
+    "why": "做 coding agent 或内网部署时，能看可观测性和供应链",
+    "architecture": "它解决的是：agent 工具越多，token、cache、模型和成本分散在每台机器上，排查“谁在烧钱、谁卡住了”很难。Agent Console 的承重组件是本地读取各 agent transcript 和可选遥测，再汇到 self-hosted team hub；关键取舍是默认不出机，只上传 model id、分钟级时间戳、token 数和 salted hash，避免把 prompt、回复和路径暴露出去。0.4.1 的直接成熟度信号是 security release：修了两个可达缺陷，release pipeline 改成无 shell、GitHub Action pin 到 commit SHA，并新增 CycloneDX SBOM 和 attestation，这比“有 README”更像可上线。相比一般仪表盘，它差在 local-first、跨机器汇总和供应链可验证。",
+    "verdict": "偏工程实用，值得看成熟度与安全设计",
+    "why_now": "v0.4.1（2026-09-27）安全发布；0.4.0/0.3.0 紧接发布",
+    "key_points": [
+     "最强证据：0.4.1 安全修复+SBOM",
+     "只看计数，不上传 prompt/路径",
+     "未见大规模用户/集成证据"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "observability",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Grafana",
+     "Prometheus"
+    ],
+    "mermaid": "graph LR\nA[Agent sessions] --> B[Local reader]\nB --> C[Token and cache counts]\nC --> D[Team hub]\nD --> E[Dashboard]\nF[Policy hooks] --> G[Presenting mode]\nH[Release pipeline] --> I[SBOM attestation]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.36484",
+   "kind": "paper",
+   "title": "The Teacher Is a Direction, Not a Destination: Extrapolating RL-Induced Representation Residuals in On-Policy Distillation",
+   "url": "https://arxiv.org/abs/2609.36484",
+   "summary": "On-policy distillation (OPD) trains a student to match the teacher's next-token distributions on the student's own trajectories and has yielded substantial empirical gains. Generalized variants allow the student to surpass the teacher by extrapolating an implicit reward in output space. The language-model head, however, attenuates this change anisotropically: much of the change encoded in the teacher's hidden states reaches the logits at a small fraction of its weight, and the sampled-token log-probability ratios on which output-space extrapolation relies inject noise that the extrapolation amplifies, making training unstable. We observe that reinforcement learning (RL) shifts a model's internal representations relative to its base checkpoint, and that the direction of this shift can be measured at every layer. Motivated by this observation, we propose RIDE (RL-Induced Direction Extrapolation), which extrapolates the RL-induced change directly in representation space: at every layer and token position, RIDE computes the residual between the teacher and its pre-RL checkpoint and regresses the student's hidden states toward targets displaced beyond the teacher along this residual. Conditioned on a sampled trajectory, this regression is equivalent to maximizing a linear directional reward defined by the residual under a quadratic penalty centered at the teacher, which makes explicit how the objective moves the student along the RL-induced direction while limiting its deviation from the teacher. Across four base/RL-teacher pairs spanning different scales, architectures, and pre-training lineages, RIDE approaches or exceeds the RL-trained teacher on every pair and is the only method whose mean does so, and it consistently outperforms output-space extrapolation, which degrades the student whenever the teacher is close to its base. Project page: https://github.com/xixixixixxxx/RIDE.",
+   "source": "hf_papers",
+   "published": "2026-09-29",
+   "authors": [
+    "Hao Li",
+    "MeiJia Chen",
+    "Weijie Ren",
+    "Donghan Li",
+    "Zijun Tian",
+    "Jingchun Huang"
+   ],
+   "org": "",
+   "hf_upvotes": 295,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/xixixixixxxx/RIDE",
+   "pdf_url": "https://arxiv.org/pdf/2609.36484",
+   "categories": [],
+   "keywords": [
+    "rlhf",
+    "distillation",
+    "on-policy"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "OPD+RL 表征外推，训练方法面试可讲清",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "RIDE 用 RL 前后隐状态残差做蒸馏，作者报告四组任务都赢 OPRD",
+    "why": "后训练/蒸馏面试点，能讲清“为什么看 hidden states”",
+    "architecture": "它要解决的悖论是：OPD 明明在模仿 RL teacher，却常把“老师学到的东西”压扁在 logits 里，尤其当 teacher 离 base 很近时，output-space extrapolation 还会被 sampled log-ratio 噪声放大，训练反而不稳。作者的关键改变是把“老师相对 base 的变化方向”从输出空间搬到 representation space：先用 teacher 和其 pre-RL checkpoint 在同一 on-policy token 上算 layerwise residual，再把学生 hidden states 往 residual 方向外推到 teacher 之外。这个 residual 组件阻断的是 head 的各向异性衰减和 log-ratio 的随机噪声。最直接的证据是四组 base/RL teacher pair 上，RIDE 的 mean Avg@16 都能接近或超过 teacher，并且稳定压过 OPRD 和 output-space baseline；这说明改动不是只修一个榜，而是修了监督信号的位置。新意在组件层+实证层：把 reward extrapolation 从 logits 迁移到 hidden states，并给出稳定性解释。",
+    "verdict": "值得精读，核心是蒸馏目标的位置变化",
+    "why_now": "",
+    "key_points": [
+     "最强证据：四组 pair 都优于 OPRD",
+     "没证明对非同初始化 teacher 也稳",
+     "复现依赖拿到 base 和 RL checkpoint"
+    ],
+    "prereqs": [
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "RLHF",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "OPRD",
+     "DPO"
+    ],
+    "mermaid": "graph TD\nA[Student rollout] --> B[Teacher and base]\nB --> C[Layerwise residual]\nC --> D[Extrapolated targets]\nD --> E[Student hidden states]\nE --> F[Better policy]\nG[Output extrapolation] --> H[Head attenuation]\nH --> I[Noisy ratios]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.34563",
+   "kind": "paper",
+   "title": "Rethinking Latent Visual Reasoning: Grounding Latent Reasoning in Visual Evidence",
+   "url": "https://arxiv.org/abs/2609.34563",
+   "summary": "Latent visual reasoning (LVR) enables multimodal large language models (MLLMs) to perform intermediate computation in continuous latent tokens rather than expressing every reasoning step in words. However, unlike textual CoT, latent reasoning is not directly observable, making it difficult to supervise what latent tokens learn. In this work, we first conduct a thorough analysis of latent-token behavior and identify a latent evidence-credit gap: latent tokens respond only weakly to image perturbations that alter the correct answer. We hypothesize that this issue stems from the lack of explicit supervision during GRPO training. These findings suggest that a final-answer reward provides too little guidance on what visual evidence to preserve or how credit should be assigned across latent tokens. To bridge this gap, we propose ReaLVR, which brings visual-evidence supervision to the model's own free-running latent trajectories. ReaLVR contrasts correct and model-generated wrong answers to determine where stronger supervision is needed, and relevant and mismatched visual evidence to specify what to preserve. Across three model families, ReaLVR consistently outperforms evaluated LVR baselines, achieving the highest five-task average of 63.7% on Qwen2.5-VL-7B. Crucially, we are the first to scale visual reasoning in latent space, showing that our framework continues to deliver robust improvements at frontier model scales up to 235B. Further analyses show more question-sensitive latent-token positions, stronger alignment with relevant visual regions, and greater fixed-context dependence on the most attended latent tokens.",
+   "source": "hf_papers",
+   "published": "2026-09-28",
+   "authors": [
+    "Xi Xiao",
+    "Tianchen Zhao",
+    "Youngeun Kim",
+    "Zhuowei Li",
+    "Linghan Xu",
+    "Jiaye Wu"
+   ],
+   "org": "",
+   "hf_upvotes": 209,
+   "stars": 14,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/xixiaouab/ReaLVR-code",
+   "pdf_url": "https://arxiv.org/pdf/2609.34563",
+   "categories": [],
+   "keywords": [
+    "vlm",
+    "latent-reasoning",
+    "grpo"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "潜在视觉推理监督问题，贴VLM后训练",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 visual-evidence supervision 解决 latent 轨迹证据缺失，Qwen2.5-VL-7B 五任务均值到 63.7%",
+    "why": "适合看 latent reasoning 和 GRPO 训练缺口",
+    "architecture": "反直觉点在于：latent reasoning 不写 CoT，但它也不该“盲想”；可作者发现，vanilla LVR 的 latent token 对会改变答案的图像扰动反应很弱，说明它没把关键视觉证据保住。核心改动不是换架构，而是把 GRPO 里只看 final answer 的信号，改成对 free-running latent trajectory 做证据级监督：先用正确答案 vs 模型错答判断哪些 token 位置该更强约束，再用相关证据 vs 匹配错位证据告诉这些 token 该保留什么。最直接证据是消融/对照里，替换 top-8 attention latent tokens 会显著拉低正确率，ReaLVR 的下降更大，说明这些 token 真在承载答案依赖的视觉信息。新意主要在组件层和训练信号层，不改 inference。",
+    "verdict": "值得精读，核心是把 latent 训练从只看答案推进到看证据",
+    "why_now": "",
+    "key_points": [
+     "最强证据：255B 规模也有持续收益",
+     "没证明通用到非视觉 latent reasoning",
+     "复现难点在自由轨迹与证据对齐"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "GRPO",
+      "status": "unknown"
+     },
+     {
+      "name": "latent reasoning",
+      "status": "unlisted"
+     },
+     {
+      "name": "visual transformer",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "GRPO",
+     "CoT"
+    ],
+    "mermaid": "graph LR\nA[image and question] --> B[free running latent]\nB --> C[answer contrast]\nC --> D[where to supervise]\nB --> E[evidence contrast]\nE --> F[what to preserve]\nD --> G[latent supervision]\nF --> G\nG --> H[better answer]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.38288",
+   "kind": "paper",
+   "title": "AREX-2: Advancing Self-Improving Agents through Long-Horizon Reflective Tasks",
+   "url": "https://arxiv.org/abs/2609.38288",
+   "summary": "We present AREX-2, an effort to advance the self-improving capability of LLM agents, which we define as the ability to iteratively refine a solution at test time. This ability rests on two complementary capabilities: reflection, which produces a solution better than the current one, and long-horizon execution, which keeps the iteration effective over many rounds. We hypothesize that both capabilities are domain-agnostic, and can therefore be learned in scenarios that are well suited for supervision. Accordingly, we synthesize long-horizon improvement trajectories from machine learning and algorithmic programming tasks, two domains that offer verifiable feedback and reward sustained iteration. Trained on this data, our agent, built on Qwen3.8-27B, achieves strong results on MLE-bench Lite (81.8) and Frontier-CS (70.7), transfers to deep research with 84.0 on BrowseComp, 52.6 on HLE, 92.2 on GAIA, and 93.8 on DeepSearchQA, and keeps improving as its budget of rounds grows. These results show that long-horizon reflective data is an effective route toward self-improving agents.",
+   "source": "hf_papers",
+   "published": "2026-09-29",
+   "authors": [
+    "Hongjin Qian",
+    "Chaofan Li",
+    "Kun Luo",
+    "Wenqing Wei",
+    "Jianlyu Chen",
+    "Shuqi Lu"
+   ],
+   "org": "",
+   "hf_upvotes": 126,
+   "stars": 19,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/VectorSpaceLab/AREX-2",
+   "pdf_url": "https://arxiv.org/pdf/2609.38288",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "self-improve",
+    "rl"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "长程反思自改进，agent 训练范式相关",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用长时程反思轨迹训练自改进 agent，Qwen3.8-27B 在 MLE-bench Lite 到 81.8",
+    "why": "和 agent 反思、test-time scaling 直接相关",
+    "architecture": "难点不是“会不会重试”，而是重试很多轮后还会不会越改越好。作者把 self-improvement 拆成两件事：reflection 负责让当前方案变好，long-horizon execution 负责让这个循环别在几轮后塌掉。关键设计是把训练数据从“只保留最终过关样本”改成“保留整段改善轨迹”，并在 machine learning 与 algorithmic programming 这类有可验证反馈的域里合成长程 trajectory，让模型看到失败、回退、再修正的全过程。最直接证据是它在多轮预算增加时持续变好，同时把这种能力迁移到 BrowseComp、GAIA、HLE 等深度研究任务。新意在系统组织和实证：训练目标从单步正确性变成多轮改进能力。",
+    "verdict": "值得看，适合补 agent 自反思训练范式",
+    "why_now": "",
+    "key_points": [
+     "最强证据：轮数越多性能继续涨",
+     "不证明所有任务都能自改进",
+     "数据构造依赖可验证反馈环境"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "test-time compute",
+      "status": "unknown"
+     },
+     {
+      "name": "self-instruct",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "test-time compute"
+    ],
+    "mermaid": "graph LR\nA[task] --> B[round 1]\nB --> C[feedback]\nC --> D[reflection]\nD --> E[next round]\nE --> C\nC --> F[kept trajectory]\nF --> G[train model]\nG --> H[more rounds better]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.40340",
+   "kind": "paper",
+   "title": "EvoDuet: Bilevel Co-Evolution of Web Searching and Task Solving for Scientific Discovery",
+   "url": "https://arxiv.org/abs/2609.40340",
+   "summary": "Evolutionary search with large language models (LLMs) can stall when progress requires external knowledge the model lacks. Supplying relevant documents helps, but simply adding web search tool can keep returning the same pages as solutions change. We introduce EvoDuet, a bi-level optimization method that co-evolves solutions and search queries with fixed model parameters. At each iteration, a retrieval gate lets the LLM assess its knowledge gap and choose to retrieve new documents, reuse stored ones, or proceed without them. An inner loop refines queries and ranks documents by the solution scores they are predicted to yield; an outer loop generates candidates in parallel from these documents and records the evaluated outcomes for later searches. Across 21 optimization tasks with one candidate per iteration, EvoDuet raises OpenEvolve's normalized discovery gain from 74.1% to 78.0% with GPT-5.6-Luna and from 61.3% to 82.3% with Gemini-3.8-Flash, whereas Qwen3.5-9B does not benefit. Our best runs surpass the previously reported best scores on eight tasks, including Swap Reduction on Q20 and Rosetta, and match them on three more. EvoDuet also improves with other scaffolds (e.g., Top-K, EvoX) on Sums/Diffs and Denoising, demonstrating its applicability across evolutionary search scaffolds.",
+   "source": "hf_papers",
+   "published": "2026-09-30",
+   "authors": [
+    "Young-Jun Lee",
+    "Jinheon Baek",
+    "Soyeong Jeong",
+    "Minki Kang",
+    "Seungyeon Jwa",
+    "Jonghyun Choi"
+   ],
+   "org": "",
+   "hf_upvotes": 102,
+   "stars": 4,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Open-Galapagos/EvoDuet",
+   "pdf_url": "https://arxiv.org/pdf/2609.40340",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "web-search",
+    "scientific"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "联合检索与求解的双层进化，代码可复现",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用双层共进化连接 web search 和解题，OpenEvolve 的 NDG 到 82.3%",
+    "why": "适合关注 agent + web search + scientific discovery",
+    "architecture": "悖论是：给 evolutionary search 加 web search 工具后，模型常会反复搜到同一批页面，解题策略变了，检索却没变，搜索还是闭环的。EvoDuet 的关键改动是把“查什么”和“怎么解”拆成双层共进化：外层负责生成并评估候选解，内层用 retrieval gate 判断当前是该补新知识、复用旧文档，还是直接推进；当需要检索时，内层再按当前知识缺口改写 query，并用 hypothetical evidence scoring 预测哪篇文档更可能带来高分候选。最直接证据是 21 个优化任务上，OpenEvolve + EvoDuet 的 NDG 明显提升，且在 Q20、Rosetta 等任务刷新历史最好。新意在系统组织层：把 search loop 也纳入进化，而不是只进化 solution。",
+    "verdict": "值得精读，核心是把检索做成会随解题共同演化的循环",
+    "why_now": "原文未明确",
+    "key_points": [
+     "最强证据：21 任务 NDG 提升到 82.3%",
+     "Qwen3.5-9B 不一定受益，需会用证据",
+     "预测高分文档仍可能产出差候选"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "OpenEvolve",
+     "EvoX"
+    ],
+    "mermaid": "graph LR\nA[solution state] --> B[gate]\nB --> C[reuse docs]\nB --> D[new query]\nD --> E[rank docs]\nE --> F[generate candidates]\nF --> G[evaluate]\nG --> A",
+    "read_level": "L3"
+   }
+  }
+ ]
+}

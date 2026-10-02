@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-10-02",
+   "papers": 12,
+   "projects": 6,
+   "top": "Agent Error Dataset: Scaling 50,000 Error--Diagnosis Pairs for Failure Analysis and Error-Aware Post-Training"
+  },
+  {
    "date": "2026-10-01",
    "papers": 11,
    "projects": 7,
