@@ -6,6 +6,12 @@
  },
  "days": [
   {
+   "date": "2026-10-03",
+   "papers": 10,
+   "projects": 8,
+   "top": "Beyond Memory: Harnessing Long-Horizon Agents with Explicit Belief States"
+  },
+  {
    "date": "2026-10-02",
    "papers": 12,
    "projects": 6,

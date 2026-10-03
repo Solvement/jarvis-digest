@@ -1,0 +1,1279 @@
+{
+ "date": "2026-10-03",
+ "stats": {
+  "collected": 507,
+  "filtered": 181,
+  "selected": 18,
+  "llm": "LLM usage — gpt-5.4-nano: 11 calls, 31466 in / 10168 out; gpt-5.4-mini: 6 calls, 46759 in / 8940 out"
+ },
+ "items": [
+  {
+   "id": "paper:2610.01415",
+   "kind": "paper",
+   "title": "Beyond Memory: Harnessing Long-Horizon Agents with Explicit Belief States",
+   "url": "https://arxiv.org/abs/2610.01415",
+   "summary": "Large language model (LLM) agents can now undertake increasingly complex tasks, but the way they organize interaction history into memory does not ensure a coherent understanding of the current world. We introduce PoS, an inference-time framework that constructs and continually maintains explicit belief states as the agent's decision context. Each belief combines an estimate of the current world state with unresolved task requirements, making explicit what the agent still needs to learn and accomplish. To keep this belief reliable and actionable, PoS validates its consistency and monitors task progress to detect Belief Trapping, where the agent continues to act without making meaningful progress toward the goal. Recovery is then tailored to both the trapping pattern and the type of unresolved task requirement. Experiments on four benchmarks spanning execution and diagnosis show that PoS achieves the highest overall performance on every benchmark with all three LLM backbones. Ablations demonstrate the importance of consistency validation and recovery, while context-scaling experiments show resilience to context growth. Together, these results support belief construction and continual maintenance as a foundation for long-horizon context management beyond history retention and compression.",
+   "source": "hf_papers",
+   "published": "2026-10-01",
+   "authors": [
+    "Yu Luo",
+    "Jiamin Jiang",
+    "Yimin Zuo",
+    "Xidao Wen",
+    "Rongchen Gao",
+    "Yongqian Sun"
+   ],
+   "org": "",
+   "hf_upvotes": 77,
+   "stars": 22,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/luoyu100/PoS",
+   "pdf_url": "https://arxiv.org/pdf/2610.01415",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "belief-state"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "长时智能体显式belief状态推理框架。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PoS 用显式 belief state 管 long-horizon agent，四个基准全都拿到最优。",
+    "why": "适合看 agent 记忆/长上下文怎么从存历史变成控状态。",
+    "architecture": "反直觉点在于：长上下文、外部 memory 都加上了，agent 还是会“记得很多却不知道现在世界什么样”。现有做法多把历史压缩或检索回去，但只保证证据在，不保证当前状态是可检查、可更新、可行动的。PoS 的关键改变是把 decision context 改成 explicit belief state：belief 由当前 world state 估计 + 未解决任务需求组成，组件分别阻断“状态过期”和“目标悬空”。它再加 Belief Sentinel 做 consistency validation，专门拦住自相矛盾、缺证据的更新；再用 gap persistence、progress stagnation、belief recurrence 诊断 Belief Trapping，拦住“动作还在走但目标没推进”。最直接证据是四个 benchmark 上、三种 backbone 下都拿到最高总体性能，且 ablation 说明只做显式 belief 还不够，必须有 validation 和 recovery。新意主要在系统组织层：不是更会总结历史，而是把 belief 构造、校验、陷阱诊断、恢复串成一个推理时闭环。",
+    "verdict": "值得精读，核心是长时序 agent 的状态组织范式。",
+    "why_now": "",
+    "key_points": [
+     "四个基准、三 backbone 全面最优",
+     "只显式 belief 不够，校验和恢复是关键",
+     "恢复策略依赖陷阱模式与未解 gap"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "POMDP",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "ReAct",
+     "POMDP"
+    ],
+    "mermaid": "graph TD\nA[History and obs] --> B[Build belief]\nB --> C[Validate consistency]\nC --> D[Detect trapping]\nD --> E[Recover by gap type]\nE --> F[Next action]\nF --> A",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2610.01939",
+   "kind": "paper",
+   "title": "Fewer Tokens, Better Action: GPT-6 Astra Robot Agents with 14% Higher Success Rate but 65% Fewer Tokens",
+   "url": "https://arxiv.org/abs/2610.01939",
+   "summary": "Vision language model (VLM) agents can control robots through visual feedback and action primitives, but repeated model invocations and redundant observations incur substantial token overhead. We introduce PyRUA-Lean, an interactive code-execution framework that couples feedback-driven primitive composition with selective observation: the agent composes classical robot primitives and learned vision-language-action (VLA) policies into Python cells that perform conditional checks and local retries, returning only explicitly requested images and state feedback for replanning. Across 700 simulated task instances from LIBERO-PRO, RoboTwin 2.0, and RoboCasa365, we compare PyRUA-Lean with a tool-calling baseline using the same GPT-6 Astra planner and underlying robot primitives. Under equal LLM-call budgets, PyRUA-Lean increases overall success from 63.1% to 71.7%. On instances solved by both agents, it uses 49% fewer LLM calls and 65% fewer input tokens.",
+   "source": "hf_papers",
+   "published": "2026-10-01",
+   "authors": [
+    "Ruiyang Si",
+    "Jianxin Bi",
+    "Shunyu Yang",
+    "Rui Ni",
+    "Wenbo Huang",
+    "Qiang Wang"
+   ],
+   "org": "",
+   "hf_upvotes": 34,
+   "stars": 18,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/DAGroup-PKU/PyRUA-Lean",
+   "pdf_url": "https://arxiv.org/pdf/2610.01939",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "robotics",
+    "vla"
+   ],
+   "core_score": 9.0,
+   "wide_score": 6.0,
+   "score_reason": "VLM agent+机器人；省token框架对工程很实用",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "PyRUA-Lean 用 Python 组机器人原语，成功率 63.1% 到 71.7%，token 省 65%。",
+    "why": "适合看 VLM 机器人 agent 的接口设计和推理成本优化。",
+    "architecture": "痛点很具体：机器人任务里，工具调用每走一步就要再问一次模型，还会把中间图像和状态反复塞回上下文，导致 token 和调用数爆炸。PyRUA-Lean 的关键改动不是换更强 planner，而是把控制接口从 tool calling 改成可执行 Python：代码里直接编排 classical primitives 和 VLA policy，遇到条件判断、局部失败就本地重试，只在需要时回传显式请求的图像和状态。这里的“组件”分别阻断两类失败：persistent program state 阻断重复推理同一中间结果，selective observation 阻断无关视觉信息进入上下文，conditional retry 阻断一次失败就回到模型重规划。最强证据是同一 GPT-6 Astra planner、同一底层 primitives、同一预算下，在 700 个模拟任务上成功率从 63.1% 升到 71.7%，且共同解实例上少 49% 调用、65% 输入 token。新意在系统组织层和接口层：不是单个 skill 变强，而是让代码承接执行细节，模型只管高层决策。",
+    "verdict": "值得看实现思路，尤其是机器人 agent 接口怎么降成本。",
+    "why_now": "原文未明确",
+    "key_points": [
+     "同 planner 同 primitives 下仍提升成功率",
+     "共同解实例少 49% 调用、65% token",
+     "代码回传可控，省的是上下文而非算力"
+    ],
+    "prereqs": [
+     {
+      "name": "VLM",
+      "status": "unknown"
+     },
+     {
+      "name": "vision-language-action",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "KV cache",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "Code as Policies"
+    ],
+    "mermaid": "graph TD\nA[Plan] --> B[Python program]\nB --> C[Run primitives]\nC --> D[Check result]\nD -->|fail| E[Local retry]\nD -->|need obs| F[Request image]\nE --> B\nF --> A\nD -->|ok| G[Next step]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.36435",
+   "kind": "paper",
+   "title": "MemFold: Learning Compact Soft Memory for Long-Context Personalization via On-Policy Optimization",
+   "url": "https://arxiv.org/abs/2609.36435",
+   "summary": "An assistant that serves the same user over a long horizon has to answer from what that user has revealed: which preferences still hold, which were revised, and which constraints apply now. Retaining that information is not the same as acting on it, and the two are usually optimized as if they were. Keeping the information as text makes the reader's input grow with the retained history, while compressing it into a fixed number of latent vectors bounds the interface but is typically trained to reconstruct text or imitate reference answers, both of which are scored on sequences the reader never produced. We present MemFold, which optimizes a fixed-budget soft memory by the behavior it supports. A query-conditioned textual memory is compressed into K continuous vectors that form the reader's memory interface, and the reader is then trained on its own rollouts under two complementary signals: group-relative rewards for task outcomes, and confidence-gated on-policy distillation in which a frozen textual-memory teacher re-scores the student's sampled tokens under the textual memory. The teacher is never sampled from, so supervision stays on the student's current distribution and adds no autoregressive decoding; at inference it is removed entirely. Across three Qwen backbones, MemFold attains the highest accuracy we measure on PersonaMem-32K and PersonaMem-128K, with margins that widen at the longer history length, and transfers to PrefEval and LongMemEval without target-domain training. Ablations attribute most of the task gain to the reward term and a smaller additional gain to the teacher signal, and memory interventions show that the reader depends on the instance-specific content of its soft memory.",
+   "source": "hf_papers",
+   "published": "2026-09-29",
+   "authors": [
+    "Jingxuan Wu",
+    "Yuzhe Yang",
+    "Yiqiao Huang",
+    "Chengzhi Liu",
+    "Qingni Wang",
+    "Chengxuan Qian"
+   ],
+   "org": "",
+   "hf_upvotes": 6,
+   "stars": 3,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/Johnny221B/memfold",
+   "pdf_url": "https://arxiv.org/pdf/2609.36435",
+   "categories": [],
+   "keywords": [
+    "memory",
+    "long-context",
+    "rlhf"
+   ],
+   "core_score": 9.0,
+   "wide_score": 7.0,
+   "score_reason": "长上下文个性化记忆+on-policy优化，核心高度相关。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "MemFold 把长程个性化记忆压成固定 K 向量，三 backbone 都拿到最高准确率。",
+    "why": "适合看 long-context personalization 里 memory 怎么从“存文本”变成“可训练接口”。",
+    "architecture": "反直觉点在于：长记忆不是越能复原文本越好，关键是压缩后还能不能支持当前回答。现有文本 memory 虽可读可改，但每轮重编码且长度随历史增长；latent memory 虽固定预算，却常按重建文本或模仿参考答案训练，和真正生成答案时的行为不对齐。MemFold 的关键改变是把 memory 当成 fixed-budget soft memory interface 来优化：先把 query-conditioned textual memory 压成 K 个 continuous vectors，再在学生自己的 rollouts 上训练，而不是在它没走过的序列上监督。它用两股信号阻断两种失败：group-relative rewards 管任务结果，confidence-gated on-policy distillation 用冻结 textual-memory teacher 重新给学生采样 token 打分，补上“哪些 token 本来更该依赖文本记忆”的密集梯度，同时不让 teacher 压过学生分布。最直接证据是 PersonaMem-32K/128K 上三种 Qwen backbone 都是最高，且历史越长优势越大，说明它不是单纯更会记，而是更会把记忆转成行为。新意在优化层：训练目标直接对齐 reader 行为，而不是重建存储内容。",
+    "verdict": "值得精读，重点在软记忆的训练目标怎么对齐行为。",
+    "why_now": "",
+    "key_points": [
+     "on-policy，监督学生自己的轨迹",
+     "teacher 只重评分，不直接采样",
+     "长历史下优势更明显"
+    ],
+    "prereqs": [
+     {
+      "name": "LoRA",
+      "status": "unknown"
+     },
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "on-policy",
+      "status": "unlisted"
+     },
+     {
+      "name": "latent memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "prefix tuning",
+     "latent memory"
+    ],
+    "mermaid": "graph TD\nA[Text memory] --> B[Compress to K vectors]\nB --> C[Student rollouts]\nC --> D[Task reward]\nC --> E[Teacher rescoring]\nE --> F[Confidence gated distill]\nD --> G[Update memory]\nF --> G",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.35259",
+   "kind": "paper",
+   "title": "On-Policy or Off-Policy Learning? A Systematic Study of Distillation Dynamics",
+   "url": "https://arxiv.org/abs/2609.35259",
+   "summary": "On-policy learning has been argued to reduce catastrophic forgetting, produce sparser parameter updates, and improve generalisation. However, existing comparisons between supervised fine-tuning and reinforcement learning vary many factors simultaneously, making the contribution of rollout policy difficult to isolate. We study the effect of rollout policy in a controlled strong-to-weak distillation setting, by independently varying rollout policy, token-level KL direction, and learning rate across the Llama3 and Qwen2.5 model families and reasoning tasks spanning scientific, medical, and arithmetic domains. Our analysis reveals a nuanced picture of distillation dynamics in which rollout policy does not necessarily play a central role. Instead, token-level KL direction more clearly shapes task performance and output coverage, while learning rate governs forgetting and update sparsity. Analysis of KL gradients and experiments along a continuous student-teacher rollout-policy spectrum explain this pattern: forward KL is remarkably robust to rollout policy, with its performance stable and strong despite changes to the rollout policy, whereas reverse KL is substantially more sensitive and favours student-generated rollouts. On-policy data nevertheless improves generalisation to harder variants of the Countdown arithmetic task under both KL directions, although this advantage does not reliably persist after subsequent RLVR. Our broader conclusions remain robust to removing gradient clipping, using sampled KL estimators, and training on tasks requiring longer reasoning chains. Overall, our results challenge the view that on-policy rollouts are inherently preferable and show that their value depends critically on the objective, evaluation setting, and optimisation hyperparameters.",
+   "source": "hf_papers",
+   "published": "2026-09-28",
+   "authors": [
+    "Julianna Piskorz",
+    "Antonin Berthon",
+    "Mihaela van der Schaar"
+   ],
+   "org": "",
+   "hf_upvotes": 152,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.35259",
+   "categories": [],
+   "keywords": [
+    "rl",
+    "distillation",
+    "alignment"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "对on/off-policy蒸馏动态有系统实验。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 controlled strong-to-weak distillation 分离 rollout policy，发现 forward KL 在不同 rollout 下仍稳，作者报告 2 个任务族",
+    "why": "你在看后训练时最容易混淆的变量，这篇专门拆开了",
+    "architecture": "反直觉点是：大家常把 on-policy 的收益归因于“数据更贴近当前模型”，但在 SFT vs RLVR 里，rollout policy、objective、监督密度、优化器全搅在一起，根本看不出真因。作者的关键改法，是把 strong-to-weak distillation 变成可控试验台：固定师生框架，只独立改 rollout policy、token-level KL direction 和 learning rate。这里 rollout policy 是数据由谁采样，KL direction 是梯度在“更贴老师”还是“更贴学生”方向上推。结果最关键的因果链是：forward KL 对 rollout policy 很鲁棒，说明“是否 on-policy”本身不是主因；reverse KL 才明显偏好 student-generated rollouts；而 forgetting 和 update sparsity 主要由 learning rate 决定，不是 rollout 决定。最直接的证据是连续 student-teacher rollout spectrum 上的 gradient analysis：forward KL 近乎不变，reverse KL 随 rollout 改得很明显。新意主要在实证层：把常被绑在一起的三个因素拆开后，重新排序了它们的作用。",
+    "verdict": "适合精读，能校正你对 on-policy 的直觉",
+    "why_now": "",
+    "key_points": [
+     "forward KL 对 rollout policy 几乎不敏感",
+     "on-policy 只稳定提升 harder Countdown 泛化",
+     "RLVR 之后这点泛化优势不一定保留"
+    ],
+    "prereqs": [
+     {
+      "name": "knowledge distillation",
+      "status": "unknown"
+     },
+     {
+      "name": "direct preference optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     },
+     {
+      "name": "reward model",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Hinton et al. 2015",
+     "RLVR"
+    ],
+    "mermaid": "graph TD\nA rollout policy\nB KL direction\nC learning rate\nD student updates\nE task accuracy\nF forgetting\nA --> D\nB --> D\nC --> D\nD --> E\nD --> F",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.38923",
+   "kind": "paper",
+   "title": "GraphForge: Training Working Agents with Graph-Anchored Workspace Synthesis",
+   "url": "https://arxiv.org/abs/2609.38923",
+   "summary": "Working agents need to read diverse files, coordinate tools, and produce deliverables. Training such agents requires tasks built on many real files with verifiable results, but few pipelines exist to synthesize this kind of data. Existing pipelines either generate files with models, which lack realism and diversity, or build tasks on real files without task-specific verifiers, leaving result quality unchecked. We introduce GraphForge, an evidence-graph based framework that grounds both the task and its verification in real files. Starting from occupation-grounded seeds for controlled diversity, GraphForge assembles a workspace of real files for each seed and builds an evidence graph over their relations. Since the task statement and rubrics are both derived from this graph, task requirements are backed by the workspace files and each criterion is anchored to the files needed to verify it. An initial rollout further tests executability, and a revision agent repairs the task and rubrics against the original files before trajectories are collected. Fine-tuning Qwen3.6-27B on 2,169 GraphForge trajectories brings GDPVal to 1445.7 (+65.7) under OpenHands, and Workspace-Bench-Lite and SpreadsheetBench II to 63.7 (+7.7) and 24.0 (+13.7) under Claude Code. Rejection fine-tuning on the SFT model's own rollouts, with candidates selected by the evidence-anchored rubrics, yields further improvements on all three benchmarks, suggesting that the rubrics provide a useful selection signal. The data and models are available.",
+   "source": "hf_papers",
+   "published": "2026-09-30",
+   "authors": [
+    "Qisheng Su",
+    "Hanchen Wang",
+    "Guanru Zhu",
+    "Huicheng Jiang",
+    "Qiuyinzhe Zhang",
+    "Kou Shi"
+   ],
+   "org": "",
+   "hf_upvotes": 82,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.38923",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "data",
+    "tool-use"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "用证据图训练可验证工作型智能体。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "用 evidence graph 生成工作流数据，Qwen3.6-27B 在 GDPVal 上 +65.7，Workspace-Bench-Lite +7.7",
+    "why": "很像 agent 数据工程的关键瓶颈题，面试常问",
+    "architecture": "真实痛点是：工作型 agent 需要读很多文件、跨工具协作、交付可验结果，但现有合成数据要么文件是模型编的，像不像真工作不够；要么基于真实文件却没有任务级 verifier，结果好坏没法稳查。GraphForge 的核心改法，是把“任务”和“验收”都绑到 real files 上：先用 occupation-grounded seeds 控制任务方向，再围绕爬来的 workspace 建 evidence graph，把文件之间的依赖关系显式化；task statement 由图编译出来，rubric 也锚定到图节点，所以每条要求都能回指到支撑它的文件。这里 evidence graph 的作用不是画图，而是阻断“任务写得空”和“验收标准不可证”这两种失败。最直接的证据是作者报告：用 2,169 条 trajectories 微调 Qwen3.6-27B，GDPVal、Workspace-Bench-Lite、SpreadsheetBench II 都有明显提升；再用 evidence-anchored rubrics 做 rejection fine-tuning 还能继续涨，说明 rubric 不只是描述文本，而是能提供筛选信号。新意在系统组织层：把数据生成、验证、修订串成闭环，而不是只做一次性合成。",
+    "verdict": "值得看，尤其是 agent 数据与 verifier 设计",
+    "why_now": "原文未明确",
+    "key_points": [
+     "作者报告 2,169 条轨迹即可带来多项基准提升",
+     "rubric-guided rejection fine-tuning 继续增益",
+     "没说明开放数据之外的生成成本与失败率"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "EnvCraft",
+     "NexForge"
+    ],
+    "mermaid": "graph TD\nA real files\nB evidence graph\nC task statement\nD rubric\nE rollout check\nF repaired data\nA --> B\nB --> C\nB --> D\nC --> E\nD --> E\nE --> F",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "paper:2609.32993",
+   "kind": "paper",
+   "title": "X-Tree: Tokenizing Reusable Experience for Efficient Agent Generalization",
+   "url": "https://arxiv.org/abs/2609.32993",
+   "summary": "Multi-step agents are trained on flat action streams: SFT and RLVR weight every token uniformly and ignore the sub-procedures that recur across tasks, the hierarchy that lets humans plan top-down from reusable routines. This structure sits unused, and flat training uses each scarce trajectory less fully than its content allows. Recent agents do use that structure, but only as LLM-written skills in context, never in the weights, so their gains do not generalize beyond retrieval. We instead recover this hierarchy from the data itself and train on it, with no LLM calls. Following text tokenizers, which build a vocabulary by counting alone, we score action spans by reusability and merge canonicalized actions into a reusable eXperience tree (X-Tree). Each X-Tree node captures how a frequent and success-bearing skill is composed from sub-skills, guiding efficient generalization. We integrate X-Tree into three training settings: offline RL, with each node as a training instance; online RLVR, with an adaptive skill bonus; and on-policy self-distillation, with X-Tree as the self-teacher's privileged context. Across WebArena, ScienceWorld, and WebShop at three model scales, X-Tree improves over standard recipes at matched data and budget by up to 4.5% SR on WebArena, 5.8% SR on ScienceWorld and 4.1% success on WebShop. Matched analyses attribute the gains to the X-Tree structure and the three integrations.",
+   "source": "hf_papers",
+   "published": "2026-09-26",
+   "authors": [
+    "Sitao Cheng",
+    "Xunjian Yin",
+    "Zhiyuan Sun",
+    "Yuxuan Li",
+    "Ruiwen Zhou",
+    "Xiangru Jian"
+   ],
+   "org": "",
+   "hf_upvotes": 29,
+   "stars": 2,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/sitaocheng/X-Tree",
+   "pdf_url": "https://arxiv.org/pdf/2609.32993",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "rl",
+    "tokenization"
+   ],
+   "core_score": 8.0,
+   "wide_score": 5.0,
+   "score_reason": "可复用经验分层token化；面向agent泛化关键",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "把轨迹 token 化成 X-Tree，三种训练都能用，WebArena 最多 +4.5% SR",
+    "why": "你做 agent 训练/评测时，最缺的是把经验复用进权重里",
+    "architecture": "反直觉点是：多步 agent 的训练明明有大量重复子程序，但 SFT 和 RLVR 都把轨迹当平铺 token 流，等于每一步都同权，没利用“可复用技能”的结构；而现有 harness 式技能库只是写进上下文，没进权重，泛化只停留在检索。X-Tree 的关键改变是把经验像文本 tokenizer 一样做分层合并：先把动作规范成 typed token，再按 reusability score 把频繁、长、且常出现在成功轨迹里的片段合并成树节点。这里 X-Tree 节点不是摘要，而是“一个高频成功技能如何由子技能组成”，它阻断的是 flat training 只学到表面动作序列、却学不到可迁移子程序的问题。最强证据是 matched data and budget 下，在 WebArena、ScienceWorld、WebShop 三个环境和三种训练设定里都优于标准 recipe，且 ablation 指向 X-Tree 结构本身，而不是单纯调参。新意在组件层加系统层都有：既提出经验 tokenization，也把它接进 offline RL、online RLVR、on-policy self-distillation。",
+    "verdict": "值得精读，尤其适合做 agent 训练方向谈资",
+    "why_now": "原文未明确",
+    "key_points": [
+     "zero LLM calls 就能挖出层级技能",
+     "三种训练范式都能接入同一树",
+     "复现依赖轨迹质量与动作规范化"
+    ],
+    "prereqs": [
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "group relative policy optimization",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Sutton et al. 1999",
+     "Option discovery"
+    ],
+    "mermaid": "graph TD\nA flat trajectories\nB typed actions\nC reusability score\nD X Tree\nE training recipes\nF generalization\nA --> B\nB --> C\nC --> D\nD --> E\nE --> F",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.32520",
+   "kind": "paper",
+   "title": "When Users Change Their Minds: Measuring and Repairing Intent Drift in LLM Agents",
+   "url": "https://arxiv.org/abs/2609.32520",
+   "summary": "LLM agents often operate over multi-turn interactions in which user intent changes before execution. We study intent drift: the failure mode in which superseded parts of the user's intent continue to influence the final answer or tool action. We introduce IntentFlux, an executable benchmark that converts verifiable tasks into dialogues with controlled intent changes while preserving their original graders. In a 627-case calibration, mean task score falls from 0.476 to 0.384 as dialogues contain more superseded and withdrawn information. Across eight models, the rate of fully correct solutions is significantly lower when the same final task must be recovered from an evolving dialogue rather than given directly in a single turn. We further introduce StateForge, which explicitly maintains the active requirements before generation. On General-Test, it improves mean task score from 0.367 to 0.467. Providing the ground-truth final state improves performance further but still does not recover single-turn performance, indicating that state-estimation errors explain only part of the gap. These results establish intent drift as a measurable multi-turn failure mode and explicit state maintenance as a partial mitigation.",
+   "source": "hf_papers",
+   "published": "2026-09-26",
+   "authors": [
+    "Yanjie Zhang",
+    "Bowen Cao",
+    "Zixin Chen",
+    "Yushi Sun"
+   ],
+   "org": "",
+   "hf_upvotes": 14,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.32520",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "eval",
+    "rlhf"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "intent漂移基准，agent安全与评测相关",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "IntentFlux+StateForge 让 8 个模型的意图漂移可测，General-Test 提升到 0.467",
+    "why": "做 agent 评测和多轮对话时很对口",
+    "architecture": "反直觉点在于：多轮里模型不是“忘了”任务，而是把已经被撤回的约束继续算进最终动作。传统 sharded instruction 或 evolving-intent 评测只能看最终对不对，分不清是旧意图残留、还是单纯长对话丢信息。作者把问题改成“已知最终意图 + 可控旧信息”两件事：IntentFlux 把可验证任务转成带 revision/withdrawal 的对话，保留原始 grader；StateForge 则先维护 active requirements，再把被撤回内容和由其推出的结论剔掉，最后再生成。最直接的证据是 627-case calibration 里，随 superseded/withdrawn 信息增多，mean task score 从 0.476 掉到 0.384；而只加长度不加改意图的 control 仍接近单轮，说明不是 turns 多就会崩。新意主要在系统组织层：把“记住历史”拆成“判定哪些历史仍有效”的显式 state folding。",
+    "verdict": "值得精读，核心是把多轮失败拆开测清楚",
+    "why_now": "",
+    "key_points": [
+     "627-case 校准：多轮改意图显著掉分",
+     "给 ground-truth state 仍未回到单轮，说明不仅是 state estimation 错",
+     "对“历史压缩”类 harness 形成直接对照"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "on-policy distillation",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "self-instruct"
+    ],
+    "mermaid": "graph LR\nA[多轮对话] --> B[识别当前意图]\nB --> C[剔除撤回约束]\nC --> D[active state]\nD --> E[生成答案]\nA --> F[旧做法 直接读历史]\nF --> G[旧意图残留]\nG --> H[错动作]",
+    "read_level": "L3"
+   }
+  },
+  {
+   "id": "paper:2609.38585",
+   "kind": "paper",
+   "title": "FlexRouter: Learning Complementary Model Sets for Flexible LLM Routing",
+   "url": "https://arxiv.org/abs/2609.38585",
+   "summary": "Existing Large Language Model (LLM) routing methods score LLMs independently to select top-k models. However, this ignores model correlations and enforces a rigid computational budget. Consequently, routers often select redundant models that share failure modes, limiting the overall probability of success. To address this, we propose FlexRouter, a routing framework that explicitly models model complementarity. FlexRouter optimizes for answer coverage, maximizing the probability that at least one selected model yields a correct response. This objective aligns with practical inference pipelines where multiple candidate outputs are generated and a downstream verifier or user selects the final one. We formulate routing as a coverage-oriented subset selection problem and model the routing policy using Determinantal Point Processes (DPPs), which naturally capture both model competence and redundancy. To directly optimize coverage without requiring a ground-truth target subset, we introduce a training objective based on marginalizing over failure sets. During inference, we employ a greedy strategy based on marginal log-determinant gains, enabling the router to adaptively determine subset sizes without a predefined budget. Extensive experiments on the large-scale RouterEval benchmark demonstrate that our proposed FlexRouter achieves higher coverage with lower redundancy across both in-domain and out-of-domain tasks than strong baselines while maintaining flexible inference cost.",
+   "source": "hf_papers",
+   "published": "2026-09-29",
+   "authors": [
+    "Wang Wei",
+    "Harry Yang",
+    "Tiankai Yang",
+    "Samyadeep Basu",
+    "Hongjie Chen",
+    "Andy Zhao"
+   ],
+   "org": "",
+   "hf_upvotes": 7,
+   "stars": 0,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "",
+   "pdf_url": "https://arxiv.org/pdf/2609.38585",
+   "categories": [],
+   "keywords": [
+    "routing",
+    "moe",
+    "inference"
+   ],
+   "core_score": 8.0,
+   "wide_score": 6.0,
+   "score_reason": "面向推理成功率的路由，直接对应多模型/系统。",
+   "tier": "core",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "FlexRouter 用 DPP 路由模型，目标从 top-k 变成覆盖率",
+    "why": "做 MoE、推理路由和多模型系统都能直接借鉴",
+    "architecture": "现有 router 常按模型独立打分选 top-k，但这会把“互相很像、一起失败”的模型一起选上：预算花了，覆盖率却没涨。作者把路由目标改成“至少一个模型答对”的 answer coverage，然后用 DPP 表达“强但不冗余”的子集：对角线奖励单模型能力，非对角线压制相似模型的共选。关键取舍是训练时不追单一 ground-truth subset，而是对 failure set 做边缘化，直接优化覆盖率；推理时用 marginal log-determinant 增益做 greedy，并可 early stopping，所以子集大小不再固定。最强证据是 RouterEval 上同时做到更高 coverage 和更低 redundancy，而且 in-domain / out-of-domain 都成立。新意在系统组织层：把“选最强几个”改成“选一组互补模型”。",
+    "verdict": "值得通读，适合看路由目标怎么重写",
+    "why_now": "",
+    "key_points": [
+     "核心指标不是准确率，而是至少一个答对的 coverage",
+     "DPP 显式惩罚冗余，针对共享 failure mode",
+     "不足：最终答案选择仍依赖 downstream verifier 或用户"
+    ],
+    "prereqs": [
+     {
+      "name": "mixture of experts",
+      "status": "unknown"
+     },
+     {
+      "name": "DPP",
+      "status": "unlisted"
+     },
+     {
+      "name": "routing",
+      "status": "unlisted"
+     },
+     {
+      "name": "verifier",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "Mixture of Experts",
+     "conditional computation"
+    ],
+    "mermaid": "graph TD\nQ[query] --> E[model scores]\nE --> D[DPP kernel]\nD --> G[greedy select]\nG --> S[diverse subset]\nS --> C[at least one correct]\nX[旧 top k] --> R[redundant models]\nR --> F[shared failures]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:xiaopuouo/openchatx-mcp",
+   "kind": "project",
+   "title": "XiaoPuOuO/openchatx-mcp",
+   "url": "https://github.com/XiaoPuOuO/openchatx-mcp",
+   "summary": "Turn ChatGPT into a local agent runtime. Operate your computer, use local tools, discover MCP servers, and delegate work to your own models through one MCP connection.",
+   "source": "github_search",
+   "published": "2026-09-23",
+   "authors": [],
+   "org": "XiaoPuOuO",
+   "hf_upvotes": 0,
+   "stars": 250,
+   "stars_today": 0,
+   "forks": 17,
+   "language": "TypeScript",
+   "code_url": "https://github.com/XiaoPuOuO/openchatx-mcp",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "mcp",
+    "agent-runtime",
+    "tool-use"
+   ],
+   "core_score": 8.0,
+   "wide_score": 7.0,
+   "score_reason": "本地agent运行时+MCP对接，贴近Agent工程",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "OpenChatX 把 ChatGPT 变成本地 agent runtime，1 条 MCP 连接管本地工具",
+    "why": "做 agent 工具链、MCP 和本地执行环境时很实用",
+    "architecture": "它解决的是“ChatGPT 会规划，但本地执行和工具编排散在各处”的痛点：你想让模型调用本地文件、shell、电脑控制、别的 MCP server，还要跨会话续接。OpenChatX 的承重组件是本地 MCP server + 官方 Secure MCP Tunnel + Desktop App：本地起服务，tunnel-client 走出站 HTTPS 连 OpenAI 隧道，ChatGPT 通过官方 MCP app 流程进来，再由 OpenChatX 分发到 file/shell/computer/MCP servers/Skills/Rules/Projects/Subagents。关键机制是“检测到 ChatGPT 的工具调用 → 通过隧道转发到本地 runtime → 再路由到具体工具”，而不是改造 ChatGPT 本体。成熟度信号较强：有桌面安装包、分平台下载、最近 release v1.0.1-beta.1，且文档明确区分官方接口和权限风险；但当前仍是 beta，Windows 还提示未签名。相较普通 MCP host，它差在把 ChatGPT 直接当入口，并把本地 runtime、跨会话摘要和子代理放到同一层。",
+    "verdict": "值得关注，偏成熟项目，适合试用不是精读",
+    "why_now": "最近 release：v1.0.1-beta.1（2026-10-01）",
+    "key_points": [
+     "有桌面版、release 和安装包，不是纯概念页",
+     "核心不是功能列表，而是官方 MCP tunnel 这条接入链",
+     "Windows 未签名且权限风险高，适合受控环境"
+    ],
+    "prereqs": [
+     {
+      "name": "model context protocol",
+      "status": "unknown"
+     },
+     {
+      "name": "tool use",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Model Context Protocol",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[ChatGPT] --> B[tunnel]\nB --> C[local runtime]\nC --> D[file shell computer]\nC --> E[MCP servers]\nC --> F[skills rules projects]\nD --> G[action]\nE --> G\nF --> G",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:swe-agent/mini-swe-agent",
+   "kind": "project",
+   "title": "SWE-agent/mini-swe-agent",
+   "url": "https://github.com/SWE-agent/mini-swe-agent",
+   "summary": "The 100 line AI agent that solves GitHub issues or helps you in your command line. Radically simple, no huge configs, no giant monorepo—but scores >74% on SWE-bench verified!",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "SWE-agent",
+   "hf_upvotes": 0,
+   "stars": 8181,
+   "stars_today": 1263,
+   "forks": 1123,
+   "language": "Python",
+   "code_url": "https://github.com/SWE-agent/mini-swe-agent",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "benchmark",
+    "swe-bench"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "轻量 agent，贴近 SWE-bench，复现价值高。",
+   "tier": "core",
+   "ptype": "model",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "100行 Bash agent，SWE-bench verified 超74%，还支持本地/沙盒运行。",
+    "why": "适合看 agent scaffold 该删到多薄",
+    "architecture": "反直觉点是：做代码 agent 不一定要复杂 tool-calling、状态 shell 和大堆历史处理；在很多可用模型上，这些反而成了脆弱点。mini-swe-agent 的关键改法是把 agent 收缩成“LLM + bash + 线性消息历史”：组件上，bash 作为唯一工具，阻断了多工具接口不一致导致的适配成本；每步用 subprocess.run 独立执行，阻断长驻 shell 状态污染和沙盒化困难；历史只追加消息，阻断 trajectory 和 prompt 分叉，便于调试和 FT/RL。最直接的证据是它在 SWE-bench verified 上仍然超过 74%，同时作者强调启动更快、可在本地/容器中稳定跑。新意主要在系统组织层：不是提出新算法，而是证明“极简 scaffold 也能保住性能”。",
+    "verdict": "适合精读 scaffold 设计，不适合只看榜单",
+    "why_now": "",
+    "key_points": [
+     "最强证据是 >74% SWE-bench verified",
+     "不证明复杂工具一定无用；多工具场景仍需 SWE-agent",
+     "复现门槛低，真正难的是选对 model 与 sandbox"
+    ],
+    "prereqs": [
+     {
+      "name": "SWE-bench",
+      "status": "unknown"
+     },
+     {
+      "name": "bash",
+      "status": "unlisted"
+     },
+     {
+      "name": "subprocess.run",
+      "status": "unlisted"
+     },
+     {
+      "name": "tool-calling",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "SWE-agent",
+     "Claude Code"
+    ],
+    "mermaid": "graph LR\nA输入任务-->B只用bash\nB-->Csubprocess独立执行\nC-->D线性消息追加\nD-->E模型推理\nE-->F输出补丁\nB-->G稳定沙盒\nD-->H易调试和微调",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:calesthio/openmontage",
+   "kind": "project",
+   "title": "calesthio/OpenMontage",
+   "url": "https://github.com/calesthio/OpenMontage",
+   "summary": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "calesthio",
+   "hf_upvotes": 0,
+   "stars": 62659,
+   "stars_today": 328,
+   "forks": 8001,
+   "language": "Python",
+   "code_url": "https://github.com/calesthio/OpenMontage",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "multimodal",
+    "video-generation"
+   ],
+   "core_score": 7.0,
+   "wide_score": 8.0,
+   "score_reason": "开源agentic视频生产系统，pipeline与代码价值高",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "daily",
+   "digest": {
+    "one_liner": "开源 agent 视频生产系统，12 条流水线、100+ 工具、700+ 规则文件。",
+    "why": "适合看多模态 agent 怎么把视频生产拆成可执行流程",
+    "architecture": "它解决的是“想用自然语言做完整视频，但单靠生成模型只会产出碎片素材”的痛点。OpenMontage 的关键不在单个模型，而在 agent 组织生产链：先把参考视频或需求转成脚本、分镜、素材计划，再按 pipeline 拉取库存镜头、生成/改写镜头、做剪辑和最终合成；核心阻断点是把“生成”与“装配”分开，避免模型直接端到端生成导致时长、节奏、叙事都失控。它还把真实 motion clips、stock footage、narration、Remotion/FFmpeg/Blender 等工具接到同一条生产线里，说明它不是“图生视频外壳”而是视频制作编排层。正文里最强的成熟度信号是大量可复现成片、公开成本、参考视频到方案的工作流，以及 Backlot 这种生产看板；但 README 很像产品页，原文未明确测试覆盖和 release 稳定性。新意主要在系统组织层：把 agent 变成视频工业流程调度器。",
+    "verdict": "值得看系统编排，不是看单个生成模型",
+    "why_now": "原文未明确",
+    "key_points": [
+     "最强证据是成片、公开成本和可追踪流水线",
+     "没证明泛化到所有影视风格；强依赖工具链质量",
+     "复现难点在素材版权、各模型接口和渲染链"
+    ],
+    "prereqs": [
+     {
+      "name": "agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "video generation",
+      "status": "unknown"
+     },
+     {
+      "name": "diffusion model",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "ReAct",
+     "Remotion"
+    ],
+    "mermaid": "graph LR\nA需求或参考视频-->B分析脚本分镜\nB-->C检索与生成素材\nC-->D剪辑合成\nD-->E成片\nB-->F成本估计\nC-->G审批门\nG-->D",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:breferrari/obsidian-mind",
+   "kind": "project",
+   "title": "breferrari/obsidian-mind",
+   "url": "https://github.com/breferrari/obsidian-mind",
+   "summary": "A self-organizing Obsidian vault that gives AI coding agents persistent memory.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "breferrari",
+   "hf_upvotes": 0,
+   "stars": 4875,
+   "stars_today": 45,
+   "forks": 549,
+   "language": "TypeScript",
+   "code_url": "https://github.com/breferrari/obsidian-mind",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "memory",
+    "rag",
+    "long-context"
+   ],
+   "core_score": 7.0,
+   "wide_score": 6.0,
+   "score_reason": "Obsidian 笔记+AI 持久记忆，适合做 agent 迁移思路",
+   "tier": "core",
+   "ptype": "tool",
+   "board": "daily",
+   "digest": {
+    "one_liner": "给 Claude Code 装持久记忆的 Obsidian vault，9.0 把上下文改成指令文件。",
+    "why": "适合看 agent memory 和 MCP/CLI 集成",
+    "architecture": "它解决的是“agent 每次开新会话都失忆，钩子还会被截断”的悖论：你把记忆塞进 hooks，结果 Claude Code 会截断 10,000 字符，`/compact` 后只剩指针，子 agent 还拿不到。9.0 的关键改法是把会话上下文改成 instruction file，让它像 `CLAUDE.md` 一样进入主上下文并穿过 `/compact`、`/clear`，同时给它独立预算，阻断 hook 输出过长被裁、以及子 agent 不见记忆的问题。配套上，Obsidian vault 负责把对话、任务、决策、brag doc 组织成可检索知识；QMD/embedding/MCP 则负责把“找得到旧决策”从 grep 提升为语义检索。最直接的证据是它明确列出 9.0 对 Claude Code 的修复边界、支持 Codex/Gemini CLI，并且有一整套命令演示记忆如何回写和回读。新意在系统组织层：不是新检索算法，而是把 agent 记忆接进 CLI 的真正生命周期。",
+    "verdict": "值得精读，重点看记忆注入和检索链路",
+    "why_now": "作者报告 v9.0.0，最近更新集中在 2026-10-03 前后",
+    "key_points": [
+     "最强证据是指令文件穿透 /compact 和子 agent",
+     "不证明记忆一定提升所有任务；偏工作流场景",
+     "复现要同时配 Obsidian、CLI 和可选 QMD"
+    ],
+    "prereqs": [
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "retrieval-augmented generation",
+      "status": "unknown"
+     },
+     {
+      "name": "embedding",
+      "status": "unknown"
+     },
+     {
+      "name": "Model Context Protocol",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "RAG",
+     "Model Context Protocol"
+    ],
+    "mermaid": "graph LR\nA会话输入-->B指令文件\nB-->C主上下文\nC-->D子agent\nC-->E任务与决策写回\nE-->FObsidian vault\nF-->GQMD语义检索\nG-->C",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:feder-cr/dots",
+   "kind": "project",
+   "title": "feder-cr/dots",
+   "url": "https://github.com/feder-cr/dots",
+   "summary": "Open-source dots for the web: an AI agent with its own browser, one that does not get blocked.",
+   "source": "github_search",
+   "published": "2026-09-29",
+   "authors": [],
+   "org": "feder-cr",
+   "hf_upvotes": 0,
+   "stars": 2572,
+   "stars_today": 0,
+   "forks": 435,
+   "language": "Python",
+   "code_url": "https://github.com/feder-cr/dots",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "browser-agent",
+    "automation"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "浏览器Agent基础设施，适配检索/规划范式",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "",
+   "digest": {
+    "one_liner": "用真实 Firefox+种子指纹跑网页代理，减少被封与失败；作者称可复现同一身份。",
+    "why": "做 browser agent/自动化很对口，能看浏览器侧承重设计。",
+    "architecture": "它解决的反直觉点是：网页代理失败，常常不是模型不会推理，而是页面没载入、验证码弹出、登录过期、点击没落到位，模型甚至还没开始“思考”。dots 的关键改变是把“代理”拆成模型和浏览器两层，并把可见身份、事件可信度和持久会话都放进浏览器内核里：真实 Firefox 引擎里做指纹，避免网页看到 WebDriver/DevTools 这类自动化痕迹；`--seed` 固定一整套屏幕、字体、GPU、时区、语言，阻断“同一账号多次像不同机器”导致的风控；鼠标按路径移动、按键逐个发出，阻断脚本式事件被识别；`--profile-dir` 保留 cookie，阻断每次都要重新登录。最直接的证据是作者展示同一个浏览器界面里左侧对话、右侧实时网页，并明确说“the browser is what the website sees”。新意主要在系统组织层：不是再做一个会点网页的模型，而是把“隐身、持久、可控的浏览器”做成 agent 的底座。",
+    "verdict": "值得看，主要看 browser agent 该怎么避风控。",
+    "why_now": "",
+    "key_points": [
+     "强证据是内核级 Firefox 伪装，不是前端补丁",
+     "没证明泛化成功率，复杂站点仍可能卡住",
+     "复现门槛低，核心是装好 uvx 和 OpenRouter"
+    ],
+    "prereqs": [
+     {
+      "name": "browser agent",
+      "status": "unlisted"
+     },
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "MCP",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "Playwright",
+     "OpenAI Operator"
+    ],
+    "mermaid": "graph LR\nA[Model] --> B[Firefox engine]\nC[Seed identity] --> B\nD[Profile dir] --> B\nB --> E[Trusted page events]\nE --> F[Website accepts]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:higgsfield-ai/higgsfield",
+   "kind": "project",
+   "title": "higgsfield-ai/higgsfield",
+   "url": "https://github.com/higgsfield-ai/higgsfield",
+   "summary": "Fault-tolerant, highly scalable GPU orchestration, and a machine learning framework designed for training models with billions to trillions of parameters",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "higgsfield-ai",
+   "hf_upvotes": 0,
+   "stars": 5857,
+   "stars_today": 1729,
+   "forks": 1050,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/higgsfield-ai/higgsfield",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "training",
+    "distributed",
+    "orchestration"
+   ],
+   "core_score": 6.0,
+   "wide_score": 5.0,
+   "score_reason": "GPU 编排训练框架，利于训练系统复现。",
+   "tier": "core",
+   "ptype": "infra",
+   "board": "monthly",
+   "digest": {
+    "one_liner": "用 GitHub 驱动分布式训练编排，打通 ZeRO-3/FSDP 与作业队列；作者称可训百亿到万亿参数。",
+    "why": "适合看训练系统怎么把环境、排队、分布式收口成一层。",
+    "architecture": "它解决的痛点是：大模型训练不是只缺算力，而是环境版本、节点分配、实验排队、启动失败和 checkpoint 管理一起炸。Higgsfield 的关键设计是把“训练”组织成一个由 GitHub 和 GitHub Actions 驱动的作业系统：先在节点上装 Docker、部署密钥和二进制，再由自动生成的 deploy/run workflow 把代码送上机器；训练入口保持标准 PyTorch workflow，因此可接 `deepspeed`、`accelerate` 或自定义 sharding；同时它把节点分配、实验队列和监控收进同一套框架，并显式支持 ZeRO-3 和 FSDP 来阻断显存不够导致的大模型训练失败。最直接的支撑是文档里的训练示例：几十行代码就能定义 `Llama70b`、`AdamW`、数据加载和 `push_to_hub`，说明系统想压掉的是工程摩擦，不是改优化器。新意主要在系统组织层。",
+    "verdict": "适合看训练编排思路，精读看部署链路。",
+    "why_now": "最近 release：v0.0.4-rc（2024-03-23）。",
+    "key_points": [
+     "作者报告支持 ZeRO-3/FSDP 和队列管理",
+     "没看到大规模实测稳定性数据",
+     "复现依赖 SSH 节点与 GitHub 工作流"
+    ],
+    "prereqs": [
+     {
+      "name": "ZeRO",
+      "status": "unknown"
+     },
+     {
+      "name": "FSDP",
+      "status": "unknown"
+     },
+     {
+      "name": "bf16",
+      "status": "unknown"
+     },
+     {
+      "name": "Adam",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "DeepSpeed",
+     "PyTorch FSDP"
+    ],
+    "mermaid": "graph LR\nA[GitHub push] --> B[Workflow]\nB --> C[Node setup]\nC --> D[Train job]\nD --> E[Checkpoint]\nD --> F[Queue and monitor]",
+    "read_level": "L2"
+   }
+  },
+  {
+   "id": "repo:microsoft/ai-agents-for-beginners",
+   "kind": "project",
+   "title": "microsoft/ai-agents-for-beginners",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners",
+   "summary": "18 Lessons to Get Started Building AI Agents",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "microsoft",
+   "hf_upvotes": 0,
+   "stars": 76376,
+   "stars_today": 718,
+   "forks": 25090,
+   "language": "Jupyter Notebook",
+   "code_url": "https://github.com/microsoft/ai-agents-for-beginners",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "getting-started",
+    "llm"
+   ],
+   "core_score": 3.0,
+   "wide_score": 7.0,
+   "score_reason": "入门 agent 教程，适合补基础但非研究产出",
+   "tier": "wide",
+   "ptype": "tutorial",
+   "board": "weekly",
+   "digest": {
+    "one_liner": "用 18 课教你搭 AI Agents，覆盖基础到代码样例；作者提供 50+ 语言翻译。",
+    "why": "如果你要补 agent 基础或面试讲清概念，这个最快。",
+    "architecture": "它解决的是“知道 agent 很热，但不知道从哪搭起”的入门断层。这个项目的关键设计不是一个新 agent 框架，而是把学习路径拆成 18 课，每课围绕一个主题配代码样例、短视频和扩展资源，并统一用 Microsoft Agent Framework + Foundry Agent Service V2 跑通样例；多语言翻译通过 GitHub Action 自动维护，降低了课程分发和更新成本。最直接的证据是 README 明确列出课程结构、代码样例位置和支持的 provider，还给出 sparse checkout 来避免把 50+ 语言翻译全拉下来，说明它更像可维护的教学系统，而不是一次性文档。新意主要在教学/项目组织层，不在算法层。",
+    "verdict": "看速览够了，除非你要系统补 agent 入门。",
+    "why_now": "原文未明确。",
+    "key_points": [
+     "强证据是完整课程+代码+多语言自动更新",
+     "没提供新方法或 benchmark",
+     "复现门槛低，主要是跟着 notebook 学"
+    ],
+    "prereqs": [
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "ReAct",
+      "status": "unknown"
+     },
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "AutoGPT"
+    ],
+    "mermaid": "graph LR\nA[Lesson topic] --> B[Notebook]\nB --> C[Code sample]\nC --> D[Agent framework]\nD --> E[Run and learn]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "repo:juliusbrussee/caveman",
+   "kind": "project",
+   "title": "JuliusBrussee/caveman",
+   "url": "https://github.com/JuliusBrussee/caveman",
+   "summary": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+   "source": "github_trending",
+   "published": "",
+   "authors": [],
+   "org": "JuliusBrussee",
+   "hf_upvotes": 0,
+   "stars": 109450,
+   "stars_today": 505,
+   "forks": 6329,
+   "language": "Go",
+   "code_url": "https://github.com/JuliusBrussee/caveman",
+   "pdf_url": "",
+   "categories": [],
+   "keywords": [
+    "agent",
+    "prompting",
+    "coding"
+   ],
+   "core_score": 5.0,
+   "wide_score": 7.0,
+   "score_reason": "面向coding agent的提示/代币节省技巧，较新",
+   "tier": "wide",
+   "ptype": "skill",
+   "board": "daily",
+   "digest": {
+    "one_liner": "一套把代理口语压到 20% token 的 skill+proxy+middleware",
+    "why": "面试讲 agent 成本/上下文压缩很顺手",
+    "architecture": "反直觉点是：coding agent 的“能力”不变，真正烧钱的是它写的解释性废话和读入的冗长日志。现有做法要么只改 prompt 语气，只省输出；要么只压输入，没法把外部工具结果和日志一起瘦身。Caveman 的关键改变是把压缩拆成三层：skill 负责改“说法”，proxy 负责在 provider 前压“读入”，middleware 负责在你自己的调用链里压工具结果，但原文、告警和可回溯内容都保留，失败时再取回原始上下文。最直接的证据是 README 里的示例：同一段 React 诊断从 63 tokens 变 20 tokens，正文还引用 Adobe 的 CAVEWOMAN 论文和 JetBrains 对 86 个真实任务的测试，后者报告“质量几乎不受影响”。新意主要在系统组织层：不是单点 prompt hack，而是把 token 预算控制做成可插拔运行时。",
+    "verdict": "值得看实现思路，不必精读机制细节",
+    "why_now": "最近有 v3.0.0 和 v3.1.0 release，且 stars 破 10 万，属于明显上榜期。",
+    "key_points": [
+     "最强证据：63 tokens 变 20 tokens，诊断语义不变",
+     "没证明普适收益边界，代码/错误信息不被改写",
+     "复现低：npx 一条命令就能装，但质量评估依赖具体 agent"
+    ],
+    "prereqs": [
+     {
+      "name": "prompt injection",
+      "status": "unknown"
+     },
+     {
+      "name": "token budget",
+      "status": "unlisted"
+     },
+     {
+      "name": "tool calling",
+      "status": "unlisted"
+     },
+     {
+      "name": "agent",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 1,
+    "related": [
+     "ReAct",
+     "MCP"
+    ],
+    "mermaid": "graph LR\nA[agent prose] --> B[skill rewrite]\nC[logs results diffs] --> D[proxy shrink]\nE[tool output] --> F[middleware shrink]\nB --> G[less output tokens]\nD --> H[less input tokens]\nF --> H\nG --> I[lower cost]\nH --> I",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2610.01762",
+   "kind": "paper",
+   "title": "OneStreamer: Unifying Perception, Memory, and Proactive Response in Streaming Video Interaction",
+   "url": "https://arxiv.org/abs/2610.01762",
+   "summary": "Streaming video LLMs must retain evidence before its relevance to future tasks is known and respond when sufficient evidence becomes available. The challenge is to form reusable factual memory without compromising real-time perception. We introduce OneStreamer, which jointly learns query-independent evidence recording and task response through a shared proactive generation process. Its Proactive Hierarchical Caption Memory (PHCM) produces time-grounded local-detail captions and summaries of completed events. Streaming caption targets supervise the interpretation of observed video prefixes during training. At inference, model-generated records complement a recent visual window, providing reusable factual context without revisiting historical visual features. Proactive State Transition Learning (PSTL) reduces the dominance of repeated waiting states by preserving supervision at all output anchors and selecting representative state-change and state-persistence tokens. We further develop a streaming data synthesis pipeline that aligns output content and timing with available evidence. Combining the resulting streaming captions and QA with cleaned open-source data yields OneStreamer-1M, a broad-coverage streaming video interaction dataset with over one million records spanning diverse tasks. Our 4B model achieves the best results among the compared methods across all eight evaluated streaming video understanding benchmarks. Ablations show that retaining generated captions improves historical QA without degrading real-time perception. PSTL also outperforms dense state supervision while supervising only 27.5% of annotated state tokens. Together, these results support proactive generation as a shared learning interface connecting perception, memory formation, and timely response in streaming video interaction.",
+   "source": "hf_papers",
+   "published": "2026-10-01",
+   "authors": [
+    "Xiangyu Zeng",
+    "Yuandong Yang",
+    "Zhiqiu Zhang",
+    "Yuhan Zhu",
+    "Xinhao Li",
+    "Qingyi Si"
+   ],
+   "org": "",
+   "hf_upvotes": 159,
+   "stars": 65,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/MCG-NJU/OneStreamer",
+   "pdf_url": "https://arxiv.org/pdf/2610.01762",
+   "categories": [],
+   "keywords": [
+    "video",
+    "streaming",
+    "memory"
+   ],
+   "core_score": 7.0,
+   "wide_score": 7.0,
+   "score_reason": "流视频感知-记忆-响应联学习，贴多模态与长程证据",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "OneStreamer 用 1M 流式数据把记忆和响应统一，4B 模型拿到 8 个基准最优",
+    "why": "适合你看 streaming video LLM 和 memory 设计",
+    "architecture": "反直觉点是：流式视频里，今天看见的片段未必现在有用，但以后却可能是回答关键；单纯把历史帧全塞进上下文又会挤掉当前观察，反而伤实时感知。现有 memory 方法多是“保留视觉 token”，解决的是可访问历史，不解决“可复用的事实记录”；而 proactive response 方法多管何时答，不管答之前怎么把证据沉淀成记忆。OneStreamer 的关键改法是把“记录”和“回应”并进同一个 proactive generation：PHCM 把已观察内容生成时间对齐的局部细节 caption 和事件摘要，作为可复用事实记忆，推理时用这些文本记录配合最近视觉窗口，不必回看历史视觉特征；PSTL 则避免 waiting state 标签淹没稀疏的响应决策，只保留代表性的状态变化/持续位置监督。最直接的证据是消融：保留生成 caption 能提升历史 QA，而且不伤实时感知；PSTL 只监督 27.5% 的状态 token 仍优于 dense supervision。新意主要在组件层加系统组织层：把生成文本当记忆接口，而不是把长视频硬扩窗。",
+    "verdict": "值得精读，核心是记忆与响应的统一接口",
+    "why_now": "",
+    "key_points": [
+     "最强证据：caption memory 提升历史 QA 且不降实时感知",
+     "PSTL 只用 27.5% 状态 token 仍赢 dense supervision",
+     "条件边界：依赖流式标注和 evidence-aligned 数据合成"
+    ],
+    "prereqs": [
+     {
+      "name": "long context",
+      "status": "unknown"
+     },
+     {
+      "name": "memory",
+      "status": "unknown"
+     },
+     {
+      "name": "streaming video",
+      "status": "unlisted"
+     },
+     {
+      "name": "VLM",
+      "status": "unknown"
+     }
+    ],
+    "difficulty": 3,
+    "related": [
+     "MemLong",
+     "Video-ChatGPT"
+    ],
+    "mermaid": "graph TD\nA[video stream] --> B[PHCM]\nB --> C[captions summaries]\nC --> D[recent visual window]\nD --> E[response]\nA --> F[PSTL]\nF --> G[state tokens]\nG --> E\nC --> H[reusable memory]",
+    "read_level": "L1"
+   }
+  },
+  {
+   "id": "paper:2609.33403",
+   "kind": "paper",
+   "title": "DataMagic: Authoring Data Videos through Declarative Multi-Agent Orchestration",
+   "url": "https://arxiv.org/abs/2609.33403",
+   "summary": "Data videos communicate data insights through dynamic charts, voice narration, and synchronized animations, and have become a widely adopted form of data storytelling. However, producing them requires expertise in data analysis, narrative design, and video editing. Static visualization tools lack narrative and animation capabilities; authoring tools rely on pre-prepared charts rather than raw data; and pixel-level models generate videos end-to-end but cannot guarantee data accuracy or provenance. End-to-end automatic generation faces two core challenges: how to uniformly represent charts, narration, and animations together with their temporal relationships, and how to efficiently search a vast design space for narrative-coherent compositions. We present DataMagic, which authors data videos from raw tabular data through declarative multi-agent orchestration. First, the declarative specification DVSpec unifies charts, narration, and animations with data-bound references and declarative synchronization, ensuring data provenance and automatic audio-visual alignment. Second, a \"Generate-then-Orchestrate\" multi-agent strategy generates candidate scenes in parallel and then optimizes narrative coherence through global orchestration. DVSpec provides a shared state for three complementary interaction modes, bridging full automation with fine-grained human control. Evaluations on 109 real-world samples show that even the most advanced LLM (e.g., GPT-5) achieves only 2.13/5 with execution success rates between 48.62% and 86.24%; DataMagic improves quality to 3.89 (+83%) with success rates above 95%, with the most significant gains in animation and narrative dimensions. A user study shows that, compared to a conversational LLM workflow, DataMagic improves creation efficiency (79.7% reduction in task time) and reduces perceived cognitive load. Project page: https://github.com/HKUSTDial/DataMagic.",
+   "source": "hf_papers",
+   "published": "2026-09-27",
+   "authors": [
+    "Yupeng Xie",
+    "Zhenyang Wang",
+    "Liangwei Wang",
+    "Jiayi Zhu",
+    "Zhouan Shen",
+    "Yuyu Luo"
+   ],
+   "org": "",
+   "hf_upvotes": 10,
+   "stars": 276,
+   "stars_today": 0,
+   "forks": 0,
+   "language": "",
+   "code_url": "https://github.com/HKUSTDial/DataMagic",
+   "pdf_url": "https://arxiv.org/pdf/2609.33403",
+   "categories": [],
+   "keywords": [
+    "tooling",
+    "multimodal",
+    "data"
+   ],
+   "core_score": 2.0,
+   "wide_score": 7.0,
+   "score_reason": "数据视频自动化偏内容生产，非主线",
+   "tier": "wide",
+   "ptype": "",
+   "board": "",
+   "digest": {
+    "one_liner": "DataMagic 用 DVSpec+多智能体，把原始表格直接做成数据视频，109 例质量到 3.89",
+    "why": "很适合看多智能体+声明式编排怎么落到可用系统",
+    "architecture": "反直觉点是：数据视频不是把图表“画出来”就完了，真正难的是把数字准确性、旁白叙事和动画时序同时对齐；纯 pixel generation 会幻觉数字，纯 authoring 又吃预制图。DataMagic 的关键改法是先把视频表示成 DVSpec：它把 chart、narration、animation 绑定到数据字段和叙事触发点上，阻断“图能看但数据不可追溯”“时间轴靠手工对齐”的失败；再用 Generate-then-Orchestrate，把多个角色 agent 先并行产出候选 scene，再在全局层按 insight value 和 coverage 选序，阻断局部最优拼接成的叙事断裂。最直接的证据是 109 个真实样本上，GPT-5 只拿 2.13/5，而 DataMagic 到 3.89，执行成功率超过 95%，用户研究还给出 79.7% 任务时间下降。新意主要在系统组织层：不是一个会生成视频的模型，而是一套可编辑、可审计的声明式编排系统。",
+    "verdict": "值得看系统设计，尤其是声明式状态如何做协同",
+    "why_now": "原文有明确开源代码，且刚发表，属于可关注的成熟系统。",
+    "key_points": [
+     "最强证据：109 样本上质量 3.89，成功率超 95%",
+     "没证明通用视频生成，只覆盖数据视频场景",
+     "复现难度中等：要跑多 agent 和可编辑规范"
+    ],
+    "prereqs": [
+     {
+      "name": "multi-agent",
+      "status": "unknown"
+     },
+     {
+      "name": "planning",
+      "status": "unknown"
+     },
+     {
+      "name": "data provenance",
+      "status": "unlisted"
+     },
+     {
+      "name": "visualization",
+      "status": "unlisted"
+     }
+    ],
+    "difficulty": 2,
+    "related": [
+     "AutoGen",
+     "ReAct"
+    ],
+    "mermaid": "graph LR\nA[raw table] --> B[DVSpec]\nB --> C[scene candidates]\nC --> D[orchestrate]\nD --> E[data video]\nB --> F[data binding]\nF --> G[traceable numbers]\nC --> H[parallel agents]\nH --> D",
+    "read_level": "L1"
+   }
+  }
+ ]
+}
